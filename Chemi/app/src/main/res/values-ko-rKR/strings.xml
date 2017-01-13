@@ -15,6 +15,8 @@
     <string name="search_popular_fragment_title">인기검색어</string>
     <string name="search_latest_fragment_title">최근검색어</string>
     <string name="list_item_latest_search_delete">해당 최근 검색어 삭제</string>
+    <string name="latest_search_delete">최근 검색어 전체 삭제</string>
+    <string name="empty_latest_search_info">보관된 최근 검색어가 없습니다.</string>
 
     <!-- Sample Data -->
     <string-array name="search_popular_word_array">

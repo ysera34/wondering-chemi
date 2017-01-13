@@ -27,12 +27,13 @@ import java.util.ArrayList;
 /**
  * Created by yoon on 2017. 1. 5..
  */
-public class SearchLatestListFragment extends Fragment {
+public class SearchLatestListFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView mSearchLatestRecyclerView;
     private LatestSearchAdapter mLatestSearchAdapter;
     private ArrayList<SearchWord> mSearchWords;
 
+    private RelativeLayout mSearchLatestAllDeleteRelativeLayout;
 
     public static SearchLatestListFragment newInstance() {
         
@@ -61,6 +62,10 @@ public class SearchLatestListFragment extends Fragment {
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 1.5f);
         mSearchLatestRecyclerView.addItemDecoration(decoration);
 
+        mSearchLatestAllDeleteRelativeLayout =
+                (RelativeLayout) view.findViewById(R.id.latest_search_delete_view);
+        mSearchLatestAllDeleteRelativeLayout.setOnClickListener(this);
+
         return view;
     }
 
@@ -84,7 +89,16 @@ public class SearchLatestListFragment extends Fragment {
         }
     }
 
-    private class LatestSearchAdapter extends RecyclerView.Adapter<LatestSearchHolder> {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.latest_search_delete_view:
+                Toast.makeText(getActivity(), "all delete view", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private class LatestSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private ArrayList<SearchWord> mSearchWords;
 
@@ -93,21 +107,47 @@ public class SearchLatestListFragment extends Fragment {
         }
 
         @Override
-        public LatestSearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_latest_search, parent, false);
+            View view;
+            if (viewType == EMPTY_VIEW_TYPE) {
+                view = layoutInflater.inflate(R.layout.view_empty_latest_search, parent, false);
+                mSearchLatestAllDeleteRelativeLayout.setVisibility(View.GONE);
+                return new EmptyViewHolder(view);
+            }
+            view = layoutInflater.inflate(R.layout.list_item_latest_search, parent, false);
+            mSearchLatestAllDeleteRelativeLayout.setVisibility(View.VISIBLE);
             return new LatestSearchHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(LatestSearchHolder holder, int position) {
-            SearchWord searchWord = mSearchWords.get(position);
-            holder.bindSearchWord(searchWord);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof LatestSearchHolder) {
+                SearchWord searchWord = mSearchWords.get(position);
+                ((LatestSearchHolder) holder).bindSearchWord(searchWord);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mSearchWords.size();
+            return mSearchWords.size() > 0 ? mSearchWords.size() : 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (mSearchWords.size() == 0) {
+                return EMPTY_VIEW_TYPE;
+            }
+            return super.getItemViewType(position);
+        }
+    }
+
+    private static final int EMPTY_VIEW_TYPE = -1;
+
+    private class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
         }
     }
 

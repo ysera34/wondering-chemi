@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.SearchWord;
+import com.planet.wondering.chemi.util.helper.SearchPreferences;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,11 @@ public class SearchLatestStorage {
         for (int i = 0; i < 3; i++) {
             SearchWord searchWord = new SearchWord();
             searchWord.setSearchWord(searchWordArr[i]);
-            mSearchWords.add(searchWord);
+            searchWord.setSearchWordIndex(i);
+            SearchPreferences.setStoredSearchWordIndex(mContext, searchWord.getSearchWordIndex());
+            SearchPreferences.setStoredSearchWordObject(
+                    mContext, searchWord, SearchPreferences.getStoredSearchWordIndex(mContext));
+//            mSearchWords.add(searchWord);
         }
     }
 
@@ -39,6 +44,17 @@ public class SearchLatestStorage {
     }
 
     public ArrayList<SearchWord> getSearchWords() {
+        int index = SearchPreferences.getStoredSearchWordIndex(mContext);
+        if (index > 0) {
+            int size = SearchPreferences.getStoredSearchWordIndex(mContext) + 1;
+            for (int i = 0; i < size; i++) {
+                mSearchWords.add(SearchPreferences.getStoredSearchWordObject(mContext, i));
+            }
+        }
         return mSearchWords;
+    }
+
+    public void arrangePreferences() {
+
     }
 }

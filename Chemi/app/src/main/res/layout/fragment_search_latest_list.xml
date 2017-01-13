@@ -11,4 +11,30 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <RelativeLayout
+        android:id="@+id/latest_search_delete_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_search_height"
+        android:background="@color/colorWhite"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <ImageView
+                android:id="@+id/latest_search_delete_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clear_24dp"
+                android:contentDescription="@string/latest_search_delete"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

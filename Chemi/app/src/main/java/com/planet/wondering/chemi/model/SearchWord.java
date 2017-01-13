@@ -14,6 +14,7 @@ public class SearchWord {
     private boolean mVariationState;
     private int mStateImageResId;
     private int mVariationValue;
+    private int mSearchWordIndex;
     private Date mDate;
 
     public SearchWord() {
@@ -63,6 +64,14 @@ public class SearchWord {
 
     public void setVariationValue(int variationValue) {
         mVariationValue = variationValue;
+    }
+
+    public int getSearchWordIndex() {
+        return mSearchWordIndex;
+    }
+
+    public void setSearchWordIndex(int searchWordIndex) {
+        mSearchWordIndex = searchWordIndex;
     }
 
     public Date getDate() {
