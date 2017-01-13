@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">케미</string>
+
+    <string name="bottom_navigation_title1">검색</string>
+    <string name="bottom_navigation_title2">카테고리</string>
+    <string name="bottom_navigation_title3">컨텐츠</string>
+    <string name="bottom_navigation_title4">성분사전</string>
+    <string name="bottom_navigation_title5">사용자</string>
+
+    <string name="search_guide_sentence">상품명, 브랜드명으로 검색해보세요</string>
+    <string name="search_edit_text">search_edit_text</string>
+    <string name="search_image_button">search_image_button</string>
+    <string name="search_view">search_edit_text_view</string>
+
+    <string name="search_popular_fragment_title">인기검색어</string>
+    <string name="search_latest_fragment_title">최근검색어</string>
+</resources>
