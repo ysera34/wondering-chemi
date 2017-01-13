@@ -2,6 +2,8 @@ package com.planet.wondering.chemi.model;
 
 import com.planet.wondering.chemi.R;
 
+import java.util.Date;
+
 /**
  * Created by yoon on 2017. 1. 5..
  */
@@ -12,9 +14,10 @@ public class SearchWord {
     private boolean mVariationState;
     private int mStateImageResId;
     private int mVariationValue;
+    private Date mDate;
 
     public SearchWord() {
-
+        mDate = new Date();
     }
 
     public int getRatingNumber() {
@@ -60,5 +63,13 @@ public class SearchWord {
 
     public void setVariationValue(int variationValue) {
         mVariationValue = variationValue;
+    }
+
+    public Date getDate() {
+        return mDate;
+    }
+
+    public void setDate(Date date) {
+        mDate = date;
     }
 }

@@ -84,7 +84,7 @@ public class SearchPopularListFragment extends Fragment {
 
         private ArrayList<SearchWord> mSearchWords;
 
-        public PopularSearchAdapter(ArrayList<SearchWord> searchWords) {
+        PopularSearchAdapter(ArrayList<SearchWord> searchWords) {
             mSearchWords = searchWords;
         }
 
@@ -117,7 +117,7 @@ public class SearchPopularListFragment extends Fragment {
         private ImageView mSearchVariationStateImageView;
         private TextView mSearchVariationValueTextView;
 
-        public PopularSearchHolder(View itemView) {
+        PopularSearchHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
@@ -131,7 +131,7 @@ public class SearchPopularListFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_popular_search_variation_value);
         }
 
-        public void bindSearchWord(SearchWord searchWord) {
+        void bindSearchWord(SearchWord searchWord) {
             mSearchWord = searchWord;
             mSearchRatingNumberTextView.setText(String.valueOf(mSearchWord.getRatingNumber()));
             mSearchWordTextView.setText(mSearchWord.getSearchWord());

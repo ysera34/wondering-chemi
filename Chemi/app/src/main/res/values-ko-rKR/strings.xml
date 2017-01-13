@@ -14,4 +14,24 @@
 
     <string name="search_popular_fragment_title">인기검색어</string>
     <string name="search_latest_fragment_title">최근검색어</string>
+    <string name="list_item_latest_search_delete">해당 최근 검색어 삭제</string>
+
+    <!-- Sample Data -->
+    <string-array name="search_popular_word_array">
+        <item>옥시크린</item>
+        <item>계면활성제</item>
+        <item>가습기 살균제</item>
+        <item>치약</item>
+        <item>물티슈</item>
+        <item>가그린</item>
+        <item>메디안</item>
+        <item>청솔</item>
+    </string-array>
+
+    <string-array name="search_latest_word_array">
+        <item>옥시크린</item>
+        <item>계면활성제</item>
+        <item>가습기 살균제 가습기 살균제 가습기 살균제</item>
+    </string-array>
+
 </resources>

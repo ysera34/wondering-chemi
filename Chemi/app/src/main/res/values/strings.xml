@@ -7,20 +7,6 @@
     <string name="bottom_navigation_title4">성분사전</string>
     <string name="bottom_navigation_title5">사용자</string>
 
-    <string name="search_guide_sentence">상품명, 브랜드명으로 검색해보세요</string>
-    <string name="search_edit_text">search_edit_text</string>
-    <string name="search_image_button">search_image_button</string>
-    <string name="search_view">search_edit_text_view</string>
 
-    <!-- Sample Data -->
-    <string-array name="search_popular_word_array">
-        <item>옥시크린</item>
-        <item>계면활성제</item>
-        <item>가습기 살균제</item>
-        <item>치약</item>
-        <item>물티슈</item>
-        <item>가그린</item>
-        <item>메디안</item>
-        <item>청솔</item>
-    </string-array>
+    <string name="list_item_latest_search_delete">해당 최근 검색어 삭제</string>
 </resources>
