@@ -29,8 +29,11 @@ import java.util.ArrayList;
  */
 public class SearchLatestListFragment extends Fragment implements View.OnClickListener {
 
+    private static final String TAG = SearchLatestListFragment.class.getSimpleName();
+
     private RecyclerView mSearchLatestRecyclerView;
     private LatestSearchAdapter mLatestSearchAdapter;
+    private SearchLatestStorage mSearchLatestStorage;
     private ArrayList<SearchWord> mSearchWords;
 
     private RelativeLayout mSearchLatestAllDeleteRelativeLayout;
@@ -47,8 +50,8 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SearchLatestStorage searchLatestStorage = SearchLatestStorage.getStorage(getActivity());
-        mSearchWords = searchLatestStorage.getSearchWords();
+        mSearchLatestStorage = SearchLatestStorage.getStorage(getActivity());
+        mSearchWords = mSearchLatestStorage.getSearchWords();
     }
 
     @Nullable
@@ -130,6 +133,7 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
 
         @Override
         public int getItemCount() {
+//            Log.d(TAG + " mSearchWords.size()", String.valueOf(mSearchWords.size()) );
             return mSearchWords.size() > 0 ? mSearchWords.size() : 1;
         }
 
@@ -190,6 +194,8 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
         public void onClick(View view) {
             if (view.getId() == R.id.list_item_latest_delete_view) {
                 Toast.makeText(getActivity(), "list_item_latest_search_delete_view", Toast.LENGTH_SHORT).show();
+//                mSearchWords = mSearchLatestStorage.removeSearchWord(this.getAdapterPosition());
+//                mLatestSearchAdapter.notifyDataSetChanged();
             } else {
                 mSelectedListener.onSearchWordSelected(mSearchWord.getSearchWord());
             }

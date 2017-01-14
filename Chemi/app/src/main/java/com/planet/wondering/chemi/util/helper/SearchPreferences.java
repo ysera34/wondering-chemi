@@ -40,6 +40,13 @@ public class SearchPreferences {
                 .apply();
     }
 
+    public static void removeStoredSearchWordIndex(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_SEARCH_WORD_INDEX)
+                .apply();
+    }
+
     public static SearchWord getStoredSearchWordObject(Context context, int searchWordIndex) {
         Gson gson = new Gson();
         String searchWordJson = PreferenceManager.getDefaultSharedPreferences(context)
@@ -53,6 +60,13 @@ public class SearchPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREF_SEARCH_WORD + searchWordIndex, searchWordJson)
+                .apply();
+    }
+
+    public static void removeStoredSearchWordObject(Context context, int searchWordIndex) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_SEARCH_WORD + searchWordIndex)
                 .apply();
     }
 }
