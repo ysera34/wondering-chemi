@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
     private SearchLatestStorage mSearchLatestStorage;
     private ArrayList<SearchWord> mSearchWords;
 
-    private RelativeLayout mSearchLatestAllDeleteRelativeLayout;
+//    private RelativeLayout mSearchLatestAllDeleteRelativeLayout;
 
     public static SearchLatestListFragment newInstance() {
         
@@ -65,9 +66,9 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 1.5f);
         mSearchLatestRecyclerView.addItemDecoration(decoration);
 
-        mSearchLatestAllDeleteRelativeLayout =
-                (RelativeLayout) view.findViewById(R.id.latest_search_delete_view);
-        mSearchLatestAllDeleteRelativeLayout.setOnClickListener(this);
+//        mSearchLatestAllDeleteRelativeLayout =
+//                (RelativeLayout) view.findViewById(R.id.latest_search_delete_view);
+//        mSearchLatestAllDeleteRelativeLayout.setOnClickListener(this);
 
         return view;
     }
@@ -95,9 +96,9 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.latest_search_delete_view:
-                Toast.makeText(getActivity(), "all delete view", Toast.LENGTH_SHORT).show();
-                break;
+//            case R.id.latest_search_delete_view:
+//                Toast.makeText(getActivity(), "all delete view", Toast.LENGTH_SHORT).show();
+//                break;
         }
     }
 
@@ -113,14 +114,24 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view;
-            if (viewType == EMPTY_VIEW_TYPE) {
-                view = layoutInflater.inflate(R.layout.view_empty_latest_search, parent, false);
-                mSearchLatestAllDeleteRelativeLayout.setVisibility(View.GONE);
-                return new EmptyViewHolder(view);
+            switch (viewType) {
+                case VIEW_TYPE_EMPTY:
+                    view = layoutInflater.inflate(R.layout.list_item_latest_search_empty, parent, false);
+                    return new EmptyViewHolder(view);
+                case VIEW_TYPE_ITEM:
+                    view = layoutInflater.inflate(R.layout.list_item_latest_search, parent, false);
+                    return new LatestSearchHolder(view);
+                case VIEW_TYPE_FOOTER:
+                    view = layoutInflater.inflate(R.layout.list_item_latest_search_footer, parent, false);
+                    return new FooterViewHolder(view);
             }
-            view = layoutInflater.inflate(R.layout.list_item_latest_search, parent, false);
-            mSearchLatestAllDeleteRelativeLayout.setVisibility(View.VISIBLE);
-            return new LatestSearchHolder(view);
+            return null;
+//            if (viewType == VIEW_TYPE_EMPTY) {
+//                view = layoutInflater.inflate(R.layout.view_empty_latest_search, parent, false);
+//                return new EmptyViewHolder(view);
+//            }
+//            view = layoutInflater.inflate(R.layout.list_item_latest_search, parent, false);
+//            return new LatestSearchHolder(view);
         }
 
         @Override
@@ -133,24 +144,37 @@ public class SearchLatestListFragment extends Fragment implements View.OnClickLi
 
         @Override
         public int getItemCount() {
-//            Log.d(TAG + " mSearchWords.size()", String.valueOf(mSearchWords.size()) );
-            return mSearchWords.size() > 0 ? mSearchWords.size() : 1;
+            Log.d(TAG + " mSearchWords.size()", String.valueOf(mSearchWords.size()) );
+            return mSearchWords.size() > 0 ? mSearchWords.size() + 1 : 1;
         }
 
         @Override
         public int getItemViewType(int position) {
             if (mSearchWords.size() == 0) {
-                return EMPTY_VIEW_TYPE;
+                return VIEW_TYPE_EMPTY;
             }
-            return super.getItemViewType(position);
+            if (mSearchWords.size() > 0 && position == mSearchWords.size()) {
+                return VIEW_TYPE_FOOTER;
+            }
+            return VIEW_TYPE_ITEM;
+//            return super.getItemViewType(position);
         }
     }
 
-    private static final int EMPTY_VIEW_TYPE = -1;
+    private static final int VIEW_TYPE_EMPTY = -1;
+    private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_FOOTER = 1;
 
     private class EmptyViewHolder extends RecyclerView.ViewHolder {
 
         public EmptyViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        public FooterViewHolder(View itemView) {
             super(itemView);
         }
     }

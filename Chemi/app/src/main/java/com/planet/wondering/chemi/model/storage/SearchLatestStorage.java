@@ -42,12 +42,15 @@ public class SearchLatestStorage {
             SearchWord searchWord = new SearchWord();
             searchWord.setSearchWord(searchWordArr[i]);
             searchWord.setSearchWordIndex(i);
+
             SearchPreferences.setStoredSearchWordIndex(mContext, searchWord.getSearchWordIndex());
             SearchPreferences.setStoredSearchWordObject(
                     mContext, searchWord, SearchPreferences.getStoredSearchWordIndex(mContext));
 //            mSearchWords.add(searchWord);
         }
         mSharedPreferenceIndex = SearchPreferences.getStoredSearchWordIndex(mContext);
+        Log.d(TAG + " after spIndex", String.valueOf(mSharedPreferenceIndex)); // 15
+
     }
 
     public static SearchLatestStorage getStorage(Context context) {
@@ -58,12 +61,12 @@ public class SearchLatestStorage {
     }
 
     public ArrayList<SearchWord> getSearchWords() {
-//        if (mSharedPreferenceIndex > 0) {
+        if (mSharedPreferenceIndex > 0) {
             mSearchWords.clear();
             for (int i = 0; i <= mSharedPreferenceIndex; i++) {
                 mSearchWords.add(SearchPreferences.getStoredSearchWordObject(mContext, i));
             }
-//        }
+        }
         return mSearchWords;
     }
 
