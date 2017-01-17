@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -29,8 +28,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private ImageView mSearchBackgroundImageView;
     private RelativeLayout mSearchView;
-    private EditText mSearchEditText;
-    private Button mSearchTextButton;
+    private Button mSearchButton;
     private ImageButton mSearchImageButton;
 
     public static SearchFragment newInstance() {
@@ -53,11 +51,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         mSearchBackgroundImageView = (ImageView) view.findViewById(R.id.search_background_image_view);
-//        mSearchEditText = (EditText) view.findViewById(R.id.search_edit_text);
         mSearchView = (RelativeLayout) view.findViewById(R.id.search_view);
-        mSearchTextButton = (Button) view.findViewById(R.id.search_edit_text);
         mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
-        mSearchTextButton.setOnClickListener(this);
+        mSearchImageButton.setOnClickListener(this);
+        mSearchButton = (Button) view.findViewById(R.id.search_button);
+        mSearchButton.setOnClickListener(this);
+
         return view;
     }
 
@@ -74,7 +73,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.search_edit_text:
+            case R.id.search_image_button:
+            case R.id.search_button:
 //                FragmentTransaction ft = getFragmentManager().beginTransaction()
 //                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 SearchDetailFragment detailFragment = SearchDetailFragment.newInstance();
@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .addSharedElement(mSearchView, getString(R.string.search_view))
-                        .addSharedElement(mSearchTextButton, getString(R.string.search_edit_text))
+                        .addSharedElement(mSearchButton, getString(R.string.search_edit_text))
                         .addSharedElement(mSearchImageButton, getString(R.string.search_image_button))
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                         .replace(R.id.fragment_container, detailFragment)
