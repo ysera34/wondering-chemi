@@ -1,4 +1,4 @@
-package com.planet.wondering.chemi.view;
+package com.planet.wondering.chemi.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.view.WindowManager;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
-import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 /**
  * Created by yoon on 2017. 1. 5..

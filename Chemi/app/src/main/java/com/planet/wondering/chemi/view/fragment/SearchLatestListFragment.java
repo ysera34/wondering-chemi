@@ -20,7 +20,9 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.SearchWord;
 import com.planet.wondering.chemi.model.storage.SearchLatestStorage;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
+import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +65,17 @@ public class SearchLatestListFragment extends Fragment {
         SeparatorDecoration decoration =
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 1.5f);
         mSearchLatestRecyclerView.addItemDecoration(decoration);
+        mSearchLatestRecyclerView.addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onShowView() {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+            }
+
+            @Override
+            public void onHideView() {
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
 
         return view;
     }
@@ -229,4 +242,5 @@ public class SearchLatestListFragment extends Fragment {
                     + " must implement OnSearchWordSelectedListener");
         }
     }
+
 }

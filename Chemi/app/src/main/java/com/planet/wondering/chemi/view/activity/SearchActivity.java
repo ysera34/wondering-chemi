@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
-import com.planet.wondering.chemi.view.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
 import com.planet.wondering.chemi.view.fragment.SearchFragment;
 
@@ -42,13 +41,12 @@ public class SearchActivity extends BottomNavigationActivity
                     .add(R.id.fragment_container, mFragment)
                     .commit();
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mBottomNavigationView.getMenu().getItem(0).setChecked(true);
+        setupBottomNavigation(0);
     }
 
     private SearchDetailFragment mSearchDetailFragment;

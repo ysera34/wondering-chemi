@@ -6,7 +6,6 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.SearchWord;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by yoon on 2017. 1. 5..
@@ -24,13 +23,13 @@ public class SearchPopularStorage {
         mSearchWords = new ArrayList<>();
         String[] searchWordArr = mContext.getResources()
                 .getStringArray(R.array.search_popular_word_array);
+        int[] variationValueArr = new int[]{1,2,3,4,0,-1,-2,-3};
 
         for (int i = 0; i < 8; i++) {
             SearchWord searchWord = new SearchWord();
             searchWord.setRatingNumber(i + 1);
             searchWord.setSearchWord(searchWordArr[i]);
-            searchWord.setVariationValue(new Random().nextInt(9) + 1);
-            searchWord.setVariationState(i%2 == 0);
+            searchWord.setVariationValue(variationValueArr[i]);
             mSearchWords.add(searchWord);
         }
     }

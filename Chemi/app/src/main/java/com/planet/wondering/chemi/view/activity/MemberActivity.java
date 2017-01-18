@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.view.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.fragment.MemberFragment;
 
 /**
@@ -39,12 +38,11 @@ public class MemberActivity extends BottomNavigationActivity {
                     .add(R.id.fragment_container, mFragment)
                     .commit();
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mBottomNavigationView.getMenu().getItem(4).setChecked(true);
+        setupBottomNavigation(4);
     }
 }

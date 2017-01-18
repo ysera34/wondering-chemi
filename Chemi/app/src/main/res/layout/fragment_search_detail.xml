@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -10,7 +11,8 @@
         android:transitionName="@string/search_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_editText_height"
-        android:background="@color/colorWhite">
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
         <!--android:layout_margin="8dp"-->
 
         <ImageButton
@@ -40,9 +42,10 @@
             android:imeOptions="actionDone"
             android:dropDownAnchor="@+id/search_view_bottom_anchor"
             android:dropDownWidth="wrap_content"
+            android:dropDownSelector="@color/colorPrimaryDark"
             android:layout_toEndOf="@+id/search_image_button"
             android:layout_toStartOf="@+id/search_clear_image_layout"/>
-
+        <!--android:popupBackground="@null"-->
         <RelativeLayout
             android:id="@+id/search_clear_image_layout"
             android:layout_width="wrap_content"

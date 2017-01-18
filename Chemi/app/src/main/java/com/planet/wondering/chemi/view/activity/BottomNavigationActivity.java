@@ -1,24 +1,23 @@
-package com.planet.wondering.chemi.view;
+package com.planet.wondering.chemi.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
-import com.planet.wondering.chemi.view.activity.CategoryActivity;
-import com.planet.wondering.chemi.view.activity.ContentActivity;
-import com.planet.wondering.chemi.view.activity.DictionaryActivity;
-import com.planet.wondering.chemi.view.activity.MemberActivity;
-import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 public class BottomNavigationActivity extends AppBaseActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = BottomNavigationActivity.class.getSimpleName();
     protected BottomNavigationView mBottomNavigationView;
+    public LinearLayout mBottomNavigationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +27,7 @@ public class BottomNavigationActivity extends AppBaseActivity
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+        mBottomNavigationLayout = (LinearLayout) findViewById(R.id.bottom_navigation_layout);
     }
 
     @Override
@@ -49,8 +49,22 @@ public class BottomNavigationActivity extends AppBaseActivity
                 startActivity(MemberActivity.newIntent(getApplicationContext()));
                 break;
         }
-
         return true;
+    }
+
+    protected void setupBottomNavigation(int menuIndex) {
+        mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
+        mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
+    }
+
+    public void showBottomNavigationView() {
+        mBottomNavigationLayout.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
+    }
+
+    public void hideBottomNavigationView() {
+        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
+                .setInterpolator(new AccelerateInterpolator(2));
     }
 
 }

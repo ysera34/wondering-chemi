@@ -11,8 +11,6 @@ public class SearchWord {
 
     private int mRatingNumber;
     private String mSearchWord;
-    private boolean mVariationState;
-    private int mStateImageResId;
     private int mVariationValue;
     private int mSearchWordIndex;
     private Date mDate;
@@ -37,28 +35,22 @@ public class SearchWord {
         mSearchWord = searchWord;
     }
 
-    public boolean isVariationState() {
-        return mVariationState;
-    }
-
-    public void setVariationState(boolean variationState) {
-        mVariationState = variationState;
-    }
-
     public int getStateImageResId() {
-        if (isVariationState()) {
-            mStateImageResId = R.drawable.ic_arrow_upward_24dp;
-        } else {
-            mStateImageResId = R.drawable.ic_arrow_downward_24dp;
+        int stateImageResId = 0;
+        if (mVariationValue > 0) {
+            stateImageResId = R.drawable.ic_arrow_upward_24dp;
+        } else if (mVariationValue < 0){
+            stateImageResId = R.drawable.ic_arrow_downward_24dp;
+        } else if (mVariationValue == 0) {
+//            stateImageResId
         }
-        return mStateImageResId;
-    }
-
-    public void setStateImageResId(int stateImageResId) {
-        mStateImageResId = stateImageResId;
+        return stateImageResId;
     }
 
     public int getVariationValue() {
+        if (mVariationValue < 0) {
+            return mVariationValue * (-1);
+        }
         return mVariationValue;
     }
 
