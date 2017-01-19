@@ -7,6 +7,11 @@
     <string name="bottom_navigation_title4">성분사전</string>
     <string name="bottom_navigation_title5">사용자</string>
 
+    <!-- product toolbar menu-->
+    <string name="menu_toolbar_product_action_faq">자주묻는질문</string>
+    <string name="menu_toolbar_product_action_archive">제품보관</string>
+    <string name="menu_toolbar_product_action_share">공유</string>
+
     <string name="search_guide_sentence">상품명, 브랜드명으로 검색해보세요</string>
     <string name="search_edit_text">search_edit_text</string>
     <string name="search_image_button">search_image_button</string>
