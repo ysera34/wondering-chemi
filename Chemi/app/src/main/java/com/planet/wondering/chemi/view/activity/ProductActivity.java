@@ -36,21 +36,6 @@ public class ProductActivity extends AppBaseActivity
 
     private static final String EXTRA_PRODUCT_ID = "com.planet.wondering.chemi.product_id";
 
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
-
-    private int mProductId;
-    private Product mProduct;
-
-    private Toolbar mProductToolbar;
-    private ImageView mProductDetailImageView;
-    private RatingBar mProductDetailReviewRatingBar;
-    private TextView mProudctDetailReviewRatingValueTextView;
-    private TextView mProductDetailReviewRatingCountTextView;
-
-    protected BottomNavigationView mBottomNavigationView;
-    public RelativeLayout mBottomNavigationLayout;
-
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ProductActivity.class);
         return intent;
@@ -61,6 +46,21 @@ public class ProductActivity extends AppBaseActivity
         intent.putExtra(EXTRA_PRODUCT_ID, productId);
         return intent;
     }
+
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
+    private int mProductId;
+    private Product mProduct;
+
+    private Toolbar mProductToolbar;
+    private ImageView mProductDetailImageView;
+    private RatingBar mProductDetailReviewRatingBar;
+    private TextView mProductDetailReviewRatingValueTextView;
+    private TextView mProductDetailReviewRatingCountTextView;
+
+    protected BottomNavigationView mBottomNavigationView;
+    public RelativeLayout mBottomNavigationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class ProductActivity extends AppBaseActivity
 
         mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
         mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);
-        mProudctDetailReviewRatingValueTextView =
+        mProductDetailReviewRatingValueTextView =
                 (TextView) findViewById(R.id.product_detail_review_rating_value_text_view);
         mProductDetailReviewRatingCountTextView =
                 (TextView) findViewById(R.id.product_detail_review_rating_count_text_view);
@@ -115,7 +115,7 @@ public class ProductActivity extends AppBaseActivity
 
 //        mProductDetailImageView
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
-        mProudctDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
+        mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
     }

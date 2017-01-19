@@ -23,13 +23,6 @@ public class ProductListActivity extends BottomNavigationActivity {
     private static final String EXTRA_PRODUCT_IDS = "com.planet.wondering.chemi.product_ids";
     private static final String EXTRA_CATEGORY_ID = "com.planet.wondering.chemi.category_id";
 
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
-
-    private int mProductId;
-    private ArrayList<Integer> mProductIds;
-    private byte mCategoryId;
-
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ProductListActivity.class);
         return intent;
@@ -52,6 +45,13 @@ public class ProductListActivity extends BottomNavigationActivity {
         intent.putExtra(EXTRA_CATEGORY_ID, categoryId);
         return intent;
     }
+
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
+    private int mProductId;
+    private ArrayList<Integer> mProductIds;
+    private byte mCategoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

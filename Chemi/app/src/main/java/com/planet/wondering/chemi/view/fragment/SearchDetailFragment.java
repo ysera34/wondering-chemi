@@ -45,7 +45,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     private TabLayout mSearchTabLayout;
     private ViewPager mSearchViewPager;
     private ArrayList<Fragment> mSearchListFragments;
-    private ArrayList<String> mSearchListFragmentsTitles;
+    private ArrayList<String> mSearchListFragmentTitles;
 
     public static SearchDetailFragment newInstance() {
 
@@ -65,7 +65,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         mSearchResults = Arrays.asList(sampleArr);
 
         mSearchListFragments = new ArrayList<>();
-        mSearchListFragmentsTitles = new ArrayList<>();
+        mSearchListFragmentTitles = new ArrayList<>();
 
         addSearchFragment(SearchPopularListFragment.newInstance(),
                 getString(R.string.search_popular_fragment_title));
@@ -143,9 +143,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
             @Override
             public CharSequence getPageTitle(int position) {
-                return mSearchListFragmentsTitles.get(position);
+                return mSearchListFragmentTitles.get(position);
             }
-
         });
         mSearchViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -191,7 +190,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
     private void addSearchFragment(Fragment fragment, String title) {
         mSearchListFragments.add(fragment);
-        mSearchListFragmentsTitles.add(title);
+        mSearchListFragmentTitles.add(title);
     }
 
     public void updateSearchEditText(String searchWord) {
