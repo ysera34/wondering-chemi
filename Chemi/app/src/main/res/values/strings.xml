@@ -27,6 +27,7 @@
     <string name="product_sort_rating_value">평점 순</string>
     <string name="product_sort_rating_count">리뷰 순</string>
     <string name="product_total_count">검색 결과 %s 개</string>
+    <string name="product_review_count">(%s명)</string>
 
     <string-array name="kind_of_product_sort_array">
         <item>@string/product_sort_accuracy</item>

@@ -12,7 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
@@ -40,6 +43,10 @@ public class ProductActivity extends AppBaseActivity
     private Product mProduct;
 
     private Toolbar mProductToolbar;
+    private ImageView mProductDetailImageView;
+    private RatingBar mProductDetailReviewRatingBar;
+    private TextView mProudctDetailReviewRatingValueTextView;
+    private TextView mProductDetailReviewRatingCountTextView;
 
     protected BottomNavigationView mBottomNavigationView;
     public RelativeLayout mBottomNavigationLayout;
@@ -76,8 +83,12 @@ public class ProductActivity extends AppBaseActivity
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
         setSupportActionBar(mProductToolbar);
 
-        setTitle(mProduct.getName());
-        mProductToolbar.setSubtitle(mProduct.getBrand());
+        mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
+        mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);
+        mProudctDetailReviewRatingValueTextView =
+                (TextView) findViewById(R.id.product_detail_review_rating_value_text_view);
+        mProductDetailReviewRatingCountTextView =
+                (TextView) findViewById(R.id.product_detail_review_rating_count_text_view);
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
@@ -91,8 +102,22 @@ public class ProductActivity extends AppBaseActivity
 //        if (mCategoryId > 0) {
 //            setupBottomNavigation(1);
 //        } else {
-            setupBottomNavigation(0);
+//            setupBottomNavigation(0);
 //        }
+        setupBottomNavigation(0);
+        bindProduct(mProduct);
+    }
+
+    private void bindProduct(Product product) {
+
+        setTitle(mProduct.getName());
+        mProductToolbar.setSubtitle(mProduct.getBrand());
+
+//        mProductDetailImageView
+        mProductDetailReviewRatingBar.setRating(product.getRatingValue());
+        mProudctDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
+        mProductDetailReviewRatingCountTextView.setText(
+                getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
     }
 
     @Override

@@ -65,7 +65,7 @@
                 android:numStars="5"/>
 
             <TextView
-                android:id="@+id/list_item_product_review_avg_text_view"
+                android:id="@+id/list_item_product_review_rating_value_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -75,7 +75,7 @@
                 android:text="4.0"/>
 
             <TextView
-                android:id="@+id/list_item_product_review_rating_text_view"
+                android:id="@+id/list_item_product_review_rating_count_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
