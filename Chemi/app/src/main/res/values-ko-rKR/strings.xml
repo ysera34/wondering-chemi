@@ -18,6 +18,16 @@
     <string name="latest_search_delete">최근 검색어 전체 삭제</string>
     <string name="empty_latest_search_info">보관된 최근 검색어가 없습니다.</string>
     <string name="latest_search_all_delete">전체 기록 삭제</string>
+    <string name="product_sort_accuracy">정확도 순</string>
+    <string name="product_sort_rating_value">평점 순</string>
+    <string name="product_sort_rating_count">리뷰 순</string>
+    <string name="product_total_count">검색 결과 %s 개</string>
+
+    <string-array name="kind_of_product_sort_array">
+        <item>@string/product_sort_accuracy</item>
+        <item>@string/product_sort_rating_value</item>
+        <item>@string/product_sort_rating_count</item>
+    </string-array>
 
     <!-- Sample Data -->
     <string-array name="search_popular_word_array">

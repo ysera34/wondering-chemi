@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/list_item_searched_product_height"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp"
+              android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginEnd="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/list_item_product_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/list_item_product_brand_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontNormal"
+            android:text="더퓨어"/>
+
+        <TextView
+            android:id="@+id/list_item_product_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"
+            android:text="아임키즈 찰랑찰랑 2NI1 샴푸"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp">
+
+            <RatingBar
+                android:id="@+id/list_item_product_review_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/RatingBarTheme"
+                style="@style/ProductListRatingBarStyle"
+                android:rating="3.5"
+                android:stepSize="0.01"
+                android:numStars="5"/>
+
+            <TextView
+                android:id="@+id/list_item_product_review_avg_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="@color/colorAccent"
+                android:text="4.0"/>
+
+            <TextView
+                android:id="@+id/list_item_product_review_rating_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontNormal"
+                android:text="(1300명)"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

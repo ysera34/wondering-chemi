@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -21,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +91,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     mSearchClearImageButton.setVisibility(View.VISIBLE);
-                    mSearchResultsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_searched_wordpart, mSearchResults);
+                    mSearchResultsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_search_wordpart, mSearchResults);
                     mSearchAutoCompleteTextView.setAdapter(mSearchResultsAdapter);
                 }
                 if (charSequence.length() == 0) {
@@ -105,6 +107,16 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         mSearchAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+
+//                    getActivity().getSupportFragmentManager()
+//                            .beginTransaction()
+//                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+//                            .replace(R.id.fragment_container, ProductListFragment.newInstance())
+//                            .addToBackStack(null)
+//                            .commit();
+                    startActivity(ProductListActivity.newIntent(getActivity()));
+                }
                 return false;
             }
         });

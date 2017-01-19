@@ -25,4 +25,10 @@
 
     </style>
 
+    <style name="ProductToolbarStyle">
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
 </resources>

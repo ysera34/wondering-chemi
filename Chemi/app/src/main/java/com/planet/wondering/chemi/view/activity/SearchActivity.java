@@ -37,8 +37,8 @@ public class SearchActivity extends BottomNavigationActivity
         if (mFragment == null) {
             mFragment = SearchFragment.newInstance();
             mFragmentManager.beginTransaction()
-//                    .addToBackStack(TAG)
                     .add(R.id.fragment_container, mFragment)
+                    .addToBackStack(null)
                     .commit();
         }
     }

@@ -34,4 +34,23 @@
 
     </style>
 
+    <style name="ProductToolbarTextAppearance">
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="ProductToolbarTextAppearance.Title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ProductToolbarTextAppearance.Subtitle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ProductToolbarStyle">
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="android:background">@color/colorWhite</item>
+    </style>
 </resources>
