@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,6 +54,7 @@ public class ProductActivity extends AppBaseActivity
     private int mProductId;
     private Product mProduct;
 
+    private AppBarLayout mProductAppBarLayout;
     private Toolbar mProductToolbar;
     private ImageView mProductDetailImageView;
     private RatingBar mProductDetailReviewRatingBar;
@@ -79,6 +81,18 @@ public class ProductActivity extends AppBaseActivity
                     .add(R.id.product_fragment_container, mFragment)
                     .commit();
         }
+
+        mProductAppBarLayout = (AppBarLayout) findViewById(R.id.product_detail_app_bar_layout);
+        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+                    hideBottomNavigationView();
+                } else {
+                    showBottomNavigationView();
+                }
+            }
+        });
 
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
         setSupportActionBar(mProductToolbar);
