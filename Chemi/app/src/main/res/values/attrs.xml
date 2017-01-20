@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HexagonFilterLayout">
+        <attr name="hexagonImageSrc" format="integer"/>
+        <attr name="hexagonCount" format="integer"/>
+        <attr name="hexagonLabel" format="string"/>
+    </declare-styleable>
+</resources>
