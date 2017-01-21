@@ -143,4 +143,41 @@ public class Product {
         }
         return counts;
     }
+
+    public ArrayList<Chemical> getChemicalListOfEachEWGRating(int hexagonFilterIndex) {
+        ArrayList<Chemical> chemicals = new ArrayList<>();
+        switch (hexagonFilterIndex) {
+            case 0:
+                return mChemicals;
+            case 1:
+                for (Chemical chemical : mChemicals) {
+                    if (chemical.getMaxHazard() == 1 || chemical.getMaxHazard() == 2) {
+                        chemicals.add(chemical);
+                    }
+                }
+                return chemicals;
+            case 2:
+                for (Chemical chemical : mChemicals) {
+                    if (chemical.getMaxHazard() >= 3 && chemical.getMaxHazard() <= 6) {
+                        chemicals.add(chemical);
+                    }
+                }
+                return chemicals;
+            case 3:
+                for (Chemical chemical : mChemicals) {
+                    if (chemical.getMaxHazard() >= 7 && chemical.getMaxHazard() <= 10) {
+                        chemicals.add(chemical);
+                    }
+                }
+                return chemicals;
+            case 4:
+                for (Chemical chemical : mChemicals) {
+                    if (chemical.getMaxHazard() == 0) {
+                        chemicals.add(chemical);
+                    }
+                }
+                return chemicals;
+        }
+        return null;
+    }
 }

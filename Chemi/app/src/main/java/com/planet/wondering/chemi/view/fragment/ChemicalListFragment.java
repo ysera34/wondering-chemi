@@ -21,7 +21,10 @@ import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.CircleHazardView;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by yoon on 2017. 1. 19..
@@ -56,6 +59,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     private Product mProduct;
     private ArrayList<Chemical> mChemicals;
 
+    private TextView mChemicalSortInfoTextView;
     private HexagonFilterLayout[] mHexagonFilterLayouts;
     private RecyclerView mChemicalRecyclerView;
     private ChemicalAdapter mChemicalAdapter;
@@ -75,14 +79,17 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical_list, container, false);
+
+        mChemicalSortInfoTextView = (TextView) view.findViewById(R.id.chemical_sort_info_text_view);
         mHexagonFilterLayouts = new HexagonFilterLayout[5];
 
         int[] filterLayoutIds = new int[]{
-                R.id.hexagon1, R.id.hexagon2, R.id.hexagon3, R.id.hexagon4, R.id.hexagon5,
-        };
+                R.id.hexagon1, R.id.hexagon2, R.id.hexagon3, R.id.hexagon4, R.id.hexagon5,};
+        int[] numberOfEachEWGRatings = mProduct.getNumberOfEachEWGRating();
 
         for (int i = 0; i < mHexagonFilterLayouts.length; i++) {
             mHexagonFilterLayouts[i] = (HexagonFilterLayout) view.findViewById(filterLayoutIds[i]);
+            mHexagonFilterLayouts[i].setHexagonCount(numberOfEachEWGRatings[i]);
             mHexagonFilterLayouts[i].setOnClickListener(this);
         }
 
@@ -118,6 +125,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     }
 
     private void updateUI() {
+
         if (mChemicalAdapter == null) {
             mChemicalAdapter = new ChemicalAdapter(mChemicals);
             mChemicalRecyclerView.setAdapter(mChemicalAdapter);
@@ -131,26 +139,31 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
             case R.id.hexagon1:
                 arrangeHexagonFilterLayouts(0);
+                arrangeChemicalList(0);
                 break;
             case R.id.hexagon2:
                 arrangeHexagonFilterLayouts(1);
+                arrangeChemicalList(1);
                 break;
             case R.id.hexagon3:
                 arrangeHexagonFilterLayouts(2);
+                arrangeChemicalList(2);
                 break;
             case R.id.hexagon4:
                 arrangeHexagonFilterLayouts(3);
+                arrangeChemicalList(3);
                 break;
             case R.id.hexagon5:
                 arrangeHexagonFilterLayouts(4);
+                arrangeChemicalList(4);
                 break;
         }
     }
 
-    private void arrangeHexagonFilterLayouts(int index) {
+    private void arrangeHexagonFilterLayouts(int hexagonFilterIndex) {
 
         for (int i = 0; i < mHexagonFilterLayouts.length; i++) {
-            if (i == index) {
+            if (i == hexagonFilterIndex) {
                 mHexagonFilterLayouts[i].scaleUpAnimate();
             } else {
                 mHexagonFilterLayouts[i].scaleDownAnimate();
@@ -158,11 +171,31 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    private void arrangeChemicalList(int hexagonFilterIndex) {
+        if (mChemicalAdapter == null) {
+            return;
+        }
+        ArrayList<Chemical> chemicals = mProduct.getChemicalListOfEachEWGRating(hexagonFilterIndex);
+        if (hexagonFilterIndex == 0) {
+            mChemicalSortInfoTextView.setText("제품표기순");
+        } else {
+            Collections.sort(chemicals, mHazardGradeDescChemicalComparator);
+            Collections.reverse(chemicals);
+            mChemicalSortInfoTextView.setText("위험도 순");
+        }
+        mChemicalAdapter.setChemicals(chemicals);
+        mChemicalAdapter.notifyDataSetChanged();
+    }
+
     private class ChemicalAdapter extends RecyclerView.Adapter<ChemicalHolder> {
 
         private ArrayList<Chemical> mChemicals;
 
         ChemicalAdapter(ArrayList<Chemical> chemicals) {
+            mChemicals = chemicals;
+        }
+
+        public void setChemicals(ArrayList<Chemical> chemicals) {
             mChemicals = chemicals;
         }
 
@@ -220,4 +253,34 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             Toast.makeText(getActivity(), String.valueOf(mChemical.getNameKo()), Toast.LENGTH_SHORT).show();
         }
     }
+
+    private final static Comparator mHazardGradeDescChemicalComparator = new Comparator() {
+
+        private final Collator mCollator = Collator.getInstance();
+
+        @Override
+        public int compare(Object o, Object t1) {
+
+            int int1 = ((Chemical) o).getMaxHazard();
+            int int2 = ((Chemical) t1).getMaxHazard();
+
+            String str1;
+            String str2;
+
+            if (int1 == 10) {
+                str1 = String.valueOf(int1);
+            } else {
+                str1 = "0" + String.valueOf(int1);
+            }
+
+            if (int2 == 10) {
+                str2 = String.valueOf(int2);
+            } else {
+                str2 = "0" + String.valueOf(int2);
+            }
+
+            return mCollator.compare(str1, str2);
+        }
+    };
+
 }

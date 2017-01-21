@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.view.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
@@ -57,6 +58,8 @@ public class HexagonFilterLayout extends LinearLayout {
     private boolean mScaleState = false;
 
     private void init(Context context) {
+        setWillNotDraw(false);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mRootView = inflate(context, R.layout.layout_hexagon_filter, this);
         mHexagonFilterImageLayout = (RelativeLayout) mRootView.findViewById(R.id.hexagon_filter_image_layout);
         mHexagonFilterImageView = (ImageView) mRootView.findViewById(R.id.hexagon_filter_image_view);
@@ -66,7 +69,7 @@ public class HexagonFilterLayout extends LinearLayout {
         mUnitTextView = (TextView) mRootView.findViewById(R.id.unit_text_view);
         mLabelTextView = (TextView) mRootView.findViewById(R.id.label_text_view);
         mLabelTextView.setText(mHexagonLabel);
-        invalidate();
+//        invalidate();
     }
 
     public void scaleUpAnimate() {
@@ -100,6 +103,7 @@ public class HexagonFilterLayout extends LinearLayout {
     public void setHexagonImageSrc(int hexagonImageSrc) {
         mHexagonImageSrc = hexagonImageSrc;
         invalidate();
+        requestLayout();
     }
 
     public int getHexagonCount() {
@@ -109,6 +113,7 @@ public class HexagonFilterLayout extends LinearLayout {
     public void setHexagonCount(int hexagonCount) {
         mHexagonCount = hexagonCount;
         invalidate();
+        requestLayout();
     }
 
     public String getHexagonLabel() {
@@ -118,5 +123,12 @@ public class HexagonFilterLayout extends LinearLayout {
     public void setHexagonLabel(String hexagonLabel) {
         mHexagonLabel = hexagonLabel;
         invalidate();
+        requestLayout();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        mCountTextView.setText(String.valueOf(mHexagonCount));
     }
 }

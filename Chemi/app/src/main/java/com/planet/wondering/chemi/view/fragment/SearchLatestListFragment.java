@@ -63,7 +63,7 @@ public class SearchLatestListFragment extends Fragment {
         mSearchLatestRecyclerView = (RecyclerView) view.findViewById(R.id.search_latest_recycler_view);
         mSearchLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 1.5f);
+                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mSearchLatestRecyclerView.addItemDecoration(decoration);
         mSearchLatestRecyclerView.addOnScrollListener(new OnScrollListener() {
             @Override

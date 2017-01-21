@@ -54,7 +54,7 @@ public class SearchPopularListFragment extends Fragment {
         mSearchPopularRecyclerView = (RecyclerView) view.findViewById(R.id.search_popular_recycler_view);
         mSearchPopularRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 1.5f);
+                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mSearchPopularRecyclerView.addItemDecoration(decoration);
 
         return view;
