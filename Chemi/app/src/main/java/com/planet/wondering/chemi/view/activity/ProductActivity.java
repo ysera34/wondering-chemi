@@ -183,12 +183,12 @@ public class ProductActivity extends AppBaseActivity
         mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
     }
 
-    private void showBottomNavigationView() {
+    public void showBottomNavigationView() {
         mBottomNavigationLayout.animate().translationY(0)
                 .setInterpolator(new DecelerateInterpolator(2));
     }
 
-    private void hideBottomNavigationView() {
+    public void hideBottomNavigationView() {
         mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
     }

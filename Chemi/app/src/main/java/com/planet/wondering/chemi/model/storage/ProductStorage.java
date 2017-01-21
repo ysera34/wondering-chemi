@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.model.storage;
 
 import android.content.Context;
 
+import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Product;
 
 import java.util.ArrayList;
@@ -26,6 +27,17 @@ public class ProductStorage {
             product.setId(i);
             product.setName("product name" + i);
             product.setBrand("brand name" + i);
+
+            for (int j = 0; j < 10; j++) {
+                Chemical chemical = new Chemical();
+                chemical.setNameKo("화학성분" + j);
+                chemical.setNameEn("chemical" + j);
+                if (j > 3 && j % 2 == 0) {
+                    chemical.setMinHazard((byte)3);
+                }
+                chemical.setMaxHazard((byte)j);
+                product.getChemicals().add(chemical);
+            }
             mProducts.add(product);
         }
     }

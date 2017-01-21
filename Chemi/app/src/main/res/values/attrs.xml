@@ -5,4 +5,9 @@
         <attr name="hexagonCount" format="integer"/>
         <attr name="hexagonLabel" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="CircleHazardView">
+        <attr name="circleColor" format="color"/>
+        <attr name="hazardValueText" format="string"/>
+    </declare-styleable>
 </resources>

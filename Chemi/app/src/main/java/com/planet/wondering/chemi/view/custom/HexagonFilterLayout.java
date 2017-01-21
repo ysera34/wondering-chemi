@@ -35,7 +35,7 @@ public class HexagonFilterLayout extends LinearLayout {
         try {
             mHexagonImageSrc = a.getResourceId(R.styleable.HexagonFilterLayout_hexagonImageSrc, 0);
             mHexagonCount = a.getInt(R.styleable.HexagonFilterLayout_hexagonCount, 0);
-            mHexagonLabel = a.getNonResourceString(R.styleable.HexagonFilterLayout_hexagonLabel);
+            mHexagonLabel = a.getString(R.styleable.HexagonFilterLayout_hexagonLabel);
         } finally {
             a.recycle();
         }
@@ -66,6 +66,7 @@ public class HexagonFilterLayout extends LinearLayout {
         mUnitTextView = (TextView) mRootView.findViewById(R.id.unit_text_view);
         mLabelTextView = (TextView) mRootView.findViewById(R.id.label_text_view);
         mLabelTextView.setText(mHexagonLabel);
+        invalidate();
     }
 
     public void scaleUpAnimate() {
@@ -90,5 +91,32 @@ public class HexagonFilterLayout extends LinearLayout {
         scale.setDuration(500);
         mHexagonFilterImageLayout.startAnimation(scale);
         mScaleState = false;
+    }
+
+    public int getHexagonImageSrc() {
+        return mHexagonImageSrc;
+    }
+
+    public void setHexagonImageSrc(int hexagonImageSrc) {
+        mHexagonImageSrc = hexagonImageSrc;
+        invalidate();
+    }
+
+    public int getHexagonCount() {
+        return mHexagonCount;
+    }
+
+    public void setHexagonCount(int hexagonCount) {
+        mHexagonCount = hexagonCount;
+        invalidate();
+    }
+
+    public String getHexagonLabel() {
+        return mHexagonLabel;
+    }
+
+    public void setHexagonLabel(String hexagonLabel) {
+        mHexagonLabel = hexagonLabel;
+        invalidate();
     }
 }

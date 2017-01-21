@@ -39,29 +39,29 @@
         </LinearLayout>
 
         <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        >
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:id="@+id/list_item_product_brand_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:textSize="14sp"
-            android:textColor="@color/colorFontNormal"
-            android:text="더퓨어"/>
+            <TextView
+                android:id="@+id/list_item_product_brand_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textSize="14sp"
+                android:textColor="@color/colorFontNormal"
+                android:text="더퓨어"/>
 
-        <TextView
-            android:id="@+id/list_item_product_name_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/colorFontNormal"
-            android:text="아임키즈 찰랑찰랑 2NI1 샴푸"/>
+            <TextView
+                android:id="@+id/list_item_product_name_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"
+                android:text="아임키즈 찰랑찰랑 2NI1 샴푸"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,4 +103,5 @@
     </LinearLayout>
 
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

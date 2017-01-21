@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.storage.ProductStorage;
+import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
@@ -115,6 +116,9 @@ public class ProductListFragment extends Fragment {
         mProductSortButton = (Button) view.findViewById(R.id.product_sort_button);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        SeparatorDecoration decoration =
+                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+        mProductRecyclerView.addItemDecoration(decoration);
         mProductRecyclerView.addOnScrollListener(new OnScrollListener() {
             @Override
             public void onShowView() {
@@ -160,7 +164,7 @@ public class ProductListFragment extends Fragment {
         @Override
         public ProductHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_card_search_product, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_product, parent, false);
             return new ProductHolder(view);
         }
 
@@ -187,7 +191,7 @@ public class ProductListFragment extends Fragment {
         private TextView mProductReviewRatingValueTextView;
         private TextView mProductReviewRatingCountTextView;
 
-        public ProductHolder(View itemView) {
+        ProductHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 

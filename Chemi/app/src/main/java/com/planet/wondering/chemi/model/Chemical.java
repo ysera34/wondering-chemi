@@ -94,4 +94,37 @@ public class Chemical {
         }
         return hazardIconResId;
     }
+
+    public int getHazardColorResId() {
+        int hazardColor;
+        switch (getMaxHazard()) {
+            case 0:
+                hazardColor = R.color.hazard1;
+                break;
+            case 1:case 2:
+                hazardColor = R.color.hazard2;
+                break;
+            case 3:case 4:case 5:case 6:
+                hazardColor = R.color.hazard3;
+                break;
+            case 7:case 8:case 9:case 10:
+                hazardColor = R.color.hazard4;
+                break;
+            default:
+                hazardColor = R.color.hazard0;
+        }
+        return hazardColor;
+    }
+
+    public String getHazardValueString() {
+        if (getMaxHazard() == 0) {
+            return "-";
+        }
+        StringBuilder hazardLabelBuilder = new StringBuilder(String.valueOf(getMaxHazard()));
+        if (getMinHazard() != 0) {
+            hazardLabelBuilder.insert(0, String.valueOf(getMinHazard()) + "~");
+        }
+        return hazardLabelBuilder.toString();
+    }
 }
+
