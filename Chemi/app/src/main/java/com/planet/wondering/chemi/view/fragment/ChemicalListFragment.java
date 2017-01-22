@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
@@ -35,6 +35,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     private static final String TAG = ChemicalListFragment.class.getSimpleName();
 
     private static final String ARG_PRODUCT_ID = "product_id";
+    private static final String CHEMICAL_DIALOG = "chemical_dialog";
 
     public static ChemicalListFragment newInstance() {
 
@@ -68,7 +69,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mProductId = getArguments().getInt(ARG_PRODUCT_ID, 0);
+        mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
         mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
 
         mChemicals = mProduct.getChemicals();
@@ -177,11 +178,11 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         }
         ArrayList<Chemical> chemicals = mProduct.getChemicalListOfEachEWGRating(hexagonFilterIndex);
         if (hexagonFilterIndex == 0) {
-            mChemicalSortInfoTextView.setText("제품표기순");
+            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
         } else {
             Collections.sort(chemicals, mHazardGradeDescChemicalComparator);
             Collections.reverse(chemicals);
-            mChemicalSortInfoTextView.setText("위험도 순");
+            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_hazard);
         }
         mChemicalAdapter.setChemicals(chemicals);
         mChemicalAdapter.notifyDataSetChanged();
@@ -195,7 +196,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             mChemicals = chemicals;
         }
 
-        public void setChemicals(ArrayList<Chemical> chemicals) {
+        void setChemicals(ArrayList<Chemical> chemicals) {
             mChemicals = chemicals;
         }
 
@@ -210,11 +211,18 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         public void onBindViewHolder(ChemicalHolder holder, int position) {
             Chemical chemical = mChemicals.get(position);
             holder.bindChemical(chemical);
+            setFadeAnimation(holder.itemView);
         }
 
         @Override
         public int getItemCount() {
             return mChemicals.size();
+        }
+
+        private void setFadeAnimation(View view) {
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500);
+            view.startAnimation(anim);
         }
     }
 
@@ -250,7 +258,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), String.valueOf(mChemical.getNameKo()), Toast.LENGTH_SHORT).show();
+            ChemicalDialogFragment dialogFragment = ChemicalDialogFragment.newInstance(mChemical.getId());
+            dialogFragment.show(getFragmentManager(), CHEMICAL_DIALOG);
         }
     }
 

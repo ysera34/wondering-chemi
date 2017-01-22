@@ -72,4 +72,13 @@
         <item name="android:shadowColor">@color/colorFontHint</item>
         <item name="textAllCaps">true</item>
     </style>
+    
+    <style name="ChemicalDialogAnimation">
+        <!--<item name="android:windowEnterAnimation">@anim/slide_up</item>-->
+        <!--<item name="android:windowExitAnimation">@anim/slide_down</item>-->
+        <!--<item name="android:windowEnterAnimation">@anim/scale_in</item>-->
+        <!--<item name="android:windowExitAnimation">@anim/scale_out</item>-->
+        <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
+    </style>
 </resources>

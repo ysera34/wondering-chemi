@@ -30,6 +30,7 @@ public class ProductStorage {
 
             for (int j = 0; j < 10; j++) {
                 Chemical chemical = new Chemical();
+                chemical.setId(j);
                 chemical.setNameKo("화학성분" + j);
                 chemical.setNameEn("chemical" + j);
                 if (j > 3 && j % 2 == 0) {

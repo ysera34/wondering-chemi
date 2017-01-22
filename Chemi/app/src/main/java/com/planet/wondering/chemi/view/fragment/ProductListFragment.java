@@ -11,11 +11,11 @@ import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
@@ -172,11 +172,18 @@ public class ProductListFragment extends Fragment {
         public void onBindViewHolder(ProductHolder holder, int position) {
             Product product = mProducts.get(position);
             holder.bindProduct(product);
+            setFadeAnimation(holder.itemView);
         }
 
         @Override
         public int getItemCount() {
             return mProducts.size();
+        }
+
+        private void setFadeAnimation(View view) {
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500);
+            view.startAnimation(anim);
         }
     }
 
@@ -221,7 +228,6 @@ public class ProductListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), mProduct.getName(), Toast.LENGTH_SHORT).show();
             startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
         }
     }
