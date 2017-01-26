@@ -5,12 +5,16 @@ import android.util.Log;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Product;
+import com.planet.wondering.chemi.model.Tag;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.planet.wondering.chemi.network.Config.COUNT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICALS;
@@ -43,6 +47,12 @@ import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ID;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 
 /**
  * Created by yoon on 2017. 1. 26..
@@ -51,6 +61,61 @@ import static com.planet.wondering.chemi.network.Config.TOTAL;
 public class Parser {
 
     public static final String TAG = Parser.class.getSimpleName();
+
+    public static ArrayList<Tag> parseTagPopularList(JSONObject responseObject) {
+
+        ArrayList<Tag> tags = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                if (tagSize > 0) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+                        Tag tag = new Tag();
+                        tag.setId(tagJSONObject.getInt(TAG_ID));
+                        tag.setName(tagJSONObject.getString(TAG_DESCRIPTION));
+                        tag.setRank(tagJSONObject.getInt(TAG_RANK));
+                        tag.setVariation(tagJSONObject.getInt(TAG_RANK_DELTA));
+                        Date rankDate = dateFormat.parse(tagJSONObject.getString(RANKED_TIME));
+                        tag.setRankDate(rankDate);
+                        tags.add(tag);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (ParseException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return tags;
+    }
+
+    public static ArrayList<Tag> parseTagList(JSONObject responseObject) {
+
+        ArrayList<Tag> tags = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                if (tagSize > 0) {
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+                        Tag tag = new Tag();
+                        tag.setId(tagJSONObject.getInt(TAG_ID));
+                        tag.setName(tagJSONObject.getString(TAG_DESCRIPTION));
+                        tags.add(tag);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return tags;
+    }
 
     public static ArrayList<Product> parseProductList(JSONObject responseObject) {
 

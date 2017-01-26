@@ -19,12 +19,34 @@ public class Config {
     public static final String PAGE = "skipping";
     public static final String PAGE_PREV = "prev";
     public static final String PAGE_NEXT = "next";
+    public static final String QUERY_START = "?";
 
     public static final int SOCKET_TIMEOUT_GET_REQ = 5000;
     public static final int SOCKET_TIMEOUT_POST_REQ = 10000;
 
+    public static final class Tag {
+        public static final String PATH = File.separator + "tags";
+
+        public static final class Key {
+            public static final String CHARACTER_QUERY = "?character=";
+            public static final String LOWEST_QUEST_DEFAULT = "?lowest=10";
+            public static final String RANKED_TIME = "ranked";
+            public static final String TAG_COUNT = "counted";
+            public static final String TAG_ID = "id";
+            public static final String TAG_DESCRIPTION = "description";
+            public static final String TAG_RANK = "rank";
+            public static final String TAG_RANK_DELTA = "rankDelta";
+        }
+    }
+
     public static final class Product {
         public static final String PATH = File.separator + "products";
+        public static final String QUERY_TAG = "?tag=";
+        public static final String QUERY_CATEGORY = "?categoryid=";
+        public static final String QUERY_ORDER = "&orderBy=";
+        public static final String ORDER_ACCURACY = QUERY_ORDER + 0;
+        public static final String ORDER_RATING_VALUE = QUERY_ORDER + 1;
+        public static final String ORDER_RATING_COUNT = QUERY_ORDER + 2;
 
         public static final class Key {
             public static final String PRODUCTS = "products";
