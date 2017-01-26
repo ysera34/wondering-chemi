@@ -18,6 +18,7 @@ public class Product {
     private String mImagePath;
     private float mRatingValue;
     private int mRatingCount;
+    private int mAllergyCount;
     private boolean mArchive;
     private ArrayList<Chemical> mChemicals;
 
@@ -104,6 +105,14 @@ public class Product {
 
     public void setRatingCount(int ratingCount) {
         mRatingCount = ratingCount;
+    }
+
+    public int getAllergyCount() {
+        return mAllergyCount;
+    }
+
+    public void setAllergyCount(int allergyCount) {
+        mAllergyCount = allergyCount;
     }
 
     public boolean isArchive() {

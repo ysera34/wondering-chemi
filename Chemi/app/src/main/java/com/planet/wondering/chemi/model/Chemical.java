@@ -2,6 +2,8 @@ package com.planet.wondering.chemi.model;
 
 import com.planet.wondering.chemi.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by yoon on 2017. 1. 17..
  */
@@ -15,9 +17,10 @@ public class Chemical {
     private byte mMinHazard;
     private byte mMaxHazard;
     private boolean mAllergy;
+    private ArrayList<Hazard> mHazards;
 
     public Chemical() {
-
+        mHazards = new ArrayList<>();
     }
 
     public int getId() {
@@ -74,6 +77,14 @@ public class Chemical {
 
     public void setAllergy(boolean allergy) {
         mAllergy = allergy;
+    }
+
+    public ArrayList<Hazard> getHazards() {
+        return mHazards;
+    }
+
+    public void setHazards(ArrayList<Hazard> hazards) {
+        mHazards = hazards;
     }
 
     public int getHazardIconResId() {
