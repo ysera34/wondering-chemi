@@ -2,11 +2,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+    android:background="@drawable/widget_border_bottom">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment_chemical_dialog"/>
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+        <!--android:layout_height="@dimen/chemical_dialog_header_height"-->
+
+        <com.planet.wondering.chemi.view.custom.CircleHazardView
+            android:id="@+id/chemical_dialog_circle_hazard_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/chemical_dialog_name_ko_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"
+            android:text="락틱애씨드; 젖산"/>
+
+        <TextView
+            android:id="@+id/chemical_dialog_name_eng_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"
+            android:text="Lactic Acid"/>
+
+        <TextView
+            android:id="@+id/chemical_dialog_purpose_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorFontBody"
+            android:text="각질제거제, 착향제, 습윤제, pH조절제, 피부컨디셔닝제, 완충제"/>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chemical_dialog_allergy_info_height"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/widget_border_top_bottom">
+
+        <TextView
+            android:id="@+id/chemical_dialog_allergy_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textColor="@color/colorFontBody"
+            android:text="@string/chemical_dialog_allergy_false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chemical_dialog_hazard_info_height">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chemical_dialog_hazard_info_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </LinearLayout>

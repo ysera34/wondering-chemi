@@ -44,7 +44,7 @@ public class CircleHazardView extends View {
         );
 
         try {
-            mCircleColor = a.getColor(R.styleable.CircleHazardView_circleColor,
+            mCircleColor = a.getInt(R.styleable.CircleHazardView_circleColor,
                     getResources().getColor(android.R.color.black));
             mHazardValueText = a.getString(R.styleable.CircleHazardView_hazardValueText);
         } finally {
@@ -64,7 +64,6 @@ public class CircleHazardView extends View {
     }
 
     public int getCircleColor() {
-
         return ContextCompat.getColor(mContext, mCircleColor);
 //        return mCircleColor;
     }

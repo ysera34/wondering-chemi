@@ -61,7 +61,6 @@
             custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status2"
             custom:hexagonLabel="중간위험도"/>
 
-
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon4"
             android:layout_width="wrap_content"
