@@ -7,8 +7,8 @@
     <dimen name="search_editText_paddingTop">140dp</dimen>
     <dimen name="list_item_search_height">50dp</dimen>
     <dimen name="list_item_search_product_height">90dp</dimen>
-    <dimen name="list_item_chemical_height">53dp</dimen>
     <dimen name="list_item_archive_product_height">160dp</dimen>
+    <dimen name="list_item_chemical_height">53dp</dimen>
     <dimen name="product_detail_app_bar_layout_height">260dp</dimen>
     <dimen name="product_detail_toolbar_height">48dp</dimen>
     <dimen name="chemical_dialog_header_height">150dp</dimen>

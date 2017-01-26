@@ -9,6 +9,8 @@ import android.transition.ChangeTransform;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +33,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private Button mSearchButton;
     private ImageButton mSearchImageButton;
 
+    private Animation mSearchViewAnimation;
+
     public static SearchFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -43,6 +47,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSearchViewAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_up_scale_up);
     }
 
     @Nullable
@@ -85,6 +90,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     detailFragment.setExitTransition(new ChangeTransform());
                     detailFragment.setSharedElementReturnTransition(new ChangeTransform());
                 }
+
+//                mSearchView.startAnimation(mSearchViewAnimation);
 
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()

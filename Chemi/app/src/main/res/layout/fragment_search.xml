@@ -40,8 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/search_editText_height"
             android:layout_below="@+id/white_logo_image_view"
-            android:background="@color/colorWhite"
-            android:elevation="4dp">
+            android:background="@color/colorWhite">
 
             <ImageButton
                 android:id="@+id/search_image_button"
