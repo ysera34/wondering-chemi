@@ -71,7 +71,7 @@ public class Parser {
                 int tagSize = responseObject.getInt(TAG_COUNT);
                 JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                 if (tagSize > 0) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                     for (int i = 0; i < tagSize; i++) {
                         JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
                         Tag tag = new Tag();
