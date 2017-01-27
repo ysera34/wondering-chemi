@@ -93,6 +93,27 @@ public class Parser {
         return tags;
     }
 
+    public static ArrayList<String> parseTagStringList(JSONObject responseObject) {
+
+        ArrayList<String> tagStrings = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                if (tagSize > 0) {
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+                        tagStrings.add(tagJSONObject.getString(TAG_DESCRIPTION));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return tagStrings;
+    }
+
     public static ArrayList<Tag> parseTagList(JSONObject responseObject) {
 
         ArrayList<Tag> tags = new ArrayList<>();

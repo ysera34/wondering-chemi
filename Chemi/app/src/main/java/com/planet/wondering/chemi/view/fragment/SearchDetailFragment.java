@@ -1,7 +1,10 @@
 package com.planet.wondering.chemi.view.fragment;
 
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +21,37 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
+import static com.planet.wondering.chemi.network.Config.Tag.PATH;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 1. 5..
@@ -37,8 +62,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     private static final String TAG = SearchDetailFragment.class.getSimpleName();
 
     private AutoCompleteTextView mSearchAutoCompleteTextView;
-    private List<String> mSearchResults;
-    private ArrayAdapter<String> mSearchResultsAdapter;
+    private TagCharacterAdapter mTagCharacterAdapter;
     private RelativeLayout mSearchClearLayout;
     private ImageButton mSearchClearImageButton;
 
@@ -59,10 +83,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        mSearchResults = new ArrayList<>();
-        String[] sampleArr = getResources().getStringArray(R.array.search_popular_word_array);
-        mSearchResults = Arrays.asList(sampleArr);
 
         mSearchListFragments = new ArrayList<>();
         mSearchListFragmentTitles = new ArrayList<>();
@@ -95,8 +115,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     mSearchClearImageButton.setVisibility(View.VISIBLE);
-                    mSearchResultsAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_search_wordpart, mSearchResults);
-                    mSearchAutoCompleteTextView.setAdapter(mSearchResultsAdapter);
                 }
                 if (charSequence.length() == 0) {
                     mSearchClearImageButton.setVisibility(View.INVISIBLE);
@@ -112,14 +130,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-
-//                    getActivity().getSupportFragmentManager()
-//                            .beginTransaction()
-//                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                            .replace(R.id.fragment_container, ProductListFragment.newInstance())
-//                            .addToBackStack(null)
-//                            .commit();
-                    startActivity(ProductListActivity.newIntent(getActivity()));
+                    startActivity(ProductListActivity.newIntent(
+                            getActivity(), textView.getText().toString()));
                 }
                 return false;
             }
@@ -172,6 +184,9 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         });
 
         mSearchTabLayout.setupWithViewPager(mSearchViewPager);
+
+        mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
+        mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
         return view;
     }
 
@@ -200,5 +215,135 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     public void updateSearchEditText(String searchWord) {
         mSearchAutoCompleteTextView.setText(String.valueOf(searchWord));
         mSearchAutoCompleteTextView.setSelection(searchWord.length());
+        startActivity(ProductListActivity.newIntent(getActivity(), searchWord));
+    }
+
+    private class TagCharacterAdapter extends ArrayAdapter<String> implements Filterable {
+
+        private ArrayList<String> mTagResults;
+
+        public TagCharacterAdapter(Context context, int resource) {
+            super(context, resource);
+            mTagResults = new ArrayList<>();
+        }
+
+        @Override
+        public int getCount() {
+            return mTagResults.size();
+        }
+
+        @Nullable
+        @Override
+        public String getItem(int position) {
+            return mTagResults.get(position);
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        try {
+                            String query = constraint.toString();
+//                            requestTagCharacterList(query);
+                            mTagResults = new TagCharacterTask().execute(query).get();
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+                        filterResults.values = mTagResults;
+                        filterResults.count = mTagResults.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+            return filter;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            View view = layoutInflater.inflate(R.layout.list_item_tag_character, parent, false);
+
+            String tag = mTagResults.get(position);
+            TextView tagTextView = (TextView) view.findViewById(R.id.list_item_tag_name_text_view);
+            tagTextView.setText(tag);
+
+            return view;
+        }
+
+        private class TagCharacterTask extends AsyncTask<String, Void, ArrayList<String>> {
+
+            @Override
+            protected ArrayList<String> doInBackground(String... params) {
+                try {
+                    String url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
+                    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                    connection.setRequestMethod("GET");
+
+                    InputStream in = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                    String line;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                    return Parser.parseTagStringList(jsonObject);
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                    return null;
+                }
+            }
+        }
+
+        private void requestTagCharacterList(String character) {
+
+            String utf8Query = null;
+            try {
+                utf8Query = URLEncoder.encode(character, "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, "UnsupportedEncodingException : " + e.getMessage());
+            }
+            Log.i("url", URL_HOST + PATH + CHARACTER_QUERY + utf8Query);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET, URL_HOST + PATH + CHARACTER_QUERY + utf8Query,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            mTagResults = Parser.parseTagStringList(response);
+                            for (String s : mTagResults) {
+                                Log.i(TAG, s);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, error.getMessage());
+                        }
+                    }
+            );
+
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+        }
     }
 }
