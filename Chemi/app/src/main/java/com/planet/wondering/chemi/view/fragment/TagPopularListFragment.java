@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,10 +23,13 @@ import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
+import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.LOWEST_QUEST_DEFAULT;
@@ -121,7 +125,10 @@ public class TagPopularListFragment extends Fragment {
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private class TagPopularAdapter extends RecyclerView.Adapter<TagHolder> {
+    private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_FOOTER = 1;
+
+    private class TagPopularAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ArrayList<Tag> mTags = new ArrayList<>();
 
@@ -134,25 +141,46 @@ public class TagPopularListFragment extends Fragment {
         }
 
         @Override
-        public TagHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_tag_popular, parent, false);
-            return new TagHolder(view);
+            View view;
+            switch (viewType) {
+                case VIEW_TYPE_ITEM:
+                    view = layoutInflater.inflate(R.layout.list_item_tag_popular, parent, false);
+                    return new TagViewHolder(view);
+                case VIEW_TYPE_FOOTER:
+                    view = layoutInflater.inflate(R.layout.list_item_tag_popular_footer, parent, false);
+                    return new TagFooterViewHolder(view);
+            }
+            return null;
         }
 
         @Override
-        public void onBindViewHolder(TagHolder holder, int position) {
-            Tag tag = mTags.get(position);
-            holder.bindTag(tag);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof TagViewHolder) {
+                Tag tag = mTags.get(position);
+                ((TagViewHolder) holder).bindTag(tag);
+            } else if (holder instanceof TagFooterViewHolder) {
+                ((TagFooterViewHolder) holder).bindDate(mTags.get(0).getRankDate());
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mTags.size();
+            return mTags.size() + 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (mTags.size() > 0 && position == mTags.size()) {
+                return VIEW_TYPE_FOOTER;
+            }
+            return VIEW_TYPE_ITEM;
         }
     }
 
-    private class TagHolder extends RecyclerView.ViewHolder {
+    private class TagViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private Tag mTag;
 
@@ -161,8 +189,9 @@ public class TagPopularListFragment extends Fragment {
         private ImageView mTagVariationStateImageView;
         private TextView mTagVariationValueTextView;
 
-        public TagHolder(View itemView) {
+        public TagViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mTagRatingNumberTextView = (TextView)
                     itemView.findViewById(R.id.list_item_tag_popular_rating_number_text_view);
@@ -180,6 +209,45 @@ public class TagPopularListFragment extends Fragment {
             mTagDNameTextView.setText(mTag.getName());
             mTagVariationStateImageView.setImageResource(mTag.getStateImageResId());
             mTagVariationValueTextView.setText(String.valueOf(mTag.getVariation()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            mSelectedListener.onSearchWordSelected(mTag.getName());
+        }
+    }
+
+    private class TagFooterViewHolder extends RecyclerView.ViewHolder {
+
+        private Date mUpdateDate;
+
+        private TextView mUpdateDateTextView;
+
+        public TagFooterViewHolder(View itemView) {
+            super(itemView);
+
+            mUpdateDateTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_tag_popular_footer_update_date_text_view);
+        }
+
+        public void bindDate(Date updateDate) {
+            mUpdateDate = updateDate;
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String transformedDate = transFormat.format(mUpdateDate);
+            mUpdateDateTextView.setText(getString(R.string.list_item_tag_popular_update_date, transformedDate));
+        }
+    }
+
+    OnSearchWordSelectedListener mSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mSelectedListener = (OnSearchWordSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnSearchWordSelectedListener");
         }
     }
 }

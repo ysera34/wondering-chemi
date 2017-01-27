@@ -2,13 +2,13 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/list_item_tag_height"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:background="@color/colorWhite">
-    <!--android:layout_height="@dimen/list_item_tag_height"-->
+
 
     <TextView
         android:id="@+id/list_item_tag_popular_rating_number_text_view"

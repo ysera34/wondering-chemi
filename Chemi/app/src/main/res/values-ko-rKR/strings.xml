@@ -34,6 +34,7 @@
     <string name="chemical_list_sort_notation">제품표기순</string>
     <string name="chemical_dialog_allergy_false">\"알레르기 과민성이 없다고 해요\"</string>
     <string name="chemical_dialog_allergy_true">\"알레르기 과민성이 있어요\"</string>
+    <string name="list_item_tag_popular_update_date">업데이트 날짜 : %s</string>
 
     <string-array name="kind_of_product_sort_array">
         <item>@string/product_sort_accuracy</item>

@@ -41,15 +41,13 @@ public class Tag {
     }
 
     public int getStateImageResId() {
-        int stateImageResId = 0;
-        if (getRank() > 0) {
-            stateImageResId = R.drawable.ic_arrow_upward_24dp;
-        } else if (getRank() < 0){
-            stateImageResId = R.drawable.ic_arrow_downward_24dp;
-        } else if (getRank() == 0) {
-//            stateImageResId
+        if (getVariation() > 0) {
+            return R.drawable.ic_arrow_upward_24dp;
+        } else if (getVariation() < 0){
+            return R.drawable.ic_arrow_downward_24dp;
+        } else {
+            return R.drawable.ic_search_primary_24dp;
         }
-        return stateImageResId;
     }
 
     public int getVariation() {
