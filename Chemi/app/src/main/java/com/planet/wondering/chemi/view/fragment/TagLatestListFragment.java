@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
@@ -185,7 +184,6 @@ public class TagLatestListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "all delete view", Toast.LENGTH_SHORT).show();
             mTagLatestAdapter.clearTag();
             mTagLatestAdapter.notifyDataSetChanged();
         }
@@ -224,7 +222,6 @@ public class TagLatestListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.list_item_tag_latest_delete_view) {
-                Toast.makeText(getActivity(), "list_item_latest_search_delete_view", Toast.LENGTH_SHORT).show();
                 mTagLatestAdapter.removeTag(mTag);
                 mTagLatestAdapter.notifyDataSetChanged();
             } else {
