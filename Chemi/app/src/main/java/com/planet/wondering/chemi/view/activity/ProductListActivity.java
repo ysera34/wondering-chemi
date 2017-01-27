@@ -8,9 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Tag;
+import com.planet.wondering.chemi.util.helper.TagSharedPreferences;
 import com.planet.wondering.chemi.view.fragment.ProductListFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by yoon on 2017. 1. 17..
@@ -51,6 +54,10 @@ public class ProductListActivity extends BottomNavigationActivity {
     public static Intent newIntent(Context packageContext, String tagName) {
         Intent intent = new Intent(packageContext, ProductListActivity.class);
         intent.putExtra(EXTRA_TAG_NAME, tagName);
+        Tag tag = new Tag();
+        tag.setName(tagName);
+        tag.setRankDate(new Date());
+        TagSharedPreferences.addStoreTag(packageContext, tag);
         return intent;
     }
 

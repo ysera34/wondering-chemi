@@ -182,7 +182,7 @@ public class ProductListFragment extends Fragment {
 
         private void setFadeAnimation(View view) {
             AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(500);
+            anim.setDuration(250);
             view.startAnimation(anim);
         }
     }

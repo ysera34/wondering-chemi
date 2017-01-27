@@ -15,11 +15,12 @@ import android.widget.TextView;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
+import com.planet.wondering.chemi.util.helper.TagSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 
 /**
  * Created by yoon on 2017. 1. 27..
@@ -58,6 +59,7 @@ public class TagLatestListFragment extends Fragment {
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mTagLatestRecyclerView.addItemDecoration(decoration);
 
+        updateUI();
         return view;
     }
 
@@ -65,17 +67,9 @@ public class TagLatestListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        /**
-         *
-         */
-        String[] tagNameArray = getActivity().getResources()
-                .getStringArray(R.array.tag_latest_name_array);
-
-        for (int i = 0; i < 10; i++) {
-            Tag tag = new Tag();
-            tag.setName(tagNameArray[i]);
-            tag.setRankDate(new Date());
-            mTags.add(tag);
+        mTags = TagSharedPreferences.getStoredTags(getActivity());
+        if (mTags != null) {
+            Collections.reverse(mTags);
         }
         updateUI();
     }
@@ -109,6 +103,7 @@ public class TagLatestListFragment extends Fragment {
 
         public void removeTag(Tag tag) {
             mTags.remove(tag);
+            TagSharedPreferences.removeStoredTag(getActivity(), tag);
         }
 
         public void clearTag() {
@@ -143,12 +138,18 @@ public class TagLatestListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mTags.size() > 0 ? mTags.size() + 1 : 1;
+            if (mTags == null || mTags.size() == 0) {
+                return 1;
+            }
+            if (mTags.size() > 0) {
+                return mTags.size() + 1;
+            }
+            return 0;
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (mTags.size() == 0) {
+            if (mTags == null || mTags.size() == 0) {
                 return VIEW_TYPE_EMPTY;
             }
             if (mTags.size() > 0 && position == mTags.size()) {
@@ -186,6 +187,7 @@ public class TagLatestListFragment extends Fragment {
         public void onClick(View v) {
             mTagLatestAdapter.clearTag();
             mTagLatestAdapter.notifyDataSetChanged();
+            TagSharedPreferences.removeAllStoredTag(getActivity());
         }
     }
 

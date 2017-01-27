@@ -58,8 +58,26 @@ public class TagSharedPreferences {
     public static void removeStoredTag(Context context, Tag tag) {
         ArrayList<Tag> tags = getStoredTags(context);
         if (tags != null) {
-            tags.remove(tag);
+            tags.remove(findTagsIndex(context, tag));
             setStoreTags(context, tags);
         }
+    }
+
+    public static void removeAllStoredTag(Context context) {
+        ArrayList<Tag> tags = getStoredTags(context);
+        if (tags != null) {
+            tags.clear();
+            setStoreTags(context, tags);
+        }
+    }
+
+    public static int findTagsIndex(Context context, Tag tag) {
+        ArrayList<Tag> tags = getStoredTags(context);
+        for (int i = 0; i < tags.size(); i++) {
+            if (tags.get(i).getName().equals(tag.getName())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

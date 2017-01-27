@@ -42,7 +42,7 @@
             android:imeOptions="actionDone"
             android:dropDownAnchor="@+id/search_view_bottom_anchor"
             android:dropDownWidth="wrap_content"
-            android:dropDownSelector="@color/colorPrimaryDark"
+            android:dropDownSelector="@color/colorPrimary"
             android:layout_toEndOf="@+id/search_image_button"
             android:layout_toStartOf="@+id/search_clear_image_layout"/>
         <!--android:popupBackground="@null"-->

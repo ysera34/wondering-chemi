@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
@@ -187,6 +188,13 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
         mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
+        mSearchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tag = mTagCharacterAdapter.getItem(position);
+                startActivity(ProductListActivity.newIntent(getActivity(), tag));
+            }
+        });
         return view;
     }
 
@@ -301,6 +309,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     while ((line = reader.readLine()) != null) {
                         stringBuilder.append(line).append("\n");
                     }
+                    in.close();
+                    connection.disconnect();
                     JSONObject jsonObject = new JSONObject(stringBuilder.toString());
                     return Parser.parseTagStringList(jsonObject);
 
