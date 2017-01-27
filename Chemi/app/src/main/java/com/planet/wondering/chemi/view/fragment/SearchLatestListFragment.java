@@ -191,7 +191,7 @@ public class SearchLatestListFragment extends Fragment {
         private TextView mSearchLatestWordTextView;
         private TextView mSearchedDateTextView;
         private RelativeLayout mSearchLatestDeleteRelativeLayout;
-        private ImageView mSearchLatestDeleteImageButton;
+        private ImageView mSearchLatestDeleteImageView;
 
         LatestSearchHolder(View itemView) {
             super(itemView);
@@ -204,8 +204,8 @@ public class SearchLatestListFragment extends Fragment {
             mSearchLatestDeleteRelativeLayout = (RelativeLayout)
                     itemView.findViewById(R.id.list_item_latest_delete_view);
             mSearchLatestDeleteRelativeLayout.setOnClickListener(this);
-            mSearchLatestDeleteImageButton = (ImageView)
-                    itemView.findViewById(R.id.list_item_latest_search_delete_image_button);
+            mSearchLatestDeleteImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_latest_search_delete_image_view);
         }
 
         void bindSearchWord(SearchWord searchWord) {

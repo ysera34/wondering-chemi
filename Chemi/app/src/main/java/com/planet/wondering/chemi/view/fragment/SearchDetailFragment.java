@@ -69,9 +69,11 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
 //        addSearchFragment(SearchPopularListFragment.newInstance(),
 //                getString(R.string.search_popular_fragment_title));
+//        addSearchFragment(SearchLatestListFragment.newInstance(),
+//                getString(R.string.search_latest_fragment_title));
         addSearchFragment(TagPopularListFragment.newInstance(),
                 getString(R.string.search_popular_fragment_title));
-        addSearchFragment(SearchLatestListFragment.newInstance(),
+        addSearchFragment(TagLatestListFragment.newInstance(),
                 getString(R.string.search_latest_fragment_title));
     }
 

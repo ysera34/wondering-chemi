@@ -125,9 +125,6 @@ public class TagPopularListFragment extends Fragment {
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private static final int VIEW_TYPE_ITEM = 0;
-    private static final int VIEW_TYPE_FOOTER = 1;
-
     private class TagPopularAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ArrayList<Tag> mTags = new ArrayList<>();
@@ -179,13 +176,16 @@ public class TagPopularListFragment extends Fragment {
         }
     }
 
+    private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_FOOTER = 1;
+
     private class TagViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
         private Tag mTag;
 
         private TextView mTagRatingNumberTextView;
-        private TextView mTagDNameTextView;
+        private TextView mTagNameTextView;
         private ImageView mTagVariationStateImageView;
         private TextView mTagVariationValueTextView;
 
@@ -195,7 +195,7 @@ public class TagPopularListFragment extends Fragment {
 
             mTagRatingNumberTextView = (TextView)
                     itemView.findViewById(R.id.list_item_tag_popular_rating_number_text_view);
-            mTagDNameTextView = (TextView)
+            mTagNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_tag_popular_tag_name_text_view);
             mTagVariationStateImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_tag_popular_tag_variation_state_image_view);
@@ -206,7 +206,7 @@ public class TagPopularListFragment extends Fragment {
         public void bindTag(Tag tag) {
             mTag = tag;
             mTagRatingNumberTextView.setText(String.valueOf(mTag.getRank()));
-            mTagDNameTextView.setText(mTag.getName());
+            mTagNameTextView.setText(mTag.getName());
             mTagVariationStateImageView.setImageResource(mTag.getStateImageResId());
             mTagVariationValueTextView.setText(String.valueOf(mTag.getVariation()));
         }
