@@ -2,12 +2,14 @@ package com.planet.wondering.chemi.util.helper;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.planet.wondering.chemi.model.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,13 +48,24 @@ public class TagSharedPreferences {
         if (tags == null) {
             tags = new ArrayList<>();
         }
-        if (tags.size() < MAX_NUMBER_OF_TAGS) {
-            tags.add(tag);
-            setStoreTags(context, tags);
-        } else {
-            tags.set(0, tag);
-            setStoreTags(context, tags);
+
+        // recently tag shared preferences
+        for (Tag t : tags) {
+            if (t.getName().equals(tag.getName())) {
+                tags.remove(t);
+                break;
+            }
         }
+
+        tags.add(tag);
+//        setStoreTags(context, tags);
+
+        //max size tag shared preferences
+        if (tags.size() > MAX_NUMBER_OF_TAGS) {
+            tags.remove(0);
+//            arrangeStoredTags(tags);
+        }
+        setStoreTags(context, tags);
     }
 
     public static void removeStoredTag(Context context, Tag tag) {
@@ -79,5 +92,16 @@ public class TagSharedPreferences {
             }
         }
         return -1;
+    }
+
+    public static void arrangeStoredTags(List<Tag> tags) {
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (Tag tag : tags) {
+            indices.add(tags.indexOf(tag));
+        }
+        Collections.sort(indices);
+        for (int i : indices) {
+            Log.i("arrangeStoredTags int", String.valueOf(i));
+        }
     }
 }
