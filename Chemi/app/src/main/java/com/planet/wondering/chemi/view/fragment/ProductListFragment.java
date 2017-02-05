@@ -24,7 +24,7 @@ import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
-import com.planet.wondering.chemi.view.activity.ProductActivity;
+import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
 import java.util.ArrayList;
 
@@ -110,6 +110,10 @@ public class ProductListFragment extends Fragment {
 
         mProductStorage = ProductStorage.getStorage(getActivity());
         mProducts = mProductStorage.getProducts();
+        mProductIds = new ArrayList<>();
+        for (Product product : mProducts) {
+            mProductIds.add(product.getId());
+        }
     }
 
     @Nullable
@@ -238,7 +242,8 @@ public class ProductListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+//            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
         }
     }
 

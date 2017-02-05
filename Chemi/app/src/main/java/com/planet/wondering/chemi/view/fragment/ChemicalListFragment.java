@@ -17,7 +17,7 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
-import com.planet.wondering.chemi.view.activity.ProductActivity;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.custom.CircleHazardView;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
@@ -102,12 +102,14 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         mChemicalRecyclerView.addOnScrollListener(new OnScrollListener() {
             @Override
             public void onShowView() {
-                ((ProductActivity) getActivity()).showBottomNavigationView();
+//                ((ProductActivity) getActivity()).showBottomNavigationView();
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
             }
 
             @Override
             public void onHideView() {
-                ((ProductActivity) getActivity()).hideBottomNavigationView();
+//                ((ProductActivity) getActivity()).hideBottomNavigationView();
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
         return view;
