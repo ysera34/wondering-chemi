@@ -254,11 +254,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             Filter filter = new Filter() {
 
                 private char mTagCharacter = '\u0000';
-                private char[] mKoreanConsonants = {
-                        'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ',
-                        'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
-                        'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ',
-                        'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
@@ -271,45 +266,56 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                             String query = constraint.toString();
                             Log.i("query", query);
                             Log.i("query.length", String.valueOf(query.length()));
-//                            requestTagCharacterList(query);
-//                            mTagResults = new TagCharacterTask().execute(query).get();
+
+                            Log.i("deComposer", decomposeKoreanSyllable(constraint.toString()));
 
                             String currentTextUnSpaced = constraint.toString().replaceAll("\\s+", "");
                             int currentTextLength = currentTextUnSpaced.length();
+
                             if ((currentTextLength) < 1) {
-                                filterResults.values = mTagResults;
-                                filterResults.count = mTagResults.size();
+                                mTagRequestResults.clear();
+                                mTagCharacter = '\u0000';
+                                filterResults.values = mTagRequestResults;
+                                filterResults.count = mTagRequestResults.size();
+                                return filterResults;
                             }
-//
-                            char firstConsonant = findConsonant(currentTextUnSpaced.charAt(0));
-                            Log.i("firstConsonant", String.valueOf(firstConsonant));
-////
-                            if (firstConsonant != mTagCharacter) {
-                                mTagRequestResults = new TagCharacterTask().execute(Character.toString(firstConsonant)).get();
-                                mTagCharacter = firstConsonant;
+
+                            String currentTextDecomposed = decomposeKoreanSyllable(currentTextUnSpaced);
+                            currentTextLength = currentTextDecomposed.length();
+
+                            char firstCharacter = currentTextDecomposed.charAt(0);
+                            if (firstCharacter != mTagCharacter) {
+                                mTagRequestResults = new TagCharacterTask().execute(Character.toString(firstCharacter)).get();
+                                mTagCharacter = firstCharacter;
                             }
 
                             for (int i = 0; i < mTagRequestResults.size(); i++) {
-                                String tag = mTagRequestResults.get(i);
-                                String tagUnSpaced = tag.replaceAll("\\s+", "");
+                                String theTag = mTagRequestResults.get(i);
+                                String theTagUnSpaced = theTag.replaceAll("\\s+", "");
+                                String theTagDecomposed = decomposeKoreanSyllable(theTagUnSpaced);
+                                int theTagDecomposedLength = theTagDecomposed.length();
 
-                                if ((tagUnSpaced.length()) < currentTextLength) {
+                                if (theTagDecomposedLength < currentTextLength) {
                                     continue;
                                 }
 
                                 int j;
-                                for (j = 0; j < currentTextLength; j++) {
-                                    char theCharacter = currentTextUnSpaced.charAt(j);
-                                    Log.i("theCharacter", Character.toString(theCharacter));
-                                    if (theCharacter != findConsonant(tag.charAt(j)) && theCharacter != tag.charAt(j)) {
+                                for (j = 0; j <currentTextLength; j++) {
+                                    if (Character.toUpperCase(theTagDecomposed.charAt(j)) != Character.toUpperCase(currentTextDecomposed.charAt(j))
+                                            && currentTextDecomposed.charAt(j) != ((char) 0x11A7) && j != currentTextLength - 1) {
+                                        break;
+                                    } else if (j == currentTextLength - 1 && j % 3 == 2 && currentTextDecomposed.charAt(j) != ((char) 0x11A7)
+                                            && theTagDecomposedLength > currentTextLength
+                                            && convertConsonantToStandAlone(currentTextDecomposed.charAt(j)) != theTagDecomposed.charAt(j + 1)
+                                            && currentTextDecomposed.charAt(j) != theTagDecomposed.charAt(j)) {
                                         break;
                                     }
                                 }
-
                                 if (j == currentTextLength) {
-                                    mTagResults.add(tag);
+                                    mTagResults.add(theTag);
                                 }
                             }
+
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -328,13 +334,94 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     }
                 }
 
-                public char findConsonant(char syllable) {
-                    int index = (int) Math.floor((syllable - '가') / 588);
-                    if (index >= 0 && index <= mKoreanConsonants.length - 1) {
-                        syllable = mKoreanConsonants[index];
+                public char convertConsonantToStandAlone(char consonant) {
+                    int consonantCode = (int) consonant;
+                    char theConsonant = consonant;
+
+                    switch (consonantCode) {
+                        case 4352: case 4520: case 4528:
+                            theConsonant='ㄱ';
+                            break;
+                        case 4353: case 4521:
+                            theConsonant='ㄲ';
+                            break;
+                        case 4354: case 4523:
+                            theConsonant='ㄴ';
+                            break;
+                        case 4355: case 4526:
+                            theConsonant='ㄷ';
+                            break;
+                        case 4356:
+                            theConsonant='ㄸ';
+                            break;
+                        case 4357: case 4527:
+                            theConsonant='ㄹ';
+                            break;
+                        case 4358: case 4529: case 4535:
+                            theConsonant='ㅁ';
+                            break;
+                        case 4359: case 4530: case 4536:
+                            theConsonant='ㅂ';
+                            break;
+                        case 4360:
+                            theConsonant='ㅃ';
+                            break;
+                        case 4361: case 4522: case 4531: case 4537: case 4538:
+                            theConsonant='ㅅ';
+                            break;
+                        case 4362: case 4539:
+                            theConsonant='ㅆ';
+                            break;
+                        case 4363: case 4540:
+                            theConsonant='ㅇ';
+                            break;
+                        case 4364: case 4524: case 4541:
+                            theConsonant='ㅈ';
+                            break;
+                        case 4365:
+                            theConsonant='ㅉ';
+                            break;
+                        case 4366: case 4542:
+                            theConsonant='ㅊ';
+                            break;
+                        case 4367: case 4543:
+                            theConsonant='ㅋ';
+                            break;
+                        case 4368: case 4532: case 4544:
+                            theConsonant='ㅌ';
+                            break;
+                        case 4369: case 4533: case 4545:
+                            theConsonant='ㅍ';
+                            break;
+                        case 4370: case 4525: case 4534: case 4546:
+                            theConsonant='ㅎ';
+                            break;
                     }
-                    return syllable;
+                    return theConsonant;
                 }
+
+                public String decomposeKoreanSyllable(String word) {
+                    StringBuilder theWord = new StringBuilder();
+                    int length = word.length();
+                    for(int i = 0; i < length; i++) {
+                        char theCharacter = word.charAt(i);
+                        if (theCharacter >= '가' && theCharacter <= '힣') {
+                            int consonant2 = (theCharacter - 0xAC00) % 28;
+                            int vowel = ((theCharacter - 0xAC00) / 28) % 21;
+                            int consonant1 = ((theCharacter - 0xAC00) / 28) / 21;
+                            char theConsonant2 = (char) (consonant2 + 0x11A8 - 1);
+                            char theVowel = (char) (vowel + 0x1161);
+                            char theConsonant1 = (char) (consonant1 + 0x1100);
+
+                            theConsonant1 = convertConsonantToStandAlone(theConsonant1);
+                            theWord = theWord.append(theConsonant1).append(theVowel).append(theConsonant2);
+                        } else {
+                            theWord = theWord.append(theCharacter).append((char) 0x11A7).append((char) 0x11A7);
+                        }
+                    }
+                    return theWord.toString();
+                }
+
             };
             return filter;
         }
@@ -364,8 +451,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             }
         }
 
-//        private class TagFilte
-
         private class TagCharacterTask extends AsyncTask<String, Void, ArrayList<String>> {
 
             @Override
@@ -393,15 +478,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     Log.e(TAG, e.getMessage());
                     return null;
                 }
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<String> strings) {
-                super.onPostExecute(strings);
-                for (String s : strings) {
-                    Log.i("onPostExecute", s);
-                }
-
             }
         }
 
