@@ -19,7 +19,7 @@ import java.util.List;
 public class TagSharedPreferences {
 
     private static final int MAX_NUMBER_OF_TAGS = 10;
-    private static final String PREF_TAGS = "tags";
+    private static final String PREF_TAGS = "com.planet.wondering.chemi.latest.tags";
 
     public static ArrayList<Tag> getStoredTags(Context context) {
         Gson gson = new Gson();
@@ -48,22 +48,16 @@ public class TagSharedPreferences {
         if (tags == null) {
             tags = new ArrayList<>();
         }
-
-        // recently tag shared preferences
         for (Tag t : tags) {
             if (t.getName().equals(tag.getName())) {
                 tags.remove(t);
                 break;
             }
         }
-
         tags.add(tag);
-//        setStoreTags(context, tags);
 
-        //max size tag shared preferences
         if (tags.size() > MAX_NUMBER_OF_TAGS) {
             tags.remove(0);
-//            arrangeStoredTags(tags);
         }
         setStoreTags(context, tags);
     }

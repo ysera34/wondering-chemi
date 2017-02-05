@@ -79,7 +79,7 @@ public class HexagonFilterLayout extends LinearLayout {
         ScaleAnimation scale = new ScaleAnimation((float) 1.0, (float) 1.2, (float) 1.0, (float) 1.2,
                 Animation.RELATIVE_TO_SELF, (float) 0.5, Animation.RELATIVE_TO_SELF, (float) 0.5);
         scale.setFillAfter(true);
-        scale.setDuration(500);
+        scale.setDuration(250);
         mHexagonFilterImageLayout.startAnimation(scale);
         mScaleState = true;
     }
@@ -91,7 +91,7 @@ public class HexagonFilterLayout extends LinearLayout {
         ScaleAnimation scale = new ScaleAnimation((float) 1.2, (float) 1.0, (float) 1.2, (float) 1.0,
                 Animation.RELATIVE_TO_SELF, (float) 0.5, Animation.RELATIVE_TO_SELF, (float) 0.5);
         scale.setFillAfter(true);
-        scale.setDuration(500);
+        scale.setDuration(250);
         mHexagonFilterImageLayout.startAnimation(scale);
         mScaleState = false;
     }

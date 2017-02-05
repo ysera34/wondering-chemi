@@ -228,10 +228,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
     private class TagCharacterAdapter extends ArrayAdapter<String> implements Filterable {
 
+        private ArrayList<String> mTagRequestResults;
         private ArrayList<String> mTagResults;
 
         public TagCharacterAdapter(Context context, int resource) {
             super(context, resource);
+            mTagRequestResults = new ArrayList<>();
             mTagResults = new ArrayList<>();
         }
 
@@ -250,14 +252,64 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         @Override
         public Filter getFilter() {
             Filter filter = new Filter() {
+
+                private char mTagCharacter = '\u0000';
+                private char[] mKoreanConsonants = {
+                        'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ',
+                        'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
+                        'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ',
+                        'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
+
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
                         try {
+                            mTagResults.clear();
+
+                            Log.i("constraint", String.valueOf(constraint.length()));
                             String query = constraint.toString();
+                            Log.i("query", query);
+                            Log.i("query.length", String.valueOf(query.length()));
 //                            requestTagCharacterList(query);
-                            mTagResults = new TagCharacterTask().execute(query).get();
+//                            mTagResults = new TagCharacterTask().execute(query).get();
+
+                            String currentTextUnSpaced = constraint.toString().replaceAll("\\s+", "");
+                            int currentTextLength = currentTextUnSpaced.length();
+                            if ((currentTextLength) < 1) {
+                                filterResults.values = mTagResults;
+                                filterResults.count = mTagResults.size();
+                            }
+//
+                            char firstConsonant = findConsonant(currentTextUnSpaced.charAt(0));
+                            Log.i("firstConsonant", String.valueOf(firstConsonant));
+////
+                            if (firstConsonant != mTagCharacter) {
+                                mTagRequestResults = new TagCharacterTask().execute(Character.toString(firstConsonant)).get();
+                                mTagCharacter = firstConsonant;
+                            }
+
+                            for (int i = 0; i < mTagRequestResults.size(); i++) {
+                                String tag = mTagRequestResults.get(i);
+                                String tagUnSpaced = tag.replaceAll("\\s+", "");
+
+                                if ((tagUnSpaced.length()) < currentTextLength) {
+                                    continue;
+                                }
+
+                                int j;
+                                for (j = 0; j < currentTextLength; j++) {
+                                    char theCharacter = currentTextUnSpaced.charAt(j);
+                                    Log.i("theCharacter", Character.toString(theCharacter));
+                                    if (theCharacter != findConsonant(tag.charAt(j)) && theCharacter != tag.charAt(j)) {
+                                        break;
+                                    }
+                                }
+
+                                if (j == currentTextLength) {
+                                    mTagResults.add(tag);
+                                }
+                            }
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -275,22 +327,44 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                         notifyDataSetInvalidated();
                     }
                 }
+
+                public char findConsonant(char syllable) {
+                    int index = (int) Math.floor((syllable - '가') / 588);
+                    if (index >= 0 && index <= mKoreanConsonants.length - 1) {
+                        syllable = mKoreanConsonants[index];
+                    }
+                    return syllable;
+                }
             };
             return filter;
         }
 
         @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_tag_character, parent, false);
-
-            String tag = mTagResults.get(position);
-            TextView tagTextView = (TextView) view.findViewById(R.id.list_item_tag_name_text_view);
-            tagTextView.setText(tag);
-
-            return view;
+            if (convertView == null) {
+                convertView = layoutInflater.inflate(R.layout.list_item_tag_character, parent, false);
+                convertView.setTag(new ViewHolder(convertView));
+            }
+            initializeViews(getItem(position), (ViewHolder) convertView.getTag());
+            return convertView;
         }
+
+        private void initializeViews(String object, ViewHolder holder) {
+            //TODO implement
+            holder.listItemTagNameTextView.setText(object);
+        }
+
+        protected class ViewHolder {
+            private TextView listItemTagNameTextView;
+
+            public ViewHolder(View view) {
+                listItemTagNameTextView = (TextView) view.findViewById(R.id.list_item_tag_name_text_view);
+            }
+        }
+
+//        private class TagFilte
 
         private class TagCharacterTask extends AsyncTask<String, Void, ArrayList<String>> {
 
@@ -298,6 +372,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             protected ArrayList<String> doInBackground(String... params) {
                 try {
                     String url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
+                    Log.i("url", url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     connection.setRequestMethod("GET");
 
@@ -318,6 +393,15 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     Log.e(TAG, e.getMessage());
                     return null;
                 }
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<String> strings) {
+                super.onPostExecute(strings);
+                for (String s : strings) {
+                    Log.i("onPostExecute", s);
+                }
+
             }
         }
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -38,7 +39,7 @@ public class ProductListFragment extends Fragment {
     private static final String ARG_PRODUCT_ID = "product_id";
     private static final String ARG_PRODUCT_IDS = "product_ids";
     private static final String ARG_CATEGORY_ID = "category_id";
-    private static final String ARG_RESULT_MESSAGE = "result_message";
+    private static final String ARG_TAG_NAME = "tag_name";
 
     public static ProductListFragment newInstance() {
 
@@ -79,10 +80,10 @@ public class ProductListFragment extends Fragment {
         return fragment;
     }
 
-    public static ProductListFragment newInstance(String message) {
+    public static ProductListFragment newInstance(String tagName) {
 
         Bundle args = new Bundle();
-        args.putString(ARG_RESULT_MESSAGE, message);
+        args.putString(ARG_TAG_NAME, tagName);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -94,6 +95,8 @@ public class ProductListFragment extends Fragment {
     private ArrayList<Integer> mProductIds;
     private Product mProduct;
 
+    private AutoCompleteTextView mSearchAutoCompleteTextView;
+    private String mTagName;
     private TextView mProductTotalTextView;
     private Button mProductSortButton;
 
@@ -103,6 +106,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTagName = getArguments().getString(ARG_TAG_NAME);
 
         mProductStorage = ProductStorage.getStorage(getActivity());
         mProducts = mProductStorage.getProducts();
@@ -110,8 +114,14 @@ public class ProductListFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
+        mSearchAutoCompleteTextView =
+                (AutoCompleteTextView) view.findViewById(R.id.product_list_search_auto_text_view);
+        mSearchAutoCompleteTextView.setText(mTagName);
+        mSearchAutoCompleteTextView.setEnabled(false);
+
         mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
         mProductSortButton = (Button) view.findViewById(R.id.product_sort_button);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);

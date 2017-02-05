@@ -67,7 +67,7 @@ public class ProductListActivity extends BottomNavigationActivity {
     private int mProductId;
     private ArrayList<Integer> mProductIds;
     private byte mCategoryId;
-    private String mTag;
+    private String mTagName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +76,14 @@ public class ProductListActivity extends BottomNavigationActivity {
         mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         mProductIds = getIntent().getIntegerArrayListExtra(EXTRA_PRODUCT_IDS);
         mCategoryId = getIntent().getByteExtra(EXTRA_CATEGORY_ID, (byte) 0);
-        mTag = getIntent().getStringExtra(EXTRA_TAG_NAME);
-        Log.i(TAG, mTag);
+        mTagName = getIntent().getStringExtra(EXTRA_TAG_NAME);
+        Log.i(TAG, mTagName);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
         if (mFragment == null) {
-            mFragment = ProductListFragment.newInstance();
+            mFragment = ProductListFragment.newInstance(mTagName);
             mFragmentManager.beginTransaction()
 //                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .add(R.id.fragment_container, mFragment)
