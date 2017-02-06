@@ -60,6 +60,7 @@ public class TagLatestListFragment extends Fragment {
         mTagLatestRecyclerView.addItemDecoration(decoration);
 
         updateUI();
+
         return view;
     }
 

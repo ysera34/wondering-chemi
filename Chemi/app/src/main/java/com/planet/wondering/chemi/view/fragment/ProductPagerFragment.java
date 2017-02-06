@@ -70,6 +70,17 @@ public class ProductPagerFragment extends Fragment {
             public int getCount() {
                 return mProductIds.size();
             }
+
+//            @Override
+//            public void setPrimaryItem(ViewGroup container, int position, Object object) {
+//                super.setPrimaryItem(container, position, object);
+//
+//                Fragment currentItem = getItem(position);
+//                if (currentItem != null) {
+//                    currentItem.setMenuVisibility(true);
+//                    currentItem.setUserVisibleHint(true);
+//                }
+//            }
         });
         for (int i = 0; i < mProductIds.size(); i++) {
             if (mProductIds.get(i) == mProductId) {

@@ -46,6 +46,7 @@ public class ProductPagerActivity extends BottomNavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 //        setContentView(R.layout.activity_product_pager);
 //        mProductViewPager = (ViewPager) findViewById(R.id.activity_product_pager_view_pager);
 //        mProductIds = new ArrayList<>();

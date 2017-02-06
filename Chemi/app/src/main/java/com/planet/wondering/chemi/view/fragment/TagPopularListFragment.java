@@ -74,6 +74,8 @@ public class TagPopularListFragment extends Fragment {
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mTagPopularRecyclerView.addItemDecoration(decoration);
 
+        updateUI();
+
         return view;
     }
 
@@ -86,6 +88,7 @@ public class TagPopularListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        updateUI();
+
         requestTagPopularList();
     }
 
@@ -164,7 +167,11 @@ public class TagPopularListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mTags.size() + 1;
+            if (mTags.size() == 0) {
+                return 0;
+            } else {
+                return mTags.size() + 1;
+            }
         }
 
         @Override

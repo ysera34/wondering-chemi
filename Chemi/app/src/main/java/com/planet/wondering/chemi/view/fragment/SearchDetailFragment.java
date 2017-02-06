@@ -28,13 +28,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
@@ -43,13 +37,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
 import static com.planet.wondering.chemi.network.Config.Tag.PATH;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -475,41 +467,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     return null;
                 }
             }
-        }
-
-        private void requestTagCharacterList(String character) {
-
-            String utf8Query = null;
-            try {
-                utf8Query = URLEncoder.encode(character, "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, "UnsupportedEncodingException : " + e.getMessage());
-            }
-            Log.i("url", URL_HOST + PATH + CHARACTER_QUERY + utf8Query);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.GET, URL_HOST + PATH + CHARACTER_QUERY + utf8Query,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            mTagResults = Parser.parseTagStringList(response);
-                            for (String s : mTagResults) {
-                                Log.i(TAG, s);
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, error.getMessage());
-                        }
-                    }
-            );
-
-            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-            AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
         }
     }
 }

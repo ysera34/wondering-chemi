@@ -69,7 +69,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Glide.with(getActivity())
-                .load("http://develop.inframincer.org/search_background.gif")
+                .load("http://develop.inframincer.org/search_background1.gif")
                 .asGif()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mSearchBackgroundImageView);
