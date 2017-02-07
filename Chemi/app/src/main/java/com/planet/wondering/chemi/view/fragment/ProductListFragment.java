@@ -25,8 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
@@ -36,14 +36,13 @@ import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.encodeUTF8;
 
 /**
  * Created by yoon on 2017. 1. 18..
@@ -107,10 +106,12 @@ public class ProductListFragment extends Fragment {
         return fragment;
     }
 
-    private ProductStorage mProductStorage;
+//    private ProductStorage mProductStorage;
+    private StringBuilder mUrlBuilder;
     private ArrayList<Product> mProducts;
     private ArrayList<Integer> mProductIds;
-    private Product mProduct;
+//    private Product mProduct;
+    private Pager mPager;
 
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private String mTagName;
@@ -127,6 +128,7 @@ public class ProductListFragment extends Fragment {
 
         mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
+        mUrlBuilder = new StringBuilder();
     }
 
     @Nullable
@@ -157,9 +159,21 @@ public class ProductListFragment extends Fragment {
                 ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
+        mProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition();
+                if (lastItem == mProductAdapter.getItemCount() - 1
+                        && mPager.getTotal() > mProductAdapter.getItemCount()) {
+                    requestTagProductList(mTagName);
+                }
+            }
+        });
 
         updateUI();
-
+        requestTagProductList(mTagName);
         return view;
     }
 
@@ -172,8 +186,6 @@ public class ProductListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        updateUI();
-
-        requestTagProductList("");
     }
 
     private void updateUI() {
@@ -185,6 +197,7 @@ public class ProductListFragment extends Fragment {
             mProductAdapter.notifyDataSetChanged();
             mProductTotalTextView.setText(highlightTotalText());
             for (Product product : mProducts) {
+                mProductIds.clear();
                 mProductIds.add(product.getId());
             }
         }
@@ -192,21 +205,25 @@ public class ProductListFragment extends Fragment {
 
     private void requestTagProductList(String query) {
 
-        String utf8Query = null;
-        try {
-            utf8Query = URLEncoder.encode(query, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.w(TAG, "UnsupportedEncodingException : " + e.toString());
+        if (mPager == null) {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(PATH)
+                    .append(QUERY_TAG).append(encodeUTF8(query));
+        } else {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(PATH).append(mPager.getNextQuery())
+                    .append(QUERY_TAG).append(encodeUTF8(query));
         }
-        String url = URL_HOST + PATH + QUERY_TAG + utf8Query;
-        Log.i(TAG, url);
+
+        Log.i(TAG, mUrlBuilder.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, url,
+                Request.Method.GET, mUrlBuilder.toString(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        mProducts = Parser.parseProductList(response);
+                        mProducts.addAll(Parser.parseProductList(response));
+                        mPager = Parser.parseProductListPagingQuery(response);
                         updateUI();
                     }
                 },

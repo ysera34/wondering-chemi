@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
+import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Tag;
 
@@ -144,10 +145,10 @@ public class Parser {
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
-                int total = responseObject.getInt(TOTAL);
-                JSONObject skippingJSONObject = responseObject.getJSONObject(PAGE);
-                String prevQuery = skippingJSONObject.getString(PAGE_PREV);
-                String nextQuery = skippingJSONObject.getString(PAGE_NEXT);
+//                int total = responseObject.getInt(TOTAL);
+//                JSONObject skippingJSONObject = responseObject.getJSONObject(PAGE);
+//                String prevQuery = skippingJSONObject.getString(PAGE_PREV);
+//                String nextQuery = skippingJSONObject.getString(PAGE_NEXT);
                 int productSize = responseObject.getInt(COUNT);
                 if (productSize > 0) {
                     JSONArray productJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
@@ -178,6 +179,23 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return products;
+    }
+
+    public static Pager parseProductListPagingQuery(JSONObject responseObject) {
+
+        Pager pager = new Pager();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                pager.setTotal(responseObject.getInt(TOTAL));
+                JSONObject skippingJSONObject = responseObject.getJSONObject(PAGE);
+                pager.setPrevQuery(skippingJSONObject.getString(PAGE_PREV));
+                pager.setNextQuery(skippingJSONObject.getString(PAGE_NEXT));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return pager;
     }
 
     public static Product parseProduct(JSONObject responseObject) {

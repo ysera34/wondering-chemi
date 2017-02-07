@@ -1,6 +1,12 @@
 package com.planet.wondering.chemi.network;
 
+import android.util.Log;
+
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by yoon on 2017. 1. 26..
@@ -41,7 +47,7 @@ public class Config {
 
     public static final class Product {
         public static final String PATH = File.separator + "products?";
-        public static final String QUERY_TAG = "tag=";
+        public static final String QUERY_TAG = "&tag=";
         public static final String QUERY_CATEGORY = "?categoryid=";
         public static final String QUERY_ORDER = "&orderBy=";
         public static final String ORDER_ACCURACY = QUERY_ORDER + 0;
@@ -51,11 +57,11 @@ public class Config {
         public static final class Key {
             public static final String PRODUCTS = "products";
             public static final String PRODUCT_ID = "id";
-//            public static final String CATEGORY_ID = "categoryid";
+            //            public static final String CATEGORY_ID = "categoryid";
 //            public static final String MAKER = "maker";
             public static final String BRAND = "brand";
             public static final String NAME = "name";
-//            public static final String TYPE = "type";
+            //            public static final String TYPE = "type";
 //            public static final String PURPOSE = "purpose";
 //            public static final String RELEASED = "released";
             public static final String RATING = "rated";
@@ -75,7 +81,7 @@ public class Config {
             public static final String NAMEKO_PRODUCT = "nameForProduct";
             public static final String NAMEKO_ORIGIN = "koreanName";
             public static final String NAMEEN = "englishName";
-//            public static final String ABBR = "abbr";
+            //            public static final String ABBR = "abbr";
             public static final String PURPOSE = "purpose";
             public static final String MAX_VALUE = "ewglevel";
             public static final String MIN_VALUE = "ewglevel2";
@@ -98,5 +104,14 @@ public class Config {
             public static final String TYPE = "type";
             public static final String ALLERGY = "isAllergy";
         }
+    }
+
+    public static String encodeUTF8(String string) {
+        try {
+            return URLEncoder.encode(string, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "UnsupportedEncodingException : " + e.toString());
+        }
+        return null;
     }
 }
