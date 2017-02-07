@@ -18,7 +18,6 @@ import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
-import com.planet.wondering.chemi.view.custom.CircleHazardView;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
 import java.text.Collator;
@@ -235,7 +234,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
         private TextView mChemicalNameKoTextView;
         private TextView mChemicalNameEngTextView;
-        private CircleHazardView mChemicalCircleHazardView;
+//        private CircleHazardView mChemicalCircleHazardView;
+        private TextView mChemicalCircleTextView;
 
         ChemicalHolder(View itemView) {
             super(itemView);
@@ -245,8 +245,10 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                     itemView.findViewById(R.id.list_item_chemical_name_ko_text_view);
             mChemicalNameEngTextView = (TextView)
                     itemView.findViewById(R.id.list_item_chemical_name_eng_text_view);
-            mChemicalCircleHazardView = (CircleHazardView)
-                    itemView.findViewById(R.id.list_item_chemical_circle_hazard_view);
+//            mChemicalCircleHazardView = (CircleHazardView)
+//                    itemView.findViewById(R.id.list_item_chemical_circle_hazard_view);
+            mChemicalCircleTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_chemical_circle_text_view);
         }
 
         void bindChemical(Chemical chemical) {
@@ -254,8 +256,10 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
             mChemicalNameKoTextView.setText(String.valueOf(mChemical.getNameKo()));
             mChemicalNameEngTextView.setText(String.valueOf(mChemical.getNameEn()));
-            mChemicalCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
-            mChemicalCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
+//            mChemicalCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
+//            mChemicalCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
+            mChemicalCircleTextView.setText(mChemical.getHazardValueString());
+            mChemicalCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());
         }
 
         @Override

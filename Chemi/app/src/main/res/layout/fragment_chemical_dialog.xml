@@ -15,10 +15,16 @@
         android:paddingEnd="20dp">
         <!--android:layout_height="@dimen/chemical_dialog_header_height"-->
 
-        <com.planet.wondering.chemi.view.custom.CircleHazardView
-            android:id="@+id/chemical_dialog_circle_hazard_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!--<com.planet.wondering.chemi.view.custom.CircleHazardView-->
+            <!--android:id="@+id/chemical_dialog_circle_hazard_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+        <TextView
+            android:id="@+id/chemical_dialog_circle_text_view"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/chemical_dialog_name_ko_text_view"

@@ -6,7 +6,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
@@ -76,14 +74,14 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, 0);
-        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
+//        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
 
         mProductDetailListFragments = new ArrayList<>();
         mProductDetailListFragmentTitles = new ArrayList<>();
 
-        addProductDetailFragment(ChemicalListFragment.newInstance(mProduct.getId()),
+        addProductDetailFragment(ChemicalListFragment.newInstance(mProductId),
                 getString(R.string.product_detail_tab_title1));
-        addProductDetailFragment(ReviewListFragment.newInstance(mProduct.getId()),
+        addProductDetailFragment(ReviewListFragment.newInstance(mProductId),
                 getString(R.string.product_detail_tab_title2));
     }
 
@@ -118,23 +116,23 @@ public class ProductFragment extends Fragment {
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
 
         FragmentManager fm = getChildFragmentManager();
-        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(fm) {
-            @Override
-            public Fragment getItem(int position) {
-                return mProductDetailListFragments.get(position);
-            }
-
-            @Override
-            public int getCount() {
-                return mProductDetailListFragmentTitles.size();
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mProductDetailListFragmentTitles.get(position);
-            }
-        });
-        mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
+//        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(fm) {
+//            @Override
+//            public Fragment getItem(int position) {
+//                return mProductDetailListFragments.get(position);
+//            }
+//
+//            @Override
+//            public int getCount() {
+//                return mProductDetailListFragmentTitles.size();
+//            }
+//
+//            @Override
+//            public CharSequence getPageTitle(int position) {
+//                return mProductDetailListFragmentTitles.get(position);
+//            }
+//        });
+//        mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
         return view;
     }
 
@@ -152,19 +150,29 @@ public class ProductFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        bindProduct(mProduct);
+//        bindProduct(mProduct);
+        requestProduct();
     }
 
     private void bindProduct(Product product) {
 
-        mProductToolbar.setTitle(mProduct.getName());
-        mProductToolbar.setSubtitle(mProduct.getBrand());
+        mProductToolbar.setTitle(product.getName());
+        mProductToolbar.setSubtitle(product.getBrand());
 
 //        mProductDetailImageView
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
+    }
+
+    private void requestProduct() {
+
+        Product product = new Product();
+        product.setName("product" + mProductId);
+        product.setBrand("brand" + mProductId);
+
+        bindProduct(product);
     }
 
     @Override

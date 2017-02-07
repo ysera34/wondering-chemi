@@ -25,11 +25,11 @@ public class Config {
     public static final int SOCKET_TIMEOUT_POST_REQ = 10000;
 
     public static final class Tag {
-        public static final String PATH = File.separator + "tags";
+        public static final String PATH = File.separator + "tags?";
 
         public static final class Key {
-            public static final String CHARACTER_QUERY = "?character=";
-            public static final String LOWEST_QUEST_DEFAULT = "?lowest=10";
+            public static final String CHARACTER_QUERY = "character=";
+            public static final String LOWEST_QUEST_DEFAULT = "lowest=10";
             public static final String RANKED_TIME = "ranked";
             public static final String TAG_COUNT = "counted";
             public static final String TAG_ID = "id";
@@ -40,8 +40,8 @@ public class Config {
     }
 
     public static final class Product {
-        public static final String PATH = File.separator + "products";
-        public static final String QUERY_TAG = "?tag=";
+        public static final String PATH = File.separator + "products?";
+        public static final String QUERY_TAG = "tag=";
         public static final String QUERY_CATEGORY = "?categoryid=";
         public static final String QUERY_ORDER = "&orderBy=";
         public static final String ORDER_ACCURACY = QUERY_ORDER + 0;

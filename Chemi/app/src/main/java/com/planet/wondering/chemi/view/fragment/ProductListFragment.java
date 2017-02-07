@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +19,32 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.storage.ProductStorage;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import static com.planet.wondering.chemi.network.Config.Product.PATH;
+import static com.planet.wondering.chemi.network.Config.Product.QUERY_TAG;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 1. 18..
@@ -108,12 +126,8 @@ public class ProductListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mTagName = getArguments().getString(ARG_TAG_NAME);
 
-        mProductStorage = ProductStorage.getStorage(getActivity());
-        mProducts = mProductStorage.getProducts();
+        mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
-        for (Product product : mProducts) {
-            mProductIds.add(product.getId());
-        }
     }
 
     @Nullable
@@ -144,6 +158,9 @@ public class ProductListFragment extends Fragment {
                 ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
+
+        updateUI();
+
         return view;
     }
 
@@ -155,7 +172,9 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+//        updateUI();
+
+        requestTagProductList("");
     }
 
     private void updateUI() {
@@ -163,15 +182,58 @@ public class ProductListFragment extends Fragment {
             mProductAdapter = new ProductAdapter(mProducts);
             mProductRecyclerView.setAdapter(mProductAdapter);
         } else {
+            mProductAdapter.setProducts(mProducts);
             mProductAdapter.notifyDataSetChanged();
+            for (Product product : mProducts) {
+                mProductIds.add(product.getId());
+            }
         }
+    }
+
+    private void requestTagProductList(String query) {
+
+        String utf8Query = null;
+        try {
+            utf8Query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "UnsupportedEncodingException : " + e.toString());
+        }
+        String url = URL_HOST + PATH + QUERY_TAG + utf8Query;
+        Log.i(TAG, url);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mProducts = Parser.parseProductList(response);
+                        updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.getMessage());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
 
         private ArrayList<Product> mProducts;
 
-        ProductAdapter(ArrayList<Product> products) {
+        public ProductAdapter(ArrayList<Product> products) {
+            mProducts = products;
+        }
+
+        public void setProducts(ArrayList<Product> products) {
             mProducts = products;
         }
 
@@ -233,11 +295,19 @@ public class ProductListFragment extends Fragment {
         void bindProduct(Product product) {
             mProduct = product;
 
+            Glide.with(getActivity())
+                    .load(mProduct.getImagePath())
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                    .crossFade()
+                    .override(330, 220)
+                    .centerCrop()
+                    .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));
             mProductNameTextView.setText(String.valueOf(mProduct.getName()));
             mProductReviewRatingBar.setRating(mProduct.getRatingValue());
             mProductReviewRatingValueTextView.setText(String.valueOf(mProduct.getRatingValue()));
-            mProductReviewRatingCountTextView.setText(String.valueOf(mProduct.getRatingCount()));
+            mProductReviewRatingCountTextView.setText(getString(R.string.product_review_count, String.valueOf(mProduct.getRatingCount())));
         }
 
         @Override

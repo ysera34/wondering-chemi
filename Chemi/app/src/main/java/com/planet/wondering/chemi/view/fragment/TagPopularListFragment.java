@@ -130,7 +130,7 @@ public class TagPopularListFragment extends Fragment {
 
     private class TagPopularAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        ArrayList<Tag> mTags = new ArrayList<>();
+        private ArrayList<Tag> mTags = new ArrayList<>();
 
         public TagPopularAdapter(ArrayList<Tag> tags) {
             mTags = tags;

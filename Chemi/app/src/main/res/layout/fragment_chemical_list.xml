@@ -44,7 +44,7 @@
             android:id="@+id/hexagon1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status4"
+            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status0"
             custom:hexagonLabel="전체 성분"/>
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout

@@ -69,8 +69,8 @@ public class Parser {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 int tagSize = responseObject.getInt(TAG_COUNT);
-                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                 if (tagSize > 0) {
+                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                     for (int i = 0; i < tagSize; i++) {
                         JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
@@ -100,8 +100,8 @@ public class Parser {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 int tagSize = responseObject.getInt(TAG_COUNT);
-                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                 if (tagSize > 0) {
+                JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                     for (int i = 0; i < tagSize; i++) {
                         JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
                         tagStrings.add(tagJSONObject.getString(TAG_DESCRIPTION));
@@ -149,8 +149,8 @@ public class Parser {
                 String prevQuery = skippingJSONObject.getString(PAGE_PREV);
                 String nextQuery = skippingJSONObject.getString(PAGE_NEXT);
                 int productSize = responseObject.getInt(COUNT);
-                JSONArray productJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                 if (productSize > 0) {
+                    JSONArray productJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                     for (int i = 0; i < productSize; i++) {
                         JSONObject productJSONObject = (JSONObject) productJSONArray.get(i);
                         Product product = new Product();
@@ -158,7 +158,17 @@ public class Parser {
                         product.setBrand(productJSONObject.getString(BRAND));
                         product.setName(productJSONObject.getString(NAME));
                         product.setImagePath(productJSONObject.getString(IMAGE_PATH));
-                        product.setRatingValue((float) productJSONObject.getDouble(RATING));
+
+                        Object ratingObject = productJSONObject.get(RATING);
+                        float ratingFloat = 0.0f;
+                        if (ratingObject instanceof Integer) {
+                            ratingFloat = ((Integer) ratingObject).floatValue();
+                        } else if (ratingObject instanceof Double) {
+                            ratingFloat = ((Double) ratingObject).floatValue();
+                        } else if (ratingObject == null) {
+                            ratingFloat = 0.0f;
+                        }
+                        product.setRatingValue(ratingFloat);
                         product.setRatingCount(productJSONObject.getInt(RATING_COUNT));
                         products.add(product);
                     }
@@ -186,8 +196,8 @@ public class Parser {
                 product.setRatingCount(productJSONObject.getInt(RATING_COUNT));
                 product.setAllergyCount(productJSONObject.getInt(ALLERGY));
                 int chemicalSize = productJSONObject.getInt(CHEMICALS_SIZE);
-                JSONArray chemicalJSONArray = productJSONObject.getJSONArray(CHEMICALS);
                 if (chemicalSize > 0) {
+                    JSONArray chemicalJSONArray = productJSONObject.getJSONArray(CHEMICALS);
                     for (int i = 0; i < chemicalSize; i++) {
                         JSONObject chemicalJSONObject = (JSONObject) chemicalJSONArray.get(i);
                         Chemical chemical = new Chemical();

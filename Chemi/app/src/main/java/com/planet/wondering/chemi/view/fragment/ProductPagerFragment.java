@@ -71,6 +71,7 @@ public class ProductPagerFragment extends Fragment {
                 return mProductIds.size();
             }
 
+
 //            @Override
 //            public void setPrimaryItem(ViewGroup container, int position, Object object) {
 //                super.setPrimaryItem(container, position, object);

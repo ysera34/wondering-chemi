@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.storage.ChemicalStorage;
-import com.planet.wondering.chemi.view.custom.CircleHazardView;
 
 /**
  * Created by yoon on 2017. 1. 22..
@@ -66,7 +65,8 @@ public class ChemicalDialogFragment extends DialogFragment {
 
     private AlertDialog.Builder mBuilder;
 
-    private CircleHazardView mChemicalDialogCircleHazardView;
+//    private CircleHazardView mChemicalDialogCircleHazardView;
+    private TextView mChemicalDialogCircleTextView;
     private TextView mChemicalDialogNameKoTextView;
     private TextView mChemicalDialogNameEngTextView;
     private TextView mChemicalDialogPurposeTextView;
@@ -89,10 +89,14 @@ public class ChemicalDialogFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_chemical_dialog, null);
 
-        mChemicalDialogCircleHazardView = (CircleHazardView)
-                view.findViewById(R.id.chemical_dialog_circle_hazard_view);
-        mChemicalDialogCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
-        mChemicalDialogCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
+        mChemicalDialogCircleTextView = (TextView)
+                view.findViewById(R.id.chemical_dialog_circle_text_view);
+        mChemicalDialogCircleTextView.setText(mChemical.getHazardValueString());
+        mChemicalDialogCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());
+//        mChemicalDialogCircleHazardView = (CircleHazardView)
+//                view.findViewById(R.id.chemical_dialog_circle_hazard_view);
+//        mChemicalDialogCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
+//        mChemicalDialogCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
 
         mChemicalDialogNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_ko_text_view);
