@@ -212,7 +212,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         public void onBindViewHolder(ChemicalHolder holder, int position) {
             Chemical chemical = mChemicals.get(position);
             holder.bindChemical(chemical);
-            setFadeAnimation(holder.itemView);
+//            setFadeAnimation(holder.itemView);
         }
 
         @Override

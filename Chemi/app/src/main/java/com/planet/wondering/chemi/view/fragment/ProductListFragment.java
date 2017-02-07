@@ -5,9 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.TextAppearanceSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,6 +183,7 @@ public class ProductListFragment extends Fragment {
         } else {
             mProductAdapter.setProducts(mProducts);
             mProductAdapter.notifyDataSetChanged();
+            mProductTotalTextView.setText(highlightTotalText());
             for (Product product : mProducts) {
                 mProductIds.add(product.getId());
             }
@@ -248,7 +248,7 @@ public class ProductListFragment extends Fragment {
         public void onBindViewHolder(ProductHolder holder, int position) {
             Product product = mProducts.get(position);
             holder.bindProduct(product);
-            setFadeAnimation(holder.itemView);
+//            setFadeAnimation(holder.itemView);
         }
 
         @Override
@@ -317,37 +317,21 @@ public class ProductListFragment extends Fragment {
         }
     }
 
-    private void highlightTextPart(TextView textView, int index, String regularExpression) {
-        String fullText = textView.getText().toString();
-        int startPos = 0;
-        int endPos = fullText.length();
-        String[] textParts = fullText.split(regularExpression);
-        if (index < 0 || index > textParts.length - 1) {
-            return;
+    private SpannableString highlightTotalText() {
+        SpannableString spannableString = new SpannableString(
+                getString(R.string.product_total_count, String.valueOf(mProducts.size())));
+        int startIndex = 6;
+        int endIndex;
+        if (mProducts.size() >= 0 && mProducts.size() < 10) {
+            endIndex = startIndex + 1;
+        } else if (mProducts.size() >= 10 && mProducts.size() <= 99) {
+            endIndex = startIndex + 2;
+        } else {
+            endIndex = startIndex + 3;
         }
-        if (textParts.length > 1) {
-            startPos = fullText.indexOf(textParts[index]);
-            endPos = fullText.indexOf(regularExpression, startPos);
-            if (endPos == -1) {
-                endPos = fullText.length();
-            }
-        }
-        Spannable spannable = new SpannableString(fullText);
-        TextAppearanceSpan textAppearanceSpan = new TextAppearanceSpan(
-                getActivity(), 0, getResources().getColor(R.color.colorPrimary));
-        spannable.setSpan(textAppearanceSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textView.setText(spannable);
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
+                startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        /*
-        int index = 3;
-        String regularExpression = " ";
-        String text = "Hello StackOverflow From BNK!";
-        TextView textView = (TextView) findViewById(R.id.textView);
-        if (textView != null) {
-            textView.setText(text);
-            highlightTextPart(textView, index, regularExpression);
-        }
-         */
-
+        return spannableString;
     }
 }
