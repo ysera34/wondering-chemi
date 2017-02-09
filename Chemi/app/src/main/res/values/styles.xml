@@ -20,6 +20,23 @@
     <style name="BottomNavigationViewTheme" parent="Widget.Design.BottomNavigationView">
     </style>
 
+    <style name="MemberStartTextAppearance">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowColor">@color/colorFontBody</item>
+    </style>
+
+    <style name="ArchiveContentTitleTextAppearance">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowColor">@color/colorFontToolbarSubtitle</item>
+    </style>
+
     <style name="SearchTabLayoutTextStyle" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">true</item>

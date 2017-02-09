@@ -10,9 +10,10 @@
         android:transitionName="@string/search_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_editText_height"
-        android:background="@color/colorWhite"
-        android:elevation="4dp">
-        <!--android:layout_margin="8dp"-->
+        android:background="@color/colorWhite">
+        <!--android:elevation="4dp"-->
+        <!--android:layout_margin="
+        8dp"-->
 
         <ImageButton
             android:id="@+id/search_image_button"

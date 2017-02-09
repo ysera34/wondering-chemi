@@ -167,6 +167,7 @@ public class ProductListFragment extends Fragment {
                         .findLastCompletelyVisibleItemPosition();
                 if (lastItem == mProductAdapter.getItemCount() - 1
                         && mPager.getTotal() > mProductAdapter.getItemCount()) {
+                    // all product == > mTagName = ""
                     requestTagProductList(mTagName);
                 }
             }
@@ -196,8 +197,8 @@ public class ProductListFragment extends Fragment {
             mProductAdapter.setProducts(mProducts);
             mProductAdapter.notifyDataSetChanged();
             mProductTotalTextView.setText(highlightTotalText());
+            mProductIds.clear();
             for (Product product : mProducts) {
-                mProductIds.clear();
                 mProductIds.add(product.getId());
             }
         }

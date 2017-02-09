@@ -18,6 +18,8 @@
 
     <!-- widget border color -->
     <color name="colorStarDust">#9e9e9e</color>
+    <color name="colorFrenchGray">#bdbdbd</color>
+    <color name="colorZircon">#e0e0e0</color>
 
     <!-- hazard  button color -->
     <color name="hazard2">#19b391</color>

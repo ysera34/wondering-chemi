@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/member_start_name_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/widget_border_bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"
+            android:text="닉네임"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"/>
+
+        <RelativeLayout
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="18dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clear_24dp"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member_start_name_header"
+        android:orientation="vertical"
+        android:paddingTop="28dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임"
+            android:textSize="12sp"
+            android:textColor="@color/colorFontBody"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="닉네임을 입력하세요"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontBody"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:layout_marginBottom="38dp"
+            android:layout_marginStart="47dp"
+            android:layout_marginEnd="47dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:gravity="center_horizontal"
+            android:text="닉네임 입력하고 시작하기"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/widget_border_oval_rectangle_primary"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
