@@ -69,10 +69,11 @@ public class Parser {
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 int tagSize = responseObject.getInt(TAG_COUNT);
                 if (tagSize > 0) {
                 JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
                     for (int i = 0; i < tagSize; i++) {
                         JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
                         Tag tag = new Tag();
@@ -80,8 +81,10 @@ public class Parser {
                         tag.setName(tagJSONObject.getString(TAG_DESCRIPTION));
                         tag.setRank(tagJSONObject.getInt(TAG_RANK));
                         tag.setVariation(tagJSONObject.getInt(TAG_RANK_DELTA));
-                        Date rankDate = dateFormat.parse(tagJSONObject.getString(RANKED_TIME));
-                        tag.setRankDate(rankDate);
+                        if (i == 0) {
+                            Date rankDate = dateFormat.parse(responseObject.getString(RANKED_TIME));
+                            tag.setRankDate(rankDate);
+                        }
                         tags.add(tag);
                     }
                 }
