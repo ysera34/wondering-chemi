@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="100dp"
-              android:layout_height="120dp"
-              android:background="@drawable/widget_border_start_end">
+              android:layout_height="120dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,6 +11,7 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/list_item_archive_review_product_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"/>
@@ -28,9 +28,11 @@
         android:paddingEnd="12dp">
 
         <TextView
+            android:id="@+id/list_item_archive_review_product_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="안심물티슈안심물티슈안심물티슈"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:textSize="12sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:ellipsize="end"
@@ -41,26 +43,29 @@
             android:layout_height="wrap_content">
 
             <RatingBar
+                android:id="@+id/list_item_archive_review_product_rating_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:paddingStart="-2dp"
+                android:paddingEnd="-2dp"
                 android:theme="@style/RatingBarTheme"
                 style="@style/ProductListRatingBarStyle"
                 android:scaleX=".6"
                 android:scaleY=".6"
                 android:transformPivotX="5dp"
-                android:transformPivotY="7dp"
+                android:transformPivotY="8dp"
                 android:rating="3.5"
                 android:stepSize="0.01"
                 android:numStars="5"/>
 
             <TextView
+                android:id="@+id/list_item_archive_review_product_date_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="02.07"
                 android:textSize="9sp"
                 android:textColor="@color/colorFontHint"/>
 
