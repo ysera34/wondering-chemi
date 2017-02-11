@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -206,14 +208,21 @@ public class ProductListFragment extends Fragment {
 
     private void requestTagProductList(String query) {
 
+        final ProgressDialog progressDialog;
+
         if (mPager == null) {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(PATH)
                     .append(QUERY_TAG).append(encodeUTF8(query));
+            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
+                    getString(R.string.progress_dialog_message_product_list), false, false);
+
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
+            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
+                    getString(R.string.progress_dialog_message_product_list), false, false);
         }
 
         Log.i(TAG, mUrlBuilder.toString());
@@ -223,6 +232,7 @@ public class ProductListFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseProductListPagingQuery(response);
                         updateUI();
@@ -231,7 +241,10 @@ public class ProductListFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
                         Log.e(TAG, error.getMessage());
+                        Toast.makeText(getActivity(),
+                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
                     }
                 }
         );

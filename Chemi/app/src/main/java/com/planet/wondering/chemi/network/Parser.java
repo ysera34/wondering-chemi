@@ -148,10 +148,6 @@ public class Parser {
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
-//                int total = responseObject.getInt(TOTAL);
-//                JSONObject skippingJSONObject = responseObject.getJSONObject(PAGE);
-//                String prevQuery = skippingJSONObject.getString(PAGE_PREV);
-//                String nextQuery = skippingJSONObject.getString(PAGE_NEXT);
                 int productSize = responseObject.getInt(COUNT);
                 if (productSize > 0) {
                     JSONArray productJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
@@ -165,12 +161,17 @@ public class Parser {
 
                         Object ratingObject = productJSONObject.get(RATING);
                         float ratingFloat = 0.0f;
-                        if (ratingObject instanceof Integer) {
-                            ratingFloat = ((Integer) ratingObject).floatValue();
-                        } else if (ratingObject instanceof Double) {
-                            ratingFloat = ((Double) ratingObject).floatValue();
-                        } else if (ratingObject == null) {
+//                        if (ratingObject instanceof Integer) {
+//                            ratingFloat = ((Integer) ratingObject).floatValue();
+//                        } else if (ratingObject instanceof Double) {
+//                            ratingFloat = ((Double) ratingObject).floatValue();
+//                        } else if (ratingObject == null) {
+//                            ratingFloat = 0.0f;
+//                        }
+                        if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
                             ratingFloat = 0.0f;
+                        } else {
+                            ratingFloat = ((Double) ratingObject).floatValue();
                         }
                         product.setRatingValue(ratingFloat);
                         product.setRatingCount(productJSONObject.getInt(RATING_COUNT));

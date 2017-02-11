@@ -44,6 +44,12 @@
     <string name="member_start_local_agree_info">케미 서비스의 <u><b>이용약관 및 개인정보 취급방침</b></u>의\n내용을 확인하였으며, 해당 내용에 동의합니다.</string>
     <string name="member_start_info_info_message">정보를 입력하면 나에게 맞는\n화학성분 제품을 찾기 쉬워요!</string>
 
+    <!-- request title, message -->
+    <string name="progress_dialog_title_product_list">알맞은 상품을 검색 중입니다.</string>
+    <string name="progress_dialog_title_product_list_next">알맞은 상품을 조금 더 가져오는 중입니다.</string>
+    <string name="progress_dialog_message_product_list">잠시만 기다려 주세요.</string>
+    <string name="progress_dialog_message_error">죄송합니다. 서버에서 문제가 발생하였습니다.</string>
+
     <string-array name="kind_of_product_sort_array">
         <item>@string/product_sort_accuracy</item>
         <item>@string/product_sort_rating_value</item>
