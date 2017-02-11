@@ -23,7 +23,7 @@ import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
-import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 
 import org.json.JSONObject;
 
@@ -220,7 +220,7 @@ public class TagPopularListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            mSelectedListener.onSearchWordSelected(mTag.getName());
+            mSelectedListener.onTagSelected(mTag.getName());
         }
     }
 
@@ -245,16 +245,16 @@ public class TagPopularListFragment extends Fragment {
         }
     }
 
-    OnSearchWordSelectedListener mSelectedListener;
+    OnTagSelectedListener mSelectedListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mSelectedListener = (OnSearchWordSelectedListener) context;
+            mSelectedListener = (OnTagSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnSearchWordSelectedListener");
+                    + " must implement OnTagSelectedListener");
         }
     }
 }

@@ -12,6 +12,7 @@
     <string name="menu_toolbar_product_action_archive">제품보관</string>
     <string name="menu_toolbar_product_action_share">공유</string>
     <string name="menu_toolbar_member_action_config">사용자 설정</string>
+    <string name="menu_toolbar_member_action_config_confirm">설정 확인</string>
 
     <string name="search_guide_sentence">상품명, 브랜드명으로 검색해보세요</string>
     <string name="search_edit_text">search_edit_text</string>

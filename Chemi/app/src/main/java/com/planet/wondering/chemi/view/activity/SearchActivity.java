@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
 import com.planet.wondering.chemi.view.fragment.SearchFragment;
 
@@ -16,7 +16,7 @@ import com.planet.wondering.chemi.view.fragment.SearchFragment;
  */
 
 public class SearchActivity extends BottomNavigationActivity
-        implements OnSearchWordSelectedListener {
+        implements OnTagSelectedListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
     private FragmentManager mFragmentManager;
@@ -52,9 +52,9 @@ public class SearchActivity extends BottomNavigationActivity
     private SearchDetailFragment mSearchDetailFragment;
 
     @Override
-    public void onSearchWordSelected(String searchWord) {
+    public void onTagSelected(String tag) {
         mSearchDetailFragment = (SearchDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_container);
-        mSearchDetailFragment.updateSearchEditText(searchWord);
+        mSearchDetailFragment.updateSearchEditText(tag);
     }
 }

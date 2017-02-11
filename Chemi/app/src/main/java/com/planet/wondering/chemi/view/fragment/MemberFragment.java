@@ -183,7 +183,6 @@ public class MemberFragment extends Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

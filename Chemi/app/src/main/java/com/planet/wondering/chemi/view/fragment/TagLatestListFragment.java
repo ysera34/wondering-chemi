@@ -16,7 +16,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.TagSharedPreferences;
-import com.planet.wondering.chemi.util.listener.OnSearchWordSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -228,21 +228,21 @@ public class TagLatestListFragment extends Fragment {
                 mTagLatestAdapter.removeTag(mTag);
                 mTagLatestAdapter.notifyDataSetChanged();
             } else {
-                mSelectedListener.onSearchWordSelected(mTag.getName());
+                mSelectedListener.onTagSelected(mTag.getName());
             }
         }
     }
 
-    OnSearchWordSelectedListener mSelectedListener;
+    OnTagSelectedListener mSelectedListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mSelectedListener = (OnSearchWordSelectedListener) context;
+            mSelectedListener = (OnTagSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnSearchWordSelectedListener");
+                    + " must implement OnTagSelectedListener");
         }
     }
 }
