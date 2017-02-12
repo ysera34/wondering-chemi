@@ -215,13 +215,13 @@ public class ProductListFragment extends Fragment {
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
                     .append(QUERY_TAG).append(encodeUTF8(query));
             progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
-                    getString(R.string.progress_dialog_message_product_list), false, false);
+                    getString(R.string.progress_dialog_message_wait), false, false);
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
             progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
-                    getString(R.string.progress_dialog_message_product_list), false, false);
+                    getString(R.string.progress_dialog_message_wait), false, false);
         }
 
         Log.i(TAG, mUrlBuilder.toString());

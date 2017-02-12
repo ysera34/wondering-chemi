@@ -86,6 +86,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     private ArrayList<Chemical> mChemicals;
 
     private TextView mChemicalSortInfoTextView;
+    private TextView mChemicalIncludeAllergyTotalTextView;
     private HexagonFilterLayout[] mHexagonFilterLayouts;
     private RecyclerView mChemicalRecyclerView;
     private ChemicalAdapter mChemicalAdapter;
@@ -107,6 +108,9 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_chemical_list, container, false);
 
         mChemicalSortInfoTextView = (TextView) view.findViewById(R.id.chemical_sort_info_text_view);
+        mChemicalIncludeAllergyTotalTextView =
+                (TextView) view.findViewById(R.id.chemical_include_allergy_total_text_view);
+        mChemicalIncludeAllergyTotalTextView.setText(String.valueOf(mProduct.getAllergyCount()));
         mHexagonFilterLayouts = new HexagonFilterLayout[5];
 
         int[] filterLayoutIds = new int[]{

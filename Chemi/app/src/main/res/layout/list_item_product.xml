@@ -19,8 +19,7 @@
             android:id="@+id/list_item_product_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"/>
+            android:scaleType="centerCrop"/>
 
     </LinearLayout>
 
@@ -38,16 +37,14 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:textSize="14sp"
-            android:textColor="@color/colorFontNormal"
-            android:text="더퓨어"/>
+            android:textColor="@color/colorFontNormal"/>
 
         <TextView
             android:id="@+id/list_item_product_name_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textColor="@color/colorFontNormal"
-            android:text="아임키즈 찰랑찰랑 2NI1 샴푸"/>
+            android:textColor="@color/colorFontNormal"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/RatingBarTheme"
                 style="@style/ProductListRatingBarStyle"
-                android:rating="3.5"
                 android:stepSize="0.01"
                 android:numStars="5"/>
 
@@ -71,8 +67,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_gravity="center_vertical"
                 android:textSize="12sp"
-                android:textColor="@color/colorAccent"
-                android:text="4.0"/>
+                android:textColor="@color/colorAccent"/>
 
             <TextView
                 android:id="@+id/list_item_product_review_rating_count_text_view"
@@ -81,8 +76,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_gravity="center_vertical"
                 android:textSize="12sp"
-                android:textColor="@color/colorFontNormal"
-                android:text="(1300명)"/>
+                android:textColor="@color/colorFontNormal"/>
 
         </LinearLayout>
 
