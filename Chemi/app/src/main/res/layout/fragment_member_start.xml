@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,44 +34,56 @@
         android:layout_alignParentBottom="true">
         
         <TextView
+            android:id="@+id/member_start_naver_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:gravity="center_horizontal"
+            android:clickable="true"
             android:text="@string/member_start_naver"
+            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
-            android:background="@drawable/widget_border_oval_rectangle_white"/>
+            android:background="@drawable/selector_transparent_white_opaque_primary"/>
 
         <TextView
+            android:id="@+id/member_start_google_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:gravity="center_horizontal"
+            android:clickable="true"
             android:text="@string/member_start_google"
+            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
-            android:background="@drawable/widget_border_oval_rectangle_white"/>
-
+            android:background="@drawable/selector_transparent_white_opaque_primary"/>
+        <!--android:background="@drawable/widget_border_oval_rectangle_white"-->
         <TextView
+            android:id="@+id/member_start_local_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:gravity="center_horizontal"
+            android:clickable="true"
             android:text="@string/member_start_local"
+            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
-            android:background="@drawable/widget_border_oval_rectangle_white"/>
+            android:background="@drawable/selector_transparent_white_opaque_primary"/>
 
         <TextView
+            android:id="@+id/member_start_browse_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="36dp"
             android:gravity="center_horizontal"
+            android:clickable="true"
             android:text="@string/member_start_browse"
+            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"/>
 
     </LinearLayout>
