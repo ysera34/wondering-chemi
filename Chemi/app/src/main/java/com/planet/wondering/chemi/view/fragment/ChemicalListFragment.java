@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.model.storage.ProductStorage;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
@@ -33,6 +32,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
     private static final String TAG = ChemicalListFragment.class.getSimpleName();
 
+    private static final String ARG_PRODUCT = "product";
     private static final String ARG_PRODUCT_ID = "product_id";
     private static final String CHEMICAL_DIALOG = "chemical_dialog";
 
@@ -55,6 +55,16 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         return fragment;
     }
 
+    public static ChemicalListFragment newInstance(Product product) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCT, product);
+
+        ChemicalListFragment fragment = new ChemicalListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private int mProductId;
     private Product mProduct;
     private ArrayList<Chemical> mChemicals;
@@ -69,8 +79,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
-        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
-
+        mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
+//        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
         mChemicals = mProduct.getChemicals();
     }
 
@@ -103,6 +113,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             public void onShowView() {
 //                ((ProductActivity) getActivity()).showBottomNavigationView();
                 ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+
             }
 
             @Override
@@ -111,6 +122,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                 ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
+
         return view;
     }
 
@@ -134,6 +146,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         } else {
             mChemicalAdapter.notifyDataSetChanged();
         }
+
     }
 
     @Override

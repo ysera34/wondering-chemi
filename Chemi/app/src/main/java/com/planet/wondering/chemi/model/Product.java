@@ -1,12 +1,13 @@
 package com.planet.wondering.chemi.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by yoon on 2017. 1. 17..
  */
 
-public class Product {
+public class Product implements Serializable {
 
     private int mId;
     private byte mCategoryId;
@@ -188,5 +189,24 @@ public class Product {
                 return chemicals;
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "mId=" + mId +
+                ", mCategoryId=" + mCategoryId +
+                ", mName='" + mName + '\'' +
+                ", mMaker='" + mMaker + '\'' +
+                ", mBrand='" + mBrand + '\'' +
+                ", mType='" + mType + '\'' +
+                ", mPurpose='" + mPurpose + '\'' +
+                ", mImagePath='" + mImagePath + '\'' +
+                ", \nmRatingValue=" + mRatingValue +
+                ", mRatingCount=" + mRatingCount +
+                ", mAllergyCount=" + mAllergyCount +
+                ", mArchive=" + mArchive +
+                ", mChemicals=" + mChemicals +
+                '}';
     }
 }

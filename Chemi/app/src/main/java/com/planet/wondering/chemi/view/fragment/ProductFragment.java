@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
@@ -33,6 +35,7 @@ public class ProductFragment extends Fragment {
 
     private static final String TAG = ProductFragment.class.getSimpleName();
 
+    private static final String ARG_PRODUCT = "product";
     private static final String ARG_PRODUCT_ID = "product_id";
 
     public static ProductFragment newInstance() {
@@ -48,6 +51,16 @@ public class ProductFragment extends Fragment {
 
         Bundle args = new Bundle();
         args.putInt(ARG_PRODUCT_ID, productId);
+
+        ProductFragment fragment = new ProductFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ProductFragment newInstance(Product product) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCT, product);
 
         ProductFragment fragment = new ProductFragment();
         fragment.setArguments(args);
@@ -74,14 +87,15 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, 0);
+        mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
 //        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
 
         mProductDetailListFragments = new ArrayList<>();
         mProductDetailListFragmentTitles = new ArrayList<>();
 
-        addProductDetailFragment(ChemicalListFragment.newInstance(mProductId),
+        addProductDetailFragment(ChemicalListFragment.newInstance(mProduct),
                 getString(R.string.product_detail_tab_title1));
-        addProductDetailFragment(ReviewListFragment.newInstance(mProductId),
+        addProductDetailFragment(ReviewListFragment.newInstance(mProduct),
                 getString(R.string.product_detail_tab_title2));
     }
 
@@ -95,7 +109,7 @@ public class ProductFragment extends Fragment {
         mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
                     ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
                 } else {
                     ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
@@ -116,23 +130,23 @@ public class ProductFragment extends Fragment {
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
 
         FragmentManager fm = getChildFragmentManager();
-//        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(fm) {
-//            @Override
-//            public Fragment getItem(int position) {
-//                return mProductDetailListFragments.get(position);
-//            }
-//
-//            @Override
-//            public int getCount() {
-//                return mProductDetailListFragmentTitles.size();
-//            }
-//
-//            @Override
-//            public CharSequence getPageTitle(int position) {
-//                return mProductDetailListFragmentTitles.get(position);
-//            }
-//        });
-//        mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
+        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(fm) {
+            @Override
+            public Fragment getItem(int position) {
+                return mProductDetailListFragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return mProductDetailListFragmentTitles.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mProductDetailListFragmentTitles.get(position);
+            }
+        });
+        mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
         return view;
     }
 
@@ -150,8 +164,8 @@ public class ProductFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        bindProduct(mProduct);
-        requestProduct();
+        bindProduct(mProduct);
+//        requestProduct();
     }
 
     private void bindProduct(Product product) {
@@ -159,25 +173,61 @@ public class ProductFragment extends Fragment {
         mProductToolbar.setTitle(product.getName());
         mProductToolbar.setSubtitle(product.getBrand());
 
-//        mProductDetailImageView
+        Glide.with(getActivity())
+                .load(mProduct.getImagePath())
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                .crossFade()
+                .override(700, 460)
+                .centerCrop()
+                .into(mProductDetailImageView);
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
+
     }
 
-    private void requestProduct() {
-
-        Product product = new Product();
-        product.setName("product" + mProductId);
-        product.setBrand("brand" + mProductId);
-
-        bindProduct(product);
-    }
+//    private void requestProduct() {
+//
+////        Product product = new Product();
+////        product.setName("product" + mProductId);
+////        product.setBrand("brand" + mProductId);
+////
+////        bindProduct(product);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(getActivity(), "상품의 정보를 가져오고 있습니다.",
+//                        "잠시만 기다려 주세요.", false, false);
+//
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+//                Request.Method.GET, URL_HOST + PATH + mProductId,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        mProduct = Parser.parseProduct(response);
+//                        bindProduct(mProduct);
+//                        progressDialog.dismiss();
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        progressDialog.dismiss();
+//                        Log.e(TAG, error.getMessage());
+//                    }
+//                }
+//        );
+//
+//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//
+//        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar_product, menu);
     }
 

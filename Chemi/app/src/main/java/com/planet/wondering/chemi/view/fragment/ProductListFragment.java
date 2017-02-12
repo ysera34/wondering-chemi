@@ -40,7 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.planet.wondering.chemi.network.Config.Product.PATH;
+import static com.planet.wondering.chemi.network.Config.Product.QUERY_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -212,14 +212,13 @@ public class ProductListFragment extends Fragment {
 
         if (mPager == null) {
             mUrlBuilder.delete(0, mUrlBuilder.length());
-            mUrlBuilder.append(URL_HOST).append(PATH)
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
                     .append(QUERY_TAG).append(encodeUTF8(query));
             progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
                     getString(R.string.progress_dialog_message_product_list), false, false);
-
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
-            mUrlBuilder.append(URL_HOST).append(PATH).append(mPager.getNextQuery())
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
             progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
                     getString(R.string.progress_dialog_message_product_list), false, false);

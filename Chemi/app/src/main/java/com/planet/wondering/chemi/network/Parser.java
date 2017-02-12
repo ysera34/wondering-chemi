@@ -7,6 +7,7 @@ import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Tag;
+import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -205,7 +206,6 @@ public class Parser {
     public static Product parseProduct(JSONObject responseObject) {
 
         Product product = new Product();
-        ArrayList<Chemical> chemicals = new ArrayList<>();
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
@@ -214,7 +214,15 @@ public class Parser {
                 product.setBrand(productJSONObject.getString(BRAND));
                 product.setName(productJSONObject.getString(NAME));
                 product.setImagePath(productJSONObject.getString(IMAGE_PATH));
-                product.setRatingValue((float) productJSONObject.getDouble(RATING));
+//                product.setRatingValue((float) productJSONObject.getDouble(RATING));
+                Object ratingObject = productJSONObject.get(RATING);
+                float ratingFloat = 0.0f;
+                if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
+                    ratingFloat = 0.0f;
+                } else {
+                    ratingFloat = ((Double) ratingObject).floatValue();
+                }
+                product.setRatingValue(ratingFloat);
                 product.setRatingCount(productJSONObject.getInt(RATING_COUNT));
                 product.setAllergyCount(productJSONObject.getInt(ALLERGY));
                 int chemicalSize = productJSONObject.getInt(CHEMICALS_SIZE);
@@ -227,12 +235,16 @@ public class Parser {
                         chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_PRODUCT));
                         chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                         chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
-                        chemical.setMaxHazard((byte)chemicalJSONObject.getInt(MAX_VALUE));
-                        Object minValueObject = chemicalJSONObject.get(MIN_VALUE);
-                        if (minValueObject != null) {
-                            chemical.setMinHazard((byte)chemicalJSONObject.getInt(MIN_VALUE));
+                        chemical.setMaxHazard((byte) chemicalJSONObject.getInt(MAX_VALUE));
+//                        Object minValueObject = chemicalJSONObject.get(MIN_VALUE);
+//                        if (minValueObject != null) {
+//                            chemical.setMinHazard((byte)chemicalJSONObject.getInt(MIN_VALUE));
+//                        }
+                        int minValue = chemicalJSONObject.getInt(MIN_VALUE);
+                        if (minValue != -1) {
+                            chemical.setMinHazard((byte) minValue);
                         }
-                        int allergyState = chemicalJSONObject.getInt(ALLERGY);
+                        int allergyState = chemicalJSONObject.getInt(Key.ALLERGY);
                         if (allergyState == 1) {
                             chemical.setAllergy(true);
                         }
@@ -243,6 +255,7 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+//        Log.i(TAG, product.toString());
         return product;
     }
 

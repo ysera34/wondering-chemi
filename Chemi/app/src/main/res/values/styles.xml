@@ -52,10 +52,10 @@
     </style>
 
     <style name="ProductToolbarTextAppearance">
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:shadowColor">@color/colorPrimary</item>
+        <!--<item name="android:shadowDx">1</item>-->
+        <!--<item name="android:shadowDy">1</item>-->
+        <!--<item name="android:shadowRadius">2</item>-->
+        <!--<item name="android:shadowColor">@color/colorPrimary</item>-->
     </style>
 
     <style name="ProductToolbarTextAppearance.Title">
@@ -83,9 +83,9 @@
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
+        <!--<item name="android:shadowDx">1</item>-->
+        <!--<item name="android:shadowDy">1</item>-->
+        <!--<item name="android:shadowRadius">2</item>-->
         <item name="android:shadowColor">@color/colorFontHint</item>
         <item name="textAllCaps">true</item>
     </style>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Product;
 
 /**
  * Created by yoon on 2017. 1. 19..
@@ -17,6 +18,7 @@ public class ReviewListFragment extends Fragment {
 
     private static final String TAG = ReviewListFragment.class.getSimpleName();
 
+    private static final String ARG_PRODUCT = "product";
     private static final String ARG_PRODUCT_ID = "product_id";
 
     public static ReviewListFragment newInstance() {
@@ -38,9 +40,22 @@ public class ReviewListFragment extends Fragment {
         return fragment;
     }
 
+    public static ReviewListFragment newInstance(Product product) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCT, product);
+
+        ReviewListFragment fragment = new ReviewListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private Product mProduct;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
     }
 
     @Nullable

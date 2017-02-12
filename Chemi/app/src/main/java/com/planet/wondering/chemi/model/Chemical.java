@@ -2,13 +2,14 @@ package com.planet.wondering.chemi.model;
 
 import com.planet.wondering.chemi.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by yoon on 2017. 1. 17..
  */
 
-public class Chemical {
+public class Chemical implements Serializable {
 
     private int mId;
     private String mNameKo;

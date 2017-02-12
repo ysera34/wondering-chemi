@@ -16,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 
 /**
@@ -68,11 +66,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Glide.with(getActivity())
-                .load("http://develop.inframincer.org/search_background.gif")
-                .asGif()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mSearchBackgroundImageView);
+//        Glide.with(getActivity())
+//                .load("http://develop.inframincer.org/search_background.gif")
+//                .asGif()
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(mSearchBackgroundImageView);
     }
 
     @Override
