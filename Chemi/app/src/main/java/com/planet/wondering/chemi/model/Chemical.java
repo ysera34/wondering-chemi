@@ -138,5 +138,19 @@ public class Chemical implements Serializable {
         }
         return hazardLabelBuilder.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Chemical{" +
+                "mId=" + mId +
+                ", mNameKo='" + mNameKo + '\'' +
+                ", mNameEn='" + mNameEn + '\'' +
+                ", mPurpose='" + mPurpose + '\'' +
+                ", mMinHazard=" + mMinHazard +
+                ", mMaxHazard=" + mMaxHazard +
+                ", mAllergy=" + mAllergy +
+                ", mHazards=" + mHazards +
+                '}';
+    }
 }
 

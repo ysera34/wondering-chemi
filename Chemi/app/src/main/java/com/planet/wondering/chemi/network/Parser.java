@@ -267,10 +267,18 @@ public class Parser {
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 JSONObject chemicalJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
                 chemical.setId(chemicalJSONObject.getInt(CHEMICAL_ID));
-                chemical.setMaxHazard((byte)chemicalJSONObject.getInt(MAX_VALUE));
-                Object minValueObject = chemicalJSONObject.get(MIN_VALUE);
-                if (minValueObject != null) {
-                    chemical.setMinHazard((byte)chemicalJSONObject.getInt(MIN_VALUE));
+//                chemical.setMaxHazard((byte)chemicalJSONObject.getInt(MAX_VALUE));
+                int maxValue = chemicalJSONObject.getInt(MAX_VALUE);
+                if (maxValue != -1) {
+                    chemical.setMaxHazard((byte) maxValue);
+                }
+//                Object minValueObject = chemicalJSONObject.get(MIN_VALUE);
+//                if (minValueObject != null) {
+//                    chemical.setMinHazard((byte)chemicalJSONObject.getInt(MIN_VALUE));
+//                }
+                int minValue = chemicalJSONObject.getInt(MIN_VALUE);
+                if (minValue != -1) {
+                    chemical.setMinHazard((byte) minValue);
                 }
                 chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
@@ -295,6 +303,7 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+        Log.i(TAG, chemical.toString());
         return chemical;
     }
 

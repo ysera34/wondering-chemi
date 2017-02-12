@@ -47,10 +47,10 @@
     <!-- request title, message -->
     <string name="progress_dialog_title_product_list">알맞은 상품을 검색 중입니다.</string>
     <string name="progress_dialog_title_product_list_next">알맞은 상품을 조금 더 가져오는 중입니다.</string>
-    <string name="progress_dialog_message_product_list">잠시만 기다려 주세요.</string>
+    <string name="progress_dialog_message_wait">잠시만 기다려 주세요.</string>
     <string name="progress_dialog_message_error">죄송합니다. 서버에서 문제가 발생하였습니다.</string>
     <string name="progress_dialog_title_product">상품의 정보를 가져오고 있습니다.</string>
-    <string name="progress_dialog_message_product">잠시만 기다려 주세요.</string>
+    <string name="progress_dialog_title_chemical">성분의 정보를 가져오고 있습니다.</string>
 
     <string-array name="kind_of_product_sort_array">
         <item>@string/product_sort_accuracy</item>

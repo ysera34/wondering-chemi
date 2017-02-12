@@ -74,7 +74,7 @@ public class Config {
     }
 
     public static final class Chemical {
-        public static final String PATH = File.separator + "chemicals";
+        public static final String PATH = File.separator + "chemicals" + File.separator;
 
         public static final class Key {
             public static final String CHEMICALS = "chemicals";
@@ -87,7 +87,7 @@ public class Config {
             public static final String MAX_VALUE = "ewglevel";
             public static final String MIN_VALUE = "ewglevel2";
             public static final String ALLERGY = "isAllergy";
-            public static final String HAZARD_SIZE = "hazardes";
+            public static final String HAZARD_SIZE = "hazarded";
             public static final String HAZARDS = "hazards";
 //            public static final String KEYWORD = "keyword";
 //            public static final String EFFECTS = "effects";

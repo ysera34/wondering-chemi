@@ -137,7 +137,7 @@ public class ProductPagerFragment extends Fragment {
 //        bindProduct(product);
         final ProgressDialog progressDialog =
                 ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product),
-                        getString(R.string.progress_dialog_message_product), false, false);
+                        getString(R.string.progress_dialog_message_wait), false, false);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH + productId,

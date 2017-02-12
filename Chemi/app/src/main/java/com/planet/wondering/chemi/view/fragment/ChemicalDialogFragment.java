@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
-import com.planet.wondering.chemi.model.storage.ChemicalStorage;
 
 /**
  * Created by yoon on 2017. 1. 22..
@@ -28,6 +27,7 @@ public class ChemicalDialogFragment extends DialogFragment {
 
     private static final String ARG_PRODUCT_ID = "product_id";
     private static final String ARG_CHEMICAL_ID = "chemical_id";
+    private static final String ARG_CHEMICAL = "chemical";
 
     public static ChemicalDialogFragment newInstance() {
 
@@ -59,6 +59,16 @@ public class ChemicalDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    public static ChemicalDialogFragment newInstance(Chemical chemical) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CHEMICAL, chemical);
+
+        ChemicalDialogFragment fragment = new ChemicalDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private int mProductId;
     private int mChemicalId;
     private Chemical mChemical;
@@ -79,7 +89,8 @@ public class ChemicalDialogFragment extends DialogFragment {
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
         mChemicalId = getArguments().getInt(ARG_CHEMICAL_ID, -1);
-        mChemical = ChemicalStorage.getStorage(getActivity()).getChemical(mChemicalId);
+//        mChemical = ChemicalStorage.getStorage(getActivity()).getChemical(mChemicalId);
+        mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
     }
 
     @NonNull
@@ -100,10 +111,13 @@ public class ChemicalDialogFragment extends DialogFragment {
 
         mChemicalDialogNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_ko_text_view);
+        mChemicalDialogNameKoTextView.setText(mChemical.getNameKo());
         mChemicalDialogNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_eng_text_view);
+        mChemicalDialogNameEngTextView.setText(mChemical.getNameEn());
         mChemicalDialogPurposeTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_purpose_text_view);
+        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
         mChemicalDialogAllergyTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_allergy_text_view);
         mChemicalDialogHazardInfoRecyclerView = (RecyclerView)
