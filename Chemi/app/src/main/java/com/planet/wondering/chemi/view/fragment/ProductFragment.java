@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
 import java.util.ArrayList;
@@ -106,16 +105,16 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         mProductAppBarLayout = (AppBarLayout) view.findViewById(R.id.product_detail_app_bar_layout);
-        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-                } else {
-                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-                }
-            }
-        });
+//        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+//                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
+//                } else {
+//                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
+//                }
+//            }
+//        });
         mProductToolbar = (Toolbar) view.findViewById(R.id.product_detail_toolbar);
         ((ProductPagerActivity) getActivity()).setSupportActionBar(mProductToolbar);
 
@@ -185,7 +184,6 @@ public class ProductFragment extends Fragment {
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
-
     }
 
 //    private void requestProduct() {

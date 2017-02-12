@@ -15,8 +15,8 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
-import com.planet.wondering.chemi.util.listener.OnScrollListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
 import java.text.Collator;
@@ -108,18 +108,17 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         SeparatorDecoration decoration =
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mChemicalRecyclerView.addItemDecoration(decoration);
-        mChemicalRecyclerView.addOnScrollListener(new OnScrollListener() {
+        mChemicalRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
             @Override
             public void onShowView() {
-//                ((ProductActivity) getActivity()).showBottomNavigationView();
-                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-
+                ((ProductPagerActivity) getActivity()).showBottomNavigationView();
+//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
             }
 
             @Override
             public void onHideView() {
-//                ((ProductActivity) getActivity()).hideBottomNavigationView();
-                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
+//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
 

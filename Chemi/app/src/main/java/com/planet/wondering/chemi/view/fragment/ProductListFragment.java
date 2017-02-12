@@ -32,7 +32,7 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
-import com.planet.wondering.chemi.util.listener.OnScrollListener;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
 
@@ -150,7 +150,7 @@ public class ProductListFragment extends Fragment {
         SeparatorDecoration decoration =
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mProductRecyclerView.addItemDecoration(decoration);
-        mProductRecyclerView.addOnScrollListener(new OnScrollListener() {
+        mProductRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
             @Override
             public void onShowView() {
                 ((BottomNavigationActivity) getActivity()).showBottomNavigationView();

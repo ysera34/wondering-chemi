@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
  * Created by yoon on 2017. 1. 18..
  */
 
-public abstract class OnScrollListener extends RecyclerView.OnScrollListener {
+public abstract class OnRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
     private static final int REACTION_THRESHOLD = 20;
 
