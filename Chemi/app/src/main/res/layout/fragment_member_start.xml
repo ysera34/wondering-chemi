@@ -43,7 +43,6 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="@string/member_start_naver"
-            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
             android:background="@drawable/selector_transparent_white_opaque_primary"/>
 
@@ -57,7 +56,6 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="@string/member_start_google"
-            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
             android:background="@drawable/selector_transparent_white_opaque_primary"/>
         <!--android:background="@drawable/widget_border_oval_rectangle_white"-->
@@ -71,7 +69,6 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="@string/member_start_local"
-            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"
             android:background="@drawable/selector_transparent_white_opaque_primary"/>
 
@@ -83,7 +80,6 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="@string/member_start_browse"
-            android:textColor="@color/color_selector_white_normal"
             android:textAppearance="@style/MemberStartTextAppearance"/>
 
     </LinearLayout>

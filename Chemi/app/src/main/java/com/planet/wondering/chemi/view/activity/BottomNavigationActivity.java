@@ -66,5 +66,4 @@ public class BottomNavigationActivity extends AppBaseActivity
         mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
     }
-
 }

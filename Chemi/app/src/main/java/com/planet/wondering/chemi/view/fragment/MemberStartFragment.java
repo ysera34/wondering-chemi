@@ -9,13 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 /**
  * Created by yoon on 2017. 2. 12..
  */
 
-public class MemberStartFragment extends Fragment implements View.OnClickListener {
+public class MemberStartFragment extends Fragment
+        implements View.OnClickListener {
+
+    public static final String TAG = MemberStartFragment.class.getSimpleName();
 
     public static MemberStartFragment newInstance() {
 
@@ -63,6 +67,7 @@ public class MemberStartFragment extends Fragment implements View.OnClickListene
             case R.id.member_start_naver_text_view:
                 break;
             case R.id.member_start_google_text_view:
+                ((MemberStartActivity)getActivity()).signInGoogle();
                 break;
             case R.id.member_start_local_text_view:
                 break;

@@ -46,6 +46,7 @@
     <string name="member_start_info_info_message">정보를 입력하면 나에게 맞는\n화학성분 제품을 찾기 쉬워요!</string>
 
     <!-- request title, message -->
+    <string name="loading">Loading…</string>
     <string name="progress_dialog_title_product_list">알맞은 상품을 검색 중입니다.</string>
     <string name="progress_dialog_title_product_list_next">알맞은 상품을 조금 더 가져오는 중입니다.</string>
     <string name="progress_dialog_message_wait">잠시만 기다려 주세요.</string>
@@ -57,29 +58,6 @@
         <item>@string/product_sort_accuracy</item>
         <item>@string/product_sort_rating_value</item>
         <item>@string/product_sort_rating_count</item>
-    </string-array>
-
-    <!-- Sample Data -->
-    <string-array name="search_popular_word_array">
-        <item>옥시크린</item>
-        <item>계면활성제</item>
-        <item>가습기 살균제</item>
-        <item>치약</item>
-        <item>물티슈</item>
-        <item>가그린</item>
-        <item>메디안</item>
-        <item>청솔</item>
-    </string-array>
-
-    <string-array name="search_latest_word_array">
-        <item>옥시크린</item>
-        <item>계면활성제</item>
-        <item>가습기 살균제 가습기 살균제 가습기 살균제</item>
-        <item>치약</item>
-        <item>물티슈</item>
-        <item>가그린</item>
-        <item>메디안</item>
-        <item>청솔</item>
     </string-array>
 
 </resources>
