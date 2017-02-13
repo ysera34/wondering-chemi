@@ -65,11 +65,13 @@ public class MemberStartFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_naver_text_view:
+                ((MemberStartActivity) getActivity()).signInNaver();
                 break;
             case R.id.member_start_google_text_view:
-                ((MemberStartActivity)getActivity()).signInGoogle();
+                ((MemberStartActivity) getActivity()).signInGoogle();
                 break;
             case R.id.member_start_local_text_view:
+                ((MemberStartActivity) getActivity()).signInLocal();
                 break;
             case R.id.member_start_browse_text_view:
                 startActivity(SearchActivity.newIntent(getActivity()));

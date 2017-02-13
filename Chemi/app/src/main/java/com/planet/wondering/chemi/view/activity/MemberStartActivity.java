@@ -1,6 +1,7 @@
 package com.planet.wondering.chemi.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,8 +26,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.nhn.android.naverlogin.OAuthLogin;
+import com.nhn.android.naverlogin.OAuthLoginDefine;
+import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
+import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
 
 /**
  * Created by yoon on 2017. 2. 12..
@@ -42,6 +47,9 @@ public class MemberStartActivity extends AppCompatActivity
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private GoogleApiClient mGoogleApiClient;
+
+    private static OAuthLogin mNaverOAuthLogin;
+    private static Context mContext;
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
@@ -76,6 +84,14 @@ public class MemberStartActivity extends AppCompatActivity
                 updateUI(user);
             }
         };
+
+        OAuthLoginDefine.DEVELOPER_VERSION = true;
+        mContext = this;
+        mNaverOAuthLogin = OAuthLogin.getInstance();
+        mNaverOAuthLogin.init(this
+                ,getString(R.string.naver_oauth_client_id)
+                ,getString(R.string.naver_oauth_client_secret)
+                ,getString(R.string.app_name));
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_start_fragment_container);
@@ -183,5 +199,44 @@ public class MemberStartActivity extends AppCompatActivity
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public void signInNaver() {
+        mNaverOAuthLogin.startOauthLoginActivity(this, mOAuthLoginHandler);
+    }
+
+    static private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
+        @Override
+        public void run(boolean success) {
+            if (success) {
+                String accessToken = mNaverOAuthLogin.getAccessToken(mContext);
+                String refreshToken = mNaverOAuthLogin.getRefreshToken(mContext);
+                long expiresAt = mNaverOAuthLogin.getExpiresAt(mContext);
+                String tokenType = mNaverOAuthLogin.getTokenType(mContext);
+                Log.i(TAG, "Naver accessToken: " + accessToken);
+                Log.i(TAG, "Naver refreshToken: " + refreshToken);
+                Log.i(TAG, "Naver expiresAt: " + String.valueOf(expiresAt));
+                Log.i(TAG, "Naver tokenType: " + tokenType);
+                Log.i(TAG, "Naver oauthState: " + mNaverOAuthLogin.getState(mContext).toString());
+            } else {
+                String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
+                String errorDesc = mNaverOAuthLogin.getLastErrorDesc(mContext);
+                Toast.makeText(mContext, "errorCode:" + errorCode + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public void signInLocal() {
+        mFragmentManager.beginTransaction()
+                .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
+                .commit();
+    }
+
+    public void cancelSignInLocal() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
+        if (fragment instanceof MemberStartLocalFragment)
+        mFragmentManager.beginTransaction()
+                .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                .commit();
     }
 }
