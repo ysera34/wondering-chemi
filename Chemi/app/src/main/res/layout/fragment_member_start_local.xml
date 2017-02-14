@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+                android:background="@color/colorWhite">
 
     <RelativeLayout
         android:id="@+id/member_start_local_header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/widget_border_bottom">
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,6 +22,7 @@
             android:textColor="@color/colorFontNormal"/>
 
         <RelativeLayout
+            android:id="@+id/member_start_local_cancel_layout"
             android:layout_width="34dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -51,12 +54,15 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_start_local_email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:hint="example@chemi.com"
+            android:inputType="textEmailAddress"
             android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorFontBody"
+            android:background="@drawable/selector_edit_text_under_line"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,12 +72,15 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_start_local_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:hint="닉네임을 입력하세요"
+            android:inputType="text"
             android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorFontBody"
+            android:background="@drawable/selector_edit_text_under_line"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -81,12 +90,15 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_start_local_pw_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:hint="새 비밀번호를 입력하세요 (6~12자)"
+            android:inputType="textPassword"
             android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorFontBody"
+            android:background="@drawable/selector_edit_text_under_line"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,12 +108,15 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_start_local_pw_confirm_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:hint="비밀번호를 확인해주세요 (6~12자)"
+            android:inputType="textPassword"
             android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorFontBody"
+            android:background="@drawable/selector_edit_text_under_line"/>
 
     </LinearLayout>
 
@@ -112,6 +127,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/member_start_local_privacy_info_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -120,6 +136,7 @@
             android:textColor="@color/colorFontHint"/>
 
         <TextView
+            android:id="@+id/member_start_local_submit_button_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="27dp"
@@ -132,7 +149,7 @@
             android:text="약관에 동의하고 회원가입"
             android:textSize="16sp"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/widget_border_oval_rectangle_primary"/>
+            android:background="@drawable/widget_solid_oval_rectangle_primary"/>
 
     </LinearLayout>
 

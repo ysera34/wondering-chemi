@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="아직 보관한 제품이 없습니다."
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@color/colorFontAluminum"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="지금 바로 제품을 둘러보세요!"
         android:textSize="12sp"
         android:textColor="@color/colorFontFrenchGray"/>
@@ -30,9 +30,10 @@
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:gravity="center_horizontal"
+        android:clickable="true"
         android:text="제품 보러가기"
         android:textSize="14sp"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/widget_border_oval_rectangle_primary"/>
+        android:textColor="@color/color_selector_primary_white"
+        android:background="@drawable/selector_transparent_primary_opaque_primary"/>
 
 </LinearLayout>

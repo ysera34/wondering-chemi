@@ -228,6 +228,7 @@ public class MemberStartActivity extends AppCompatActivity
 
     public void signInLocal() {
         mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
                 .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
                 .commit();
     }
