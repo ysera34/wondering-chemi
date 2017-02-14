@@ -16,6 +16,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,6 +123,7 @@ public class ProductListFragment extends Fragment {
 
     private RecyclerView mProductRecyclerView;
     private ProductAdapter mProductAdapter;
+    private ProgressBar mProductListProgressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -174,6 +176,7 @@ public class ProductListFragment extends Fragment {
                 }
             }
         });
+        mProductListProgressBar = (ProgressBar) view.findViewById(R.id.product_list_progress_bar);
 
         updateUI();
         requestTagProductList(mTagName);
@@ -214,15 +217,16 @@ public class ProductListFragment extends Fragment {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
                     .append(QUERY_TAG).append(encodeUTF8(query));
-            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
-                    getString(R.string.progress_dialog_message_wait), false, false);
+//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
+//                    getString(R.string.progress_dialog_message_wait), false, false);
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
-            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
-                    getString(R.string.progress_dialog_message_wait), false, false);
+//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
+//                    getString(R.string.progress_dialog_message_wait), false, false);
         }
+        mProductListProgressBar.setVisibility(View.VISIBLE);
 
         Log.i(TAG, mUrlBuilder.toString());
 
@@ -231,7 +235,14 @@ public class ProductListFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+                        try {
+                            Thread.sleep(5000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+//                        progressDialog.dismiss();
+                        mProductListProgressBar.setVisibility(View.GONE);
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseProductListPagingQuery(response);
                         updateUI();
@@ -240,7 +251,8 @@ public class ProductListFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
+                        mProductListProgressBar.setVisibility(View.GONE);
                         Log.e(TAG, error.getMessage());
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
