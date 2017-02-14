@@ -29,12 +29,12 @@
 
         <ImageView
             android:id="@+id/white_logo_image_view"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="40dp"
             android:layout_marginBottom="16dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/white_logo"
-            android:scaleType="centerCrop"/>
+            android:src="@drawable/logo_white"
+            android:scaleType="centerInside"/>
 
         <RelativeLayout
             android:id="@+id/search_view"

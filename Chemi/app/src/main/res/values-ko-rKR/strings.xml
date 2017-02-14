@@ -40,7 +40,8 @@
     <string name="member_start_naver">네이버 아이디로 시작하기</string>
     <string name="member_start_google">구글 아이디로 시작하기</string>
     <string name="member_start_local">이메일로 시작하기</string>
-    <string name="member_start_browse">둘러보기</string>
+    <string name="member_start_browse"><u>둘러보기</u></string>
+    <string name="member_start_already_user"><u>이미 가입하셨나요?</u></string>
     <string name="member_start_app_info">일상 속 화학제품 안전성 알리미 케미</string>
     <string name="member_start_local_agree_info">케미 서비스의 <u><b>이용약관 및 개인정보 취급방침</b></u>의\n내용을 확인하였으며, 해당 내용에 동의합니다.</string>
     <string name="member_start_info_info_message">정보를 입력하면 나에게 맞는\n화학성분 제품을 찾기 쉬워요!</string>

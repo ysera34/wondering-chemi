@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginDefine;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
@@ -77,9 +78,9 @@ public class MemberStartActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.i(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Log.i(TAG, "onAuthStateChanged:signed_out");
                 }
                 updateUI(user);
             }
@@ -125,20 +126,27 @@ public class MemberStartActivity extends AppCompatActivity
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                Log.i(TAG, "GoogleSignInResult" + "isSuccess");
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthGoogle(account);
                 // TODO(user): send token to server and validate server-side
+
+
+
             } else {
+                Log.i(TAG, "GoogleSignInResult" + "isFail");
                 updateUI(null);
             }
         }
     }
 
     private void firebaseAuthGoogle(GoogleSignInAccount account) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getIdToken());
+        Log.d(TAG, "firebaseAuthWithGoogle: id : " + account.getId());
+        Log.d(TAG, "firebaseAuthWithGoogle: id token : " + account.getIdToken());
         Log.d(TAG, "firebaseAuthWithGoogle: full name : " + account.getDisplayName());
         Log.d(TAG, "firebaseAuthWithGoogle: email : " + account.getEmail());
+        Log.d(TAG, "firebaseAuthWithGoogle: server auth code : " + account.getServerAuthCode());
+        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
 
         showProgressDialog();
 
