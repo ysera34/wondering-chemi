@@ -29,6 +29,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="10dp"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
                 android:background="@drawable/widget_border_bottom_member_appbar">
@@ -49,7 +50,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_toEndOf="@+id/member_profile_circle_image_view"
-                    android:paddingBottom="16dp"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -65,8 +65,8 @@
                         android:id="@+id/member_info_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="7dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="6dp"
                         android:text="여성 / 40대 / 자녀 있음"
                         android:textSize="13sp"
                         android:textColor="@color/colorFontBody"/>
@@ -138,7 +138,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -188,7 +188,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -237,7 +237,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical">
 
                     <TextView

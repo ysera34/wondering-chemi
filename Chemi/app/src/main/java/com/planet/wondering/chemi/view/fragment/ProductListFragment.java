@@ -212,6 +212,7 @@ public class ProductListFragment extends Fragment {
     private void requestTagProductList(String query) {
 
         final ProgressDialog progressDialog;
+        mProductListProgressBar.setVisibility(View.VISIBLE);
 
         if (mPager == null) {
             mUrlBuilder.delete(0, mUrlBuilder.length());
@@ -226,7 +227,6 @@ public class ProductListFragment extends Fragment {
 //            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
 //                    getString(R.string.progress_dialog_message_wait), false, false);
         }
-        mProductListProgressBar.setVisibility(View.VISIBLE);
 
         Log.i(TAG, mUrlBuilder.toString());
 
@@ -235,14 +235,8 @@ public class ProductListFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
 //                        progressDialog.dismiss();
-                        mProductListProgressBar.setVisibility(View.GONE);
+//                        mProductListProgressBar.setVisibility(View.GONE);
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseProductListPagingQuery(response);
                         updateUI();
@@ -252,7 +246,7 @@ public class ProductListFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                        progressDialog.dismiss();
-                        mProductListProgressBar.setVisibility(View.GONE);
+//                        mProductListProgressBar.setVisibility(View.GONE);
                         Log.e(TAG, error.getMessage());
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
