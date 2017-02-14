@@ -16,7 +16,7 @@ import com.planet.wondering.chemi.common.AppBaseActivity;
 
 public class SplashActivity extends AppBaseActivity {
 
-    private static final int SPLASH_TIME_OUT = 1500;
+    private static final int SPLASH_TIME_OUT = 1000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class SplashActivity extends AppBaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, SearchActivity.class);
+                Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();

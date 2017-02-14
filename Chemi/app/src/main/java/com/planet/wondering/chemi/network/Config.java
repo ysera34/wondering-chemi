@@ -30,6 +30,14 @@ public class Config {
     public static final int SOCKET_TIMEOUT_GET_REQ = 5000;
     public static final int SOCKET_TIMEOUT_POST_REQ = 10000;
 
+    public static final class User {
+        public static final String PATH = File.separator + "users" + File.separator;
+
+        public static final class Key {
+            public static final String EMAIL = "email";
+        }
+    }
+
     public static final class Tag {
         public static final String PATH = File.separator + "tags?";
 

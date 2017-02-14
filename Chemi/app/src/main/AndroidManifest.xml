@@ -16,7 +16,11 @@
             android:name=".view.activity.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--<activity-->
         <!--android:name=".BottomNavigationActivity"-->
@@ -30,9 +34,14 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="chemi.wondering.planet.com"
+                    android:host="verification_email"/>
             </intent-filter>
         </activity>
         <activity
