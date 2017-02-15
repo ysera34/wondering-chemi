@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -42,8 +44,9 @@ public class MemberStartActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();
-    public static final String TAG_GOOGLE = "start.google";
-    public static final int RC_SIGN_IN = 9002;
+    public static final String START_NAVER = "start.naver";
+    public static final String START_GOOGLE = "start.google";
+    public static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -66,8 +69,8 @@ public class MemberStartActivity extends AppCompatActivity
                         .requestEmail()
                         .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
+        mGoogleApiClient = new GoogleApiClient.Builder(MemberStartActivity.this)
+                .enableAutoManage(MemberStartActivity.this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
@@ -86,14 +89,6 @@ public class MemberStartActivity extends AppCompatActivity
             }
         };
 
-        OAuthLoginDefine.DEVELOPER_VERSION = true;
-        mContext = this;
-        mNaverOAuthLogin = OAuthLogin.getInstance();
-        mNaverOAuthLogin.init(this
-                ,getString(R.string.naver_oauth_client_id)
-                ,getString(R.string.naver_oauth_client_secret)
-                ,getString(R.string.app_name));
-
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_start_fragment_container);
 
@@ -109,6 +104,7 @@ public class MemberStartActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+
     }
     @Override
     public void onStop() {
@@ -126,7 +122,7 @@ public class MemberStartActivity extends AppCompatActivity
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                Log.i(TAG, "GoogleSignInResult" + "isSuccess");
+                Log.i(TAG, "GoogleSignInResult" + " isSuccess");
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthGoogle(account);
                 // TODO(user): send token to server and validate server-side
@@ -134,7 +130,7 @@ public class MemberStartActivity extends AppCompatActivity
 
 
             } else {
-                Log.i(TAG, "GoogleSignInResult" + "isFail");
+                Log.i(TAG, "GoogleSignInResult" + " isFail");
                 updateUI(null);
             }
         }
@@ -172,13 +168,40 @@ public class MemberStartActivity extends AppCompatActivity
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    public void signOutGoogle() {
+//        FirebaseAuth.getInstance().signOut();
+        mFirebaseAuth.signOut();
+
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        updateUI(null);
+                    }
+                }
+        );
+    }
+
+    public void revokeAccessGoogle() {
+        mFirebaseAuth.signOut();
+
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        updateUI(null);
+                    }
+                }
+        );
+    }
+
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
             Log.i(TAG, getString(R.string.google_status_fmt, user.getEmail()));
             Log.i(TAG, getString(R.string.firebase_status_fmt, user.getUid()));
         } else {
-
+            Log.i(TAG, "사용자 정보가 없거나, 로그아웃, 연동 해제 되었습니다.");
         }
     }
 
@@ -190,27 +213,20 @@ public class MemberStartActivity extends AppCompatActivity
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
-    @VisibleForTesting
-    public ProgressDialog mProgressDialog;
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
     public void signInNaver() {
+        OAuthLoginDefine.DEVELOPER_VERSION = true;
+        mContext = this;
+        mNaverOAuthLogin = OAuthLogin.getInstance();
+        mNaverOAuthLogin.init(this,
+                getString(R.string.naver_oauth_client_id),
+                getString(R.string.naver_oauth_client_secret),
+                getString(R.string.app_name));
+
         mNaverOAuthLogin.startOauthLoginActivity(this, mOAuthLoginHandler);
+    }
+
+    public void signOutNaver() {
+        mNaverOAuthLogin.logout(mContext);
     }
 
     static private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
@@ -247,5 +263,24 @@ public class MemberStartActivity extends AppCompatActivity
         mFragmentManager.beginTransaction()
                 .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
                 .commit();
+    }
+
+    @VisibleForTesting
+    public ProgressDialog mProgressDialog;
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

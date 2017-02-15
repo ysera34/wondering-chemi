@@ -1,5 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,7 +45,7 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
 public class MemberStartLocalFragment extends Fragment
         implements View.OnClickListener {
 
-    public static final String TAG = MemberStartLocalFragment.class.getSimpleName();
+    private static final String TAG = MemberStartLocalFragment.class.getSimpleName();
 
     public static MemberStartLocalFragment newInstance() {
 
@@ -61,6 +64,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private LinearLayout mEmailAuthButtonLayout;
     private TextView mEmailAuthButtonTextView;
+    private InputMethodManager mInputMethodManager;
     private LinearLayout mBodyLayout;
     private LinearLayout mFooterLayout;
 
@@ -78,6 +82,7 @@ public class MemberStartLocalFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mValidationMessages = getResources().getStringArray(R.array.validation_message_array);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -129,12 +134,37 @@ public class MemberStartLocalFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        Uri uriData = getActivity().getIntent().getData();
+        String accessToken = null;
+        if (uriData != null) {
+            Log.i(TAG, String.valueOf(uriData.toString()));
+            accessToken = uriData.getQueryParameter("accesstoken");
+        } else {
+            Log.i(TAG, "uriData : did not get it");
+        }
+//        isAuthEmailValidation &&
+        if (accessToken != null) {
+            mEmailValidationMessageTextView.setText(getString(R.string.email_validation_message_correct));
+            mEmailAuthButtonLayout.setVisibility(View.GONE);
+            mBodyLayout.setVisibility(View.VISIBLE);
+            mFooterLayout.setVisibility(View.VISIBLE);
+            Log.i(TAG, "accesstoken : " + accessToken);
+        } else {
+            Log.e(TAG, "accesstoken : did not get it");
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_local_cancel_layout:
                 ((MemberStartActivity) getActivity()).cancelSignInLocal();
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
                 if (isAuthEmailValidation) {
                     requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
                 } else {
@@ -282,6 +312,7 @@ public class MemberStartLocalFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(),
                                 "메일 발송이 완료 되었습니다.\n메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        isAuthEmailResult = true;
                     }
                 },
                 new Response.ErrorListener() {
@@ -290,6 +321,7 @@ public class MemberStartLocalFragment extends Fragment
                         Log.e(TAG, error.getMessage());
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        isAuthEmailResult = false;
                     }
                 }
         );

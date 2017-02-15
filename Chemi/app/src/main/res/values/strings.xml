@@ -63,7 +63,7 @@
 
     <string name="email_validation_message_wrong_pattern">올바르지 않은 이메일 형식 이에요.</string>
     <string name="email_validation_message_already_user">이미 사용하고 있는 이메일 이에요.</string>
-    <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증을 부탁드려요!</string>
+    <string name="email_validation_message_auth">멋진 이메일 이네요! 메일 인증을 부탁드려요!</string>
 
     <string name="name_validation_message_short">사용자 이름이 너무 짧아요.</string>
     <string name="name_validation_message_long">사용자 이름이 너무 길어요.</string>
@@ -78,7 +78,7 @@
     <string-array name="validation_message_array">
         <item>@string/email_validation_message_wrong_pattern</item>
         <item>@string/email_validation_message_already_user</item>
-        <item>@string/email_validation_message_correct</item>
+        <item>@string/email_validation_message_auth</item>
         <item>@string/name_validation_message_short</item>
         <item>@string/name_validation_message_long</item>
         <item>@string/name_validation_message_incorrect</item>
@@ -89,4 +89,5 @@
         <item>@string/confirm_validation_message_correct</item>
     </string-array>
 
+    <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>
 </resources>

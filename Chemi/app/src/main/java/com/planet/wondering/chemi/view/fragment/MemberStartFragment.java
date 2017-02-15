@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +22,7 @@ import com.planet.wondering.chemi.view.activity.SearchActivity;
 public class MemberStartFragment extends Fragment
         implements View.OnClickListener {
 
-    public static final String TAG = MemberStartFragment.class.getSimpleName();
+    private static final String TAG = MemberStartFragment.class.getSimpleName();
 
     public static MemberStartFragment newInstance() {
 
@@ -41,6 +42,9 @@ public class MemberStartFragment extends Fragment
     private TextView mStartLocalTextView;
     private TextView mStartBrowseTextView;
     private TextView mStartAlreadyUserTextView;
+
+    private Button mNaverLogoutButton;
+    private Button mGoogleLogoutButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +73,10 @@ public class MemberStartFragment extends Fragment
         mStartBrowseTextView.setOnClickListener(this);
         mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
         mStartAlreadyUserTextView.setOnClickListener(this);
+
+        view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
+        view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
+        view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
         return view;
     }
 
@@ -98,7 +106,17 @@ public class MemberStartFragment extends Fragment
                 break;
             case R.id.member_start_already_user_text_view:
                 Toast.makeText(getActivity(),
-                        "비밀번호는 찾을 수 없습니다.\n다른 이메일로 다시 가입해주세요", Toast.LENGTH_SHORT).show();
+                        "로그인 화면 만들어야되요.\n비밀번호는 찾을 수 없습니다.\n다른 이메일로 다시 가입해주세요", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.naver_sign_out_button:
+                ((MemberStartActivity) getActivity()).signOutNaver();
+                break;
+            case R.id.google_sign_out_button:
+                ((MemberStartActivity) getActivity()).signOutGoogle();
+                break;
+            case R.id.google_revoke_button:
+                ((MemberStartActivity) getActivity()).revokeAccessGoogle();
                 break;
         }
     }

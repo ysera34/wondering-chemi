@@ -161,6 +161,7 @@ public class Parser {
                         product.setImagePath(productJSONObject.getString(IMAGE_PATH));
 
                         Object ratingObject = productJSONObject.get(RATING);
+                        Log.i(TAG, String.valueOf(ratingObject));
                         float ratingFloat = 0.0f;
 //                        if (ratingObject instanceof Integer) {
 //                            ratingFloat = ((Integer) ratingObject).floatValue();
@@ -171,6 +172,8 @@ public class Parser {
 //                        }
                         if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
                             ratingFloat = 0.0f;
+                        } else if (ratingObject instanceof Integer) {
+                            ratingFloat = ((Integer) ratingObject).floatValue();
                         } else {
                             ratingFloat = ((Double) ratingObject).floatValue();
                         }
@@ -219,6 +222,8 @@ public class Parser {
                 float ratingFloat = 0.0f;
                 if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
                     ratingFloat = 0.0f;
+                } else if (ratingObject instanceof Integer) {
+                    ratingFloat = ((Integer) ratingObject).floatValue();
                 } else {
                     ratingFloat = ((Double) ratingObject).floatValue();
                 }

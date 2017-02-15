@@ -70,6 +70,11 @@
                     android:textAppearance="@style/MemberStartTextAppearance"/>
             </RelativeLayout>
 
+            <Button
+                android:id="@+id/naver_sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <RelativeLayout
                 android:id="@+id/member_start_google_layout"
                 android:layout_width="match_parent"
@@ -97,6 +102,16 @@
                     android:textSize="16sp"
                     android:textAppearance="@style/MemberStartTextAppearance"/>
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/google_sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/google_revoke_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:id="@+id/member_start_local_layout"

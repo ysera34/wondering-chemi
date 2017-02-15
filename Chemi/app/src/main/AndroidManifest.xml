@@ -33,14 +33,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
+            <intent-filter> 
+                <action android:name="android.intent.action.VIEW"/>  
+                <category android:name="android.intent.category.DEFAULT"/> 
+                <category android:name="android.intent.category.BROWSABLE"/>  
                 <data
-                    android:scheme="chemi.wondering.planet.com"
+                    android:scheme="chemi"
                     android:host="verification_email"/>
             </intent-filter>
         </activity>
