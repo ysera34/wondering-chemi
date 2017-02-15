@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +42,6 @@ public class MemberStartFragment extends Fragment
     private TextView mStartBrowseTextView;
     private TextView mStartAlreadyUserTextView;
 
-    private Button mNaverLogoutButton;
-    private Button mGoogleLogoutButton;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +73,7 @@ public class MemberStartFragment extends Fragment
         view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
+        view.findViewById(R.id.naver_revoke_button).setOnClickListener(this);
         return view;
     }
 
@@ -111,6 +108,9 @@ public class MemberStartFragment extends Fragment
 
             case R.id.naver_sign_out_button:
                 ((MemberStartActivity) getActivity()).signOutNaver();
+                break;
+            case R.id.naver_revoke_button:
+                ((MemberStartActivity) getActivity()).revokeAccessNaver();
                 break;
             case R.id.google_sign_out_button:
                 ((MemberStartActivity) getActivity()).signOutGoogle();

@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -88,6 +89,15 @@ public class MemberStartActivity extends AppCompatActivity
                 updateUI(user);
             }
         };
+
+        OAuthLoginDefine.DEVELOPER_VERSION = true;
+        mContext = this;
+        mNaverOAuthLogin = OAuthLogin.getInstance();
+        mNaverOAuthLogin.init(this,
+                getString(R.string.naver_oauth_client_id),
+                getString(R.string.naver_oauth_client_secret),
+                getString(R.string.app_name));
+
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_start_fragment_container);
@@ -214,19 +224,16 @@ public class MemberStartActivity extends AppCompatActivity
     }
 
     public void signInNaver() {
-        OAuthLoginDefine.DEVELOPER_VERSION = true;
-        mContext = this;
-        mNaverOAuthLogin = OAuthLogin.getInstance();
-        mNaverOAuthLogin.init(this,
-                getString(R.string.naver_oauth_client_id),
-                getString(R.string.naver_oauth_client_secret),
-                getString(R.string.app_name));
-
-        mNaverOAuthLogin.startOauthLoginActivity(this, mOAuthLoginHandler);
+        mNaverOAuthLogin.startOauthLoginActivity(MemberStartActivity.this, mOAuthLoginHandler);
     }
 
     public void signOutNaver() {
-        mNaverOAuthLogin.logout(mContext);
+//        mNaverOAuthLogin.logout(mContext);
+//        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+    }
+
+    public void revokeAccessNaver() {
+        new DeleteTokenTask().execute();
     }
 
     static private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
@@ -281,6 +288,20 @@ public class MemberStartActivity extends AppCompatActivity
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            boolean isSucessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+
+            if (!isSucessDeleteToken) {
+                Log.d(TAG, "errorCode:" + mNaverOAuthLogin.getLastErrorCode(mContext));
+                Log.d(TAG, "errorDese:" + mNaverOAuthLogin.getLastErrorDesc(mContext));
+            }
+
+            return null;
         }
     }
 }
