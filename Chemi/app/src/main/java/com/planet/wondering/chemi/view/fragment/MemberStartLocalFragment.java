@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.TextValidator;
@@ -33,7 +35,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
@@ -126,8 +128,10 @@ public class MemberStartLocalFragment extends Fragment
 
         mMemberStartLocalPrivacyInfoTextView =
                 (TextView) view.findViewById(R.id.member_start_local_privacy_info_text_view);
+        mMemberStartLocalPrivacyInfoTextView.setOnClickListener(this);
         mMemberStartLocalSubmitButtonTextView =
                 (TextView) view.findViewById(R.id.member_start_local_submit_button_text_view);
+        mMemberStartLocalSubmitButtonTextView.setOnClickListener(this);
         return view;
     }
 
@@ -152,21 +156,36 @@ public class MemberStartLocalFragment extends Fragment
                     Toast.makeText(getActivity(), mValidationMessages[0], Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.member_start_local_privacy_info_text_view:
+                Toast.makeText(getActivity(),
+                        "member_start_local_privacy_info_text_view", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.member_start_local_submit_button_text_view:
+                Toast.makeText(getActivity(),
+                        "member_start_local_submit_button_text_view", Toast.LENGTH_SHORT).show();
+                if (isAuthEmailResult && isConfirmPassword) {
+                    requestSubmitUserInfo();
+                } else {
+                    Toast.makeText(getActivity(),
+                            "회원 가입 절차 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
     private boolean isAuthEmailValidation = false;
     private boolean isAuthEmailResult = false;
+    private boolean isConfirmPassword = false;
     private String mAccessToken;
 
     public void updateUIByAuthEmail(String accessToken) {
-        if (isAuthEmailValidation) {
+        if (isAuthEmailValidation && isAuthEmailResult) {
             mEmailValidationMessageTextView.setText(getString(R.string.email_validation_message_correct));
             mEmailAuthButtonLayout.setVisibility(View.GONE);
             mBodyLayout.setVisibility(View.VISIBLE);
             mFooterLayout.setVisibility(View.VISIBLE);
             mMemberStartLocalEmailEditText.setEnabled(false);
-            Log.i(TAG, "accesstoken : " + accessToken);
+            Log.i(TAG, "accessToken : " + accessToken);
             mAccessToken = accessToken;
         }
     }
@@ -234,10 +253,12 @@ public class MemberStartLocalFragment extends Fragment
                     mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                     mConfirmValidationMessageTextView.setText(mValidationMessages[10]);
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    isConfirmPassword = true;
                 } else {
                     mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true);
                     mConfirmValidationMessageTextView.setText(validateConfirm(text));
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                    isConfirmPassword = false;
                 }
             }
         });
@@ -311,7 +332,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.getMessage());
+                        Log.e(TAG, String.valueOf(error.getMessage()));
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                         isAuthEmailResult = false;
@@ -319,7 +340,50 @@ public class MemberStartLocalFragment extends Fragment
                 }
         );
 
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestSubmitUserInfo() {
+
+        final ProgressDialog progressDialog;
+        progressDialog = ProgressDialog.show(getActivity(), "회원가입을 요청하고 있습니다.",
+                    getString(R.string.progress_dialog_message_wait), false, false);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("email", mMemberStartLocalEmailEditText.getText().toString());
+        params.put("name", mMemberStartLocalNameEditText.getText().toString());
+        params.put("password", mMemberStartLocalConfirmEditText.getText().toString());
+        params.put("accessToken", mAccessToken);
+        params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
+        params.put("platform", "0");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(),
+                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getActivity(),
+                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

@@ -224,8 +224,8 @@
             android:clickable="true"
             android:text="약관에 동의하고 회원가입"
             android:textSize="16sp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/widget_solid_oval_rectangle_primary"/>
+            android:textColor="@color/color_selector_white_primary"
+            android:background="@drawable/selector_opaque_primary_transparent_white"/>
 
     </LinearLayout>
 
