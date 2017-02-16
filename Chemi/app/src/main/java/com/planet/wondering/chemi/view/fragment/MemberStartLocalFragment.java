@@ -1,7 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -56,6 +56,8 @@ public class MemberStartLocalFragment extends Fragment
         return fragment;
     }
 
+    private Intent mAccessTokenIntent;
+
     private RelativeLayout mMemberStartLocalCancelLayout;
     private EditText mMemberStartLocalEmailEditText;
     private EditText mMemberStartLocalNameEditText;
@@ -83,6 +85,8 @@ public class MemberStartLocalFragment extends Fragment
         super.onCreate(savedInstanceState);
         mValidationMessages = getResources().getStringArray(R.array.validation_message_array);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mAccessTokenIntent = getActivity().getIntent();
+
     }
 
     @Nullable
@@ -134,33 +138,10 @@ public class MemberStartLocalFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        Uri uriData = getActivity().getIntent().getData();
-        String accessToken = null;
-        if (uriData != null) {
-            Log.i(TAG, String.valueOf(uriData.toString()));
-            accessToken = uriData.getQueryParameter("accesstoken");
-        } else {
-            Log.i(TAG, "uriData : did not get it");
-        }
-//        isAuthEmailValidation &&
-        if (accessToken != null) {
-            mEmailValidationMessageTextView.setText(getString(R.string.email_validation_message_correct));
-            mEmailAuthButtonLayout.setVisibility(View.GONE);
-            mBodyLayout.setVisibility(View.VISIBLE);
-            mFooterLayout.setVisibility(View.VISIBLE);
-            Log.i(TAG, "accesstoken : " + accessToken);
-        } else {
-            Log.e(TAG, "accesstoken : did not get it");
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_local_cancel_layout:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
                 ((MemberStartActivity) getActivity()).cancelSignInLocal();
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
@@ -176,9 +157,18 @@ public class MemberStartLocalFragment extends Fragment
 
     private boolean isAuthEmailValidation = false;
     private boolean isAuthEmailResult = false;
+    private String mAccessToken;
 
-    private void updateViewbyAuthEmail(boolean isAuthEmailResult) {
-
+    public void updateUIByAuthEmail(String accessToken) {
+        if (isAuthEmailValidation) {
+            mEmailValidationMessageTextView.setText(getString(R.string.email_validation_message_correct));
+            mEmailAuthButtonLayout.setVisibility(View.GONE);
+            mBodyLayout.setVisibility(View.VISIBLE);
+            mFooterLayout.setVisibility(View.VISIBLE);
+            mMemberStartLocalEmailEditText.setEnabled(false);
+            Log.i(TAG, "accesstoken : " + accessToken);
+            mAccessToken = accessToken;
+        }
     }
 
     private void validateEditText() {
@@ -293,7 +283,10 @@ public class MemberStartLocalFragment extends Fragment
     }
 
     private String validateConfirm(String confirmText) {
-        if (confirmText.length() > 1
+        if (confirmText.length() == 0) {
+            return "";
+        }
+        if (confirmText.length() > 0
                 && !mMemberStartLocalPasswordEditText.getText().toString().equals(confirmText)) {
             return mValidationMessages[9];
         }

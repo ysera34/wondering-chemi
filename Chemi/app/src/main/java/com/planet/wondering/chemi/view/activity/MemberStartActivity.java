@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -82,9 +83,9 @@ public class MemberStartActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.i(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.i(TAG, "onAuthStateChanged: signed_in:" + user.getUid());
                 } else {
-                    Log.i(TAG, "onAuthStateChanged:signed_out");
+                    Log.i(TAG, "onAuthStateChanged: signed_out");
                 }
                 updateUI(user);
             }
@@ -97,7 +98,6 @@ public class MemberStartActivity extends AppCompatActivity
                 getString(R.string.naver_oauth_client_id),
                 getString(R.string.naver_oauth_client_secret),
                 getString(R.string.app_name));
-
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_start_fragment_container);
@@ -114,8 +114,39 @@ public class MemberStartActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    private MemberStartLocalFragment mMemberStartLocalFragment;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Uri uriData = getIntent().getData();
+        String accessToken = null;
+        if (uriData != null) {
+            Log.i(TAG, String.valueOf(uriData.toString()));
+            accessToken = uriData.getQueryParameter("accesstoken");
+        } else {
+            Log.i(TAG, "uriData : did not get it");
+        }
+        if (accessToken != null) {
+            Log.i(TAG, "accesstoken : " + accessToken);
+            mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.member_start_fragment_container);
+            mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
+        } else {
+            Log.e(TAG, "accesstoken : did not get it");
+        }
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -136,7 +167,7 @@ public class MemberStartActivity extends AppCompatActivity
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthGoogle(account);
                 // TODO(user): send token to server and validate server-side
-
+                requestSignInGoogle();
 
 
             } else {
@@ -228,15 +259,15 @@ public class MemberStartActivity extends AppCompatActivity
     }
 
     public void signOutNaver() {
-//        mNaverOAuthLogin.logout(mContext);
-//        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+        mNaverOAuthLogin.logout(mContext);
+        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
     }
 
     public void revokeAccessNaver() {
         new DeleteTokenTask().execute();
     }
 
-    static private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
+    private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
         @Override
         public void run(boolean success) {
             if (success) {
@@ -249,6 +280,10 @@ public class MemberStartActivity extends AppCompatActivity
                 Log.i(TAG, "Naver expiresAt: " + String.valueOf(expiresAt));
                 Log.i(TAG, "Naver tokenType: " + tokenType);
                 Log.i(TAG, "Naver oauthState: " + mNaverOAuthLogin.getState(mContext).toString());
+
+                // TODO(user): send token to server and validate server-side
+                requestSignInNaver();
+
             } else {
                 String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
                 String errorDesc = mNaverOAuthLogin.getLastErrorDesc(mContext);
@@ -262,6 +297,7 @@ public class MemberStartActivity extends AppCompatActivity
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
                 .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
                 .commit();
+//        .addToBackStack(null)
     }
 
     public void cancelSignInLocal() {
@@ -270,6 +306,7 @@ public class MemberStartActivity extends AppCompatActivity
         mFragmentManager.beginTransaction()
                 .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
                 .commit();
+//        onBackPressed();
     }
 
     @VisibleForTesting
@@ -281,7 +318,6 @@ public class MemberStartActivity extends AppCompatActivity
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
-
         mProgressDialog.show();
     }
 
@@ -294,14 +330,23 @@ public class MemberStartActivity extends AppCompatActivity
     private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            boolean isSucessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+            boolean isSuccessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
 
-            if (!isSucessDeleteToken) {
+            if (!isSuccessDeleteToken) {
                 Log.d(TAG, "errorCode:" + mNaverOAuthLogin.getLastErrorCode(mContext));
                 Log.d(TAG, "errorDese:" + mNaverOAuthLogin.getLastErrorDesc(mContext));
             }
-
             return null;
         }
+    }
+
+
+    // server request
+    private void requestSignInGoogle() {
+        Toast.makeText(this, "구글로 가입이 되었고, 성공한다면 추가 정보 페이지로 이동", Toast.LENGTH_SHORT).show();
+    }
+
+    private void requestSignInNaver() {
+        Toast.makeText(this, "네이버로 가입이 되었고, 성공한다면 추가 정보 페이지로 이동", Toast.LENGTH_SHORT).show();
     }
 }
