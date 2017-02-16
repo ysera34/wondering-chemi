@@ -24,8 +24,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 import org.json.JSONObject;
@@ -37,7 +40,7 @@ import java.util.regex.Pattern;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
-import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.EMAIL_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -81,6 +84,8 @@ public class MemberStartLocalFragment extends Fragment
 
     private TextView mMemberStartLocalPrivacyInfoTextView;
     private TextView mMemberStartLocalSubmitButtonTextView;
+
+    private User mUser;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,12 +162,8 @@ public class MemberStartLocalFragment extends Fragment
                 }
                 break;
             case R.id.member_start_local_privacy_info_text_view:
-                Toast.makeText(getActivity(),
-                        "member_start_local_privacy_info_text_view", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.member_start_local_submit_button_text_view:
-                Toast.makeText(getActivity(),
-                        "member_start_local_submit_button_text_view", Toast.LENGTH_SHORT).show();
                 if (isAuthEmailResult && isConfirmPassword) {
                     requestSubmitUserInfo();
                 } else {
@@ -320,7 +321,7 @@ public class MemberStartLocalFragment extends Fragment
         params.put("email", emailAddress);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + EMAIL, new JSONObject(params),
+                Request.Method.POST, URL_HOST + PATH + EMAIL_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -370,6 +371,20 @@ public class MemberStartLocalFragment extends Fragment
                         Toast.makeText(getActivity(),
                                 "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, response.toString());
+                        mUser = Parser.parseUser(response);
+
+//                        if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
+//                            UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
+//                        } else {
+//                            UserSharedPreferences.removeStoredToken(getActivity());
+//                            UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
+//                        }
+                        if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                            UserSharedPreferences.removeStoredToken(getActivity());
+                        }
+                        UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
+                        Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
+                        ((MemberStartActivity) getActivity()).replaceFragment();
                     }
                 },
                 new Response.ErrorListener() {
@@ -389,4 +404,6 @@ public class MemberStartLocalFragment extends Fragment
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
+
+
 }

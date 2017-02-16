@@ -35,8 +35,11 @@ import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginDefine;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
+import com.planet.wondering.chemi.view.fragment.MemberStartInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
+import com.planet.wondering.chemi.view.fragment.MemberStartNameFragment;
 
 /**
  * Created by yoon on 2017. 2. 12..
@@ -348,5 +351,28 @@ public class MemberStartActivity extends AppCompatActivity
 
     private void requestSignInNaver() {
         Toast.makeText(this, "네이버로 가입이 되었고, 성공한다면 추가 정보 페이지로 이동", Toast.LENGTH_SHORT).show();
+    }
+
+    public void determineActivity() {
+        String token = UserSharedPreferences.getStoredToken(getApplicationContext());
+        if (token != null) {
+            startActivity(SearchActivity.newIntent(getApplicationContext()));
+        }
+    }
+
+    public void replaceFragment() {
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentById(R.id.member_start_fragment_container);
+        if (fragment instanceof MemberStartFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberStartLocalFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.member_start_fragment_container, MemberStartInfoFragment.newInstance())
+                    .commit();
+        }
     }
 }
