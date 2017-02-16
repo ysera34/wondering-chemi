@@ -15,6 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -35,11 +40,23 @@ import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginDefine;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartNameFragment;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
  * Created by yoon on 2017. 2. 12..
@@ -52,6 +69,8 @@ public class MemberStartActivity extends AppCompatActivity
     public static final String START_NAVER = "start.naver";
     public static final String START_GOOGLE = "start.google";
     public static final int RC_SIGN_IN = 9001;
+
+    private User mUser;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -170,7 +189,7 @@ public class MemberStartActivity extends AppCompatActivity
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthGoogle(account);
                 // TODO(user): send token to server and validate server-side
-                requestSignInGoogle();
+                requestSubmitUserInfo(account.getIdToken(), 1);
 
 
             } else {
@@ -186,6 +205,8 @@ public class MemberStartActivity extends AppCompatActivity
         Log.d(TAG, "firebaseAuthWithGoogle: full name : " + account.getDisplayName());
         Log.d(TAG, "firebaseAuthWithGoogle: email : " + account.getEmail());
         Log.d(TAG, "firebaseAuthWithGoogle: server auth code : " + account.getServerAuthCode());
+        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
+        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
         Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
 
         showProgressDialog();
@@ -285,7 +306,7 @@ public class MemberStartActivity extends AppCompatActivity
                 Log.i(TAG, "Naver oauthState: " + mNaverOAuthLogin.getState(mContext).toString());
 
                 // TODO(user): send token to server and validate server-side
-                requestSignInNaver();
+                requestSubmitUserInfo(accessToken, 2);
 
             } else {
                 String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
@@ -345,12 +366,56 @@ public class MemberStartActivity extends AppCompatActivity
 
 
     // server request
-    private void requestSignInGoogle() {
-        Toast.makeText(this, "구글로 가입이 되었고, 성공한다면 추가 정보 페이지로 이동", Toast.LENGTH_SHORT).show();
-    }
+    private void requestSubmitUserInfo(String accessToken, int platformId) {
 
-    private void requestSignInNaver() {
-        Toast.makeText(this, "네이버로 가입이 되었고, 성공한다면 추가 정보 페이지로 이동", Toast.LENGTH_SHORT).show();
+//        final ProgressDialog progressDialog;
+//        progressDialog = ProgressDialog.show(getApplicationContext(), "회원가입을 요청하고 있습니다.",
+//                getString(R.string.progress_dialog_message_wait), false, false);
+
+        showProgressDialog();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "hello");
+        params.put("accessToken", accessToken);
+        params.put("platform", String.valueOf(platformId));
+        params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                        progressDialog.dismiss();
+                        hideProgressDialog();
+                        Toast.makeText(getApplicationContext(),
+                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, response.toString());
+                        mUser = Parser.parseUser(response);
+
+                        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                            UserSharedPreferences.removeStoredToken(getApplicationContext());
+                        }
+                        UserSharedPreferences.setStoreToken(getApplicationContext(), mUser.getToken());
+                        Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        progressDialog.dismiss();
+                        hideProgressDialog();
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getApplicationContext(),
+                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     public void determineActivity() {
