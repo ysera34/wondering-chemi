@@ -44,6 +44,7 @@ import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartInfoFragment;
@@ -319,7 +320,7 @@ public class MemberStartActivity extends AppCompatActivity
 
     public void signUpForLocal() {
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
                 .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
@@ -327,16 +328,34 @@ public class MemberStartActivity extends AppCompatActivity
 
     public void cancelSignUpForLocal() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
-        if (fragment instanceof MemberStartLocalFragment)
-        mFragmentManager.beginTransaction()
-                .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
-                .commit();
+        if (fragment instanceof MemberStartLocalFragment) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .commit();
+        }
     }
 
     public void signInLocal() {
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
                 .replace(R.id.member_start_fragment_container, MemberSignInLocalFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void cancelSignInLocal() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
+        if (fragment instanceof MemberSignInLocalFragment) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .commit();
+        }
+    }
+
+    public void findPassword() {
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
+                .replace(R.id.member_start_fragment_container, MemberForgetPasswordFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }

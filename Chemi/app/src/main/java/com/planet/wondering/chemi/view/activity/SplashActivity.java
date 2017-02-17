@@ -26,6 +26,7 @@ public class SplashActivity extends AppBaseActivity {
 
         Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
         startActivity(intent);
+        finish();
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {

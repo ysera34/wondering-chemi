@@ -91,7 +91,7 @@
     </style>
     
     <style name="ChemicalDialogAnimation">
-        <!--<item name="android:windowEnterAnimation">@anim/slide_up</item>-->
+        <!--<item name="android:windowEnterAnimation">@anim/slide_in_top</item>-->
         <!--<item name="android:windowExitAnimation">@anim/slide_down</item>-->
         <!--<item name="android:windowEnterAnimation">@anim/scale_in</item>-->
         <!--<item name="android:windowExitAnimation">@anim/scale_out</item>-->
