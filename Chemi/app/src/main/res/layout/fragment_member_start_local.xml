@@ -64,7 +64,7 @@
             android:textSize="18sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
-            android:background="@drawable/selector_edit_text_under_line"/>
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
 
         <TextView
             android:id="@+id/member_start_local_email_validation_text_view"
@@ -127,7 +127,7 @@
             android:textSize="18sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
-            android:background="@drawable/selector_edit_text_under_line"/>
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
 
         <TextView
             android:id="@+id/member_start_local_name_validation_text_view"
@@ -154,7 +154,7 @@
             android:textSize="18sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
-            android:background="@drawable/selector_edit_text_under_line"/>
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
 
         <TextView
             android:id="@+id/member_start_local_pw_validation_text_view"
@@ -181,7 +181,7 @@
             android:textSize="18sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
-            android:background="@drawable/selector_edit_text_under_line"/>
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
 
         <TextView
             android:id="@+id/member_start_local_pw_confirm_validation_text_view"

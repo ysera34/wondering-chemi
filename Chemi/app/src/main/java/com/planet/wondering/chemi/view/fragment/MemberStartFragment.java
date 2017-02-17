@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
@@ -70,6 +69,9 @@ public class MemberStartFragment extends Fragment
         mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
         mStartAlreadyUserTextView.setOnClickListener(this);
 
+        view.findViewById(R.id.member_start_name_button).setOnClickListener(this);
+        view.findViewById(R.id.member_start_info_button).setOnClickListener(this);
+
         view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
@@ -95,15 +97,21 @@ public class MemberStartFragment extends Fragment
                 break;
             case R.id.member_start_local_layout:
             case R.id.member_start_local_text_view:
-                ((MemberStartActivity) getActivity()).signInLocal();
+                ((MemberStartActivity) getActivity()).signUpForLocal();
                 break;
             case R.id.member_start_browse_text_view:
                 startActivity(SearchActivity.newIntent(getActivity()));
                 getActivity().finish();
                 break;
             case R.id.member_start_already_user_text_view:
-                Toast.makeText(getActivity(),
-                        "로그인 화면 만들어야되요.\n비밀번호는 찾을 수 없습니다.\n다른 이메일로 다시 가입해주세요", Toast.LENGTH_SHORT).show();
+                ((MemberStartActivity) getActivity()).signInLocal();
+                break;
+
+            case R.id.member_start_name_button:
+                ((MemberStartActivity) getActivity()).moveToFragment(1);
+                break;
+            case R.id.member_start_info_button:
+                ((MemberStartActivity) getActivity()).moveToFragment(2);
                 break;
 
             case R.id.naver_sign_out_button:

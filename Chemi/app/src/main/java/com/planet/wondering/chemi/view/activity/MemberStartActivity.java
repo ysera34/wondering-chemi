@@ -44,6 +44,7 @@ import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
@@ -316,21 +317,28 @@ public class MemberStartActivity extends AppCompatActivity
         }
     };
 
-    public void signInLocal() {
+    public void signUpForLocal() {
         mFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
                 .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
+                .addToBackStack(null)
                 .commit();
-//        .addToBackStack(null)
     }
 
-    public void cancelSignInLocal() {
+    public void cancelSignUpForLocal() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
         if (fragment instanceof MemberStartLocalFragment)
         mFragmentManager.beginTransaction()
                 .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
                 .commit();
-//        onBackPressed();
+    }
+
+    public void signInLocal() {
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_up, R.anim.slide_up)
+                .replace(R.id.member_start_fragment_container, MemberSignInLocalFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
     }
 
     @VisibleForTesting
@@ -364,8 +372,6 @@ public class MemberStartActivity extends AppCompatActivity
         }
     }
 
-
-    // server request
     private void requestSubmitUserInfo(String accessToken, int platformId) {
 
 //        final ProgressDialog progressDialog;
@@ -437,6 +443,20 @@ public class MemberStartActivity extends AppCompatActivity
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.member_start_fragment_container, MemberStartInfoFragment.newInstance())
+                    .commit();
+        }
+    }
+
+    public void moveToFragment(int fragmentId) {
+        if (fragmentId == 1) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        } else if (fragmentId == 2) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartInfoFragment.newInstance())
+                    .addToBackStack(null)
                     .commit();
         }
     }

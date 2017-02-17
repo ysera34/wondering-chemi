@@ -2,8 +2,8 @@ package com.planet.wondering.chemi.view.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +22,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
@@ -61,8 +66,6 @@ public class MemberStartLocalFragment extends Fragment
         return fragment;
     }
 
-    private Intent mAccessTokenIntent;
-
     private RelativeLayout mMemberStartLocalCancelLayout;
     private EditText mMemberStartLocalEmailEditText;
     private EditText mMemberStartLocalNameEditText;
@@ -87,13 +90,27 @@ public class MemberStartLocalFragment extends Fragment
 
     private User mUser;
 
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mValidationMessages = getResources().getStringArray(R.array.validation_message_array);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAccessTokenIntent = getActivity().getIntent();
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged:signed_in: " + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
     }
 
     @Nullable
@@ -147,11 +164,25 @@ public class MemberStartLocalFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_local_cancel_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
-                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+                ((MemberStartActivity) getActivity()).cancelSignUpForLocal();
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
@@ -207,7 +238,7 @@ public class MemberStartLocalFragment extends Fragment
                     mEmailAuthButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary_transparent_white);
                     isAuthEmailValidation = true;
                 } else {
-                    mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true);
+                    mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mEmailValidationMessageTextView.setText(validateEmail(text));
                     mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
 
@@ -226,7 +257,7 @@ public class MemberStartLocalFragment extends Fragment
                     mNameValidationMessageTextView.setText(mValidationMessages[6]);
                     mNameValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 } else {
-                    mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true);
+                    mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mNameValidationMessageTextView.setText(validateName(text));
                     mNameValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
@@ -240,7 +271,7 @@ public class MemberStartLocalFragment extends Fragment
                     mMemberStartLocalPasswordEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                     mPasswordValidationMessageTextView.setText("");
                 } else {
-                    mMemberStartLocalPasswordEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true);
+                    mMemberStartLocalPasswordEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mPasswordValidationMessageTextView.setText(validatePassword(text));
                     mPasswordValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
@@ -256,7 +287,7 @@ public class MemberStartLocalFragment extends Fragment
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                     isConfirmPassword = true;
                 } else {
-                    mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true);
+                    mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mConfirmValidationMessageTextView.setText(validateConfirm(text));
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
                     isConfirmPassword = false;
@@ -373,6 +404,8 @@ public class MemberStartLocalFragment extends Fragment
                         Log.i(TAG, response.toString());
                         mUser = Parser.parseUser(response);
 
+                        createAccout(mMemberStartLocalEmailEditText.getText().toString(),
+                                mMemberStartLocalConfirmEditText.getText().toString());
 //                        if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
 //                            UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
 //                        } else {
@@ -405,5 +438,21 @@ public class MemberStartLocalFragment extends Fragment
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
+    private void createAccout(String email, String password) {
+        Log.d(TAG, "createAccount with Firebase: " + email);
+
+        mFirebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete: " + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getActivity(),
+                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
 }
