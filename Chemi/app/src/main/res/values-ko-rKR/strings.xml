@@ -90,4 +90,6 @@
     </string-array>
 
     <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>
+    <string name="survey_year_format">%s년</string>
+    <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
 </resources>

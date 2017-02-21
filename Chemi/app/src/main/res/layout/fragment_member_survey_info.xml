@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:id="@+id/member_survey_info_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/member_survey_info_skip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:text="다음에 할래요"
+            android:textSize="12sp"
+            android:textColor="#6c9805"
+            android:background="@null"/>
+
+        <TextView
+            android:id="@+id/member_survey_info_progress_stage_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14sp"
+            android:textColor="@color/colorWhite"/>
+
+        <ProgressBar
+            android:id="@+id/member_survey_info_progress_bar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:max="100"
+            android:indeterminate="false"
+            android:progressTint="@color/colorProgressed"
+            android:progressTintMode="src_in"
+            android:progressBackgroundTint="@color/colorWhite"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal"
+            android:text="부가 정보를 입력하시면 나에게 맞는"
+            android:textSize="19sp"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center_horizontal"
+            android:text="화학 제품을 찾기 쉬워요!"
+            android:textSize="19sp"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_survey_info_body_height"
+        android:layout_below="@+id/member_survey_info_header_layout">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/member_survey_info_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/member_survey_info_confirm_button_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginEnd="47dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:gravity="center_horizontal"
+        android:clickable="true"
+        android:text="다음"
+        android:textSize="16sp"
+        android:textColor="@color/colorReef"
+        android:background="@drawable/widget_solid_oval_rectangle_pale"/>
+
+</RelativeLayout>

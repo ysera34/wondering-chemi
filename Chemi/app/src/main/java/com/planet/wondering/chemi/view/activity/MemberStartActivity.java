@@ -44,12 +44,14 @@ import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
-import com.planet.wondering.chemi.view.fragment.MemberStartInfoFragment;
+import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartNameFragment;
+import com.planet.wondering.chemi.view.fragment.MemberSurveyInfoFragment;
 
 import org.json.JSONObject;
 
@@ -65,7 +67,7 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
  */
 
 public class MemberStartActivity extends AppCompatActivity
-        implements GoogleApiClient.OnConnectionFailedListener {
+        implements GoogleApiClient.OnConnectionFailedListener, OnSurveyCompletedListener {
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();
     public static final String START_NAVER = "start.naver";
@@ -286,7 +288,7 @@ public class MemberStartActivity extends AppCompatActivity
 
     public void signOutNaver() {
         mNaverOAuthLogin.logout(mContext);
-        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+//        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
     }
 
     public void revokeAccessNaver() {
@@ -461,7 +463,7 @@ public class MemberStartActivity extends AppCompatActivity
         } else if (fragment instanceof MemberStartLocalFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_start_fragment_container, MemberStartInfoFragment.newInstance())
+                    .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
                     .commit();
         }
     }
@@ -474,9 +476,29 @@ public class MemberStartActivity extends AppCompatActivity
                     .commit();
         } else if (fragmentId == 2) {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartInfoFragment.newInstance())
+                    .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        } else if (fragmentId == 3) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberSurveyInfoFragment.newInstance())
                     .addToBackStack(null)
                     .commit();
         }
     }
+
+    @Override
+    public void onSurveyCompleted(int stageNumber, boolean isCompleted) {
+        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.member_start_fragment_container);
+        surveyInfoFragment.updateConfirmButtonTextView(stageNumber, isCompleted);
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.member_start_fragment_container);
+//        surveyInfoFragment.onBackPressed();
+//        super.onBackPressed();
+//    }
 }

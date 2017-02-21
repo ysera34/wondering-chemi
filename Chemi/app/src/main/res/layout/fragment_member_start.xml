@@ -26,6 +26,14 @@
             android:text="info"
             android:textAllCaps="false"/>
 
+        <Button
+            android:id="@+id/member_survey_info_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/member_start_info_button"
+            android:text="survey"
+            android:textAllCaps="false"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

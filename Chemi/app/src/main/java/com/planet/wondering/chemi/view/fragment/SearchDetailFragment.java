@@ -416,21 +416,21 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.list_item_tag_character, parent, false);
-                convertView.setTag(new ViewHolder(convertView));
+                convertView.setTag(new TagCharacterHolder(convertView));
             }
-            initializeViews(getItem(position), (ViewHolder) convertView.getTag());
+            initializeViews(getItem(position), (TagCharacterHolder) convertView.getTag());
             return convertView;
         }
 
-        private void initializeViews(String object, ViewHolder holder) {
+        private void initializeViews(String object, TagCharacterHolder holder) {
             //TODO implement
             holder.listItemTagNameTextView.setText(object);
         }
 
-        protected class ViewHolder {
+        protected class TagCharacterHolder {
             private TextView listItemTagNameTextView;
 
-            public ViewHolder(View view) {
+            public TagCharacterHolder(View view) {
                 listItemTagNameTextView = (TextView) view.findViewById(R.id.list_item_tag_name_text_view);
             }
         }

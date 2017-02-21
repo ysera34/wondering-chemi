@@ -71,6 +71,7 @@ public class MemberStartFragment extends Fragment
 
         view.findViewById(R.id.member_start_name_button).setOnClickListener(this);
         view.findViewById(R.id.member_start_info_button).setOnClickListener(this);
+        view.findViewById(R.id.member_survey_info_button).setOnClickListener(this);
 
         view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
@@ -113,6 +114,8 @@ public class MemberStartFragment extends Fragment
             case R.id.member_start_info_button:
                 ((MemberStartActivity) getActivity()).moveToFragment(2);
                 break;
+            case R.id.member_survey_info_button:
+                ((MemberStartActivity) getActivity()).moveToFragment(3);
 
             case R.id.naver_sign_out_button:
                 ((MemberStartActivity) getActivity()).signOutNaver();

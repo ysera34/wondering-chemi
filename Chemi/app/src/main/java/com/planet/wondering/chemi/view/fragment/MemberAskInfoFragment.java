@@ -13,13 +13,13 @@ import com.planet.wondering.chemi.R;
  * Created by yoon on 2017. 2. 17..
  */
 
-public class MemberStartInfoFragment extends Fragment {
+public class MemberAskInfoFragment extends Fragment {
 
-    public static MemberStartInfoFragment newInstance() {
+    public static MemberAskInfoFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        MemberStartInfoFragment fragment = new MemberStartInfoFragment();
+        MemberAskInfoFragment fragment = new MemberAskInfoFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,7 +33,7 @@ public class MemberStartInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_member_start_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_ask_info, container, false);
         return view;
     }
 

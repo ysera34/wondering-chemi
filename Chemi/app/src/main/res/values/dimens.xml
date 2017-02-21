@@ -18,4 +18,5 @@
     <dimen name="list_item_chemical_dialog_hazard_info_height">65dp</dimen>
     <dimen name="member_header_height">130dp</dimen>
     <dimen name="member_config_body_menu_height">48dp</dimen>
+    <dimen name="member_survey_info_body_height">330dp</dimen>
 </resources>
