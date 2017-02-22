@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class OnRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
-    private static final int REACTION_THRESHOLD = 20;
+    private static final int REACTION_THRESHOLD = 10;
 
     private boolean mControlsVisible = true;
     private int mScrolledDistance;

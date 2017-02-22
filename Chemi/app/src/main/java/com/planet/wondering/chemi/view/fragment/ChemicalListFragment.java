@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -267,6 +268,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         private TextView mChemicalNameKoTextView;
         private TextView mChemicalNameEngTextView;
 //        private CircleHazardView mChemicalCircleHazardView;
+        private ImageView mChemicalAllergyImageView;
         private TextView mChemicalCircleTextView;
 
         ChemicalHolder(View itemView) {
@@ -279,6 +281,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                     itemView.findViewById(R.id.list_item_chemical_name_eng_text_view);
 //            mChemicalCircleHazardView = (CircleHazardView)
 //                    itemView.findViewById(R.id.list_item_chemical_circle_hazard_view);
+            mChemicalAllergyImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_chemical_allergy_image_view);
             mChemicalCircleTextView = (TextView)
                     itemView.findViewById(R.id.list_item_chemical_circle_text_view);
         }
@@ -290,6 +294,13 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             mChemicalNameEngTextView.setText(String.valueOf(mChemical.getNameEn()));
 //            mChemicalCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
 //            mChemicalCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
+            if (mChemical.isAllergy()) {
+                mChemicalAllergyImageView.setVisibility(View.VISIBLE);
+            } else {
+                mChemicalAllergyImageView.setVisibility(View.GONE);
+            }
+
+
             mChemicalCircleTextView.setText(mChemical.getHazardValueString());
             mChemicalCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());
         }

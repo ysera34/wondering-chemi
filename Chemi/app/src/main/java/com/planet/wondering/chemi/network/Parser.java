@@ -165,7 +165,7 @@ public class Parser {
                         product.setImagePath(productJSONObject.getString(IMAGE_PATH));
 
                         Object ratingObject = productJSONObject.get(RATING);
-                        Log.i(TAG, String.valueOf(ratingObject));
+//                        Log.i(TAG, String.valueOf(ratingObject));
                         float ratingFloat = 0.0f;
 //                        if (ratingObject instanceof Integer) {
 //                            ratingFloat = ((Integer) ratingObject).floatValue();
@@ -244,11 +244,15 @@ public class Parser {
                         chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_PRODUCT));
                         chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                         chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
-                        chemical.setMaxHazard((byte) chemicalJSONObject.getInt(MAX_VALUE));
+//                        chemical.setMaxHazard((byte) chemicalJSONObject.getInt(MAX_VALUE));
 //                        Object minValueObject = chemicalJSONObject.get(MIN_VALUE);
 //                        if (minValueObject != null) {
 //                            chemical.setMinHazard((byte)chemicalJSONObject.getInt(MIN_VALUE));
 //                        }
+                        int maxValue = chemicalJSONObject.getInt(MAX_VALUE);
+                        if (maxValue != -1) {
+                            chemical.setMaxHazard((byte) maxValue);
+                        }
                         int minValue = chemicalJSONObject.getInt(MIN_VALUE);
                         if (minValue != -1) {
                             chemical.setMinHazard((byte) minValue);
