@@ -69,18 +69,22 @@ public class MemberSurveyStage2Fragment extends Fragment implements View.OnClick
                 if (!isCheckedFemale) {
                     mMemberSurveyFemaleImageView.setImageResource(R.drawable.ic_circle_check_white_true);
                     isCheckedFemale = true;
+                    mMemberSurveyMaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
+                    isCheckedMale = false;
 
                     mSurveyCompletedListener.onSurveyCompleted(2, true);
                 } else {
                     mMemberSurveyFemaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedFemale = false;
-
                 }
                 break;
             case R.id.member_survey_male_layout:
                 if (!isCheckedMale) {
                     mMemberSurveyMaleImageView.setImageResource(R.drawable.ic_circle_check_white_true);
                     isCheckedMale = true;
+                    mMemberSurveyFemaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
+                    isCheckedFemale = false;
+
                     mSurveyCompletedListener.onSurveyCompleted(2, true);
                 } else {
                     mMemberSurveyMaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
