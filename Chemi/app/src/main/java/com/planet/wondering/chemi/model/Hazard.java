@@ -1,10 +1,14 @@
 package com.planet.wondering.chemi.model;
 
+import com.planet.wondering.chemi.R;
+
+import java.io.Serializable;
+
 /**
  * Created by yoon on 2017. 1. 26..
  */
 
-public class Hazard {
+public class Hazard implements Serializable {
 
     private int mId;
     private String mSource;
@@ -12,6 +16,7 @@ public class Hazard {
     private String mName;
     private String mDescription;
     private byte mType;
+    private int mIconResId;
     private boolean mAllergy;
 
     public int getId() {
@@ -62,11 +67,58 @@ public class Hazard {
         mType = type;
     }
 
-    public boolean isAllergy() {
-        return mAllergy;
+    public int getIconResId() {
+        return mIconResId;
     }
 
-    public void setAllergy(boolean allergy) {
-        mAllergy = allergy;
+    public void setIconResId(byte type) {
+        switch (type) {
+            case 1:
+                mIconResId = R.drawable.ic_hazard_1;
+                break;
+            case 2:
+                mIconResId = R.drawable.ic_hazard_2;
+                break;
+            case 3:
+                mIconResId = R.drawable.ic_hazard_3;
+                break;
+            case 4:
+                mIconResId = R.drawable.ic_hazard_4;
+                break;
+            case 5:
+                mIconResId = R.drawable.ic_hazard_5;
+                break;
+            case 6:
+                mIconResId = R.drawable.ic_hazard_6;
+                break;
+            case 7:
+                mIconResId = R.drawable.ic_hazard_7;
+                break;
+            case 8:
+                mIconResId = R.drawable.ic_hazard_8;
+                break;
+            case 9:
+                mIconResId = R.drawable.ic_hazard_9;
+                break;
+            case 10:
+                mIconResId = R.drawable.ic_chemical_allergy_true;
+                break;
+            case 11:
+                mIconResId = R.drawable.ic_hazard_11;
+                break;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Hazard{" +
+                "mId=" + mId +
+                ", mSource='" + mSource + '\'' +
+                ", mCode='" + mCode + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mType=" + mType +
+                ", mIconResId=" + mIconResId +
+                '}';
     }
 }

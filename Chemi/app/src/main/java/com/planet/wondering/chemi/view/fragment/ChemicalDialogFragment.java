@@ -1,7 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,16 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
+import com.planet.wondering.chemi.model.Hazard;
+
+import java.util.ArrayList;
 
 /**
  * Created by yoon on 2017. 1. 22..
  */
 
-public class ChemicalDialogFragment extends DialogFragment {
+public class ChemicalDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private static final String TAG = ChemicalDialogFragment.class.getSimpleName();
 
@@ -79,9 +83,16 @@ public class ChemicalDialogFragment extends DialogFragment {
     private TextView mChemicalDialogCircleTextView;
     private TextView mChemicalDialogNameKoTextView;
     private TextView mChemicalDialogNameEngTextView;
+    private TextView mChemicalDialogHazardLineTextView;
     private TextView mChemicalDialogPurposeTextView;
+    private ImageView mChemicalDialogAllergyImageView;
     private TextView mChemicalDialogAllergyTextView;
     private RecyclerView mChemicalDialogHazardInfoRecyclerView;
+    private HazardAdapter mHazardAdapter;
+    private ArrayList<Hazard> mHazards;
+
+    private TextView mChemicalDialogCloseButtonTextView;
+    private TextView mChemicalDialogUpdateRequestButtonTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +102,7 @@ public class ChemicalDialogFragment extends DialogFragment {
         mChemicalId = getArguments().getInt(ARG_CHEMICAL_ID, -1);
 //        mChemical = ChemicalStorage.getStorage(getActivity()).getChemical(mChemicalId);
         mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
+        mHazards = mChemical.getHazards();
     }
 
     @NonNull
@@ -115,37 +127,56 @@ public class ChemicalDialogFragment extends DialogFragment {
         mChemicalDialogNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_eng_text_view);
         mChemicalDialogNameEngTextView.setText(mChemical.getNameEn());
+        mChemicalDialogHazardLineTextView = (TextView)
+                view.findViewById(R.id.chemical_dialog_hazard_bg_text_view);
+        mChemicalDialogHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
         mChemicalDialogPurposeTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_purpose_text_view);
         mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+        mChemicalDialogAllergyImageView = (ImageView)
+                view.findViewById(R.id.chemical_dialog_allergy_image_view);
+
+        mChemicalDialogAllergyImageView.setImageResource(R.drawable.ic_chemical_allergy_true);
+
         mChemicalDialogAllergyTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_allergy_text_view);
+        mChemicalDialogAllergyTextView.setText(mChemical.getAllergyDescription());
         mChemicalDialogHazardInfoRecyclerView = (RecyclerView)
                 view.findViewById(R.id.chemical_dialog_hazard_info_recycler_view);
         mChemicalDialogHazardInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mHazardAdapter = new HazardAdapter(mHazards);
+        mChemicalDialogHazardInfoRecyclerView.setAdapter(mHazardAdapter);
+
+        mChemicalDialogCloseButtonTextView = (TextView)
+                view.findViewById(R.id.chemical_dialog_close_button_text_view);
+        mChemicalDialogCloseButtonTextView.setOnClickListener(this);
+        mChemicalDialogUpdateRequestButtonTextView = (TextView)
+                view.findViewById(R.id.chemical_dialog_update_request_button_text_view);
+        mChemicalDialogUpdateRequestButtonTextView.setOnClickListener(this);
 
         mBuilder = new AlertDialog.Builder(getActivity())
                 .setView(view)
 //                .setIcon(R.drawable.chemical_composition_dangerous_status2)
 //                .setTitle(mChemical.getNameKo())
-                .setPositiveButton("positive", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setNegativeButton("negative", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setNeutralButton("neutral", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
+//                .setPositiveButton("positive", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+//                .setNegativeButton("negative", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+//                .setNeutralButton("neutral", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+                ;
         return mBuilder.create();
     }
 
@@ -161,4 +192,71 @@ public class ChemicalDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         getDialog().getWindow().getAttributes().windowAnimations = R.style.ChemicalDialogAnimation;
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.chemical_dialog_close_button_text_view:
+                this.dismiss();
+                break;
+            case R.id.chemical_dialog_update_request_button_text_view:
+                Toast.makeText(getActivity(), "수정 요청 하였습니다.", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private class HazardAdapter extends RecyclerView.Adapter<HazardHolder> {
+
+        private ArrayList<Hazard> mHazards;
+
+        public HazardAdapter(ArrayList<Hazard> hazards) {
+            mHazards = hazards;
+        }
+
+        @Override
+        public HazardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view = layoutInflater.inflate(R.layout.list_item_hazard, parent, false);
+            return new HazardHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(HazardHolder holder, int position) {
+            Hazard hazard = mHazards.get(position);
+            holder.bindHazard(hazard);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mHazards.size();
+        }
+    }
+
+    private class HazardHolder extends RecyclerView.ViewHolder {
+
+        private Hazard mHazard;
+
+        private ImageView mHazardIconImageView;
+        private TextView mHazardTitleTextView;
+        private TextView mHazardDescriptionTextView;
+
+        public HazardHolder(View itemView) {
+            super(itemView);
+
+            mHazardIconImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_hazard_icon_image_view);
+            mHazardTitleTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_hazard_title_text_view);
+            mHazardDescriptionTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_hazard_description_text_view);
+        }
+
+        public void bindHazard(Hazard hazard) {
+            mHazard = hazard;
+            mHazardIconImageView.setImageResource(mHazard.getIconResId());
+            mHazardTitleTextView.setText(mHazard.getName());
+            mHazardDescriptionTextView.setText(mHazard.getDescription());
+        }
+    }
+
 }

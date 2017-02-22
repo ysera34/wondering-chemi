@@ -18,6 +18,7 @@ public class Chemical implements Serializable {
     private byte mMinHazard;
     private byte mMaxHazard;
     private boolean mAllergy;
+    private String mAllergyDescription;
     private ArrayList<Hazard> mHazards;
 
     public Chemical() {
@@ -80,6 +81,14 @@ public class Chemical implements Serializable {
         mAllergy = allergy;
     }
 
+    public String getAllergyDescription() {
+        return mAllergyDescription;
+    }
+
+    public void setAllergyDescription(String allergyDescription) {
+        mAllergyDescription = allergyDescription;
+    }
+
     public ArrayList<Hazard> getHazards() {
         return mHazards;
     }
@@ -87,6 +96,8 @@ public class Chemical implements Serializable {
     public void setHazards(ArrayList<Hazard> hazards) {
         mHazards = hazards;
     }
+
+    // to array [2] and to setter
 
     public int getHazardIconResId() {
         int hazardIconResId = 0;
@@ -105,6 +116,25 @@ public class Chemical implements Serializable {
                 break;
         }
         return hazardIconResId;
+    }
+
+    public int getHazardLineResId() {
+        int hazardLineResId = 0;
+        switch (getMaxHazard()) {
+            case 0:
+                hazardLineResId = R.drawable.widget_line_hazard1;
+                break;
+            case 1:case 2:
+                hazardLineResId = R.drawable.widget_line_hazard2;
+                break;
+            case 3:case 4:case 5:case 6:
+                hazardLineResId = R.drawable.widget_line_hazard3;
+                break;
+            case 7:case 8:case 9:case 10:
+                hazardLineResId = R.drawable.widget_line_hazard4;
+                break;
+        }
+        return hazardLineResId;
     }
 
     public int getHazardColorResId() {

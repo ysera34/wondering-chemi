@@ -94,15 +94,13 @@ public class Config {
             public static final String NAMEKO_PRODUCT = "nameForProduct";
             public static final String NAMEKO_ORIGIN = "koreanName";
             public static final String NAMEEN = "englishName";
-//            public static final String ABBR = "abbr";
             public static final String PURPOSE = "purpose";
             public static final String MAX_VALUE = "ewglevel";
             public static final String MIN_VALUE = "ewglevel2";
             public static final String ALLERGY = "isAllergy";
+            public static final String ALLERGY_DESCRIPTION = "allergyDescription";
             public static final String HAZARD_SIZE = "hazarded";
             public static final String HAZARDS = "hazards";
-//            public static final String KEYWORD = "keyword";
-//            public static final String EFFECTS = "effects";
         }
     }
 

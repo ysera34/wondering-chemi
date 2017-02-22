@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.planet.wondering.chemi.network.Config.COUNT;
+import static com.planet.wondering.chemi.network.Config.Chemical.Key.ALLERGY_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICALS;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICAL_ID;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.HAZARDS;
@@ -258,7 +259,7 @@ public class Parser {
                             chemical.setMinHazard((byte) minValue);
                         }
                         int allergyState = chemicalJSONObject.getInt(Key.ALLERGY);
-                        if (allergyState == 1) {
+                        if (allergyState > 0) {
                             chemical.setAllergy(true);
                         }
                         product.getChemicals().add(chemical);
@@ -296,6 +297,7 @@ public class Parser {
                 chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                 chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
+                chemical.setAllergyDescription(chemicalJSONObject.getString(ALLERGY_DESCRIPTION));
                 int hazardSize = chemicalJSONObject.getInt(HAZARD_SIZE);
                 JSONArray hazardJSONArray = chemicalJSONObject.getJSONArray(HAZARDS);
                 if (hazardSize > 0) {
@@ -308,7 +310,7 @@ public class Parser {
                         hazard.setName(hazardJSONObject.getString(Config.Hazard.Key.NAME));
                         hazard.setDescription(hazardJSONObject.getString(DESCRIPTION));
                         hazard.setType((byte)hazardJSONObject.getInt(TYPE));
-                        hazard.setAllergy(hazardJSONObject.getBoolean(Config.Hazard.Key.ALLERGY));
+                        hazard.setIconResId(hazard.getType());
                         chemical.getHazards().add(hazard);
                     }
                 }
@@ -316,7 +318,7 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        Log.i(TAG, chemical.toString());
+//        Log.i(TAG, chemical.toString());
         return chemical;
     }
 
