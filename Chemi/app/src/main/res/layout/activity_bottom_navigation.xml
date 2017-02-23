@@ -9,33 +9,53 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_above="@+id/bottom_navigation_view"-->
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/bottom_navigation_view"-->
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/review_floating_action_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/review_floating_action_button"
+            android:layout_width="78dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_fab_pencil"
+            app:rippleColor="@color/colorWhite"
+            app:fabSize="normal"/>
+
 
         <LinearLayout
-            android:id="@+id/bottom_navigation_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/white"
-            android:elevation="8dp">
+        android:id="@+id/bottom_navigation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 
             <android.support.design.widget.BottomNavigationView
                 android:id="@+id/bottom_navigation_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:theme="@style/BottomNavigationViewTheme"
+                android:background="@color/colorWhite"
+                android:elevation="8dp"
                 app:menu="@menu/menu_bottom_navigation"
                 app:itemBackground="@color/colorWhite"
                 app:itemIconTint="@color/colorPrimary"
                 app:itemTextColor="@drawable/selector_bottom_navigation_menu">
             </android.support.design.widget.BottomNavigationView>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
