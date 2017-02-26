@@ -93,4 +93,21 @@
     <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>
     <string name="survey_year_format">%s년</string>
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
+
+    <string name="review_rating_1_message">1점입니다.</string>
+    <string name="review_rating_2_message">2점입니다.</string>
+    <string name="review_rating_3_message">3점입니다.</string>
+    <string name="review_rating_4_message">4점입니다.</string>
+    <string name="review_rating_5_message">5점입니다.</string>
+
+    <string-array name="review_rating_message_array">
+        <item>@string/review_rating_1_message</item>
+        <item>@string/review_rating_2_message</item>
+        <item>@string/review_rating_3_message</item>
+        <item>@string/review_rating_4_message</item>
+        <item>@string/review_rating_5_message</item>
+    </string-array>
+
+    <string name="bottom_sheet_menu_camera">카메라</string>
+    <string name="bottom_sheet_menu_gallery">갤러리</string>
 </resources>
