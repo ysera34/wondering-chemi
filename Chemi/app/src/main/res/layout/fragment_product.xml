@@ -143,4 +143,16 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:visibility="gone"
+        android:id="@+id/review_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="72dp"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_pencil"
+        app:rippleColor="@color/colorWhite"
+        app:fabSize="mini"/>
+
 </android.support.design.widget.CoordinatorLayout>

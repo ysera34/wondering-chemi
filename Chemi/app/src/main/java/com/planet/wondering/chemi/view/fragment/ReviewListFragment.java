@@ -55,6 +55,7 @@ public class ReviewListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
     }
 

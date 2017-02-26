@@ -74,6 +74,7 @@ public class ProductPagerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mProductIds = getArguments().getIntegerArrayList(ARG_PRODUCT_IDS);
         mProductId = getArguments().getInt(ARG_PRODUCT_ID);
     }

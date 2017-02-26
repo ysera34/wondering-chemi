@@ -60,7 +60,8 @@ public class MemberConfigFragment extends Fragment
 
         mConfigToolbar = (Toolbar) view.findViewById(R.id.member_config_toolbar);
         ((MemberActivity) getActivity()).setSupportActionBar(mConfigToolbar);
-        mConfigToolbar.setTitle("설정");
+//        mConfigToolbar.setTitle("설정");
+        ((MemberActivity) getActivity()).getSupportActionBar().setTitle("설정");
         for (int i = 0; i < mConfigLayoutIds.length; i++) {
             mConfigLayouts[i] = (RelativeLayout) view.findViewById(mConfigLayoutIds[i]);
             mConfigLayouts[i].setOnClickListener(this);

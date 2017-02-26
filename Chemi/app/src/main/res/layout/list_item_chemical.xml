@@ -19,6 +19,9 @@
             android:id="@+id/list_item_chemical_name_ko_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontNormal"
             android:ellipsize="end"
             android:maxLines="1"/>
 
@@ -26,6 +29,8 @@
             android:id="@+id/list_item_chemical_name_eng_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/colorFontBody"
             android:ellipsize="end"
             android:maxLines="1"/>
 

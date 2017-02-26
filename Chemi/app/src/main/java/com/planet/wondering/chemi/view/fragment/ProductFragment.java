@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,13 +27,14 @@ import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
+import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import java.util.ArrayList;
 
 /**
  * Created by yoon on 2017. 1. 18..
  */
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ProductFragment.class.getSimpleName();
 
@@ -81,10 +85,13 @@ public class ProductFragment extends Fragment {
     private ArrayList<Fragment> mProductDetailListFragments;
     private ArrayList<String> mProductDetailListFragmentTitles;
 
+    private FloatingActionButton mReviewFloatingActionButton;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, 0);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
 //        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
@@ -145,7 +152,29 @@ public class ProductFragment extends Fragment {
                 return mProductDetailListFragmentTitles.get(position);
             }
         });
+        mProductDetailViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    mReviewFloatingActionButton.setVisibility(View.GONE);
+                } else if (position == 1) {
+                    mReviewFloatingActionButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
+        mReviewFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.review_floating_action_button);
+        mReviewFloatingActionButton.setOnClickListener(this);
         return view;
     }
 
@@ -243,5 +272,28 @@ public class ProductFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.review_floating_action_button:
+                startActivity(ReviewActivity.newIntent(getActivity()));
+                break;
+        }
+    }
+
+    public void setFloatingActionButtonVisibility() {
+        mReviewFloatingActionButton.setVisibility(View.VISIBLE);
+    }
+
+    public void showReviewFloatingActionButton() {
+        mReviewFloatingActionButton.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
+    }
+
+    public void hideReviewFloatingActionButton() {
+        mReviewFloatingActionButton.animate().translationY(56)
+                .setInterpolator(new AccelerateInterpolator(2));
     }
 }

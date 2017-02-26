@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
@@ -27,6 +28,7 @@ public class ReviewActivity extends BottomNavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBottomNavigationLayout.setVisibility(View.GONE);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
@@ -42,6 +44,6 @@ public class ReviewActivity extends BottomNavigationActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setupBottomNavigation(1);
+//        setupBottomNavigation(0);
     }
 }

@@ -1,11 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/colorWhite">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/review_create_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="fragment_review_create"/>
+        android:title="리뷰 작성"
+        android:elevation="4dp"
+        android:background="@color/colorWhite">
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+        
+        <LinearLayout
+            android:id="@+id/review_create_rating_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/widget_border_bottom">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="상품명"
+                android:textSize="15sp"
+                android:textColor="@color/colorFontNormal"/>
+    
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="평점"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontBody"/>
+    
+            <TextView
+                android:id="@+id/review_create_message_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="만족해요!"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"/>
+    
+            <RatingBar
+                android:id="@+id/review_create_rating_value_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp"/>
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="16dp">
+    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="리뷰"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorFontBody"/>
+    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="15자"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorFontFrenchGray"/>
+            </RelativeLayout>
+    
+            <EditText
+                android:id="@+id/review_create_review_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:minHeight="175dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="16dp"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:imeOptions="actionSend"
+                android:hint="이 제품이 좋은 이유와 아쉬운 점이 있다면 무엇인지 다른 사람들에게 알려주세요. (최소 15자)"
+                android:textColorHint="@color/colorFontFrenchGray"
+                android:textSize="15sp"
+                android:background="@color/colorWhite"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start">
+            
+            <ImageButton
+                android:id="@+id/review_create_review_image1_image_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_camera_add_photo"
+                android:background="@drawable/widget_rectangle_border"/>
+
+            <ImageButton
+                android:visibility="invisible"
+                android:id="@+id/review_create_review_image2_image_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_camera_add_photo"
+                android:background="@drawable/widget_rectangle_border"/>
+
+            <ImageButton
+                android:visibility="invisible"
+                android:id="@+id/review_create_review_image3_image_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_camera_add_photo"
+                android:background="@drawable/widget_rectangle_border"/>
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
+</ScrollView>

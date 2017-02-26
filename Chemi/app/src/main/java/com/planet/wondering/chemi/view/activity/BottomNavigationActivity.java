@@ -3,9 +3,7 @@ package com.planet.wondering.chemi.view.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
@@ -15,13 +13,11 @@ import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
 
 public class BottomNavigationActivity extends AppBaseActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = BottomNavigationActivity.class.getSimpleName();
     protected BottomNavigationView mBottomNavigationView;
-    public LinearLayout mReviewFloatingActionButtonLayout;
     public LinearLayout mBottomNavigationLayout;
-    protected FloatingActionButton mReviewFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +27,7 @@ public class BottomNavigationActivity extends AppBaseActivity
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-        mReviewFloatingActionButtonLayout = (LinearLayout) findViewById(R.id.review_floating_action_button_layout);
         mBottomNavigationLayout = (LinearLayout) findViewById(R.id.bottom_navigation_layout);
-        mReviewFloatingActionButton = (FloatingActionButton) findViewById(R.id.review_floating_action_button);
-        mReviewFloatingActionButton.setOnClickListener(this);
     }
 
     @Override
@@ -59,27 +52,18 @@ public class BottomNavigationActivity extends AppBaseActivity
         return true;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.review_floating_action_button:
-                startActivity(ReviewActivity.newIntent(getApplicationContext()));
-                break;
-        }
-    }
-
     protected void setupBottomNavigation(int menuIndex) {
         mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
         mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
     }
 
     public void showBottomNavigationView() {
-        mReviewFloatingActionButtonLayout.animate().translationY(0)
+        mBottomNavigationLayout.animate().translationY(0)
                 .setInterpolator(new DecelerateInterpolator(2));
     }
 
     public void hideBottomNavigationView() {
-        mReviewFloatingActionButtonLayout.animate().translationY(mBottomNavigationLayout.getHeight())
+        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
     }
 }
