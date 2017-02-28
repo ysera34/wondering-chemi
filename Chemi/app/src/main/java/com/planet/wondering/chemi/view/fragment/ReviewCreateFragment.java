@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.view.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,12 +16,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,11 +29,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +76,12 @@ public class ReviewCreateFragment extends Fragment
     private LinearLayout mReviewCreateRatingBarLayout;
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
+    private TextView mReviewCreateReviewTextView;
+    private NestedScrollView mReviewCreateReviewEditNestedScrollView;
+    private String mReviewHint;
+    private RelativeLayout mReviewCreateReviewEditLayout;
     private EditText mReviewCreateReviewEditText;
+    private InputMethodManager mInputMethodManager;
     private Button mReviewCreateReviewCompleteButton;
     private ImageButton mReviewCreateImage1ImageButton;
     private ImageButton mReviewCreateImage2ImageButton;
@@ -91,7 +98,10 @@ public class ReviewCreateFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mReview = new Review();
+        mReviewHint = getString(R.string.review_create_review_hint);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        setRetainInstance(true);
     }
 
@@ -117,31 +127,41 @@ public class ReviewCreateFragment extends Fragment
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
         mReviewCreateRatingValueRatingBar.setOnRatingBarChangeListener(this);
+
+        mReviewCreateReviewEditLayout = (RelativeLayout)
+                view.findViewById(R.id.review_create_review_edit_layout);
+        mReviewCreateReviewTextView = (TextView) view.findViewById(R.id.review_create_review_text_view);
+        mReviewCreateReviewTextView.setOnClickListener(this);
+//        mReviewCreateReviewEditNestedScrollView = (NestedScrollView)
+//                view.findViewById(R.id.review_create_review_edit_scroll_view);
+
         mReviewCreateReviewEditText = (EditText) view.findViewById(R.id.review_create_review_edit_text);
-        mReviewCreateReviewEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String str = s.toString();
-                if (str.length() > 0) {
-                    mReviewCreateReviewCompleteButton.setVisibility(View.VISIBLE);
-                    mReviewCreateReviewCompleteButton.setEnabled(true);
-                } else {
-                    mReviewCreateReviewCompleteButton.setVisibility(View.GONE);
-                    mReviewCreateReviewCompleteButton.setEnabled(false);
-                }
-            }
-        });
+//        mReviewCreateReviewEditText.setOnClickListener(this);
+//        mReviewCreateReviewEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String str = s.toString();
+//                if (str.length() > 0) {
+//                    mReviewCreateReviewEditLayout.setVisibility(View.VISIBLE);
+//                    mReviewCreateReviewCompleteButton.setEnabled(true);
+//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.VISIBLE);
+//                } else {
+//                    mReviewCreateReviewEditLayout.setVisibility(View.GONE);
+//                    mReviewCreateReviewCompleteButton.setEnabled(false);
+//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.GONE);
+//                }
+//            }
+//        });
         mReviewCreateReviewCompleteButton = (Button) view.findViewById(R.id.review_create_review_edit_complete_button);
+        mReviewCreateReviewCompleteButton.setOnClickListener(this);
         mReviewCreateImage1ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image1_image_button);
         mReviewCreateImage1ImageButton.setOnClickListener(this);
         mReviewCreateImage2ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image2_image_button);
@@ -192,6 +212,39 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.review_create_review_text_view:
+                mReviewCreateReviewEditLayout.setVisibility(View.VISIBLE);
+                mReviewCreateReviewEditText.setFocusable(true);
+                mInputMethodManager.showSoftInput(mReviewCreateReviewEditText, InputMethodManager.SHOW_IMPLICIT);
+
+                if (mReviewCreateReviewTextView.getText().toString().length() > 0) {
+//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.VISIBLE);
+                    if (!mReviewCreateReviewTextView.getText().toString().equals(mReviewHint)) {
+                        mReviewCreateReviewEditText.setText(mReviewCreateReviewTextView.getText().toString());
+                    } else {
+                        mReviewCreateReviewEditText.setText("");
+                    }
+                    mReviewCreateReviewTextView.setText("");
+                }
+
+            case R.id.review_create_review_edit_text:
+//                if (mReviewCreateReviewEditText.getText().toString().length() > 0) {
+//                    mReviewCreateReviewCompleteButton.setVisibility(View.VISIBLE);
+//                    mReviewCreateReviewCompleteButton.setEnabled(true);
+//                }
+                break;
+            case R.id.review_create_review_edit_complete_button:
+                mInputMethodManager.hideSoftInputFromWindow(mReviewCreateReviewEditText.getWindowToken(), 0);
+                mReviewCreateReviewEditLayout.setVisibility(View.GONE);
+                if (!mReviewCreateReviewEditText.getText().toString().equals(mReviewHint)) {
+                    mReview.setContent(mReviewCreateReviewEditText.getText().toString());
+                    mReviewCreateReviewTextView.setText(mReview.getContent());
+                } else {
+                    mReviewCreateReviewTextView.setText(mReviewHint);
+                }
+//                mReviewCreateReviewCompleteButton.setVisibility(View.GONE);
+//                mReviewCreateReviewCompleteButton.setEnabled(false);
+                break;
             case R.id.review_create_review_image1_image_button:
                 checkStoragePermission(1);
 //                createMenuBottomSheetDialog();

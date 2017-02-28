@@ -110,4 +110,5 @@
 
     <string name="bottom_sheet_menu_camera">카메라</string>
     <string name="bottom_sheet_menu_gallery">갤러리</string>
+    <string name="review_create_review_hint">이 제품이 좋은 이유와 아쉬운 점이 있다면 무엇인지 다른 사람들에게 알려주세요. (최소 15자)</string>
 </resources>
