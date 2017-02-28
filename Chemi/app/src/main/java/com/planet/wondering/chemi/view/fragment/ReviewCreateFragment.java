@@ -1,6 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,8 +52,8 @@ public class ReviewCreateFragment extends Fragment
 
     private static final String TAG = ReviewCreateFragment.class.getSimpleName();
 
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1001;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 1002;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1000;
+    private static final int GALLERY_IMAGE_REQUEST_CODE = 2000;
     private static final int PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 9001;
     String[] storagePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -164,17 +165,19 @@ public class ReviewCreateFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_create_review_image1_image_button:
-                checkStoragePermission();
+                checkStoragePermission(1);
 //                createMenuBottomSheetDialog();
                 break;
             case R.id.review_create_review_image2_image_button:
+                checkStoragePermission(2);
                 break;
             case R.id.review_create_review_image3_image_button:
+                checkStoragePermission(3);
                 break;
         }
     }
 
-    private void createMenuBottomSheetDialog() {
+    private void createMenuBottomSheetDialog(final int imagePosition) {
         if (dismissMenuBottomSheetDialog()) {
             return;
         }
@@ -194,18 +197,18 @@ public class ReviewCreateFragment extends Fragment
                 String state = Environment.getExternalStorageState();
                 if (!Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
                     dismissMenuBottomSheetDialog();
-                    Toast.makeText(getActivity(), "SD카드가 없으므로 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SD 카드가 없으므로 취소되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     dismissMenuBottomSheetDialog();
                     if (position == 0 /* camera */) {
                         if (hasCamera()) {
-                            startActivityForResult(cameraIntent(), 101);
+                            startActivityForResult(cameraIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE + imagePosition);
                         } else {
                             Toast.makeText(getActivity(), "카메라를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                     } else if (position == 1 /* gallery */) {
                     // gallery
-                        startActivityForResult(galleryIntent(), 201);
+                        startActivityForResult(galleryIntent(), GALLERY_IMAGE_REQUEST_CODE + imagePosition);
                     }
                 }
             }
@@ -223,12 +226,105 @@ public class ReviewCreateFragment extends Fragment
         return false;
     }
 
+    public Intent cameraIntent() {
+        mImageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), getString(R.string.app_name));
+
+        if (!mImageDir.exists()) {
+            Toast.makeText(getActivity(), "저장할 디렉토리를 생성 하였습니다.", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (mImagePath != null) {
+            mImagePath = "";
+        }
+        String imageName = "upload_" + String.valueOf(System.currentTimeMillis() / 100) + ".png";
+        File imageFile = new File(mImageDir, imageName);
+        mImagePath = imageFile.getAbsolutePath();
+
+//        try {
+//            ExifInterface exif = new ExifInterface(mImagePath);
+//            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//            int rotate = 0;
+//            switch (orientation) {
+//                case ExifInterface.ORIENTATION_ROTATE_270:
+//                    rotate -= 90;
+//                case ExifInterface.ORIENTATION_ROTATE_180:
+//                    rotate -= 90;
+//                case ExifInterface.ORIENTATION_ROTATE_90:
+//                    rotate-= 90;
+//            }
+//            Canvas canvas = new Canvas(bitmap);
+//            canvas.rotate(rotate);
+//        } catch (Exception e) {
+//            Log.e(TAG, e.getMessage());
+//        }
+
+        mImageUri = Uri.fromFile(imageFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        return intent;
+    }
+
+    public Intent galleryIntent() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        return intent;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri galleryImageUri;
+        if (resultCode != Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED) {
+            return;
+        }
+
+        switch (requestCode) {
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 1:
+                mReviewCreateImage1ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+                mReviewCreateImage2ImageButton.setVisibility(View.VISIBLE);
+                break;
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 2:
+                mReviewCreateImage2ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+                mReviewCreateImage3ImageButton.setVisibility(View.VISIBLE);
+                break;
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 3:
+                mReviewCreateImage3ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 1:
+                galleryImageUri = data.getData();
+                if (galleryImageUri != null) {
+                    mReviewCreateImage1ImageButton.setImageURI(galleryImageUri);
+                    mReviewCreateImage2ImageButton.setVisibility(View.VISIBLE);
+                } else {
+
+                }
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 2:
+                galleryImageUri = data.getData();
+                if (galleryImageUri != null) {
+                    mReviewCreateImage2ImageButton.setImageURI(galleryImageUri);
+                    mReviewCreateImage3ImageButton.setVisibility(View.VISIBLE);
+                } else {
+
+                }
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 3:
+                galleryImageUri = data.getData();
+                if (galleryImageUri != null) {
+                    mReviewCreateImage3ImageButton.setImageURI(galleryImageUri);
+                } else {
+
+                }
+                break;
+        }
+    }
+
     private boolean hasCamera() {
         return (getActivity().getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA));
     }
 
-    private void checkStoragePermission() {
+    private void checkStoragePermission(int imagePosition) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(getActivity(), storagePermissions[0]) != PackageManager.PERMISSION_GRANTED
@@ -261,7 +357,7 @@ public class ReviewCreateFragment extends Fragment
             }
             else {
                 // already have permission
-                createMenuBottomSheetDialog();
+                createMenuBottomSheetDialog(imagePosition);
             }
         }
     }
@@ -281,7 +377,7 @@ public class ReviewCreateFragment extends Fragment
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     Log.i(TAG + "granted", "Storage Permission has been granted by user : " +
                             "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
-                    createMenuBottomSheetDialog();
+                    createMenuBottomSheetDialog(1);
                 } else {
                     Log.i(TAG + "denied", "Storage Permission has been denied by user : " +
                             "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
@@ -290,30 +386,5 @@ public class ReviewCreateFragment extends Fragment
                 return;
             }
         }
-    }
-
-    public Intent cameraIntent() {
-        mImageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), getString(R.string.app_name));
-
-        if (!mImageDir.exists()) {
-            Toast.makeText(getActivity(), "저장할 디렉토리를 생성 하였습니다.", Toast.LENGTH_SHORT).show();
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (mImagePath != null) {
-            mImagePath = "";
-        }
-        String imageName = "upload_" + String.valueOf(System.currentTimeMillis() / 100) + ".png";
-        File imageFile = new File(mImageDir, imageName);
-        mImagePath = imageFile.getAbsolutePath();
-        mImageUri = Uri.fromFile(imageFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-        return intent;
-    }
-
-    public Intent galleryIntent() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        return intent;
     }
 }
