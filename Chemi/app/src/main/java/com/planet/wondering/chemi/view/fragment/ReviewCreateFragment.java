@@ -19,6 +19,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -72,6 +75,7 @@ public class ReviewCreateFragment extends Fragment
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
     private EditText mReviewCreateReviewEditText;
+    private Button mReviewCreateReviewCompleteButton;
     private ImageButton mReviewCreateImage1ImageButton;
     private ImageButton mReviewCreateImage2ImageButton;
     private ImageButton mReviewCreateImage3ImageButton;
@@ -114,6 +118,30 @@ public class ReviewCreateFragment extends Fragment
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
         mReviewCreateRatingValueRatingBar.setOnRatingBarChangeListener(this);
         mReviewCreateReviewEditText = (EditText) view.findViewById(R.id.review_create_review_edit_text);
+        mReviewCreateReviewEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = s.toString();
+                if (str.length() > 0) {
+                    mReviewCreateReviewCompleteButton.setVisibility(View.VISIBLE);
+                    mReviewCreateReviewCompleteButton.setEnabled(true);
+                } else {
+                    mReviewCreateReviewCompleteButton.setVisibility(View.GONE);
+                    mReviewCreateReviewCompleteButton.setEnabled(false);
+                }
+            }
+        });
+        mReviewCreateReviewCompleteButton = (Button) view.findViewById(R.id.review_create_review_edit_complete_button);
         mReviewCreateImage1ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image1_image_button);
         mReviewCreateImage1ImageButton.setOnClickListener(this);
         mReviewCreateImage2ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image2_image_button);

@@ -57,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:hint="닉네임을 입력하세요"
+            android:inputType="text"
             android:textSize="16sp"
             android:textColor="@color/colorFontBody"/>
 
