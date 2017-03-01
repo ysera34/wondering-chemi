@@ -8,13 +8,15 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
+import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
 
 /**
  * Created by yoon on 2017. 2. 23..
  */
 
-public class ReviewActivity extends BottomNavigationActivity {
+public class ReviewActivity extends BottomNavigationActivity implements OnReviewEditListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
     private FragmentManager mFragmentManager;
@@ -45,5 +47,22 @@ public class ReviewActivity extends BottomNavigationActivity {
     protected void onResume() {
         super.onResume();
 //        setupBottomNavigation(0);
+    }
+
+    @Override
+    public void onReviewEdit(String reviewContent, boolean isEdit) {
+        if (isEdit) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
+                    .commit();
+        } else {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
+                    .commit();
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
+//                    .addToBackStack(null)
+//                    .commit();
+        }
     }
 }

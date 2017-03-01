@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,14 +27,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +37,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
+import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import java.io.File;
@@ -56,6 +51,7 @@ public class ReviewCreateFragment extends Fragment
         implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private static final String TAG = ReviewCreateFragment.class.getSimpleName();
+    private static final String ARG_REVIEW_CONTENT = "review_content";
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1000;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2000;
@@ -72,17 +68,24 @@ public class ReviewCreateFragment extends Fragment
         return fragment;
     }
 
+    public static ReviewCreateFragment newInstance(String reviewContent) {
+
+        Bundle args = new Bundle();
+        args.putString(ARG_REVIEW_CONTENT, reviewContent);
+
+        ReviewCreateFragment fragment = new ReviewCreateFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private Toolbar mReviewCreateToolbar;
-    private LinearLayout mReviewCreateRatingBarLayout;
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
+    private TextView mReviewCreateReviewLengthTextView;
     private TextView mReviewCreateReviewTextView;
-    private NestedScrollView mReviewCreateReviewEditNestedScrollView;
     private String mReviewHint;
-    private RelativeLayout mReviewCreateReviewEditLayout;
-    private EditText mReviewCreateReviewEditText;
+    private String mReviewContent;
     private InputMethodManager mInputMethodManager;
-    private Button mReviewCreateReviewCompleteButton;
     private ImageButton mReviewCreateImage1ImageButton;
     private ImageButton mReviewCreateImage2ImageButton;
     private ImageButton mReviewCreateImage3ImageButton;
@@ -100,9 +103,10 @@ public class ReviewCreateFragment extends Fragment
         setHasOptionsMenu(true);
         mReview = new Review();
         mReviewHint = getString(R.string.review_create_review_hint);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        setRetainInstance(true);
+
+        mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
     }
 
 //    public void setReview(Review review) {
@@ -123,45 +127,23 @@ public class ReviewCreateFragment extends Fragment
         ((ReviewActivity) getActivity()).setSupportActionBar(mReviewCreateToolbar);
 //        mReviewCreateToolbar.setTitle("리뷰 작성");
         ((ReviewActivity) getActivity()).getSupportActionBar().setTitle("리뷰 작성");
-        mReviewCreateRatingBarLayout = (LinearLayout) view.findViewById(R.id.review_create_rating_bar_layout);
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
         mReviewCreateRatingValueRatingBar.setOnRatingBarChangeListener(this);
 
-        mReviewCreateReviewEditLayout = (RelativeLayout)
-                view.findViewById(R.id.review_create_review_edit_layout);
+        mReviewCreateReviewLengthTextView = (TextView) view.findViewById(R.id.review_create_review_text_length_text_view);
         mReviewCreateReviewTextView = (TextView) view.findViewById(R.id.review_create_review_text_view);
-        mReviewCreateReviewTextView.setOnClickListener(this);
-//        mReviewCreateReviewEditNestedScrollView = (NestedScrollView)
-//                view.findViewById(R.id.review_create_review_edit_scroll_view);
 
-        mReviewCreateReviewEditText = (EditText) view.findViewById(R.id.review_create_review_edit_text);
-//        mReviewCreateReviewEditText.setOnClickListener(this);
-//        mReviewCreateReviewEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                String str = s.toString();
-//                if (str.length() > 0) {
-//                    mReviewCreateReviewEditLayout.setVisibility(View.VISIBLE);
-//                    mReviewCreateReviewCompleteButton.setEnabled(true);
-//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.VISIBLE);
-//                } else {
-//                    mReviewCreateReviewEditLayout.setVisibility(View.GONE);
-//                    mReviewCreateReviewCompleteButton.setEnabled(false);
-//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-        mReviewCreateReviewCompleteButton = (Button) view.findViewById(R.id.review_create_review_edit_complete_button);
-        mReviewCreateReviewCompleteButton.setOnClickListener(this);
+        if (mReviewContent.equals("") || mReviewContent == null) {
+            mReviewCreateReviewTextView.setText(mReviewHint);
+            mReviewCreateReviewLengthTextView.setText(
+                    getString(R.string.review_create_review_length_format, String.valueOf(mReviewHint.length())));
+        } else {
+            mReviewCreateReviewTextView.setText(mReviewContent);
+            mReviewCreateReviewLengthTextView.setText(
+                    getString(R.string.review_create_review_length_format, String.valueOf(mReviewContent.length())));
+        }
+        mReviewCreateReviewTextView.setOnClickListener(this);
         mReviewCreateImage1ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image1_image_button);
         mReviewCreateImage1ImageButton.setOnClickListener(this);
         mReviewCreateImage2ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image2_image_button);
@@ -213,37 +195,12 @@ public class ReviewCreateFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_create_review_text_view:
-                mReviewCreateReviewEditLayout.setVisibility(View.VISIBLE);
-                mReviewCreateReviewEditText.setFocusable(true);
-                mInputMethodManager.showSoftInput(mReviewCreateReviewEditText, InputMethodManager.SHOW_IMPLICIT);
-
-                if (mReviewCreateReviewTextView.getText().toString().length() > 0) {
-//                    mReviewCreateReviewEditNestedScrollView.setVisibility(View.VISIBLE);
-                    if (!mReviewCreateReviewTextView.getText().toString().equals(mReviewHint)) {
-                        mReviewCreateReviewEditText.setText(mReviewCreateReviewTextView.getText().toString());
-                    } else {
-                        mReviewCreateReviewEditText.setText("");
-                    }
-                    mReviewCreateReviewTextView.setText("");
-                }
-
-            case R.id.review_create_review_edit_text:
-//                if (mReviewCreateReviewEditText.getText().toString().length() > 0) {
-//                    mReviewCreateReviewCompleteButton.setVisibility(View.VISIBLE);
-//                    mReviewCreateReviewCompleteButton.setEnabled(true);
-//                }
-                break;
-            case R.id.review_create_review_edit_complete_button:
-                mInputMethodManager.hideSoftInputFromWindow(mReviewCreateReviewEditText.getWindowToken(), 0);
-                mReviewCreateReviewEditLayout.setVisibility(View.GONE);
-                if (!mReviewCreateReviewEditText.getText().toString().equals(mReviewHint)) {
-                    mReview.setContent(mReviewCreateReviewEditText.getText().toString());
-                    mReviewCreateReviewTextView.setText(mReview.getContent());
+                String reviewContent = mReviewCreateReviewTextView.getText().toString();
+                if (reviewContent.equals(mReviewHint)) {
+                    mReviewEditListener.onReviewEdit("", true);
                 } else {
-                    mReviewCreateReviewTextView.setText(mReviewHint);
+                    mReviewEditListener.onReviewEdit(reviewContent, true);
                 }
-//                mReviewCreateReviewCompleteButton.setVisibility(View.GONE);
-//                mReviewCreateReviewCompleteButton.setEnabled(false);
                 break;
             case R.id.review_create_review_image1_image_button:
                 checkStoragePermission(1);
@@ -255,6 +212,19 @@ public class ReviewCreateFragment extends Fragment
             case R.id.review_create_review_image3_image_button:
                 checkStoragePermission(3);
                 break;
+        }
+    }
+
+    OnReviewEditListener mReviewEditListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mReviewEditListener = (OnReviewEditListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implements OnReviewEditListener");
         }
     }
 
