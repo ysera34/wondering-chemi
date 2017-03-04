@@ -1,6 +1,6 @@
 package com.planet.wondering.chemi.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by yoon on 2017. 1. 17..
@@ -13,7 +13,11 @@ public class Review {
     private int mProductId;
     private float mRatingValue;
     private String content;
-    private ArrayList<String> mImagePaths;
+    private HashMap<Integer, String> mImagePathMap;
+
+    public Review() {
+        mImagePathMap = new HashMap<>();
+    }
 
     public int getId() {
         return mId;
@@ -55,11 +59,11 @@ public class Review {
         this.content = content;
     }
 
-    public ArrayList<String> getImagePaths() {
-        return mImagePaths;
+    public HashMap<Integer, String> getImagePathMap() {
+        return mImagePathMap;
     }
 
-    public void setImagePaths(ArrayList<String> imagePaths) {
-        mImagePaths = imagePaths;
+    public void setImagePathMap(HashMap<Integer, String> imagePathMap) {
+        mImagePathMap = imagePathMap;
     }
 }

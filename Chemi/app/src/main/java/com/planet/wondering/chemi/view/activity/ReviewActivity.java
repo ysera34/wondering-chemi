@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
@@ -64,5 +65,15 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //                    .addToBackStack(null)
 //                    .commit();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
+        preferences.removeStoredRatingValue(getApplicationContext());
+        preferences.removeStoredImage1Path(getApplicationContext());
+        preferences.removeStoredImage2Path(getApplicationContext());
+        preferences.removeStoredImage3Path(getApplicationContext());
     }
 }

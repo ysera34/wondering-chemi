@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
-                android:stepSize="1.0"/>
+                android:stepSize="0.5"/>
 
         </LinearLayout>
 
@@ -139,30 +139,30 @@
             android:layout_height="wrap_content"
             android:gravity="start">
 
-            <ImageButton
-                android:id="@+id/review_create_review_image1_image_button"
+            <ImageView
+                android:id="@+id/review_create_review_image1_image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_camera_add_photo"
-                android:background="@drawable/widget_rectangle_border"/>
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
 
-            <ImageButton
+            <ImageView
                 android:visibility="invisible"
-                android:id="@+id/review_create_review_image2_image_button"
+                android:id="@+id/review_create_review_image2_image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_camera_add_photo"
-                android:background="@drawable/widget_rectangle_border"/>
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
 
-            <ImageButton
+            <ImageView
                 android:visibility="invisible"
-                android:id="@+id/review_create_review_image3_image_button"
+                android:id="@+id/review_create_review_image3_image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_camera_add_photo"
-                android:background="@drawable/widget_rectangle_border"/>
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
 
         </LinearLayout>
 

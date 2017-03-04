@@ -94,22 +94,36 @@
     <string name="survey_year_format">%s년</string>
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
 
-    <string name="review_rating_1_message">1점입니다.</string>
-    <string name="review_rating_2_message">2점입니다.</string>
-    <string name="review_rating_3_message">3점입니다.</string>
-    <string name="review_rating_4_message">4점입니다.</string>
-    <string name="review_rating_5_message">5점입니다.</string>
+    <string name="review_rating_0_message">최악이에요!</string>
+    <string name="review_rating_0.5_message">다시 사고 싶지 않아요.</string>
+    <string name="review_rating_1_message">전혀 좋지 않아요.</string>
+    <string name="review_rating_1.5_message">별로 좋지 않아요.</string>
+    <string name="review_rating_2_message">좋은지 잘 모르겠어요.</string>
+    <string name="review_rating_2.5_message">보통이에요.</string>
+    <string name="review_rating_3_message">그냥 쓸 만해요.</string>
+    <string name="review_rating_3.5_message">그럭저럭 좋아요.</string>
+    <string name="review_rating_4_message">만족스러워요.</string>
+    <string name="review_rating_4.5_message">또 살 거예요.</string>
+    <string name="review_rating_5_message">최고예요!</string>
 
     <string-array name="review_rating_message_array">
+        <item>@string/review_rating_0_message</item>
+        <item>@string/review_rating_0.5_message</item>
         <item>@string/review_rating_1_message</item>
+        <item>@string/review_rating_1.5_message</item>
         <item>@string/review_rating_2_message</item>
+        <item>@string/review_rating_2.5_message</item>
         <item>@string/review_rating_3_message</item>
+        <item>@string/review_rating_3.5_message</item>
         <item>@string/review_rating_4_message</item>
+        <item>@string/review_rating_4.5_message</item>
         <item>@string/review_rating_5_message</item>
     </string-array>
     
     <string name="bottom_sheet_menu_camera">카메라</string>
     <string name="bottom_sheet_menu_gallery">갤러리</string>
+    <string name="bottom_sheet_menu_pick">이미지 다시 선택하기</string>
+    <string name="bottom_sheet_menu_delete">이미지 선택 취소하기</string>
     <string name="review_create_review_hint">이 제품이 좋은 이유와 아쉬운 점이 있다면 무엇인지 다른 사람들에게 알려주세요. (최소 15자)</string>
     <string name="review_create_review_length_format">%s자</string>
 </resources>

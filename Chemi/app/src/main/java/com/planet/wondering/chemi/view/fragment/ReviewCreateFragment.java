@@ -6,11 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
@@ -27,8 +33,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +42,15 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
+import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by yoon on 2017. 2. 23..
@@ -85,15 +94,17 @@ public class ReviewCreateFragment extends Fragment
     private TextView mReviewCreateReviewTextView;
     private String mReviewHint;
     private String mReviewContent;
-    private InputMethodManager mInputMethodManager;
-    private ImageButton mReviewCreateImage1ImageButton;
-    private ImageButton mReviewCreateImage2ImageButton;
-    private ImageButton mReviewCreateImage3ImageButton;
+    private ImageView mReviewCreateImage1ImageView;
+    private ImageView mReviewCreateImage2ImageView;
+    private ImageView mReviewCreateImage3ImageView;
 
     private BottomSheetDialog mMenuBottomSheetDialog;
     private Uri mImageUri;
     private File mImageDir;
     private String mImagePath;
+    private Bitmap mImage1Bitmap;
+    private Bitmap mImage2Bitmap;
+    private Bitmap mImage3Bitmap;
 
     private Review mReview;
 
@@ -101,21 +112,12 @@ public class ReviewCreateFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
         mReview = new Review();
         mReviewHint = getString(R.string.review_create_review_hint);
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
     }
-
-//    public void setReview(Review review) {
-//        mReview = review;
-//    }
-//
-//    public Review getReview() {
-//        return mReview;
-//    }
 
     @Nullable
     @Override
@@ -125,7 +127,6 @@ public class ReviewCreateFragment extends Fragment
 
         mReviewCreateToolbar = (Toolbar) view.findViewById(R.id.review_create_toolbar);
         ((ReviewActivity) getActivity()).setSupportActionBar(mReviewCreateToolbar);
-//        mReviewCreateToolbar.setTitle("리뷰 작성");
         ((ReviewActivity) getActivity()).getSupportActionBar().setTitle("리뷰 작성");
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
@@ -133,29 +134,78 @@ public class ReviewCreateFragment extends Fragment
 
         mReviewCreateReviewLengthTextView = (TextView) view.findViewById(R.id.review_create_review_text_length_text_view);
         mReviewCreateReviewTextView = (TextView) view.findViewById(R.id.review_create_review_text_view);
-
-        if (mReviewContent.equals("") || mReviewContent == null) {
-            mReviewCreateReviewTextView.setText(mReviewHint);
-            mReviewCreateReviewLengthTextView.setText(
-                    getString(R.string.review_create_review_length_format, String.valueOf(mReviewHint.length())));
-        } else {
-            mReviewCreateReviewTextView.setText(mReviewContent);
-            mReviewCreateReviewLengthTextView.setText(
-                    getString(R.string.review_create_review_length_format, String.valueOf(mReviewContent.length())));
-        }
         mReviewCreateReviewTextView.setOnClickListener(this);
-        mReviewCreateImage1ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image1_image_button);
-        mReviewCreateImage1ImageButton.setOnClickListener(this);
-        mReviewCreateImage2ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image2_image_button);
-        mReviewCreateImage2ImageButton.setOnClickListener(this);
-        mReviewCreateImage3ImageButton = (ImageButton) view.findViewById(R.id.review_create_review_image3_image_button);
-        mReviewCreateImage3ImageButton.setOnClickListener(this);
-       return view;
+
+        mReviewCreateImage1ImageView = (ImageView) view.findViewById(R.id.review_create_review_image1_image_view);
+        mReviewCreateImage1ImageView.setOnClickListener(this);
+        mReviewCreateImage2ImageView = (ImageView) view.findViewById(R.id.review_create_review_image2_image_view);
+        mReviewCreateImage2ImageView.setOnClickListener(this);
+        mReviewCreateImage3ImageView = (ImageView) view.findViewById(R.id.review_create_review_image3_image_view);
+        mReviewCreateImage3ImageView.setOnClickListener(this);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mReviewContent.equals("") || mReviewContent == null) {
+            mReviewCreateReviewTextView.setText(mReviewHint);
+        } else {
+            mReviewCreateReviewTextView.setText(mReviewContent);
+        }
+        mReviewCreateReviewLengthTextView.setText(
+                getString(R.string.review_create_review_length_format,
+                        String.valueOf(mReviewCreateReviewTextView.getText().length())));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
+        float ratingValue = preferences.getStoredRatingValue(getActivity());
+        if (ratingValue != 0.0f) {
+            mReviewCreateRatingValueRatingBar.setRating(ratingValue);
+        }
+        String imagePath = preferences.getStoredImage1Path(getActivity());
+        if (imagePath != null) {
+            mImagePath = imagePath;
+            mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+            mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+        }
+        imagePath = preferences.getStoredImage2Path(getActivity());
+        if (imagePath != null) {
+            mImagePath = imagePath;
+            mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+            mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+        }
+        imagePath = preferences.getStoredImage3Path(getActivity());
+        if (imagePath != null) {
+            mImagePath = imagePath;
+            mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
+        }
+
+    }
+
+    private String mImage1Path;
+    private String mImage2Path;
+    private String mImage3Path;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
+        if (mReviewCreateRatingValueRatingBar.getRating() != 0.0f) {
+            preferences.setStoreRatingValue(getActivity(), mReviewCreateRatingValueRatingBar.getRating());
+        }
+        if (mImage1Bitmap != null) {
+            preferences.setStoreImage1Path(getActivity(), mImage1Path);
+        }
+        if (mImage2Bitmap != null) {
+            preferences.setStoreImage2Path(getActivity(), mImage2Path);
+        }
+        if (mImage3Bitmap != null) {
+            preferences.setStoreImage3Path(getActivity(), mImage3Path);
+        }
     }
 
     @Override
@@ -178,16 +228,12 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
         String[] messageArray = getResources().getStringArray(R.array.review_rating_message_array);
-        if (rating > 0.1 && rating <= 1.0) {
-            mReviewCreateMessageTextView.setText(messageArray[0]);
-        } else if (rating >= 1.1 && rating <= 2.0) {
-            mReviewCreateMessageTextView.setText(messageArray[1]);
-        } else if (rating > 2.0 && rating <= 3.0) {
-            mReviewCreateMessageTextView.setText(messageArray[2]);
-        } else if (rating > 3.0 && rating <= 4.0) {
-            mReviewCreateMessageTextView.setText(messageArray[3]);
-        } else if (rating > 4.0 && rating <= 5.0) {
-            mReviewCreateMessageTextView.setText(messageArray[4]);
+
+        for (int i = 0; i < messageArray.length; i++) {
+            if (rating == 0.5f * i) {
+                mReviewCreateMessageTextView.setText(messageArray[i]);
+                break;
+            }
         }
     }
 
@@ -202,15 +248,26 @@ public class ReviewCreateFragment extends Fragment
                     mReviewEditListener.onReviewEdit(reviewContent, true);
                 }
                 break;
-            case R.id.review_create_review_image1_image_button:
-                checkStoragePermission(1);
-//                createMenuBottomSheetDialog();
+            case R.id.review_create_review_image1_image_view:
+                if (mImage1Bitmap == null) {
+                    checkStoragePermission(1);
+                } else {
+                    createEditImageMenuBottomSheetDialog(1);
+                }
                 break;
-            case R.id.review_create_review_image2_image_button:
-                checkStoragePermission(2);
+            case R.id.review_create_review_image2_image_view:
+                if (mImage2Bitmap == null) {
+                    checkStoragePermission(2);
+                } else {
+                    createEditImageMenuBottomSheetDialog(2);
+                }
                 break;
-            case R.id.review_create_review_image3_image_button:
-                checkStoragePermission(3);
+            case R.id.review_create_review_image3_image_view:
+                if (mImage3Bitmap == null) {
+                    checkStoragePermission(3);
+                } else {
+                    createEditImageMenuBottomSheetDialog(3);
+                }
                 break;
         }
     }
@@ -228,7 +285,7 @@ public class ReviewCreateFragment extends Fragment
         }
     }
 
-    private void createMenuBottomSheetDialog(final int imagePosition) {
+    private void createPickImageMenuBottomSheetDialog(final int imagePosition) {
         if (dismissMenuBottomSheetDialog()) {
             return;
         }
@@ -253,7 +310,7 @@ public class ReviewCreateFragment extends Fragment
                     dismissMenuBottomSheetDialog();
                     if (position == 0 /* camera */) {
                         if (hasCamera()) {
-                            startActivityForResult(cameraIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE + imagePosition);
+                            startActivityForResult(dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE + imagePosition);
                         } else {
                             Toast.makeText(getActivity(), "카메라를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
@@ -269,12 +326,250 @@ public class ReviewCreateFragment extends Fragment
         mMenuBottomSheetDialog.show();
     }
 
+    private void createEditImageMenuBottomSheetDialog(final int imagePosition) {
+        if (dismissMenuBottomSheetDialog()) {
+            return;
+        }
+        ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
+        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_pick));
+        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_delete));
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bottom_sheet_menu_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        BottomSheetMenuAdapter bottomSheetMenuAdapter = new BottomSheetMenuAdapter(bottomSheetMenus);
+        recyclerView.setAdapter(bottomSheetMenuAdapter);
+        bottomSheetMenuAdapter.setItemClickListener(new BottomSheetMenuAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
+                dismissMenuBottomSheetDialog();
+                if (position == 0 /* re_pick */) {
+                    checkStoragePermission(imagePosition);
+                } else if (position == 1 /* delete */) {
+                    deleteImage(imagePosition);
+                }
+            }
+        });
+        mMenuBottomSheetDialog = new BottomSheetDialog(getActivity());
+        mMenuBottomSheetDialog.setContentView(view);
+        mMenuBottomSheetDialog.show();
+    }
+
     private boolean dismissMenuBottomSheetDialog() {
         if (mMenuBottomSheetDialog != null && mMenuBottomSheetDialog.isShowing()) {
             mMenuBottomSheetDialog.dismiss();
             return true;
         }
         return false;
+    }
+
+    private void deleteImage(int imagePosition) {
+        switch (imagePosition) {
+            case 1:
+                if (mImage2Bitmap == null && mImage3Bitmap == null) {
+                    mReviewCreateImage1ImageView.setImageBitmap(null);
+                    mImage1Bitmap = null;
+                    mReviewCreateImage2ImageView.setVisibility(View.INVISIBLE);
+                } else if (mImage2Bitmap != null && mImage3Bitmap == null) {
+                    mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
+                    mImage1Bitmap = mImage2Bitmap;
+                    mReviewCreateImage2ImageView.setImageBitmap(null);
+                    mImage2Bitmap = null;
+                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
+                } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
+                    mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
+                    mImage1Bitmap = mImage2Bitmap;
+                    mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
+                    mImage2Bitmap = mImage3Bitmap;
+                    mReviewCreateImage3ImageView.setImageBitmap(null);
+                    mImage3Bitmap = null;
+                }
+                break;
+            case 2:
+                if (mImage2Bitmap != null && mImage3Bitmap == null) {
+                    mReviewCreateImage2ImageView.setImageBitmap(null);
+                    mImage2Bitmap = null;
+                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
+                } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
+                    mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
+                    mImage2Bitmap = mImage3Bitmap;
+                    mReviewCreateImage3ImageView.setImageBitmap(null);
+                    mImage3Bitmap = null;
+                }
+                break;
+            case 3:
+                mReviewCreateImage3ImageView.setImageBitmap(null);
+                mImage3Bitmap = null;
+                break;
+        }
+    }
+
+    private File getAlbumDir() {
+
+        File storageDir = null;
+
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new File(Environment.getExternalStorageDirectory()
+                    + "/dcim/" + getString(R.string.app_name));
+
+            if (storageDir != null) {
+                if (!storageDir.mkdirs()) {
+                    if (!storageDir.exists()) {
+                        Log.d(TAG, "failed to create directory");
+                        return null;
+                    }
+                }
+            }
+        } else {
+            Log.v(TAG, "External storage is not mounted READ/WRITE");
+        }
+        return storageDir;
+    }
+
+    private static final String PNG_FILE_PREFIX = "IMG_";
+    private static final String PNG_FILE_SUFFIX = ".png";
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyymmdd_HHmmss").format(new Date());
+        String imageFileName = PNG_FILE_PREFIX + timeStamp + "_";
+        File albumFolder = getAlbumDir();
+        File imageFile = File.createTempFile(imageFileName, PNG_FILE_SUFFIX, albumFolder);
+        return imageFile;
+    }
+
+    private File setupPhotoFile() throws IOException {
+        File file = createImageFile();
+        mImagePath = file.getAbsolutePath();
+        return file;
+    }
+
+    private Bitmap setPicture(ImageView imageView) {
+        int targetWidth = imageView.getWidth();
+        int targetHeight = imageView.getHeight();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mImagePath, options);
+
+        int photoWidth = options.outWidth;
+        int photoHeight = options.outHeight;
+
+        int scaleFactor = 1;
+        if ((targetWidth > 0) || (targetHeight > 0)) {
+            scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
+        }
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scaleFactor;
+//        options.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mImagePath, options);
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(mImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+        int rotationAngle = 0;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            rotationAngle = 90;
+        }
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            rotationAngle = 180;
+        }
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            rotationAngle = 270;
+        }
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+        return Bitmap.createBitmap(bitmap, 0, 0, options.outWidth, options.outHeight, matrix, true);
+    }
+
+    private Intent galleryAddPictureIntent() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(mImagePath);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
+        return mediaScanIntent;
+    }
+
+    private Intent dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = null;
+        try {
+            file = setupPhotoFile();
+            mImagePath = file.getAbsolutePath();
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+            file = null;
+            mImagePath = null;
+        }
+        return takePictureIntent;
+    }
+
+    private Bitmap handleSmallCameraPhoto(Intent intent) {
+        Bundle extras = intent.getExtras();
+        return (Bitmap) extras.get("data");
+    }
+
+    private Bitmap handleBigCameraPhoto(ImageView imageView) {
+        if (mImagePath != null) {
+            Bitmap bitmap = setPicture(imageView);
+            imageView.setImageBitmap(bitmap);
+            getActivity().sendBroadcast(galleryAddPictureIntent());
+            mImagePath = null;
+            return bitmap;
+        }
+        return null;
+    }
+
+    private Bitmap getThumbnailBitmap(String imagePath, int thumbnailSize) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, options);
+        if ((options.outWidth == -1 || options.outHeight == -1)) {
+            return null;
+        }
+        int originalSize = (options.outHeight > options.outWidth) ? options.outHeight : options.outWidth;
+        BitmapFactory.Options options1 = new BitmapFactory.Options();
+        options1.inSampleSize = originalSize / thumbnailSize;
+        return BitmapFactory.decodeFile(imagePath, options1);
+    }
+
+    private Bitmap getRotatedBitmap(String imagePath) {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, bounds);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+        int rotationAngle = 0;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            rotationAngle = 90;
+        }
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            rotationAngle = 180;
+        }
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            rotationAngle = 270;
+        }
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+        return Bitmap.createBitmap(bitmap, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
     }
 
     public Intent cameraIntent() {
@@ -317,7 +612,7 @@ public class ReviewCreateFragment extends Fragment
     public Intent galleryIntent() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType(Media.CONTENT_TYPE);
         return intent;
     }
 
@@ -331,21 +626,30 @@ public class ReviewCreateFragment extends Fragment
 
         switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 1:
-                mReviewCreateImage1ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
-                mReviewCreateImage2ImageButton.setVisibility(View.VISIBLE);
+//                mReviewCreateImage1ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+                mImage1Path = mImagePath;
+                mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+                mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 2:
-                mReviewCreateImage2ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
-                mReviewCreateImage3ImageButton.setVisibility(View.VISIBLE);
+//                mReviewCreateImage2ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+                mImage2Path = mImagePath;
+                mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+                mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 3:
-                mReviewCreateImage3ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
+//                mReviewCreateImage3ImageView.setImageURI(Uri.fromFile(new File(mImagePath)));
+                mImage3Path = mImagePath;
+                mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
                 break;
             case GALLERY_IMAGE_REQUEST_CODE + 1:
                 galleryImageUri = data.getData();
                 if (galleryImageUri != null) {
-                    mReviewCreateImage1ImageButton.setImageURI(galleryImageUri);
-                    mReviewCreateImage2ImageButton.setVisibility(View.VISIBLE);
+//                    mReviewCreateImage1ImageView.setImageURI(galleryImageUri);
+                    mImagePath = getRealPathFromURI(galleryImageUri);
+                    mImage1Path = mImagePath;
+                    mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
                 } else {
 
                 }
@@ -353,8 +657,11 @@ public class ReviewCreateFragment extends Fragment
             case GALLERY_IMAGE_REQUEST_CODE + 2:
                 galleryImageUri = data.getData();
                 if (galleryImageUri != null) {
-                    mReviewCreateImage2ImageButton.setImageURI(galleryImageUri);
-                    mReviewCreateImage3ImageButton.setVisibility(View.VISIBLE);
+//                    mReviewCreateImage2ImageView.setImageURI(galleryImageUri);
+                    mImagePath = getRealPathFromURI(galleryImageUri);
+                    mImage2Path = mImagePath;
+                    mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                 } else {
 
                 }
@@ -362,12 +669,25 @@ public class ReviewCreateFragment extends Fragment
             case GALLERY_IMAGE_REQUEST_CODE + 3:
                 galleryImageUri = data.getData();
                 if (galleryImageUri != null) {
-                    mReviewCreateImage3ImageButton.setImageURI(galleryImageUri);
+//                    mReviewCreateImage3ImageView.setImageURI(galleryImageUri);
+                    mImagePath = getRealPathFromURI(galleryImageUri);
+                    mImage3Path = mImagePath;
+                    mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
                 } else {
 
                 }
                 break;
         }
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     private boolean hasCamera() {
@@ -408,7 +728,7 @@ public class ReviewCreateFragment extends Fragment
             }
             else {
                 // already have permission
-                createMenuBottomSheetDialog(imagePosition);
+                createPickImageMenuBottomSheetDialog(imagePosition);
             }
         }
     }
@@ -428,7 +748,7 @@ public class ReviewCreateFragment extends Fragment
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     Log.i(TAG + "granted", "Storage Permission has been granted by user : " +
                             "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
-                    createMenuBottomSheetDialog(1);
+                    createPickImageMenuBottomSheetDialog(1);
                 } else {
                     Log.i(TAG + "denied", "Storage Permission has been denied by user : " +
                             "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
