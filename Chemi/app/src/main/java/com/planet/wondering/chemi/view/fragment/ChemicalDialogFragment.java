@@ -126,7 +126,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
         mChemicalDialogNameKoTextView.setText(mChemical.getNameKo());
         mChemicalDialogNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_eng_text_view);
-        mChemicalDialogNameEngTextView.setText(mChemical.getNameEn());
+        mChemicalDialogNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
         mChemicalDialogHazardLineTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_hazard_bg_text_view);
         mChemicalDialogHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
@@ -135,12 +135,11 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
         mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
         mChemicalDialogAllergyImageView = (ImageView)
                 view.findViewById(R.id.chemical_dialog_allergy_image_view);
-
-        mChemicalDialogAllergyImageView.setImageResource(R.drawable.ic_chemical_allergy_true);
-
+        mChemicalDialogAllergyImageView.setImageResource(mChemical.getAllergyIconResId());
         mChemicalDialogAllergyTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_allergy_text_view);
         mChemicalDialogAllergyTextView.setText(mChemical.getAllergyDescription());
+
         mChemicalDialogHazardInfoRecyclerView = (RecyclerView)
                 view.findViewById(R.id.chemical_dialog_hazard_info_recycler_view);
         mChemicalDialogHazardInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -190,7 +189,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.ChemicalDialogAnimation;
+//        getDialog().getWindow().getAttributes().windowAnimations = R.style.ChemicalDialogAnimation;
     }
 
     @Override
@@ -254,7 +253,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
         public void bindHazard(Hazard hazard) {
             mHazard = hazard;
             mHazardIconImageView.setImageResource(mHazard.getIconResId());
-            mHazardTitleTextView.setText(mHazard.getName());
+            mHazardTitleTextView.setText(mHazard.getClassName());
             mHazardDescriptionTextView.setText(mHazard.getDescription());
         }
     }

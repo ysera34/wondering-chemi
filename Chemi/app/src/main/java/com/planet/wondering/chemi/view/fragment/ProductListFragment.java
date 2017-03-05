@@ -236,7 +236,7 @@ public class ProductListFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
-//                        mProductListProgressBar.setVisibility(View.GONE);
+                        mProductListProgressBar.setVisibility(View.GONE);
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseProductListPagingQuery(response);
                         updateUI();
@@ -246,7 +246,7 @@ public class ProductListFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                        progressDialog.dismiss();
-//                        mProductListProgressBar.setVisibility(View.GONE);
+                        mProductListProgressBar.setVisibility(View.GONE);
                         Log.e(TAG, error.getMessage());
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();

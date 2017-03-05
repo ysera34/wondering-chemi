@@ -112,6 +112,7 @@ public class Config {
             public static final String CODE = "code";
             public static final String NAME = "name";
             public static final String DESCRIPTION = "description";
+            public static final String CLASS = "class";
             public static final String TYPE = "type";
             public static final String ALLERGY = "isAllergy";
         }

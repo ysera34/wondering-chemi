@@ -81,6 +81,14 @@ public class Chemical implements Serializable {
         mAllergy = allergy;
     }
 
+    public int getAllergyIconResId() {
+        if (isAllergy()) {
+            return R.drawable.ic_chemical_allergy_true;
+        } else {
+            return R.drawable.ic_chemical_allergy_false;
+        }
+    }
+
     public String getAllergyDescription() {
         return mAllergyDescription;
     }

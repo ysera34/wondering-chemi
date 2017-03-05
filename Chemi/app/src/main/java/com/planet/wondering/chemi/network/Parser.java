@@ -31,6 +31,7 @@ import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEEN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_ORIGIN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_PRODUCT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.PURPOSE;
+import static com.planet.wondering.chemi.network.Config.Hazard.Key.CLASS;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CODE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.HAZARD_ID;
@@ -297,6 +298,7 @@ public class Parser {
                 chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                 chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
+                chemical.setAllergy(chemicalJSONObject.getBoolean(Key.ALLERGY));
                 chemical.setAllergyDescription(chemicalJSONObject.getString(ALLERGY_DESCRIPTION));
                 int hazardSize = chemicalJSONObject.getInt(HAZARD_SIZE);
                 JSONArray hazardJSONArray = chemicalJSONObject.getJSONArray(HAZARDS);
@@ -309,6 +311,7 @@ public class Parser {
                         hazard.setCode(hazardJSONObject.getString(CODE));
                         hazard.setName(hazardJSONObject.getString(Config.Hazard.Key.NAME));
                         hazard.setDescription(hazardJSONObject.getString(DESCRIPTION));
+                        hazard.setClassName(hazardJSONObject.getString(CLASS));
                         hazard.setType((byte)hazardJSONObject.getInt(TYPE));
                         hazard.setIconResId(hazard.getType());
                         chemical.getHazards().add(hazard);

@@ -15,6 +15,7 @@ public class Hazard implements Serializable {
     private String mCode;
     private String mName;
     private String mDescription;
+    private String mClassName;
     private byte mType;
     private int mIconResId;
     private boolean mAllergy;
@@ -57,6 +58,14 @@ public class Hazard implements Serializable {
 
     public void setDescription(String description) {
         mDescription = description;
+    }
+
+    public String getClassName() {
+        return mClassName;
+    }
+
+    public void setClassName(String className) {
+        mClassName = className;
     }
 
     public byte getType() {
