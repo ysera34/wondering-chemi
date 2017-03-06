@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
+import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
@@ -60,7 +61,10 @@ public class ReviewCreateFragment extends Fragment
         implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private static final String TAG = ReviewCreateFragment.class.getSimpleName();
+
+    private static final String ARG_PRODUCT = "product";
     private static final String ARG_REVIEW_CONTENT = "review_content";
+
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1000;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2000;
@@ -87,7 +91,29 @@ public class ReviewCreateFragment extends Fragment
         return fragment;
     }
 
+    public static ReviewCreateFragment newInstance(Product product) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCT, product);
+
+        ReviewCreateFragment fragment = new ReviewCreateFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ReviewCreateFragment newInstance(Product product, String reviewContent) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCT, product);
+        args.putString(ARG_REVIEW_CONTENT, reviewContent);
+
+        ReviewCreateFragment fragment = new ReviewCreateFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private Toolbar mReviewCreateToolbar;
+    private TextView mReviewCreateProductNameTextView;
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
     private TextView mReviewCreateReviewLengthTextView;
@@ -106,13 +132,16 @@ public class ReviewCreateFragment extends Fragment
     private Bitmap mImage2Bitmap;
     private Bitmap mImage3Bitmap;
 
+    private Product mProduct;
     private Review mReview;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
         mReview = new Review();
+
         mReviewHint = getString(R.string.review_create_review_hint);
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
     }
@@ -126,6 +155,7 @@ public class ReviewCreateFragment extends Fragment
         mReviewCreateToolbar = (Toolbar) view.findViewById(R.id.review_create_toolbar);
         ((ReviewActivity) getActivity()).setSupportActionBar(mReviewCreateToolbar);
         ((ReviewActivity) getActivity()).getSupportActionBar().setTitle("리뷰 작성");
+        mReviewCreateProductNameTextView = (TextView) view.findViewById(R.id.review_create_product_name_text_view);
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
         mReviewCreateRatingValueRatingBar.setOnRatingBarChangeListener(this);
@@ -146,6 +176,7 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mReviewCreateProductNameTextView.setText(mProduct.getName());
         if (mReviewContent.equals("") || mReviewContent == null) {
             mReviewCreateReviewTextView.setText(mReviewHint);
         } else {

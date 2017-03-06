@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
@@ -20,24 +21,38 @@ import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
 public class ReviewActivity extends BottomNavigationActivity implements OnReviewEditListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
+
+    private static final String EXTRA_PRODUCT = "com.planet.wondering.chemi.product";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ReviewActivity.class);
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, Product product) {
+        Intent intent = new Intent(packageContext, ReviewActivity.class);
+        intent.putExtra(EXTRA_PRODUCT, product);
+        return intent;
+    }
+
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
+    private Product mProduct;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBottomNavigationLayout.setVisibility(View.GONE);
 
+        mProduct = (Product) getIntent().getSerializableExtra(EXTRA_PRODUCT);
+
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
         if (mFragment == null) {
-            mFragment = ReviewCreateFragment.newInstance();
+//            mFragment = ReviewCreateFragment.newInstance();
+            mFragment = ReviewCreateFragment.newInstance(mProduct);
             mFragmentManager.beginTransaction()
                     .add(R.id.fragment_container, mFragment)
                     .commit();
@@ -50,15 +65,20 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //        setupBottomNavigation(0);
     }
 
+    private String mReviewContent;
+
     @Override
     public void onReviewEdit(String reviewContent, boolean isEdit) {
         if (isEdit) {
+            mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
                     .commit();
         } else {
+            mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
+//                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
+                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, reviewContent))
                     .commit();
 //            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
@@ -75,5 +95,18 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         preferences.removeStoredImage1Path(getApplicationContext());
         preferences.removeStoredImage2Path(getApplicationContext());
         preferences.removeStoredImage3Path(getApplicationContext());
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+//        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
+        if (fragment instanceof ReviewEditFragment) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, mReviewContent))
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

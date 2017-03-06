@@ -278,7 +278,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_floating_action_button:
-                startActivity(ReviewActivity.newIntent(getActivity()));
+//                startActivity(ReviewActivity.newIntent(getActivity()));
+                startActivity(ReviewActivity.newIntent(getActivity(), mProduct));
                 break;
         }
     }
