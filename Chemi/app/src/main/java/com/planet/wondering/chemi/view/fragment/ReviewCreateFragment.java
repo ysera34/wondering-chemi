@@ -176,30 +176,31 @@ public class ReviewCreateFragment extends Fragment
                 case 3:
                     mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                     mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                    mReviewCreateImage3ImageView.setImageURI(
-                            Uri.fromFile(new File(mReview.getImagePathMap().get(3))));
+                    File file3 = new File(mReview.getImagePathMap().get(3));
+                    mImage3Path = file3.getAbsolutePath();
+                    mImage3Bitmap = BitmapFactory.decodeFile(mImage3Path);
+                    mReviewCreateImage3ImageView.setImageBitmap(mImage3Bitmap);
 
                 case 2:
                     mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                     mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                    mReviewCreateImage2ImageView.setImageURI(
-                            Uri.fromFile(new File(mReview.getImagePathMap().get(2))));
+//                    mReviewCreateImage2ImageView.setImageURI(
+//                            Uri.fromFile(new File(mReview.getImagePathMap().get(2))));
+                    File file2 = new File(mReview.getImagePathMap().get(2));
+                    mImage2Path = file2.getAbsolutePath();
+                    mImage2Bitmap = BitmapFactory.decodeFile(mImage2Path);
+                    mReviewCreateImage2ImageView.setImageBitmap(mImage2Bitmap);
                 case 1:
                     mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                    mReviewCreateImage1ImageView.setImageURI(
-                            Uri.fromFile(new File(mReview.getImagePathMap().get(1))));
+//                    mReviewCreateImage1ImageView.setImageURI(
+//                            Uri.fromFile(new File(mReview.getImagePathMap().get(1))));
+                    File file1 = new File(mReview.getImagePathMap().get(1));
+                    mImage1Path = file1.getAbsolutePath();
+                    mImage1Bitmap = BitmapFactory.decodeFile(mImage1Path);
+                    mReviewCreateImage1ImageView.setImageBitmap(mImage1Bitmap);
                     break;
             }
             Log.i(TAG, "imageViewArrayLength: " + String.valueOf(imageViewArrayLength));
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
-        if (mReviewCreateRatingValueRatingBar.getRating() != 0.0f) {
-            preferences.setStoreRatingValue(getActivity(), mReviewCreateRatingValueRatingBar.getRating());
         }
     }
 
@@ -229,6 +230,10 @@ public class ReviewCreateFragment extends Fragment
                 mReviewCreateMessageTextView.setText(messageArray[i]);
                 break;
             }
+        }
+        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
+        if (mReviewCreateRatingValueRatingBar.getRating() != 0.0f) {
+            preferences.setStoreRatingValue(getActivity(), mReviewCreateRatingValueRatingBar.getRating());
         }
     }
 
@@ -365,25 +370,34 @@ public class ReviewCreateFragment extends Fragment
                 if (mImage2Bitmap == null && mImage3Bitmap == null) {
                     mReviewCreateImage1ImageView.setImageBitmap(null);
                     mImage1Path = null;
+                    mReview.removeImagePath(getActivity(), 1);
                     mImage1Bitmap = null;
                     mReviewCreateImage2ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap == null) {
                     mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
                     mImage1Path = mImage2Path;
+                    mReview.removeImagePath(getActivity(), 1);
+                    mReview.putImagePath(getActivity(), 1, mImage1Path);
                     mImage1Bitmap = mImage2Bitmap;
                     mReviewCreateImage2ImageView.setImageBitmap(null);
                     mImage2Path = null;
+                    mReview.removeImagePath(getActivity(), 2);
                     mImage2Bitmap = null;
                     mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
                     mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
                     mImage1Path = mImage2Path;
+                    mReview.removeImagePath(getActivity(), 1);
+                    mReview.putImagePath(getActivity(), 1, mImage1Path);
                     mImage1Bitmap = mImage2Bitmap;
                     mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
                     mImage2Path = mImage3Path;
+                    mReview.removeImagePath(getActivity(), 2);
+                    mReview.putImagePath(getActivity(), 2, mImage2Path);
                     mImage2Bitmap = mImage3Bitmap;
                     mReviewCreateImage3ImageView.setImageBitmap(null);
                     mImage3Path = null;
+                    mReview.removeImagePath(getActivity(), 3);
                     mImage3Bitmap = null;
                 }
                 break;
@@ -391,20 +405,28 @@ public class ReviewCreateFragment extends Fragment
                 if (mImage2Bitmap != null && mImage3Bitmap == null) {
                     mReviewCreateImage2ImageView.setImageBitmap(null);
                     mImage2Path = null;
+                    mReview.removeImagePath(getActivity(), 2);
                     mImage2Bitmap = null;
                     mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
                     mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
                     mImage2Path = mImage3Path;
+                    Log.i(TAG, "mImage2Path " + mImage2Path);
+                    Log.i(TAG, "mImage3Path " + mImage3Path);
+                    mReview.removeImagePath(getActivity(), 2);
+                    mReview.putImagePath(getActivity(), 2, mImage2Path);
                     mImage2Bitmap = mImage3Bitmap;
+
                     mReviewCreateImage3ImageView.setImageBitmap(null);
                     mImage3Path = null;
+                    mReview.removeImagePath(getActivity(), 3);
                     mImage3Bitmap = null;
                 }
                 break;
             case 3:
                 mReviewCreateImage3ImageView.setImageBitmap(null);
                 mImage3Path = null;
+                mReview.removeImagePath(getActivity(), 3);
                 mImage3Bitmap = null;
                 break;
         }
@@ -467,7 +489,7 @@ public class ReviewCreateFragment extends Fragment
 
         options.inJustDecodeBounds = false;
         options.inSampleSize = scaleFactor;
-//        options.inPurgeable = true;
+        options.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mImagePath, options);
 
