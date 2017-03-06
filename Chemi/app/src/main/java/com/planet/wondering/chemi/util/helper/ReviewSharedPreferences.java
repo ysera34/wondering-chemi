@@ -59,10 +59,10 @@ public class ReviewSharedPreferences {
                 .getString(PREF_IMAGE2_PATH, null);
     }
 
-    public void setStoreImage2Path(Context context, String image1Path) {
+    public void setStoreImage2Path(Context context, String image2Path) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(PREF_IMAGE2_PATH, image1Path)
+                .putString(PREF_IMAGE2_PATH, image2Path)
                 .apply();
     }
 
@@ -78,10 +78,10 @@ public class ReviewSharedPreferences {
                 .getString(PREF_IMAGE3_PATH, null);
     }
 
-    public void setStoreImage3Path(Context context, String image1Path) {
+    public void setStoreImage3Path(Context context, String image3Path) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(PREF_IMAGE3_PATH, image1Path)
+                .putString(PREF_IMAGE3_PATH, image3Path)
                 .apply();
     }
 

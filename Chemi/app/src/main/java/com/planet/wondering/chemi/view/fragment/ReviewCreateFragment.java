@@ -112,10 +112,8 @@ public class ReviewCreateFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
         mReview = new Review();
         mReviewHint = getString(R.string.review_create_review_hint);
-
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
     }
 
@@ -158,6 +156,10 @@ public class ReviewCreateFragment extends Fragment
                         String.valueOf(mReviewCreateReviewTextView.getText().length())));
     }
 
+    private String mImage1Path;
+    private String mImage2Path;
+    private String mImage3Path;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -166,29 +168,31 @@ public class ReviewCreateFragment extends Fragment
         if (ratingValue != 0.0f) {
             mReviewCreateRatingValueRatingBar.setRating(ratingValue);
         }
-        String imagePath = preferences.getStoredImage1Path(getActivity());
-        if (imagePath != null) {
-            mImagePath = imagePath;
-            mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
-            mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-        }
-        imagePath = preferences.getStoredImage2Path(getActivity());
-        if (imagePath != null) {
-            mImagePath = imagePath;
-            mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
-            mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-        }
-        imagePath = preferences.getStoredImage3Path(getActivity());
-        if (imagePath != null) {
-            mImagePath = imagePath;
-            mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
-        }
 
+        mReview.setImagePathMap(getActivity());
+        int imageViewArrayLength = mReview.getImagePathMapSize();
+        if (imageViewArrayLength > 0) {
+            switch (imageViewArrayLength) {
+                case 3:
+                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                    mReviewCreateImage3ImageView.setImageURI(
+                            Uri.fromFile(new File(mReview.getImagePathMap().get(3))));
+
+                case 2:
+                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                    mReviewCreateImage2ImageView.setImageURI(
+                            Uri.fromFile(new File(mReview.getImagePathMap().get(2))));
+                case 1:
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                    mReviewCreateImage1ImageView.setImageURI(
+                            Uri.fromFile(new File(mReview.getImagePathMap().get(1))));
+                    break;
+            }
+            Log.i(TAG, "imageViewArrayLength: " + String.valueOf(imageViewArrayLength));
+        }
     }
-
-    private String mImage1Path;
-    private String mImage2Path;
-    private String mImage3Path;
 
     @Override
     public void onPause() {
@@ -196,15 +200,6 @@ public class ReviewCreateFragment extends Fragment
         ReviewSharedPreferences preferences = new ReviewSharedPreferences();
         if (mReviewCreateRatingValueRatingBar.getRating() != 0.0f) {
             preferences.setStoreRatingValue(getActivity(), mReviewCreateRatingValueRatingBar.getRating());
-        }
-        if (mImage1Bitmap != null) {
-            preferences.setStoreImage1Path(getActivity(), mImage1Path);
-        }
-        if (mImage2Bitmap != null) {
-            preferences.setStoreImage2Path(getActivity(), mImage2Path);
-        }
-        if (mImage3Bitmap != null) {
-            preferences.setStoreImage3Path(getActivity(), mImage3Path);
         }
     }
 
@@ -369,37 +364,47 @@ public class ReviewCreateFragment extends Fragment
             case 1:
                 if (mImage2Bitmap == null && mImage3Bitmap == null) {
                     mReviewCreateImage1ImageView.setImageBitmap(null);
+                    mImage1Path = null;
                     mImage1Bitmap = null;
                     mReviewCreateImage2ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap == null) {
                     mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
+                    mImage1Path = mImage2Path;
                     mImage1Bitmap = mImage2Bitmap;
                     mReviewCreateImage2ImageView.setImageBitmap(null);
+                    mImage2Path = null;
                     mImage2Bitmap = null;
                     mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
                     mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
+                    mImage1Path = mImage2Path;
                     mImage1Bitmap = mImage2Bitmap;
                     mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
+                    mImage2Path = mImage3Path;
                     mImage2Bitmap = mImage3Bitmap;
                     mReviewCreateImage3ImageView.setImageBitmap(null);
+                    mImage3Path = null;
                     mImage3Bitmap = null;
                 }
                 break;
             case 2:
                 if (mImage2Bitmap != null && mImage3Bitmap == null) {
                     mReviewCreateImage2ImageView.setImageBitmap(null);
+                    mImage2Path = null;
                     mImage2Bitmap = null;
                     mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
                 } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
                     mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
+                    mImage2Path = mImage3Path;
                     mImage2Bitmap = mImage3Bitmap;
                     mReviewCreateImage3ImageView.setImageBitmap(null);
+                    mImage3Path = null;
                     mImage3Bitmap = null;
                 }
                 break;
             case 3:
                 mReviewCreateImage3ImageView.setImageBitmap(null);
+                mImage3Path = null;
                 mImage3Bitmap = null;
                 break;
         }
@@ -523,7 +528,7 @@ public class ReviewCreateFragment extends Fragment
             Bitmap bitmap = setPicture(imageView);
             imageView.setImageBitmap(bitmap);
             getActivity().sendBroadcast(galleryAddPictureIntent());
-            mImagePath = null;
+//            mImagePath = null;
             return bitmap;
         }
         return null;
@@ -630,26 +635,30 @@ public class ReviewCreateFragment extends Fragment
                 mImage1Path = mImagePath;
                 mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
                 mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                mReview.putImagePath(getActivity(), 1, mImage1Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 2:
 //                mReviewCreateImage2ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
                 mImage2Path = mImagePath;
                 mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
                 mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+                mReview.putImagePath(getActivity(), 2, mImage2Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 3:
 //                mReviewCreateImage3ImageView.setImageURI(Uri.fromFile(new File(mImagePath)));
                 mImage3Path = mImagePath;
                 mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
+                mReview.putImagePath(getActivity(), 3, mImage3Path);
                 break;
             case GALLERY_IMAGE_REQUEST_CODE + 1:
                 galleryImageUri = data.getData();
                 if (galleryImageUri != null) {
 //                    mReviewCreateImage1ImageView.setImageURI(galleryImageUri);
                     mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage1Path = mImagePath;
                     mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+                    mImage1Path = mImagePath;
                     mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                    mReview.putImagePath(getActivity(), 1, mImage1Path);
                 } else {
 
                 }
@@ -659,9 +668,10 @@ public class ReviewCreateFragment extends Fragment
                 if (galleryImageUri != null) {
 //                    mReviewCreateImage2ImageView.setImageURI(galleryImageUri);
                     mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage2Path = mImagePath;
                     mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+                    mImage2Path = mImagePath;
                     mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+                    mReview.putImagePath(getActivity(), 2, mImage2Path);
                 } else {
 
                 }
@@ -671,8 +681,9 @@ public class ReviewCreateFragment extends Fragment
                 if (galleryImageUri != null) {
 //                    mReviewCreateImage3ImageView.setImageURI(galleryImageUri);
                     mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage3Path = mImagePath;
                     mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
+                    mImage3Path = mImagePath;
+                    mReview.putImagePath(getActivity(), 3, mImage3Path);
                 } else {
 
                 }
