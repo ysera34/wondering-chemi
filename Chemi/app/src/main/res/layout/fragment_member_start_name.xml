@@ -53,7 +53,7 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
-            android:id="@+id/member_start_local_name_edit_text"
+            android:id="@+id/member_start_name_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
@@ -65,7 +65,7 @@
             android:background="@drawable/selector_edit_text_under_line_accent"/>
 
         <TextView
-            android:id="@+id/member_start_local_name_validation_text_view"
+            android:id="@+id/member_start_name_name_validation_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -81,6 +81,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/member_start_name_name_auth_button_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="27dp"
@@ -90,10 +91,11 @@
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
             android:gravity="center_horizontal"
+            android:clickable="true"
             android:text="닉네임 입력하고 시작하기"
             android:textSize="16sp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/widget_solid_oval_rectangle_primary"/>
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/widget_border_oval_rectangle_primary"/>
 
     </LinearLayout>
 

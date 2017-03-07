@@ -205,10 +205,11 @@ public class MemberStartActivity extends AppCompatActivity
             if (result.isSuccess()) {
                 Log.i(TAG, "GoogleSignInResult" + " isSuccess");
                 GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthGoogle(account);
+                firebaseAuthGoogle(account, 0);
                 // TODO(user): send token to server and validate server-side
                 if (account != null) {
                     requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
+                    mGoogleSignInAccount = account;
                 }
 //              requestSubmitUserInfo(account.getIdToken(), 1);
             } else {
@@ -218,7 +219,9 @@ public class MemberStartActivity extends AppCompatActivity
         }
     }
 
-    private void firebaseAuthGoogle(GoogleSignInAccount account) {
+    private GoogleSignInAccount mGoogleSignInAccount;
+
+    private void firebaseAuthGoogle(GoogleSignInAccount account, int platformId) {
         Log.d(TAG, "firebaseAuthWithGoogle: id : " + account.getId());
         Log.d(TAG, "firebaseAuthWithGoogle: id token : " + account.getIdToken());
         Log.d(TAG, "firebaseAuthWithGoogle: full name : " + account.getDisplayName());
@@ -228,23 +231,25 @@ public class MemberStartActivity extends AppCompatActivity
         Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
         Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
 
-        showProgressDialog();
+        if (platformId == 1) {
+            showProgressDialog();
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mFirebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            mFirebaseAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (!task.isSuccessful()) {
+                                Log.w(TAG, "signInWithCredential", task.getException());
+                                Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            hideProgressDialog();
                         }
-                        hideProgressDialog();
-                    }
-                });
+                    });
+        }
     }
 
     public void signInGoogle() {
@@ -456,7 +461,11 @@ public class MemberStartActivity extends AppCompatActivity
         }
     }
 
-    private void requestConfirmEmailRepetition(String emailAddress, final String accessToken, final int platformId) {
+    private String mNaverEmail;
+    private String mAccessToken = null;
+    private int mPlatformId = -1;
+
+    private void requestConfirmEmailRepetition(final String emailAddress, final String accessToken, final int platformId) {
 
         Map<String, String> params = new HashMap<>();
         params.put("emailString", emailAddress);
@@ -474,16 +483,22 @@ public class MemberStartActivity extends AppCompatActivity
                                     .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
                                     .commit();
 
+                            mNaverEmail = emailAddress;
+                            mAccessToken = accessToken;
+                            mPlatformId = platformId;
+
                         } else {
                             if (platformId == 1) {
                                 Toast.makeText(getApplicationContext(),
                                         "구글 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
+                                signOutGoogle();
                                 revokeAccessGoogle();
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "네이버 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
+                                signOutNaver();
                                 revokeAccessNaver();
                             }
                         }
@@ -506,7 +521,7 @@ public class MemberStartActivity extends AppCompatActivity
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private void requestSubmitUserInfo(String accessToken, int platformId) {
+    public void requestSubmitUserInfo(String name) {
 
 //        final ProgressDialog progressDialog;
 //        progressDialog = ProgressDialog.show(getApplicationContext(), "회원가입을 요청하고 있습니다.",
@@ -514,10 +529,15 @@ public class MemberStartActivity extends AppCompatActivity
 
         showProgressDialog();
 
+        Log.i(TAG, "requestSubmitUserInfo : name :" + name);
+        Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
+        Log.i(TAG, "requestSubmitUserInfo : mPlatformId :" + String.valueOf(mPlatformId));
+        Log.i(TAG, "requestSubmitUserInfo : pushToken :" + FirebaseInstanceId.getInstance().getToken());
+
         Map<String, String> params = new HashMap<>();
-        params.put("name", "hello");
-        params.put("accessToken", accessToken);
-        params.put("platform", String.valueOf(platformId));
+        params.put("name", name);
+        params.put("accessToken", mAccessToken);
+        params.put("platform", String.valueOf(mPlatformId));
         params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -532,11 +552,24 @@ public class MemberStartActivity extends AppCompatActivity
                         Log.i(TAG, response.toString());
                         mUser = Parser.parseUser(response);
 
+                        if (mPlatformId == 1) {
+                            firebaseAuthGoogle(mGoogleSignInAccount, mPlatformId);
+                        } else {
+                        // platform id 2
+                            createFirebaseAccount(mNaverEmail,
+                                    FirebaseInstanceId.getInstance().getToken());
+                        }
+
                         if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
                             UserSharedPreferences.removeStoredToken(getApplicationContext());
                         }
                         UserSharedPreferences.setStoreToken(getApplicationContext(), mUser.getToken());
                         Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
+                                .commit();
                     }
                 },
                 new Response.ErrorListener() {
@@ -563,6 +596,23 @@ public class MemberStartActivity extends AppCompatActivity
         if (token != null) {
             startActivity(SearchActivity.newIntent(getApplicationContext()));
         }
+    }
+
+    private void createFirebaseAccount(String email, String password) {
+        Log.d(TAG, "createFirebaseAccount with Firebase: " + email);
+
+        mFirebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete: " + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(MemberStartActivity.this,
+                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public void replaceFragment() {
@@ -614,7 +664,12 @@ public class MemberStartActivity extends AppCompatActivity
 //        surveyInfoFragment.onBackPressed();
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_start_fragment_container);
-        if (fragment instanceof MemberAskInfoFragment) {
+        if (fragment instanceof MemberStartNameFragment) {
+
+        } else if (fragment instanceof MemberAskInfoFragment) {
+            startActivity(SearchActivity.newIntent(getApplicationContext()));
+            finish();
+        } else if (fragment instanceof MemberSurveyInfoFragment) {
             startActivity(SearchActivity.newIntent(getApplicationContext()));
             finish();
         } else {
