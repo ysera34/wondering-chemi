@@ -371,6 +371,21 @@ public class Parser {
         return email;
     }
 
+    public static String parseSignInUserToken(JSONObject responseObject) {
+
+        String token = null;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject tokenObject = responseObject.getJSONObject(RESPONSE_DATA);
+                token = tokenObject.getString(TOKEN);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return token;
+    }
+
     public static ArrayList<Chemical> parseChemicalList(JSONObject responseObject) {
 
         ArrayList<Chemical> chemicals = new ArrayList<>();

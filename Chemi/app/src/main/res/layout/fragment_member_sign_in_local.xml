@@ -123,8 +123,8 @@
             android:clickable="true"
             android:text="이메일로 로그인"
             android:textSize="16sp"
-            android:textColor="@color/color_selector_white_primary"
-            android:background="@drawable/selector_opaque_primary_transparent_white"/>
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/widget_border_oval_rectangle_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

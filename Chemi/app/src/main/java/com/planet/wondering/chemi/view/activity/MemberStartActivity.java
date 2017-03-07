@@ -99,6 +99,11 @@ public class MemberStartActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(TAG, "shared preferences accessToken : "
+                + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+
         setContentView(R.layout.activity_member_start);
 
         GoogleSignInOptions googleSignInOptions =
@@ -307,11 +312,15 @@ public class MemberStartActivity extends AppCompatActivity
     }
 
     public void signOutNaver() {
+        mFirebaseAuth.signOut();
+
         mNaverOAuthLogin.logout(mContext);
 //        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
     }
 
     public void revokeAccessNaver() {
+        mFirebaseAuth.signOut();
+
         new DeleteTokenTask().execute();
     }
 
