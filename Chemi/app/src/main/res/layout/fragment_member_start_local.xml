@@ -89,16 +89,26 @@
             android:layout_marginTop="27dp"
             android:layout_marginStart="47dp"
             android:layout_marginEnd="47dp"
+            android:layout_marginBottom="dp"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
             android:gravity="center_horizontal"
             android:clickable="true"
-            android:text="인증 메일 발송하기"
+            android:text="중복 확인 후 인증 메일 발송하기"
             android:textSize="16sp"
             android:textColor="@color/colorPrimary"
             android:background="@drawable/widget_border_oval_rectangle_primary"/>
         <!--android:textColor="@color/colorWhite"-->
         <!--android:background="@drawable/widget_solid_oval_rectangle_primary"-->
+
+        <TextView
+            android:id="@+id/member_start_local_email_result_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="이메일이 성공적으로 발송되었습니다. 메일함을 확인해주세요."
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary"/>
     </LinearLayout>
     <LinearLayout
         android:visibility="gone"

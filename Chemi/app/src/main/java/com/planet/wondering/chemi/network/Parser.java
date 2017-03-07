@@ -70,6 +70,18 @@ public class Parser {
 
     public static final String TAG = Parser.class.getSimpleName();
 
+    public static boolean parseSimpleResult(JSONObject responseObject) {
+
+        try {
+            if (responseObject.getString(RESPONSE_MESSAGE).equals(RESPONSE_SUCCESS)) {
+                return true;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return false;
+    }
+
     public static ArrayList<Tag> parseTagPopularList(JSONObject responseObject) {
 
         ArrayList<Tag> tags = new ArrayList<>();
@@ -340,8 +352,23 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        Log.i(TAG, user.toString());
+//        Log.i(TAG, user.toString());
         return user;
+    }
+
+    public static String parseNaverUser(JSONObject responseObject) {
+
+        String email = null;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject naverUserJSONObject = responseObject.getJSONObject("response");
+                email = naverUserJSONObject.getString(EMAIL);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return email;
     }
 
     public static ArrayList<Chemical> parseChemicalList(JSONObject responseObject) {

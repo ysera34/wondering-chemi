@@ -49,17 +49,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="닉네임"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_start_local_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="4dp"
             android:hint="닉네임을 입력하세요"
             android:inputType="text"
-            android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textSize="18sp"
+            android:textColor="@color/colorFontToolbarSubtitle"
+            android:textColorHint="@color/colorFontIron"
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
+
+        <TextView
+            android:id="@+id/member_start_local_name_validation_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
 

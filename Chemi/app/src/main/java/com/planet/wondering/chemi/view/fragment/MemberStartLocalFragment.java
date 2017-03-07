@@ -46,6 +46,10 @@ import java.util.regex.Pattern;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_PATH;
+import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING;
+import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
+import static com.planet.wondering.chemi.network.Config.User.NAME_STRING;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -74,6 +78,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private LinearLayout mEmailAuthButtonLayout;
     private TextView mEmailAuthButtonTextView;
+    private TextView mEmailResultTextView;
     private InputMethodManager mInputMethodManager;
     private LinearLayout mBodyLayout;
     private LinearLayout mFooterLayout;
@@ -134,6 +139,8 @@ public class MemberStartLocalFragment extends Fragment
         mEmailAuthButtonTextView = (TextView)
                 view.findViewById(R.id.member_start_local_email_auth_button_text_view);
         mEmailAuthButtonTextView.setOnClickListener(this);
+        mEmailResultTextView = (TextView)
+                view.findViewById(R.id.member_start_local_email_result_text_view);
         mBodyLayout = (LinearLayout)
                 view.findViewById(R.id.member_start_local_body_layout);
         mFooterLayout = (LinearLayout)
@@ -187,7 +194,8 @@ public class MemberStartLocalFragment extends Fragment
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
                 if (isAuthEmailValidation) {
-                    requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
+                    requestConfirmEmailRepetition(mMemberStartLocalEmailEditText.getText().toString());
+//                    requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
                 } else {
                     Toast.makeText(getActivity(), mValidationMessages[0], Toast.LENGTH_SHORT).show();
                 }
@@ -196,10 +204,11 @@ public class MemberStartLocalFragment extends Fragment
                 break;
             case R.id.member_start_local_submit_button_text_view:
                 if (isAuthEmailResult && isConfirmPassword) {
-                    requestSubmitUserInfo();
+//                    requestSubmitUserInfo();
+                    requestConfirmNameRepetition(mMemberStartLocalNameEditText.getText().toString());
                 } else {
                     Toast.makeText(getActivity(),
-                            "회원 가입 절차 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                            "이메일 인증이 완료 되지 않았거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -207,6 +216,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private boolean isAuthEmailValidation = false;
     private boolean isAuthEmailResult = false;
+    private boolean isConfirmName = false;
     private boolean isConfirmPassword = false;
     private String mAccessToken;
 
@@ -346,10 +356,48 @@ public class MemberStartLocalFragment extends Fragment
         return null;
     }
 
+    private void requestConfirmEmailRepetition(String emailAddress) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("emailString", emailAddress);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+                            mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_correct));
+                            mEmailAuthButtonTextView.setEnabled(false);
+                            requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
+                        } else {
+                            mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
+                            mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_incorrect));
+                            mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getActivity(),
+                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
     private void requestSendAuthEmail(String emailAddress) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("email", emailAddress);
+        params.put(EMAIL, emailAddress);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + EMAIL_PATH, new JSONObject(params),
@@ -366,8 +414,50 @@ public class MemberStartLocalFragment extends Fragment
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.getMessage()));
                         Toast.makeText(getActivity(),
-                                "메일 발송 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
                         isAuthEmailResult = false;
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestConfirmNameRepetition(String name) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("nameString", name);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH + NAME_STRING, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+                            isConfirmName = true;
+                        } else {
+                            isConfirmName = false;
+                        }
+
+                        if (isAuthEmailResult && isConfirmPassword && isConfirmName) {
+                            requestSubmitUserInfo();
+                        } else {
+                            mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
+                            mNameValidationMessageTextView.setText(getString(R.string.name_submit_message_incorrect));
+                            mNameValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getActivity(),
+                                "닉네임 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -386,8 +476,8 @@ public class MemberStartLocalFragment extends Fragment
                     getString(R.string.progress_dialog_message_wait), false, false);
 
         Map<String, String> params = new HashMap<>();
-        params.put("email", mMemberStartLocalEmailEditText.getText().toString());
-        params.put("name", mMemberStartLocalNameEditText.getText().toString());
+        params.put(EMAIL, mMemberStartLocalEmailEditText.getText().toString());
+        params.put(NAME, mMemberStartLocalNameEditText.getText().toString());
         params.put("password", mMemberStartLocalConfirmEditText.getText().toString());
         params.put("accessToken", mAccessToken);
         params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
@@ -401,17 +491,11 @@ public class MemberStartLocalFragment extends Fragment
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(),
                                 "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, response.toString());
                         mUser = Parser.parseUser(response);
 
-                        createAccout(mMemberStartLocalEmailEditText.getText().toString(),
+                        createFirebaseAccount(mMemberStartLocalEmailEditText.getText().toString(),
                                 mMemberStartLocalConfirmEditText.getText().toString());
-//                        if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
-//                            UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
-//                        } else {
-//                            UserSharedPreferences.removeStoredToken(getActivity());
-//                            UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
-//                        }
+
                         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
                             UserSharedPreferences.removeStoredToken(getActivity());
                         }
@@ -438,8 +522,8 @@ public class MemberStartLocalFragment extends Fragment
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private void createAccout(String email, String password) {
-        Log.d(TAG, "createAccount with Firebase: " + email);
+    private void createFirebaseAccount(String email, String password) {
+        Log.d(TAG, "createFirebaseAccount with Firebase: " + email);
 
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {

@@ -33,6 +33,8 @@ public class Config {
     public static final class User {
         public static final String PATH = File.separator + "users";
         public static final String EMAIL_PATH = File.separator + "email";
+        public static final String EMAIL_STRING = File.separator + "emailstring";
+        public static final String NAME_STRING = File.separator + "namestring";
 
         public static final class Key {
             public static final String USER_ID = "id";

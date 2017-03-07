@@ -65,12 +65,16 @@
 
     <string name="email_validation_message_wrong_pattern">올바르지 않은 이메일 형식 이에요.</string>
     <string name="email_validation_message_already_user">이미 사용하고 있는 이메일 이에요.</string>
-    <string name="email_validation_message_auth">멋진 이메일 이네요! 메일 인증을 부탁드려요!</string>
+    <string name="email_validation_message_auth">멋진 이메일 이네요! 아래 버튼을 눌르시면, 중복 확인 후 메일을 발송해드릴께요.</string>
+    <string name="email_submit_message_correct">중복 확인 후 이메일이 발송 되었어요. 메일함으로 이동해서 인증을 부탁드려요!</string>
+    <string name="email_submit_message_incorrect">사용 중인 이메일 입니다. 메일을 다시 입력해주세요.</string>
+    <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>
 
     <string name="name_validation_message_short">사용자 이름이 너무 짧아요.</string>
     <string name="name_validation_message_long">사용자 이름이 너무 길어요.</string>
     <string name="name_validation_message_incorrect">올바르지 않은 이름이에요.</string>
     <string name="name_validation_message_correct">멋진 이름 이네요!</string>
+    <string name="name_submit_message_incorrect">사용 중인 닉네임 입니다. 닉네임을 다시 입력해주세요.</string>
 
     <string name="password_validation_message_short">비밀번호가 너무 짧아요.</string>
     <string name="password_validation_message_long">비밀번호가 너무 길어요.</string>
@@ -91,7 +95,6 @@
         <item>@string/confirm_validation_message_correct</item>
     </string-array>
 
-    <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>
     <string name="survey_year_format">%s년</string>
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
 

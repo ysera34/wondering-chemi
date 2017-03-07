@@ -45,21 +45,26 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
+import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
-import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartNameFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSurveyInfoFragment;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -73,6 +78,11 @@ public class MemberStartActivity extends AppCompatActivity
     public static final String START_NAVER = "start.naver";
     public static final String START_GOOGLE = "start.google";
     public static final int RC_SIGN_IN = 9001;
+
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, MemberStartActivity.class);
+        return intent;
+    }
 
     private User mUser;
 
@@ -158,13 +168,17 @@ public class MemberStartActivity extends AppCompatActivity
         }
         if (accessToken != null) {
             Log.i(TAG, "accesstoken : " + accessToken);
-            mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.member_start_fragment_container);
-            mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
+            try {
+                mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.member_start_fragment_container);
+                mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
+            } catch (ClassCastException e) {
+                Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
+                startActivity(MemberStartActivity.newIntent(getApplication()));
+            }
         } else {
             Log.e(TAG, "accesstoken : did not get it");
         }
-
     }
 
     @Override
@@ -193,9 +207,10 @@ public class MemberStartActivity extends AppCompatActivity
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthGoogle(account);
                 // TODO(user): send token to server and validate server-side
-                requestSubmitUserInfo(account.getIdToken(), 1);
-
-
+                if (account != null) {
+                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
+                }
+//              requestSubmitUserInfo(account.getIdToken(), 1);
             } else {
                 Log.i(TAG, "GoogleSignInResult" + " isFail");
                 updateUI(null);
@@ -310,7 +325,14 @@ public class MemberStartActivity extends AppCompatActivity
                 Log.i(TAG, "Naver oauthState: " + mNaverOAuthLogin.getState(mContext).toString());
 
                 // TODO(user): send token to server and validate server-side
-                requestSubmitUserInfo(accessToken, 2);
+                String email = null;
+                try {
+                    email = new NaverMemberProfileTask().execute(accessToken).get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                requestConfirmEmailRepetition(email, accessToken, 2);
+//                requestSubmitUserInfo(accessToken, 2);
 
             } else {
                 String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
@@ -391,6 +413,97 @@ public class MemberStartActivity extends AppCompatActivity
             }
             return null;
         }
+    }
+
+    private class NaverMemberProfileTask extends AsyncTask<String, Void, String> {
+
+        private String email = null;
+
+        @Override
+        protected String doInBackground(String... params) {
+//            String token = "YOUR_ACCESS_TOKEN";// 네이버 로그인 접근 토큰;
+            String token = params[0];
+            String header = "Bearer " + token; // Bearer 다음에 공백 추가
+            try {
+                String apiURL = "https://openapi.naver.com/v1/nid/me";
+                URL url = new URL(apiURL);
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Authorization", header);
+                int responseCode = con.getResponseCode();
+                BufferedReader br;
+                if(responseCode==200) { // 정상 호출
+                    br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                } else {  // 에러 발생
+                    br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                }
+                String inputLine;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((inputLine = br.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+                br.close();
+//                System.out.println(response.toString());
+                Log.i(TAG, "naver member profile : " + stringBuilder.toString());
+                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                email = Parser.parseNaverUser(jsonObject);
+                Log.i(TAG, "naver member profile email : " + email);
+            } catch (Exception e) {
+//                System.out.println(e);
+                Log.e(TAG, e.getMessage());
+            }
+            return email;
+        }
+    }
+
+    private void requestConfirmEmailRepetition(String emailAddress, final String accessToken, final int platformId) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("emailString", emailAddress);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+//                            requestSubmitUserInfo(accessToken, platformId);
+
+                            mFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                                    .commit();
+
+                        } else {
+                            if (platformId == 1) {
+                                Toast.makeText(getApplicationContext(),
+                                        "구글 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
+                                        Toast.LENGTH_SHORT).show();
+                                revokeAccessGoogle();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "네이버 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
+                                        Toast.LENGTH_SHORT).show();
+                                revokeAccessNaver();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getApplicationContext(),
+                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     private void requestSubmitUserInfo(String accessToken, int platformId) {
@@ -494,11 +607,18 @@ public class MemberStartActivity extends AppCompatActivity
         surveyInfoFragment.updateConfirmButtonTextView(stageNumber, isCompleted);
     }
 
-//    @Override
-//    public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
 //        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.member_start_fragment_container);
 //        surveyInfoFragment.onBackPressed();
-//        super.onBackPressed();
-//    }
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentById(R.id.member_start_fragment_container);
+        if (fragment instanceof MemberAskInfoFragment) {
+            startActivity(SearchActivity.newIntent(getApplicationContext()));
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
