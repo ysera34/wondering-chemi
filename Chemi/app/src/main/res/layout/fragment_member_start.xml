@@ -13,16 +13,9 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/member_start_name_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="name"
-            android:textAllCaps="false"/>
-        <Button
             android:id="@+id/member_start_info_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/member_start_name_button"
             android:text="info"
             android:textAllCaps="false"/>
 

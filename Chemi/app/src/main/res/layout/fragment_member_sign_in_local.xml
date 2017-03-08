@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="47dp"
             android:layout_marginEnd="47dp"
             android:paddingTop="14dp"
@@ -125,6 +125,16 @@
             android:textSize="16sp"
             android:textColor="@color/colorPrimary"
             android:background="@drawable/widget_border_oval_rectangle_primary"/>
+
+        <TextView
+            android:id="@+id/member_sign_in_submit_result_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="@color/colorFontNormal"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

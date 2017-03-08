@@ -1,12 +1,15 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +20,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
@@ -31,7 +39,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.content.ContentValues.TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
@@ -45,6 +52,8 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
 public class MemberSignInLocalFragment extends Fragment
         implements View.OnClickListener {
 
+    private static final String TAG = MemberSignInLocalFragment.class.getSimpleName();
+
     public static MemberSignInLocalFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -56,18 +65,37 @@ public class MemberSignInLocalFragment extends Fragment
 
     private RelativeLayout mMemberSignInCancelLayout;
 
+    private InputMethodManager mInputMethodManager;
     private EditText mMemberSignInEmailEditText;
     private TextView mEmailValidationMessageTextView;
     private EditText mMemberSignInPasswordEditText;
     private TextView mPasswordValidationMessageTextView;
 
     private TextView mMemberSignInSubmitButtonTextView;
+    private TextView mMemberSignInSubmitResultTextView;
     private TextView mMemberSignInForgetPasswordTextView;
     private TextView mMemberSignInRecommendUserTextView;
+
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged:signed_in: " + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
     }
 
     @Nullable
@@ -90,6 +118,8 @@ public class MemberSignInLocalFragment extends Fragment
         mMemberSignInSubmitButtonTextView = (TextView)
                 view.findViewById(R.id.member_sign_in_submit_button_text_view);
         mMemberSignInSubmitButtonTextView.setOnClickListener(this);
+        mMemberSignInSubmitResultTextView = (TextView)
+                view.findViewById(R.id.member_sign_in_submit_result_text_view);
 
         mMemberSignInForgetPasswordTextView = (TextView)
                 view.findViewById(R.id.member_sign_in_forget_password_text_view);
@@ -107,24 +137,42 @@ public class MemberSignInLocalFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_sign_in_cancel_layout:
                 ((MemberStartActivity) getActivity()).cancelSignInLocal();
                 break;
             case R.id.member_sign_in_submit_button_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 if (isValidatedEmail && isValidatedPassword) {
                     requestSignInLocal(mMemberSignInEmailEditText.getText().toString(),
                             mMemberSignInPasswordEditText.getText().toString());
                 } else {
                     Toast.makeText(getActivity(), "이메일과 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    mMemberSignInSubmitResultTextView.setText("이메일과 비밀번호를 확인해주세요.");
                 }
 
                 break;
             case R.id.member_sign_in_forget_password_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 ((MemberStartActivity) getActivity()).findPassword();
                 break;
             case R.id.member_sign_in_recommend_user_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 ((MemberStartActivity) getActivity()).cancelSignInLocal();
                 break;
         }
@@ -203,7 +251,7 @@ public class MemberSignInLocalFragment extends Fragment
         return null;
     }
 
-    private void requestSignInLocal(String email, String password) {
+    private void requestSignInLocal(final String email, final String password) {
 
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL, email);
@@ -224,10 +272,12 @@ public class MemberSignInLocalFragment extends Fragment
                             Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
 
                             // sign in firebase user
+                            signInFirebaseAccount(email, password);
 
                         } else {
                             Toast.makeText(getActivity(),
                                     "가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
+                            mMemberSignInSubmitResultTextView.setText("가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.");
                         }
                     }
                 },
@@ -246,6 +296,26 @@ public class MemberSignInLocalFragment extends Fragment
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
 
+    private void signInFirebaseAccount(String email, String password) {
+        Log.d(TAG, "sign in firebase account :" + email);
+
+        mFirebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithEmail:onCompleted:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled i the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(getActivity(),
+                                        "fail to sign in firebase user", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
