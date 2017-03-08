@@ -315,7 +315,7 @@ public class MemberStartLocalFragment extends Fragment
         if (!matcher.matches()) {
             return mValidationMessages[0];
         } else {
-            return null; // emailText request url ~~>
+            return null;
         }
     }
 
@@ -324,7 +324,7 @@ public class MemberStartLocalFragment extends Fragment
             if (nameText.length() < 2) {
                 return mValidationMessages[3];
             } else if (nameText.length() >= 2 && nameText.length() < 11) {
-                return null; // nameText request url ~~>
+                return null;
             } else if (nameText.length() >= 11) {
                 return mValidationMessages[4];
             }
