@@ -47,6 +47,7 @@ import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
+import com.planet.wondering.chemi.view.fragment.MemberSendEmailFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartFragment;
 import com.planet.wondering.chemi.view.fragment.MemberStartLocalFragment;
@@ -477,7 +478,9 @@ public class MemberStartActivity extends AppCompatActivity
     private void requestConfirmEmailRepetition(final String emailAddress, final String accessToken, final int platformId) {
 
         Map<String, String> params = new HashMap<>();
+        params.put("accessToken", accessToken);
         params.put("emailString", emailAddress);
+        params.put("platform", String.valueOf(platformId));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),
@@ -624,7 +627,7 @@ public class MemberStartActivity extends AppCompatActivity
                 });
     }
 
-    public void replaceFragment() {
+    public void replaceFragment(String email) {
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_start_fragment_container);
         if (fragment instanceof MemberStartFragment) {
@@ -636,6 +639,11 @@ public class MemberStartActivity extends AppCompatActivity
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberForgetPasswordFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.member_start_fragment_container, MemberSendEmailFragment.newInstance(email))
                     .commit();
         }
     }
@@ -674,6 +682,10 @@ public class MemberStartActivity extends AppCompatActivity
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_start_fragment_container);
         if (fragment instanceof MemberStartNameFragment) {
+
+        } else if (fragment instanceof MemberSignInLocalFragment) {
+
+        } else if (fragment instanceof MemberForgetPasswordFragment) {
 
         } else if (fragment instanceof MemberAskInfoFragment) {
             startActivity(SearchActivity.newIntent(getApplicationContext()));

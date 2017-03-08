@@ -21,7 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
+import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 import org.json.JSONObject;
 
@@ -153,7 +155,7 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
         }
     }
 
-    private void requestSendAuthEmail(String emailAddress) {
+    private void requestSendAuthEmail(final String emailAddress) {
 
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL, emailAddress);
@@ -164,10 +166,14 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, response.toString());
-                        Toast.makeText(getActivity(),
-                                "메일 발송이 완료 되었습니다.\n메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
-//                        isAuthEmailResult = true;
+                        if (Parser.parseSimpleResult(response)) {
+                            ((MemberStartActivity) getActivity()).replaceFragment(emailAddress);
+                            Toast.makeText(getActivity(),
+                                    "메일 발송이 완료 되었습니다.\n메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "사용 할 수 없는 메일 주소예요. 메일 주소를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -176,7 +182,6 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                         Log.e(TAG, String.valueOf(error.getMessage()));
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
-//                        isAuthEmailResult = false;
                     }
                 }
         );

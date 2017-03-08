@@ -501,7 +501,7 @@ public class MemberStartLocalFragment extends Fragment
                         }
                         UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
                         Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
-                        ((MemberStartActivity) getActivity()).replaceFragment();
+                        ((MemberStartActivity) getActivity()).replaceFragment(null);
                     }
                 },
                 new Response.ErrorListener() {

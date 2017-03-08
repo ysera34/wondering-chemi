@@ -20,15 +20,17 @@
         android:textColor="@color/colorFontBody"/>
 
     <TextView
+        android:id="@+id/member_send_email_email_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="ysera34@naver.com 으로"
+        android:text="@string/member_send_email_format"
         android:textSize="14sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="인증 메일이 발송되었습니다."
         android:textSize="14sp"/>
 
@@ -40,6 +42,7 @@
         android:textSize="14sp"/>
 
     <TextView
+        android:id="@+id/member_send_email_confirm_button_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -47,6 +50,7 @@
         android:paddingBottom="14dp"
         android:paddingStart="50dp"
         android:paddingEnd="50dp"
+        android:clickable="true"
         android:text="확인"
         android:textSize="16sp"
         android:textColor="@color/color_selector_white_primary"

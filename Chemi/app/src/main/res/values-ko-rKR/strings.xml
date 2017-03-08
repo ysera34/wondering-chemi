@@ -130,4 +130,5 @@
     <string name="bottom_sheet_menu_delete">이미지 선택 취소하기</string>
     <string name="review_create_review_hint">이 제품이 좋은 이유와 아쉬운 점이 있다면 무엇인지 다른 사람들에게 알려주세요. (최소 15자)</string>
     <string name="review_create_review_length_format">%s자</string>
+    <string name="member_send_email_format">%s 으로</string>
 </resources>
