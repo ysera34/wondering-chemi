@@ -31,6 +31,7 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 import org.json.JSONObject;
 
@@ -274,6 +275,8 @@ public class MemberSignInLocalFragment extends Fragment
                             // sign in firebase user
                             signInFirebaseAccount(email, password);
 
+                            startActivity(SearchActivity.newIntent(getActivity()));
+                            getActivity().finish();
                         } else {
                             Toast.makeText(getActivity(),
                                     "가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();

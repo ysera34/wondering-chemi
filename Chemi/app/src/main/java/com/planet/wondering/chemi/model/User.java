@@ -10,6 +10,7 @@ public class User {
     private String mEmail;
     private String mName;
     private String mToken;
+    private String mPushToken;
 
     public int getId() {
         return mId;
@@ -43,6 +44,14 @@ public class User {
         mToken = token;
     }
 
+    public String getPushToken() {
+        return mPushToken;
+    }
+
+    public void setPushToken(String pushToken) {
+        mPushToken = pushToken;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -50,6 +59,7 @@ public class User {
                 ", mEmail='" + mEmail + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mToken='" + mToken + '\'' +
+                ", mPushToken='" + mPushToken + '\'' +
                 '}';
     }
 }

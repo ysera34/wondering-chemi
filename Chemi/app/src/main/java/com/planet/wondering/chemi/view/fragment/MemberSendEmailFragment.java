@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 /**
  * Created by yoon on 2017. 3. 8..
@@ -78,6 +80,13 @@ public class MemberSendEmailFragment extends Fragment implements View.OnClickLis
             case R.id.member_send_email_confirm_button_text_view:
                 Toast.makeText(getActivity(), "where i am", Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    public void updateUIByAuthEmail(String accessToken) {
+        if (mEmail != null) {
+            Log.i(TAG, "accessToken : " + accessToken);
+            ((MemberStartActivity) getActivity()).replaceFragment(accessToken);
         }
     }
 }

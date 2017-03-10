@@ -59,6 +59,7 @@ import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER_ID;
 
@@ -335,6 +336,29 @@ public class Parser {
         }
 //        Log.i(TAG, chemical.toString());
         return chemical;
+    }
+
+    public static User parseEmailConfirm(JSONObject responseObject) {
+        Log.i(TAG, responseObject.toString());
+        User user = new User();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+
+                JSONObject userObject = responseObject.optJSONObject(RESPONSE_DATA);
+                Log.i(TAG, userObject.toString());
+                if (userObject.toString().equals("{}")) {
+                    user = null;
+                } else {
+                    JSONObject tokenObject = responseObject.getJSONObject(RESPONSE_DATA);
+                    user.setToken(tokenObject.getString(TOKEN));
+                    user.setPushToken(tokenObject.getString(PUSH_TOKEN));
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return user;
     }
 
     public static User parseUser(JSONObject responseObject) {

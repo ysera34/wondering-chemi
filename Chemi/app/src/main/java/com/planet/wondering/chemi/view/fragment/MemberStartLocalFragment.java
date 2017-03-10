@@ -360,6 +360,7 @@ public class MemberStartLocalFragment extends Fragment
 
         Map<String, String> params = new HashMap<>();
         params.put("emailString", emailAddress);
+        params.put("platform", "0");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),

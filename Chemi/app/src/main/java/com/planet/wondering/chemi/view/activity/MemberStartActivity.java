@@ -46,6 +46,7 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
+import com.planet.wondering.chemi.view.fragment.MemberChangePasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSendEmailFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
@@ -159,6 +160,7 @@ public class MemberStartActivity extends AppCompatActivity
     }
 
     private MemberStartLocalFragment mMemberStartLocalFragment;
+    private MemberSendEmailFragment mMemberSendEmailFragment;
 
     @Override
     protected void onResume() {
@@ -166,21 +168,34 @@ public class MemberStartActivity extends AppCompatActivity
 
         Uri uriData = getIntent().getData();
         String accessToken = null;
+        String resetsPassword = null;
         if (uriData != null) {
             Log.i(TAG, String.valueOf(uriData.toString()));
             accessToken = uriData.getQueryParameter("accesstoken");
+            resetsPassword = uriData.getQueryParameter("resetspassword");
         } else {
             Log.i(TAG, "uriData : did not get it");
         }
         if (accessToken != null) {
-            Log.i(TAG, "accesstoken : " + accessToken);
-            try {
-                mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.member_start_fragment_container);
-                mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
-            } catch (ClassCastException e) {
-                Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
-                startActivity(MemberStartActivity.newIntent(getApplication()));
+//            Log.i(TAG, "accesstoken : " + accessToken);
+            if (resetsPassword.equals("0")) {
+                try {
+                    mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.member_start_fragment_container);
+                    mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
+                } catch (ClassCastException e) {
+                    Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
+                    startActivity(MemberStartActivity.newIntent(getApplication()));
+                }
+            } else if (resetsPassword.equals("1")) {
+                try {
+                    mMemberSendEmailFragment = (MemberSendEmailFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.member_start_fragment_container);
+                    mMemberSendEmailFragment.updateUIByAuthEmail(accessToken);
+                } catch (ClassCastException e) {
+                    Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
+                    startActivity(MemberStartActivity.newIntent(getApplication()));
+                }
             }
         } else {
             Log.e(TAG, "accesstoken : did not get it");
@@ -487,28 +502,41 @@ public class MemberStartActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         if (Parser.parseSimpleResult(response)) {
 //                            requestSubmitUserInfo(accessToken, platformId);
+                            User user = Parser.parseEmailConfirm(response);
 
-                            mFragmentManager.beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
-                                    .commit();
+                            if (user == null) {
+                                mFragmentManager.beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                        .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                                        .commit();
 
-                            mNaverEmail = emailAddress;
-                            mAccessToken = accessToken;
-                            mPlatformId = platformId;
+                                mNaverEmail = emailAddress;
+                                mAccessToken = accessToken;
+                                mPlatformId = platformId;
+                            } else {
+                                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                                    UserSharedPreferences.removeStoredToken(getApplicationContext());
+                                }
+                                UserSharedPreferences.setStoreToken(getApplicationContext(), user.getToken());
+                                Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+                                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                                finish();
+                            }
 
                         } else {
                             if (platformId == 1) {
                                 Toast.makeText(getApplicationContext(),
-                                        "구글 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
+                                        "동일 이메일이 구글을 통하지 않고 가입 되었다.... 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
                                 signOutGoogle();
                                 revokeAccessGoogle();
                             } else {
                                 Toast.makeText(getApplicationContext(),
-                                        "네이버 인증이 완료 되었으나, 동일 이메일이 사용 중이므로 다른 이메일로 가입해주세요.",
+                                        "동일 이메일이 네이버를 통하지 않고 가입 되었다... 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
                                 signOutNaver();
                                 revokeAccessNaver();
@@ -645,6 +673,11 @@ public class MemberStartActivity extends AppCompatActivity
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.member_start_fragment_container, MemberSendEmailFragment.newInstance(email))
                     .commit();
+        } else if (fragment instanceof MemberSendEmailFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.member_start_fragment_container, MemberChangePasswordFragment.newInstance(email))
+                    .commit();
         }
     }
 
@@ -682,11 +715,17 @@ public class MemberStartActivity extends AppCompatActivity
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_start_fragment_container);
         if (fragment instanceof MemberStartNameFragment) {
-
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .commit();
         } else if (fragment instanceof MemberSignInLocalFragment) {
-
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .commit();
         } else if (fragment instanceof MemberForgetPasswordFragment) {
-
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.member_start_fragment_container, MemberSignInLocalFragment.newInstance())
+                    .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
             startActivity(SearchActivity.newIntent(getApplicationContext()));
             finish();

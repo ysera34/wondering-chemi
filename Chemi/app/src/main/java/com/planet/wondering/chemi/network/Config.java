@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
 
 /**
  * Created by yoon on 2017. 1. 26..
@@ -32,7 +34,8 @@ public class Config {
 
     public static final class User {
         public static final String PATH = File.separator + "users";
-        public static final String EMAIL_PATH = File.separator + "email";
+        public static final String EMAIL_PATH = File.separator + EMAIL;
+        public static final String PASSWORD_PATH = File.separator + PASSWORD;
         public static final String EMAIL_STRING = File.separator + "emailstring";
         public static final String NAME_STRING = File.separator + "namestring";
         public static final String LOGIN_PARAMS = File.separator + "loginparams";
@@ -41,7 +44,10 @@ public class Config {
             public static final String USER_ID = "id";
             public static final String EMAIL = "email";
             public static final String NAME = "name";
+            public static final String PASSWORD = "password";
             public static final String TOKEN = "token";
+            public static final String ACCESS_TOKEN = "accessToken";
+            public static final String PUSH_TOKEN = "pushToken";
         }
     }
 
