@@ -730,8 +730,9 @@ public class MemberStartActivity extends AppCompatActivity
             startActivity(SearchActivity.newIntent(getApplicationContext()));
             finish();
         } else if (fragment instanceof MemberSurveyInfoFragment) {
-            startActivity(SearchActivity.newIntent(getApplicationContext()));
-            finish();
+//            startActivity(SearchActivity.newIntent(getApplicationContext()));
+//            finish();
+            super.onBackPressed();
         } else {
             super.onBackPressed();
         }

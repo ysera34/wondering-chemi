@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
-        android:text="본인의 피부 고민은 무엇인가요?"
+        android:text="자녀의 피부 고민은 무엇인가요?"
         android:textSize="19sp"
         android:textStyle="bold"
         android:textColor="@color/colorWhite"/>
@@ -34,13 +34,13 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/member_survey_adult_skin_type1_layout"
+            android:id="@+id/member_survey_baby_skin_type1_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/member_survey_adult_skin_type1_image_view"
+                android:id="@+id/member_survey_baby_skin_type1_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -58,13 +58,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/member_survey_adult_skin_type2_layout"
+            android:id="@+id/member_survey_baby_skin_type2_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/member_survey_adult_skin_type2_image_view"
+                android:id="@+id/member_survey_baby_skin_type2_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -75,44 +75,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="건성"
+                android:text="악건성"
                 android:textSize="19sp"
                 android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/member_survey_adult_skin_type3_layout"
+            android:id="@+id/member_survey_baby_skin_type3_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/member_survey_adult_skin_type3_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_circle_check_white_false"
-                android:scaleType="centerInside"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="지성"
-                android:textSize="19sp"
-                android:textColor="@color/colorWhite"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/member_survey_adult_skin_type4_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/member_survey_adult_skin_type4_image_view"
+                android:id="@+id/member_survey_baby_skin_type3_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

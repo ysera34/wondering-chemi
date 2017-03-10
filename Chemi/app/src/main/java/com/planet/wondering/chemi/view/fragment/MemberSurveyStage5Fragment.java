@@ -14,16 +14,16 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 
 /**
- * Created by yoon on 2017. 2. 20..
+ * Created by yoon on 2017. 3. 10..
  */
 
-public class MemberSurveyStage3Fragment extends Fragment implements View.OnClickListener {
+public class MemberSurveyStage5Fragment extends Fragment implements View.OnClickListener {
 
-    public static MemberSurveyStage3Fragment newInstance() {
+    public static MemberSurveyStage5Fragment newInstance() {
 
         Bundle args = new Bundle();
 
-        MemberSurveyStage3Fragment fragment = new MemberSurveyStage3Fragment();
+        MemberSurveyStage5Fragment fragment = new MemberSurveyStage5Fragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,12 +37,12 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSkinTypeLayoutIds = new int[]{
-                R.id.member_survey_adult_skin_type1_layout, R.id.member_survey_adult_skin_type2_layout,
-                R.id.member_survey_adult_skin_type3_layout, R.id.member_survey_adult_skin_type4_layout,};
+                R.id.member_survey_baby_skin_type1_layout, R.id.member_survey_baby_skin_type2_layout,
+                R.id.member_survey_baby_skin_type3_layout,};
         mSkinTypeLayouts = new LinearLayout[mSkinTypeLayoutIds.length];
         mSkinTypeImageViewIds = new int[]{
-                R.id.member_survey_adult_skin_type1_image_view, R.id.member_survey_adult_skin_type2_image_view,
-                R.id.member_survey_adult_skin_type3_image_view, R.id.member_survey_adult_skin_type4_image_view,};
+                R.id.member_survey_baby_skin_type1_image_view, R.id.member_survey_baby_skin_type2_image_view,
+                R.id.member_survey_baby_skin_type3_image_view,};
         mSkinTypeImageViews = new ImageView[mSkinTypeImageViewIds.length];
     }
 
@@ -50,7 +50,7 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_member_survey_stage3, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_survey_stage5, container, false);
         for (int i = 0; i < mSkinTypeLayoutIds.length; i++) {
             mSkinTypeLayouts[i] = (LinearLayout) view.findViewById(mSkinTypeLayoutIds[i]);
             mSkinTypeLayouts[i].setOnClickListener(this);
@@ -67,22 +67,19 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.member_survey_adult_skin_type1_layout:
+            case R.id.member_survey_baby_skin_type1_layout:
                 checkImageView(0);
                 break;
-            case R.id.member_survey_adult_skin_type2_layout:
+            case R.id.member_survey_baby_skin_type2_layout:
                 checkImageView(1);
                 break;
-            case R.id.member_survey_adult_skin_type3_layout:
+            case R.id.member_survey_baby_skin_type3_layout:
                 checkImageView(2);
-                break;
-            case R.id.member_survey_adult_skin_type4_layout:
-                checkImageView(3);
                 break;
         }
     }
 
-    private boolean[] hasSkinTypes = new boolean[]{false, false, false, false};
+    private boolean[] hasSkinTypes = new boolean[]{false, false, false};
 
     private void checkImageView(int position) {
 

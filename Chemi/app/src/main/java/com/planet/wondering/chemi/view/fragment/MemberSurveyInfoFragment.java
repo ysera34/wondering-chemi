@@ -52,8 +52,8 @@ public class MemberSurveyInfoFragment extends Fragment
         mMemberSurveyStageFragments.add(MemberSurveyStage1Fragment.newInstance());
         mMemberSurveyStageFragments.add(MemberSurveyStage2Fragment.newInstance());
         mMemberSurveyStageFragments.add(MemberSurveyStage3Fragment.newInstance());
-        mMemberSurveyStageFragments.add(MemberSurveyStage2Fragment.newInstance());
-        mMemberSurveyStageFragments.add(MemberSurveyStage3Fragment.newInstance());
+        mMemberSurveyStageFragments.add(MemberSurveyStage4Fragment.newInstance());
+        mMemberSurveyStageFragments.add(MemberSurveyStage5Fragment.newInstance());
     }
 
     @Nullable

@@ -141,13 +141,13 @@ public class MemberSurveyStage1Fragment extends Fragment {
                 mYearCheckBox.setChecked(false);
                 isYearSelected = false;
                 mSurveyCompletedListener.onSurveyCompleted(1, false);
-                mYearLayoutManager.setScrollEnable(false);
+                mYearLayoutManager.setScrollEnable(true);
             } else if (!mYearCheckBox.isChecked() && !isYearSelected) {
                 mYearCheckBox.setChecked(true);
                 isYearSelected = true;
                 mSurveyCompletedListener.onSurveyCompleted(1, true);
-                mMemberSurveyYearRecyclerView.setNestedScrollingEnabled(true);
-                mYearLayoutManager.setScrollEnable(true);
+                mYearLayoutManager.setScrollEnable(false);
+//                mMemberSurveyYearRecyclerView.setNestedScrollingEnabled(true);
             }
         }
 
