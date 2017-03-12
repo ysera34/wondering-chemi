@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,23 +81,56 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
                 checkImageView(3);
                 break;
         }
+
+        if (mSurveyCompleteStatus > 0) {
+            mSurveyCompletedListener.onSurveyCompleted(3, true);
+            mSurveyCompletedListener.onSurveyValueSubmit(3, mSurveyResultValue);
+        } else {
+            mSurveyCompletedListener.onSurveyCompleted(3, false);
+        }
     }
 
+    private int mSurveyCompleteStatus = 0;
+    private int mSurveyResultValue = 0;
     private boolean[] hasSkinTypes = new boolean[]{false, false, false, false};
 
     private void checkImageView(int position) {
 
-//        for (int i = 0; i < hasSkinTypes.length; i++) {
-//            mSkinTypeImageViews[i].setImageResource(R.drawable.ic_circle_check_white_false);
-//        }
-//        mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_true);
-        if (!hasSkinTypes[position]) {
-            mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_true);
-            hasSkinTypes[position] = true;
+        if (position == 0) {
+            if (!hasSkinTypes[position]) {
+                for (int i = 1; i < 4; i++) {
+                    if (hasSkinTypes[i]) {
+                        checkImageView(i);
+                    }
+                }
+                mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_true);
+                hasSkinTypes[position] = true;
+                mSurveyCompleteStatus++;
+                mSurveyResultValue = mSurveyResultValue + (int) Math.pow(10, (hasSkinTypes.length - 1 - position));
+            } else {
+                mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_false);
+                hasSkinTypes[position] = false;
+                mSurveyCompleteStatus--;
+                mSurveyResultValue = mSurveyResultValue - (int) Math.pow(10, (hasSkinTypes.length - 1 - position));
+            }
         } else {
-            mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_false);
-            hasSkinTypes[position] = false;
+            if (hasSkinTypes[0]) {
+                checkImageView(0);
+            }
+
+            if (!hasSkinTypes[position]) {
+                mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_true);
+                hasSkinTypes[position] = true;
+                mSurveyCompleteStatus++;
+                mSurveyResultValue = mSurveyResultValue + (int) Math.pow(10, (hasSkinTypes.length - 1 - position));
+            } else {
+                mSkinTypeImageViews[position].setImageResource(R.drawable.ic_circle_check_white_false);
+                hasSkinTypes[position] = false;
+                mSurveyCompleteStatus--;
+                mSurveyResultValue = mSurveyResultValue - (int) Math.pow(10, (hasSkinTypes.length - 1 - position));
+            }
         }
+        Log.i("mSurveyResultValue", "mSurveyResultValue : " + mSurveyResultValue);
     }
 
     OnSurveyCompletedListener mSurveyCompletedListener;

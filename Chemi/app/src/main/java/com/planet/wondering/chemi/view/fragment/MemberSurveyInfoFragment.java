@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 import java.util.ArrayList;
 
@@ -44,6 +46,7 @@ public class MemberSurveyInfoFragment extends Fragment
     private TextView mMemberSurveyInfoConfirmButtonTextView;
 
     private ArrayList<Fragment> mMemberSurveyStageFragments;
+    private User mUser;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class MemberSurveyInfoFragment extends Fragment
         mMemberSurveyStageFragments.add(MemberSurveyStage3Fragment.newInstance());
         mMemberSurveyStageFragments.add(MemberSurveyStage4Fragment.newInstance());
         mMemberSurveyStageFragments.add(MemberSurveyStage5Fragment.newInstance());
+
+        mUser = new User();
     }
 
     @Nullable
@@ -69,6 +74,7 @@ public class MemberSurveyInfoFragment extends Fragment
                 (ProgressBar) view.findViewById(R.id.member_survey_info_progress_bar);
         mMemberSurveyInfoViewPager =
                 (ViewPager) view.findViewById(R.id.member_survey_info_view_pager);
+        mMemberSurveyInfoViewPager.setOffscreenPageLimit(mMemberSurveyStageFragments.size() - 1);
         mMemberSurveyInfoViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -104,21 +110,16 @@ public class MemberSurveyInfoFragment extends Fragment
                 Log.d(TAG, "create AlertDialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("부가정보 입력 다음에 하기");
-                builder.setMessage("부가정보 입력을 다음에 하시겠습니까?");
+                builder.setMessage("부가정보 입력을 나중에 하실건가요?");
                 builder.setCancelable(false);
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        startActivity(SearchActivity.newIntent(getActivity()));
+                        getActivity().finish();
                     }
                 });
                 builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -130,6 +131,10 @@ public class MemberSurveyInfoFragment extends Fragment
                 int currentStage = mMemberSurveyInfoViewPager.getCurrentItem();
                 if (currentStage < mMemberSurveyStageFragments.size() - 1) {
                     mMemberSurveyInfoViewPager.setCurrentItem(currentStage + 1);
+                } else if (currentStage == mMemberSurveyStageFragments.size() - 1) {
+                    requestSubmitUserInfo(mUser);
+                    startActivity(SearchActivity.newIntent(getActivity()));
+                    getActivity().finish();
                 }
                 break;
         }
@@ -157,29 +162,31 @@ public class MemberSurveyInfoFragment extends Fragment
                 getString(R.string.survey_info_progress_stage_format,
                         String.valueOf(mMemberSurveyStageFragments.size()),
                         String.valueOf(position + 1)));
-        if (mCurrentPosition < position) {
-            mMemberSurveyInfoConfirmButtonTextView
-                    .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
-            mMemberSurveyInfoConfirmButtonTextView
-                    .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
-        }
+
+        // mMemberSurveyInfoConfirmButtonTextView initialize
+        mMemberSurveyInfoConfirmButtonTextView
+                .setTextColor(getResources().getColor(R.color.colorReef));
+        mMemberSurveyInfoConfirmButtonTextView
+                .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        // 0: stop; 1: touch in; 2: touch out;
-        Log.i(TAG, "onPageScrollStateChanged position : " + String.valueOf(state));
+        // 1: touch in; 2: touch out and find its rightful place; 0: stop;
+//        Log.i(TAG, "onPageScrollStateChanged position : " + String.valueOf(state));
     }
 
     public void updateConfirmButtonTextView(int stageNumber, boolean isCompleted) {
         switch (stageNumber) {
-            case 1:case 2:
+            case 1:case 2:case 3:
                 if (isCompleted) {
+                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
                     mMemberSurveyInfoConfirmButtonTextView
                             .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
                     mMemberSurveyInfoConfirmButtonTextView
                             .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
                 } else {
+                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
                     mMemberSurveyInfoConfirmButtonTextView
                             .setTextColor(getResources().getColor(R.color.colorReef));
                     mMemberSurveyInfoConfirmButtonTextView
@@ -189,7 +196,48 @@ public class MemberSurveyInfoFragment extends Fragment
         }
     }
 
-//    public void onBackPressed() {
-//
-//    }
+    public void updateUserInfo(int stageNumber, int value) {
+        switch (stageNumber) {
+            case 1:
+                mUser.setBirthYear(value);
+                break;
+            case 2:
+                // female : 0; male : 1;
+                if (value == 0) {
+                    mUser.setGender(true);
+                } else {
+                    mUser.setGender(false);
+                }
+                break;
+            case 3:
+//                if (value / 1000 == 1) {
+//                    mUser.setHasDrySkin(false);
+//                    mUser.setHasOilySkin(false);
+//                    mUser.setHasAllergy(false);
+//                    break;
+//                }
+                mUser.setHasDrySkin(false);
+                mUser.setHasOilySkin(false);
+                mUser.setHasAllergy(false);
+                if (value / 100 == 1) {
+                    mUser.setHasDrySkin(true);
+                }
+                if (value / 10 == 1 || value / 10 == 11) {
+                    mUser.setHasOilySkin(true);
+                }
+                if (value % 10 == 1) {
+                    mUser.setHasAllergy(true);
+                }
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+        Log.i(TAG, mUser.toString());
+    }
+
+    private void requestSubmitUserInfo(User user) {
+
+    }
 }

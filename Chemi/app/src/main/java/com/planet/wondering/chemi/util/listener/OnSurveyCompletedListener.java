@@ -7,4 +7,6 @@ package com.planet.wondering.chemi.util.listener;
 public interface OnSurveyCompletedListener {
 
     void onSurveyCompleted(int stageNumber, boolean isCompleted);
+
+    void onSurveyValueSubmit(int stageNumber, int value);
 }

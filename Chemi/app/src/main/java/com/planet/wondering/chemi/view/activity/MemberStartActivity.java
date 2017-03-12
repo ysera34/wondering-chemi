@@ -708,6 +708,13 @@ public class MemberStartActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSurveyValueSubmit(int stageNumber, int value) {
+        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.member_start_fragment_container);
+        surveyInfoFragment.updateUserInfo(stageNumber, value);
+    }
+
+    @Override
     public void onBackPressed() {
 //        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.member_start_fragment_container);

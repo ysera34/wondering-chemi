@@ -43,8 +43,8 @@ public class MemberSurveyStage1Fragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mYears = new ArrayList<>();
-        mDefaultYear = 1989;
-        for (int i = mDefaultYear - 40 ; i < mDefaultYear + 25; i++) {
+        mDefaultYear = 1950;
+        for (int i = mDefaultYear ; i < mDefaultYear + 65; i++) {
             mYears.add(i);
         }
     }
@@ -127,6 +127,7 @@ public class MemberSurveyStage1Fragment extends Fragment {
 
             mYearTextView = (TextView) itemView.findViewById(R.id.list_item_year_text_view);
             mYearCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_year_check_box);
+            mYearCheckBox.setChecked(false);
             mYearCheckBox.setOnCheckedChangeListener(this);
         }
 
@@ -137,6 +138,9 @@ public class MemberSurveyStage1Fragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+//            Toast.makeText(getActivity(), String.valueOf(mDefaultYear + getAdapterPosition()),
+//                    Toast.LENGTH_SHORT).show();
+
             if (mYearCheckBox.isChecked() && isYearSelected) {
                 mYearCheckBox.setChecked(false);
                 isYearSelected = false;
@@ -148,6 +152,7 @@ public class MemberSurveyStage1Fragment extends Fragment {
                 mSurveyCompletedListener.onSurveyCompleted(1, true);
                 mYearLayoutManager.setScrollEnable(false);
 //                mMemberSurveyYearRecyclerView.setNestedScrollingEnabled(true);
+                mSurveyCompletedListener.onSurveyValueSubmit(1, mDefaultYear + getAdapterPosition());
             }
         }
 

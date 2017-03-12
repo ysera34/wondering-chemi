@@ -92,6 +92,13 @@ public class MemberSurveyStage2Fragment extends Fragment implements View.OnClick
                 }
                 break;
         }
+        // female : 0; male : 1;
+        if (isCheckedFemale) {
+            mSurveyCompletedListener.onSurveyValueSubmit(2, 0);
+        } else if (isCheckedMale) {
+            mSurveyCompletedListener.onSurveyValueSubmit(2, 1);
+        }
+
     }
 
     OnSurveyCompletedListener mSurveyCompletedListener;
