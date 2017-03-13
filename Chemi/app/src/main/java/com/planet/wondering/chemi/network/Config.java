@@ -88,6 +88,8 @@ public class Config {
 //            public static final String RELEASED = "released";
             public static final String RATING = "rated";
             public static final String RATING_COUNT = "reviewed";
+            public static final String WHOLE_CHEMICALS = "isComplete";
+            public static final String ARCHIVE = "isKept";
             public static final String IMAGE_PATH = "imagePath";
             public static final String ALLERGY = "allergied";
             public static final String CHEMICALS_SIZE = "chemicaled";
@@ -106,6 +108,7 @@ public class Config {
             public static final String PURPOSE = "purpose";
             public static final String MAX_VALUE = "ewglevel";
             public static final String MIN_VALUE = "ewglevel2";
+            public static final String DATA_SCORE = "dataScore";
             public static final String ALLERGY = "isAllergy";
             public static final String ALLERGY_DESCRIPTION = "allergyDescription";
             public static final String HAZARD_SIZE = "hazarded";

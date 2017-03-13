@@ -33,6 +33,8 @@
     <string name="product_review_count">(%s명)</string>
     <string name="product_detail_tab_title1">성분</string>
     <string name="product_detail_tab_title2">리뷰</string>
+    <string name="chemical_whole_true_message">전성분</string>
+    <string name="chemical_whole_false_message">주성분</string>
     <string name="chemical_list_sort_hazard">위험도 순</string>
     <string name="chemical_list_sort_notation">제품표기순</string>
     <string name="chemical_dialog_name_eng_format">[%s]</string>
@@ -131,4 +133,21 @@
     <string name="review_create_review_hint">이 제품이 좋은 이유와 아쉬운 점이 있다면 무엇인지 다른 사람들에게 알려주세요. (최소 15자)</string>
     <string name="review_create_review_length_format">%s자</string>
     <string name="member_send_email_format">%s 으로</string>
+
+    <string name="ewg_reason_description_null">근거자료가 없어요</string>
+    <string name="ewg_reason_description_none">근거자료가 없어요</string>
+    <string name="ewg_reason_description_limited">근거자료가 미약해요</string>
+    <string name="ewg_reason_description_fair">근거자료가 적절해요</string>
+    <string name="ewg_reason_description_good">근거자료가 많아요</string>
+    <string name="ewg_reason_description_robust">근거자료가 풍부해</string>
+
+    <string-array name="ewg_reason_description_array">
+        <item>@string/ewg_reason_description_null</item>
+        <item>@string/ewg_reason_description_none</item>
+        <item>@string/ewg_reason_description_limited</item>
+        <item>@string/ewg_reason_description_fair</item>
+        <item>@string/ewg_reason_description_good</item>
+        <item>@string/ewg_reason_description_robust</item>
+    </string-array>
+
 </resources>

@@ -86,7 +86,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/product_detail_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/toolbar_height"
                 app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
                 app:titleTextColor="@color/colorFontToolbarTitle"
                 app:subtitleTextAppearance="@style/ProductToolbarTextAppearance.Subtitle"

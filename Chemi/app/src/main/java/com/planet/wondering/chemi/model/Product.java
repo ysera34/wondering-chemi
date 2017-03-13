@@ -21,6 +21,7 @@ public class Product implements Serializable {
     private int mRatingCount;
     private int mAllergyCount;
     private boolean mArchive;
+    private boolean mWholeChemicals;
     private ArrayList<Chemical> mChemicals;
 
     public Product() {
@@ -122,6 +123,14 @@ public class Product implements Serializable {
 
     public void setArchive(boolean archive) {
         mArchive = archive;
+    }
+
+    public boolean isWholeChemicals() {
+        return mWholeChemicals;
+    }
+
+    public void setWholeChemicals(boolean wholeChemicals) {
+        mWholeChemicals = wholeChemicals;
     }
 
     public ArrayList<Chemical> getChemicals() {

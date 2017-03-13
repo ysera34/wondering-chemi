@@ -17,6 +17,7 @@ public class Chemical implements Serializable {
     private String mPurpose;
     private byte mMinHazard;
     private byte mMaxHazard;
+    private byte mDataScore;
     private boolean mAllergy;
     private String mAllergyDescription;
     private ArrayList<Hazard> mHazards;
@@ -71,6 +72,39 @@ public class Chemical implements Serializable {
 
     public void setMaxHazard(byte maxHazard) {
         mMaxHazard = maxHazard;
+    }
+
+    public byte getDataScore() {
+        return mDataScore;
+    }
+
+    public void setDataScore(byte dataScore) {
+        mDataScore = dataScore;
+    }
+
+    public int getHazardReasonStringResId() {
+        int hazardReasonStringResId = 0;
+        switch (getDataScore()) {
+            case 0:
+                hazardReasonStringResId = R.string.ewg_reason_description_none;
+                break;
+            case 1:
+                hazardReasonStringResId = R.string.ewg_reason_description_limited;
+                break;
+            case 2:
+                hazardReasonStringResId = R.string.ewg_reason_description_fair;
+                break;
+            case 3:
+                hazardReasonStringResId = R.string.ewg_reason_description_good;
+                break;
+            case 4:
+                hazardReasonStringResId = R.string.ewg_reason_description_robust;
+                break;
+            default:
+                hazardReasonStringResId = R.string.ewg_reason_description_null;
+                break;
+        }
+        return hazardReasonStringResId;
     }
 
     public boolean isAllergy() {

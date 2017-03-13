@@ -109,7 +109,6 @@ public class ProductListFragment extends Fragment {
         return fragment;
     }
 
-//    private ProductStorage mProductStorage;
     private StringBuilder mUrlBuilder;
     private ArrayList<Product> mProducts;
     private ArrayList<Integer> mProductIds;

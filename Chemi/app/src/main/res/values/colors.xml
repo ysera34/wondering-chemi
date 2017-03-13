@@ -22,6 +22,7 @@
     <color name="colorFontToolbarSubtitle">#4a4a4a</color>
 
     <!-- widget border color -->
+    <color name="colorBlackHaze">#F7F7F7</color>
     <color name="colorStarDust">#9e9e9e</color>
     <color name="colorFrenchGray">#bdbdbd</color>
     <color name="colorZircon">#e0e0e0</color>

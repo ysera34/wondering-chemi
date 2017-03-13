@@ -79,15 +79,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="EWG 등급"
+                android:text="EWG 등급 "
                 android:textSize="12sp"
+                android:textColor="@color/colorFontToolbarSubtitle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="|"
+                android:textSize="11sp"
                 android:textColor="@color/colorFontToolbarSubtitle"/>
 
             <TextView
                 android:id="@+id/chemical_dialog_reason_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:text="근거 자료가 풍부해요"
                 android:textSize="12sp"
                 android:textColor="@color/colorFontBody"/>

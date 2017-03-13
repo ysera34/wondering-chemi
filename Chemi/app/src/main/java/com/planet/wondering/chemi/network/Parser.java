@@ -23,6 +23,7 @@ import static com.planet.wondering.chemi.network.Config.COUNT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.ALLERGY_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICALS;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICAL_ID;
+import static com.planet.wondering.chemi.network.Config.Chemical.Key.DATA_SCORE;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.HAZARDS;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.HAZARD_SIZE;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.MAX_VALUE;
@@ -41,6 +42,7 @@ import static com.planet.wondering.chemi.network.Config.PAGE;
 import static com.planet.wondering.chemi.network.Config.PAGE_NEXT;
 import static com.planet.wondering.chemi.network.Config.PAGE_PREV;
 import static com.planet.wondering.chemi.network.Config.Product.Key.ALLERGY;
+import static com.planet.wondering.chemi.network.Config.Product.Key.ARCHIVE;
 import static com.planet.wondering.chemi.network.Config.Product.Key.BRAND;
 import static com.planet.wondering.chemi.network.Config.Product.Key.CHEMICALS_SIZE;
 import static com.planet.wondering.chemi.network.Config.Product.Key.IMAGE_PATH;
@@ -48,6 +50,7 @@ import static com.planet.wondering.chemi.network.Config.Product.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.Product.Key.PRODUCT_ID;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING_COUNT;
+import static com.planet.wondering.chemi.network.Config.Product.Key.WHOLE_CHEMICALS;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
@@ -248,6 +251,10 @@ public class Parser {
                 }
                 product.setRatingValue(ratingFloat);
                 product.setRatingCount(productJSONObject.getInt(RATING_COUNT));
+                if (productJSONObject.getInt(WHOLE_CHEMICALS) == 1) {
+                    product.setWholeChemicals(true);
+                }
+                product.setArchive(productJSONObject.getBoolean(ARCHIVE));
                 product.setAllergyCount(productJSONObject.getInt(ALLERGY));
                 int chemicalSize = productJSONObject.getInt(CHEMICALS_SIZE);
                 if (chemicalSize > 0) {
@@ -272,6 +279,8 @@ public class Parser {
                         if (minValue != -1) {
                             chemical.setMinHazard((byte) minValue);
                         }
+                        int dataScore = chemicalJSONObject.getInt(DATA_SCORE);
+                        chemical.setDataScore((byte) dataScore);
                         int allergyState = chemicalJSONObject.getInt(Key.ALLERGY);
                         if (allergyState > 0) {
                             chemical.setAllergy(true);
@@ -308,9 +317,14 @@ public class Parser {
                 if (minValue != -1) {
                     chemical.setMinHazard((byte) minValue);
                 }
+                int dataScore = chemicalJSONObject.getInt(DATA_SCORE);
+                chemical.setDataScore((byte) dataScore);
                 chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                 chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
+                if (chemical.getPurpose().equals("null")) {
+                    chemical.setPurpose("배합목적이 알려지지 않았어요");
+                }
                 chemical.setAllergy(chemicalJSONObject.getBoolean(Key.ALLERGY));
                 chemical.setAllergyDescription(chemicalJSONObject.getString(ALLERGY_DESCRIPTION));
                 int hazardSize = chemicalJSONObject.getInt(HAZARD_SIZE);

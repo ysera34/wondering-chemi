@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
         android:background="@color/colorWhite"
         android:elevation="1dp">
 
@@ -26,38 +29,57 @@
                 android:text="성분 구성 및 정보"/>
 
             <TextView
+                android:id="@+id/chemical_whole_text_view"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/chemical_sort_info_text_view"
+                android:layout_marginEnd="4dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textSize="13sp"
+                android:textColor="@color/colorFontBody"
+                android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+            <TextView
                 android:id="@+id/chemical_sort_info_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:textSize="13sp"
                 android:textColor="@color/colorFontBody"
-                android:text="제품표기순"/>
+                android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="4dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="6dp"
                 android:text="알러지 주의성분"
                 android:textSize="15sp"
                 android:textColor="@color/colorFontNormal"/>
 
             <TextView
                 android:id="@+id/chemical_include_allergy_total_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="2dp"
+                android:gravity="center"
                 android:textSize="22sp"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/widget_solid_oval"/>
 
             <TextView
                 android:layout_width="wrap_content"

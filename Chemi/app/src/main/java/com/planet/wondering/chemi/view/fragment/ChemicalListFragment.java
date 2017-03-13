@@ -86,6 +86,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     private Chemical mChemical;
     private ArrayList<Chemical> mChemicals;
 
+    private TextView mChemicalWholeTextView;
     private TextView mChemicalSortInfoTextView;
     private TextView mChemicalIncludeAllergyTotalTextView;
     private HexagonFilterLayout[] mHexagonFilterLayouts;
@@ -98,7 +99,6 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
-//        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
         mChemicals = mProduct.getChemicals();
     }
 
@@ -108,6 +108,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical_list, container, false);
 
+        mChemicalWholeTextView = (TextView) view.findViewById(R.id.chemical_whole_text_view);
         mChemicalSortInfoTextView = (TextView) view.findViewById(R.id.chemical_sort_info_text_view);
         mChemicalIncludeAllergyTotalTextView =
                 (TextView) view.findViewById(R.id.chemical_include_allergy_total_text_view);
@@ -150,6 +151,12 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         arrangeHexagonFilterLayouts(0);
+        if (mProduct.isWholeChemicals()) {
+            mChemicalWholeTextView.setText(getString(R.string.chemical_whole_true_message));
+        } else {
+            mChemicalWholeTextView.setText(getString(R.string.chemical_whole_false_message));
+        }
+        mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
     }
 
     @Override

@@ -51,6 +51,10 @@
 
     </style>
 
+    <style name="ToolbarTitleTextAppearance" parent="@style/Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="ProductToolbarTextAppearance">
         <!--<item name="android:shadowDx">1</item>-->
         <!--<item name="android:shadowDy">1</item>-->
@@ -59,7 +63,7 @@
     </style>
 
     <style name="ProductToolbarTextAppearance.Title">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="ProductToolbarTextAppearance.Subtitle">

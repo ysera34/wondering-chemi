@@ -102,9 +102,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/member_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/toolbar_height"
                 app:title="마이페이지"
-                app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
+                app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
                 app:titleTextColor="@color/colorFontToolbarTitle"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin">

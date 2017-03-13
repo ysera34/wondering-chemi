@@ -94,7 +94,6 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, 0);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
-//        mProduct = ProductStorage.getStorage(getActivity()).getProduct(mProductId);
 
         mProductDetailListFragments = new ArrayList<>();
         mProductDetailListFragmentTitles = new ArrayList<>();
@@ -112,16 +111,16 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         mProductAppBarLayout = (AppBarLayout) view.findViewById(R.id.product_detail_app_bar_layout);
-//        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-//                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
-//                } else {
-//                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
-//                }
-//            }
-//        });
+        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
+                } else {
+                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
+                }
+            }
+        });
         mProductToolbar = (Toolbar) view.findViewById(R.id.product_detail_toolbar);
         ((ProductPagerActivity) getActivity()).setSupportActionBar(mProductToolbar);
 

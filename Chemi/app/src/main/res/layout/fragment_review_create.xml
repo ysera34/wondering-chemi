@@ -7,9 +7,11 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/review_create_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/toolbar_height"
+        app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
         android:title="리뷰 작성"
         android:elevation="4dp"
+
         android:background="@color/colorWhite">
     </android.support.v7.widget.Toolbar>
 

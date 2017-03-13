@@ -81,6 +81,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
 
 //    private CircleHazardView mChemicalDialogCircleHazardView;
     private TextView mChemicalDialogCircleTextView;
+    private TextView mChemicalDialogReasonTextView;
     private TextView mChemicalDialogNameKoTextView;
     private TextView mChemicalDialogNameEngTextView;
     private TextView mChemicalDialogHazardLineTextView;
@@ -100,7 +101,6 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
         mChemicalId = getArguments().getInt(ARG_CHEMICAL_ID, -1);
-//        mChemical = ChemicalStorage.getStorage(getActivity()).getChemical(mChemicalId);
         mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
         mHazards = mChemical.getHazards();
     }
@@ -120,6 +120,9 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
 //                view.findViewById(R.id.chemical_dialog_circle_hazard_view);
 //        mChemicalDialogCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
 //        mChemicalDialogCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
+        mChemicalDialogReasonTextView = (TextView)
+                view.findViewById(R.id.chemical_dialog_reason_text_view);
+        mChemicalDialogReasonTextView.setText(getString(mChemical.getHazardReasonStringResId()));
 
         mChemicalDialogNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_ko_text_view);

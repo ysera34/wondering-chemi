@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.fragment.ProductPagerFragment;
@@ -92,5 +94,15 @@ public class ProductPagerActivity extends BottomNavigationActivity {
         } else {
             setupBottomNavigation(0);
         }
+    }
+
+    public void showBottomNavigationView() {
+        mBottomNavigationLayout.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
+    }
+
+    public void hideBottomNavigationView() {
+        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
+                .setInterpolator(new AccelerateInterpolator(2));
     }
 }
