@@ -13,17 +13,9 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/member_start_info_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="info"
-            android:textAllCaps="false"/>
-
-        <Button
             android:id="@+id/member_survey_info_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/member_start_info_button"
             android:text="survey"
             android:textAllCaps="false"/>
 
@@ -85,15 +77,21 @@
                     android:textAppearance="@style/MemberStartTextAppearance"/>
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/naver_sign_out_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/naver_revoke_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/naver_sign_out_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/naver_revoke_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/member_start_google_layout"
@@ -123,15 +121,21 @@
                     android:textAppearance="@style/MemberStartTextAppearance"/>
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/google_sign_out_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/google_revoke_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/google_sign_out_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/google_revoke_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/member_start_local_layout"

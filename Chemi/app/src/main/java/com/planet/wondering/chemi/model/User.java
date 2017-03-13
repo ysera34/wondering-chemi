@@ -61,6 +61,15 @@ public class User {
         mPushToken = pushToken;
     }
 
+    // female : 0; male : 1;
+    public int getGender() {
+        if (isGender()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     public boolean isGender() {
         return mGender;
     }
@@ -77,12 +86,28 @@ public class User {
         mBirthYear = birthYear;
     }
 
+    public int getHasDrySkin() {
+        if (isHasDrySkin()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public boolean isHasDrySkin() {
         return mHasDrySkin;
     }
 
     public void setHasDrySkin(boolean hasDrySkin) {
         mHasDrySkin = hasDrySkin;
+    }
+
+    public int getHasOilySkin() {
+        if (isHasOilySkin()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public boolean isHasOilySkin() {
@@ -93,12 +118,28 @@ public class User {
         mHasOilySkin = hasOilySkin;
     }
 
+    public int getHasAllergy() {
+        if (isHasAllergy()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public boolean isHasAllergy() {
         return mHasAllergy;
     }
 
     public void setHasAllergy(boolean hasAllergy) {
         mHasAllergy = hasAllergy;
+    }
+
+    public int getHasChild() {
+        if (isHasChild()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public boolean isHasChild() {
@@ -109,12 +150,28 @@ public class User {
         mHasChild = hasChild;
     }
 
+    public int getChildHasDrySkin() {
+        if (isChildHasDrySkin()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public boolean isChildHasDrySkin() {
         return mChildHasDrySkin;
     }
 
     public void setChildHasDrySkin(boolean childHasDrySkin) {
         mChildHasDrySkin = childHasDrySkin;
+    }
+
+    public int getChildHasAllergy() {
+        if (isChildHasAllergy()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public boolean isChildHasAllergy() {

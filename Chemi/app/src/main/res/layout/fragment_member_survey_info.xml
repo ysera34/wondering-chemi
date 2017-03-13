@@ -11,16 +11,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/member_survey_info_skip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:text="다음에 할래요"
-            android:textSize="12sp"
-            android:textColor="#6c9805"
-            android:background="@null"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <ImageButton
+                android:id="@+id/member_survey_prev_page_image_button"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_back_white"
+                android:background="@android:color/transparent"/>
+
+            <Button
+                android:id="@+id/member_survey_info_skip_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:text="다음에 할래요"
+                android:textSize="12sp"
+                android:textColor="#6c9805"
+                android:background="@null"/>
+
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/member_survey_info_progress_stage_text_view"

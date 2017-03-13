@@ -12,15 +12,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
  * Created by yoon on 2017. 2. 20..
@@ -40,6 +57,7 @@ public class MemberSurveyInfoFragment extends Fragment
         return fragment;
     }
 
+    private ImageButton mMemberSurveyPrevPageImageButton;
     private Button mMemberSurveyInfoSkipButton;
     private TextView mMemberSurveyInfoProgressStageTextView;
     private ProgressBar mMemberSurveyInfoProgressBar;
@@ -67,6 +85,9 @@ public class MemberSurveyInfoFragment extends Fragment
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_survey_info, container, false);
+        mMemberSurveyPrevPageImageButton = (ImageButton)
+                view.findViewById(R.id.member_survey_prev_page_image_button);
+        mMemberSurveyPrevPageImageButton.setOnClickListener(this);
         mMemberSurveyInfoSkipButton = (Button) view.findViewById(R.id.member_survey_info_skip_button);
         mMemberSurveyInfoSkipButton.setOnClickListener(this);
         mMemberSurveyInfoProgressStageTextView =
@@ -97,6 +118,11 @@ public class MemberSurveyInfoFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mMemberSurveyInfoViewPager.getCurrentItem() == 0) {
+            mMemberSurveyPrevPageImageButton.setVisibility(View.GONE);
+        } else {
+            mMemberSurveyPrevPageImageButton.setVisibility(View.VISIBLE);
+        }
         mMemberSurveyInfoProgressStageTextView.setText(
                 getString(R.string.survey_info_progress_stage_format,
                         String.valueOf(mMemberSurveyStageFragments.size()),
@@ -105,7 +131,19 @@ public class MemberSurveyInfoFragment extends Fragment
 
     @Override
     public void onClick(View v) {
+        int currentStage = mMemberSurveyInfoViewPager.getCurrentItem();
         switch (v.getId()) {
+            case R.id.member_survey_prev_page_image_button:
+                if (currentStage < mMemberSurveyStageFragments.size()) {
+                    mMemberSurveyInfoViewPager.setCurrentItem(currentStage - 1);
+                    enableConfirmButton();
+//                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
+                }
+                break;
             case R.id.member_survey_info_skip_button:
                 //AlertDialog
                 Log.d(TAG, "create AlertDialog");
@@ -129,9 +167,9 @@ public class MemberSurveyInfoFragment extends Fragment
                 builder.show();
                 break;
             case R.id.member_survey_info_confirm_button_text_view:
-                int currentStage = mMemberSurveyInfoViewPager.getCurrentItem();
                 if (currentStage < mMemberSurveyStageFragments.size() - 1) {
                     mMemberSurveyInfoViewPager.setCurrentItem(currentStage + 1);
+
                 } else if (currentStage == mMemberSurveyStageFragments.size() - 1) {
                     requestSubmitUserInfo(mUser);
                     startActivity(SearchActivity.newIntent(getActivity()));
@@ -157,40 +195,67 @@ public class MemberSurveyInfoFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
+        if (!isShownPage[position]) {
+            disalbleConfirmButton();
+        } else {
+            enableConfirmButton();
+        }
+
+//        isShownPage[position] = true;
+
+        if (position == 0) {
+            mMemberSurveyPrevPageImageButton.setVisibility(View.GONE);
+        } else {
+            mMemberSurveyPrevPageImageButton.setVisibility(View.VISIBLE);
+        }
+
         mMemberSurveyInfoProgressStageTextView.setText(
                 getString(R.string.survey_info_progress_stage_format,
                         String.valueOf(mMemberSurveyStageFragments.size()),
                         String.valueOf(position + 1)));
 
+        if (position == 4) {
+            mMemberSurveyInfoConfirmButtonTextView.setText("정보 입력 마치고 시작하기");
+        } else {
+            mMemberSurveyInfoConfirmButtonTextView.setText("다 음");
+        }
+
         // mMemberSurveyInfoConfirmButtonTextView initialize
-        mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
-        mMemberSurveyInfoConfirmButtonTextView
-                .setTextColor(getResources().getColor(R.color.colorReef));
-        mMemberSurveyInfoConfirmButtonTextView
-                .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
+
+
+//        mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
+//        mMemberSurveyInfoConfirmButtonTextView
+//                .setTextColor(getResources().getColor(R.color.colorReef));
+//        mMemberSurveyInfoConfirmButtonTextView
+//                .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        // 1: touch in; 2: touch out and find its rightful place; 0: stop;
+        // 1:touch in; 2: touch out and find its rightful place; 0: stop;
 //        Log.i(TAG, "onPageScrollStateChanged position : " + String.valueOf(state));
     }
 
+    private boolean[] isShownPage = new boolean[]{false, false, false, false, false};
+
     public void updateConfirmButtonTextView(int stageNumber, boolean isCompleted) {
+        isShownPage[stageNumber - 1] = isCompleted;
         switch (stageNumber) {
             case 1:case 2:case 3:case 4:case 5:
                 if (isCompleted) {
-                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
-                    mMemberSurveyInfoConfirmButtonTextView
-                            .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
-                    mMemberSurveyInfoConfirmButtonTextView
-                            .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
+                    enableConfirmButton();
+//                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
                 } else {
-                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
-                    mMemberSurveyInfoConfirmButtonTextView
-                            .setTextColor(getResources().getColor(R.color.colorReef));
-                    mMemberSurveyInfoConfirmButtonTextView
-                            .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
+                    disalbleConfirmButton();
+//                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setTextColor(getResources().getColor(R.color.colorReef));
+//                    mMemberSurveyInfoConfirmButtonTextView
+//                            .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
                 }
                 break;
         }
@@ -247,5 +312,61 @@ public class MemberSurveyInfoFragment extends Fragment
     private void requestSubmitUserInfo(User user) {
 
         Log.i(TAG, user.toString());
+
+        Map<String, String> params = new HashMap<>();
+        params.put("gender", String.valueOf(user.getGender()));
+        params.put("birthYear", String.valueOf(user.getBirthYear()));
+        params.put("hasDrySkin", String.valueOf(user.getHasDrySkin()));
+        params.put("hasOilySkin", String.valueOf(user.getHasOilySkin()));
+        params.put("hasAllergy", String.valueOf(user.getHasAllergy()));
+        params.put("hasChild", String.valueOf(user.getHasChild()));
+        params.put("childHasDrySkin", String.valueOf(user.getChildHasDrySkin()));
+        params.put("childHasAllergy", String.valueOf(user.getChildHasAllergy()));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, URL_HOST + PATH, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.getMessage());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void enableConfirmButton() {
+        mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
+        mMemberSurveyInfoConfirmButtonTextView
+                .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
+        mMemberSurveyInfoConfirmButtonTextView
+                .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
+    }
+
+    private void disalbleConfirmButton() {
+        mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
+        mMemberSurveyInfoConfirmButtonTextView
+                .setTextColor(getResources().getColor(R.color.colorReef));
+        mMemberSurveyInfoConfirmButtonTextView
+                .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
     }
 }

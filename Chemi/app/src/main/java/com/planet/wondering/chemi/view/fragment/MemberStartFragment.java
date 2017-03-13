@@ -69,7 +69,6 @@ public class MemberStartFragment extends Fragment
         mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
         mStartAlreadyUserTextView.setOnClickListener(this);
 
-        view.findViewById(R.id.member_start_info_button).setOnClickListener(this);
         view.findViewById(R.id.member_survey_info_button).setOnClickListener(this);
 
         view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
@@ -107,9 +106,6 @@ public class MemberStartFragment extends Fragment
                 ((MemberStartActivity) getActivity()).signInLocal();
                 break;
 
-            case R.id.member_start_info_button:
-                ((MemberStartActivity) getActivity()).moveToFragment(2);
-                break;
             case R.id.member_survey_info_button:
                 ((MemberStartActivity) getActivity()).moveToFragment(3);
 
