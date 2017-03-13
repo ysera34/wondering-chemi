@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
+import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
 
 import java.util.ArrayList;
 
@@ -73,7 +74,7 @@ public class MemberSurveyInfoFragment extends Fragment
         mMemberSurveyInfoProgressBar =
                 (ProgressBar) view.findViewById(R.id.member_survey_info_progress_bar);
         mMemberSurveyInfoViewPager =
-                (ViewPager) view.findViewById(R.id.member_survey_info_view_pager);
+                (SwipeableViewPager) view.findViewById(R.id.member_survey_info_view_pager);
         mMemberSurveyInfoViewPager.setOffscreenPageLimit(mMemberSurveyStageFragments.size() - 1);
         mMemberSurveyInfoViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
@@ -150,11 +151,9 @@ public class MemberSurveyInfoFragment extends Fragment
             progressStatus = position
             * (mMemberSurveyInfoProgressBar.getMax() / mMemberSurveyStageFragments.size());
             mMemberSurveyInfoProgressBar.setProgress(progressStatus);
-            mCurrentPosition = position;
         }
     }
 
-    private int mCurrentPosition;
 
     @Override
     public void onPageSelected(int position) {
@@ -164,6 +163,7 @@ public class MemberSurveyInfoFragment extends Fragment
                         String.valueOf(position + 1)));
 
         // mMemberSurveyInfoConfirmButtonTextView initialize
+        mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
         mMemberSurveyInfoConfirmButtonTextView
                 .setTextColor(getResources().getColor(R.color.colorReef));
         mMemberSurveyInfoConfirmButtonTextView
@@ -178,7 +178,7 @@ public class MemberSurveyInfoFragment extends Fragment
 
     public void updateConfirmButtonTextView(int stageNumber, boolean isCompleted) {
         switch (stageNumber) {
-            case 1:case 2:case 3:
+            case 1:case 2:case 3:case 4:case 5:
                 if (isCompleted) {
                     mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
                     mMemberSurveyInfoConfirmButtonTextView
@@ -210,12 +210,6 @@ public class MemberSurveyInfoFragment extends Fragment
                 }
                 break;
             case 3:
-//                if (value / 1000 == 1) {
-//                    mUser.setHasDrySkin(false);
-//                    mUser.setHasOilySkin(false);
-//                    mUser.setHasAllergy(false);
-//                    break;
-//                }
                 mUser.setHasDrySkin(false);
                 mUser.setHasOilySkin(false);
                 mUser.setHasAllergy(false);
@@ -230,14 +224,28 @@ public class MemberSurveyInfoFragment extends Fragment
                 }
                 break;
             case 4:
+                // hasChild true : 0; hasChild false : 1;
+                if (value == 0) {
+                    mUser.setHasChild(true);
+                } else {
+                    mUser.setHasChild(false);
+                }
                 break;
             case 5:
+                mUser.setChildHasDrySkin(false);
+                mUser.setChildHasAllergy(false);
+                if (value / 10 == 1) {
+                    mUser.setChildHasDrySkin(true);
+                }
+                if (value % 10 == 1) {
+                    mUser.setChildHasAllergy(true);
+                }
                 break;
         }
-        Log.i(TAG, mUser.toString());
     }
 
     private void requestSubmitUserInfo(User user) {
 
+        Log.i(TAG, user.toString());
     }
 }

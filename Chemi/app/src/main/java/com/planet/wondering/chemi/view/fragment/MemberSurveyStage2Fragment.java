@@ -76,6 +76,7 @@ public class MemberSurveyStage2Fragment extends Fragment implements View.OnClick
                 } else {
                     mMemberSurveyFemaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedFemale = false;
+                    mSurveyCompletedListener.onSurveyCompleted(2, false);
                 }
                 break;
             case R.id.member_survey_male_layout:
@@ -89,6 +90,7 @@ public class MemberSurveyStage2Fragment extends Fragment implements View.OnClick
                 } else {
                     mMemberSurveyMaleImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedMale = false;
+                    mSurveyCompletedListener.onSurveyCompleted(2, false);
                 }
                 break;
         }
@@ -98,7 +100,6 @@ public class MemberSurveyStage2Fragment extends Fragment implements View.OnClick
         } else if (isCheckedMale) {
             mSurveyCompletedListener.onSurveyValueSubmit(2, 1);
         }
-
     }
 
     OnSurveyCompletedListener mSurveyCompletedListener;

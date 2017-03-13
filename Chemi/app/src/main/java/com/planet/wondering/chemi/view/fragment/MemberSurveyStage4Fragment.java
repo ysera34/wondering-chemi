@@ -71,9 +71,11 @@ public class MemberSurveyStage4Fragment extends Fragment implements View.OnClick
 
                     mMemberSurveyBabyFalseImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedFalse = false;
+                    mSurveyCompletedListener.onSurveyCompleted(4, true);
                 } else {
                     mMemberSurveyBabyTrueImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedTrue = false;
+                    mSurveyCompletedListener.onSurveyCompleted(4, false);
                 }
                 break;
             case R.id.member_survey_baby_false_layout:
@@ -83,11 +85,19 @@ public class MemberSurveyStage4Fragment extends Fragment implements View.OnClick
 
                     mMemberSurveyBabyTrueImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedTrue = false;
+                    mSurveyCompletedListener.onSurveyCompleted(4, true);
                 } else {
                     mMemberSurveyBabyFalseImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedFalse = false;
+                    mSurveyCompletedListener.onSurveyCompleted(4, false);
                 }
                 break;
+        }
+        // hasChild true : 0; hasChild false : 1;
+        if (isCheckedTrue) {
+            mSurveyCompletedListener.onSurveyValueSubmit(4, 0);
+        } else if (isCheckedFalse) {
+            mSurveyCompletedListener.onSurveyValueSubmit(4, 1);
         }
     }
 

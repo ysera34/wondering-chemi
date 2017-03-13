@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +97,7 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
 
         if (position == 0) {
             if (!hasSkinTypes[position]) {
-                for (int i = 1; i < 4; i++) {
+                for (int i = 1; i < hasSkinTypes.length; i++) {
                     if (hasSkinTypes[i]) {
                         checkImageView(i);
                     }
@@ -130,7 +129,6 @@ public class MemberSurveyStage3Fragment extends Fragment implements View.OnClick
                 mSurveyResultValue = mSurveyResultValue - (int) Math.pow(10, (hasSkinTypes.length - 1 - position));
             }
         }
-        Log.i("mSurveyResultValue", "mSurveyResultValue : " + mSurveyResultValue);
     }
 
     OnSurveyCompletedListener mSurveyCompletedListener;

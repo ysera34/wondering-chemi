@@ -67,12 +67,12 @@
         android:layout_height="@dimen/member_survey_info_body_height"
         android:layout_below="@+id/member_survey_info_header_layout">
 
-        <android.support.v4.view.ViewPager
+        <com.planet.wondering.chemi.view.custom.SwipeableViewPager
             android:id="@+id/member_survey_info_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.v4.view.ViewPager>
+        </com.planet.wondering.chemi.view.custom.SwipeableViewPager>
     </LinearLayout>
 
     <TextView
