@@ -4,9 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/review_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment_review"/>
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
