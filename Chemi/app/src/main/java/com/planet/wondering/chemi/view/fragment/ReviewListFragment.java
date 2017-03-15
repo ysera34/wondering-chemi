@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
@@ -306,6 +308,11 @@ public class ReviewListFragment extends Fragment {
 
         private TextView mContentTextView;
 
+        private LinearLayout mImagesLayout;
+        private ImageView mImage1ImageView;
+        private ImageView mImage2ImageView;
+        private ImageView mImage3ImageView;
+
         public ReviewHolder(View itemView) {
             super(itemView);
 
@@ -327,6 +334,11 @@ public class ReviewListFragment extends Fragment {
             mChildAllergyTextView = (TextView) itemView.findViewById(R.id.list_item_review_child_allergy_text_view);
 
             mContentTextView = (TextView) itemView.findViewById(R.id.list_item_review_content_text_view);
+
+            mImagesLayout = (LinearLayout) itemView.findViewById(R.id.list_item_review_images_layout);
+            mImage1ImageView = (ImageView) itemView.findViewById(R.id.list_item_review_image1_image_view);
+            mImage2ImageView = (ImageView) itemView.findViewById(R.id.list_item_review_image2_image_view);
+            mImage3ImageView = (ImageView) itemView.findViewById(R.id.list_item_review_image3_image_view);
         }
 
         public void bindReview(Review review) {
@@ -389,6 +401,43 @@ public class ReviewListFragment extends Fragment {
             }
 
             mContentTextView.setText(mReview.getContent());
+
+            if (mReview.getImagePaths().size() == 0) {
+                mImagesLayout.setVisibility(View.GONE);
+            } else {
+                mImagesLayout.setVisibility(View.VISIBLE);
+
+                switch (mReview.getImagePaths().size()) {
+                    case 3:
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(2))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(70, 70)
+                                .centerCrop()
+                                .into(mImage3ImageView);
+                    case 2:
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(1))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(70, 70)
+                                .centerCrop()
+                                .into(mImage2ImageView);
+                    case 1:
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(0))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(70, 70)
+                                .centerCrop()
+                                .into(mImage1ImageView);
+                        break;
+                }
+            }
         }
     }
 }
