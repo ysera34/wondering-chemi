@@ -2,17 +2,25 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/toolbar_height"
+    android:layout_height="220dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:background="@color/colorWhite">
+
+    <ImageButton
+        android:id="@+id/list_item_review_empty_review_create_image_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/ic_pencil_gray"
+        android:background="@android:color/transparent"/>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="빈화면"
-        android:textSize="16sp"
-        android:textColor="@color/colorFontNormal"/>
+        android:layout_height="wrap_content"
+        android:text="첫 번째 리뷰의 주인공이 되어보세요."
+        android:textSize="15sp"
+        android:textColor="@color/colorFontAluminum"/>
 
 </LinearLayout>

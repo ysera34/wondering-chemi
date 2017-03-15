@@ -48,6 +48,16 @@ public class Config {
             public static final String TOKEN = "token";
             public static final String ACCESS_TOKEN = "accessToken";
             public static final String PUSH_TOKEN = "pushToken";
+
+            public static final String USER = "user";
+            public static final String GENDER = "gender";
+            public static final String AGE = "age";
+            public static final String HAS_DRY_SKIN = "hasDrySkin";
+            public static final String HAS_OILY_SKIN = "hasOilySkin";
+            public static final String HAS_ALLERGY = "hasAllergy";
+            public static final String HAS_CHILD = "hasChild";
+            public static final String CHILD_HAS_DRY_SKIN = "childHasDrySkin";
+            public static final String CHILD_HAS_ALLERGY = "childHasAllergy";
         }
     }
 
@@ -127,6 +137,18 @@ public class Config {
             public static final String CLASS = "class";
             public static final String TYPE = "type";
             public static final String ALLERGY = "isAllergy";
+        }
+    }
+
+    public static final class Review {
+        public static final String PATH = File.separator + "reviews";
+
+        public static final class Key {
+            public static final String REVIEW_ID = "id";
+            public static final String RATING = "rated";
+            public static final String DESCRIPTION = "description";
+            public static final String IMAGE_PATHS = "imagePaths";
+            public static final String DATE = "dated";
         }
     }
 

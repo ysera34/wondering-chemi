@@ -16,10 +16,10 @@
         android:textColor="@color/colorFontNormal"/>
 
     <TextView
+        android:id="@+id/list_item_review_header_count_text_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="57건"
         android:textSize="12sp"
         android:textColor="@color/colorFontAluminum"/>
 

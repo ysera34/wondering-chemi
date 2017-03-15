@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,14 +17,20 @@ public class Review {
     private int mId;
     private int mUserId;
     private int mProductId;
+    private User mUser;
     private float mRatingValue;
     private String content;
     private HashMap<Integer, String> mImagePathMap;
     private ReviewSharedPreferences mPreferences;
+    private String mDate;
+    private ArrayList<String> mImagePaths;
+
 
     public Review() {
+        mUser = new User();
         mImagePathMap = new HashMap<>();
         mPreferences = new ReviewSharedPreferences();
+        mImagePaths = new ArrayList<>();
     }
 
     public int getId() {
@@ -48,6 +55,14 @@ public class Review {
 
     public void setProductId(int productId) {
         mProductId = productId;
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        mUser = user;
     }
 
     public float getRatingValue() {
@@ -138,5 +153,35 @@ public class Review {
 
     public int getImagePathMapSize() {
         return mImagePathMap.size();
+    }
+
+    public String getDate() {
+        return mDate;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
+    }
+
+    public ArrayList<String> getImagePaths() {
+        return mImagePaths;
+    }
+
+    public void setImagePaths(ArrayList<String> imagePaths) {
+        mImagePaths = imagePaths;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "mId=" + mId +
+                ", mUserId=" + mUserId +
+                ", mProductId=" + mProductId + "\n" +
+                ", mUser=" + mUser.toString() + "\n" +
+                ", mRatingValue=" + mRatingValue + "\n" +
+                ", content='" + content + '\'' + "\n" +
+                ", mDate='" + mDate + '\'' + "\n" +
+                ", mImagePaths=" + mImagePaths +
+                '}';
     }
 }

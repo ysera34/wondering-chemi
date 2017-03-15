@@ -6,6 +6,7 @@ import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
+import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
@@ -54,6 +55,7 @@ import static com.planet.wondering.chemi.network.Config.Product.Key.WHOLE_CHEMIC
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
+import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
@@ -61,9 +63,18 @@ import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
+import static com.planet.wondering.chemi.network.Config.User.Key.AGE;
+import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_ALLERGY;
+import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_DRY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.GENDER;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_ALLERGY;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_CHILD;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_DRY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_OILY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.Key.USER;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER_ID;
 
 /**
@@ -350,6 +361,83 @@ public class Parser {
         }
 //        Log.i(TAG, chemical.toString());
         return chemical;
+    }
+
+    public static ArrayList<Review> parseReviewList(JSONObject responseObject) {
+
+        ArrayList<Review> reviews = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int reviewSize = responseObject.getInt(COUNT);
+                if (reviewSize > 0) {
+                    JSONArray reviewJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < reviewSize; i++) {
+                        JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
+                        Review review = new Review();
+                        review.setId(reviewJSONObject.getInt(REVIEW_ID));
+                        JSONObject userJSONObject = reviewJSONObject.getJSONObject(USER);
+                        review.getUser().setId(userJSONObject.getInt(USER_ID));
+                        review.getUser().setName(userJSONObject.getString(NAME));
+                        int gender = userJSONObject.getInt(GENDER);
+                        if (gender == 0) {
+                            review.getUser().setGender(true);
+                        } else if (gender == 1) {
+                            review.getUser().setGender(false);
+                        }
+                        review.getUser().setAge(userJSONObject.getString(AGE));
+                        int hasDrySkin = userJSONObject.getInt(HAS_DRY_SKIN);
+                        if (hasDrySkin == 1) {
+                            review.getUser().setHasDrySkin(true);
+                        }
+                        int hasOilySkin = userJSONObject.getInt(HAS_OILY_SKIN);
+                        if (hasOilySkin == 1) {
+                            review.getUser().setHasOilySkin(true);
+                        }
+                        int hasAllergy = userJSONObject.getInt(HAS_ALLERGY);
+                        if (hasAllergy == 1) {
+                            review.getUser().setHasAllergy(true);
+                        }
+                        int hasChild = userJSONObject.getInt(HAS_CHILD);
+                        if (hasChild == 1) {
+                            review.getUser().setHasChild(true);
+                        }
+                        int childHasDrySkin = userJSONObject.getInt(CHILD_HAS_DRY_SKIN);
+                        if (childHasDrySkin == 1) {
+                            review.getUser().setChildHasDrySkin(true);
+                        }
+                        int childHasAllergy = userJSONObject.getInt(CHILD_HAS_ALLERGY);
+                        if (childHasAllergy == 1) {
+                            review.getUser().setChildHasAllergy(true);
+                        }
+
+                        Object ratingObject = reviewJSONObject.get(Config.Review.Key.RATING);
+                        float ratingFloat = 0.0f;
+                        if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
+                            ratingFloat = 0.0f;
+                        } else if (ratingObject instanceof Integer) {
+                            ratingFloat = ((Integer) ratingObject).floatValue();
+                        } else {
+                            ratingFloat = ((Double) ratingObject).floatValue();
+                        }
+                        review.setRatingValue(ratingFloat);
+
+                        review.setContent(reviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
+                        review.setDate(reviewJSONObject.getString(Config.Review.Key.DATE));
+
+                        JSONArray jsonArray = reviewJSONObject.getJSONArray(Config.Review.Key.IMAGE_PATHS);
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            review.getImagePaths().add(jsonArray.getString(j));
+                        }
+                        Log.i(TAG, review.toString());
+                        reviews.add(review);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return reviews;
     }
 
     public static User parseEmailConfirm(JSONObject responseObject) {

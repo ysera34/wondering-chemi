@@ -13,6 +13,7 @@ public class User {
     private String mPushToken;
     private boolean mGender;
     private int mBirthYear;
+    private String mAge;
     private boolean mHasDrySkin;
     private boolean mHasOilySkin;
     private boolean mHasAllergy;
@@ -84,6 +85,14 @@ public class User {
 
     public void setBirthYear(int birthYear) {
         mBirthYear = birthYear;
+    }
+
+    public String getAge() {
+        return mAge;
+    }
+
+    public void setAge(String age) {
+        mAge = age;
     }
 
     public int getHasDrySkin() {
