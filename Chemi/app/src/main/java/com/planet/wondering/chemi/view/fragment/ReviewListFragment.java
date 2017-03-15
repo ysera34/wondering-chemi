@@ -29,7 +29,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import org.json.JSONObject;
@@ -114,17 +114,17 @@ public class ReviewListFragment extends Fragment {
         mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
             @Override
             public void onShowView() {
-                ((ProductPagerActivity) getActivity()).showBottomNavigationView();
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
             }
 
             @Override
             public void onHideView() {
-                ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
 
         updateUI();
-        requestReviewList();
+
         return view;
     }
 
@@ -137,6 +137,7 @@ public class ReviewListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        updateUI();
+        requestReviewList();
     }
 
     private void updateUI() {
@@ -157,7 +158,7 @@ public class ReviewListFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, response.toString());
+//                        Log.i(TAG, response.toString());
                         mReviews = Parser.parseReviewList(response);
                         updateUI();
                     }

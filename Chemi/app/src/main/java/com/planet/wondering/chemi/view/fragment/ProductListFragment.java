@@ -35,12 +35,13 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
-import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.planet.wondering.chemi.network.Config.Product.QUERY_CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
@@ -117,6 +118,7 @@ public class ProductListFragment extends Fragment {
 
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private String mTagName;
+    private byte mCategoryId;
     private TextView mProductTotalTextView;
     private Button mProductSortButton;
 
@@ -127,7 +129,8 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTagName = getArguments().getString(ARG_TAG_NAME);
+        mTagName = getArguments().getString(ARG_TAG_NAME, null);
+        mCategoryId = getArguments().getByte(ARG_CATEGORY_ID, (byte) -1);
 
         mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
@@ -171,14 +174,23 @@ public class ProductListFragment extends Fragment {
                 if (lastItem == mProductAdapter.getItemCount() - 1
                         && mPager.getTotal() > mProductAdapter.getItemCount()) {
                     // all product == > mTagName = ""
-                    requestTagProductList(mTagName);
+                    if (mTagName != null) {
+                        requestTagProductList(mTagName);
+                    } else if (mCategoryId > 0) {
+                        requestCategoryProductList(mCategoryId);
+                    }
                 }
             }
         });
         mProductListProgressBar = (ProgressBar) view.findViewById(R.id.product_list_progress_bar);
 
         updateUI();
-        requestTagProductList(mTagName);
+
+        if (mTagName != null) {
+            requestTagProductList(mTagName);
+        } else if (mCategoryId > 0) {
+            requestCategoryProductList(mCategoryId);
+        }
         return view;
     }
 
@@ -223,6 +235,58 @@ public class ProductListFragment extends Fragment {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
+//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
+//                    getString(R.string.progress_dialog_message_wait), false, false);
+        }
+
+        Log.i(TAG, mUrlBuilder.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, mUrlBuilder.toString(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                        progressDialog.dismiss();
+                        mProductListProgressBar.setVisibility(View.GONE);
+                        mProducts.addAll(Parser.parseProductList(response));
+                        mPager = Parser.parseProductListPagingQuery(response);
+                        updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        progressDialog.dismiss();
+                        mProductListProgressBar.setVisibility(View.GONE);
+                        Log.e(TAG, error.getMessage());
+                        Toast.makeText(getActivity(),
+                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestCategoryProductList(byte categoryId) {
+
+        Toast.makeText(getActivity(), "category request" + categoryId, Toast.LENGTH_SHORT).show();
+        mProductListProgressBar.setVisibility(View.VISIBLE);
+
+        if (mPager == null) {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
+                    .append(QUERY_CATEGORY).append(categoryId);
+//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
+//                    getString(R.string.progress_dialog_message_wait), false, false);
+        } else {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
+                    .append(QUERY_CATEGORY).append(categoryId);
 //            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
 //                    getString(R.string.progress_dialog_message_wait), false, false);
         }
@@ -347,8 +411,8 @@ public class ProductListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-//            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
-            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
+            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+//            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
         }
     }
 

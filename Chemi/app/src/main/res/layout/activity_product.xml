@@ -3,22 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <!--android:fitsSystemWindows="true"-->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/product_detail_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/product_detail_app_bar_layout_height"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
             app:titleEnabled="false"
-            app:contentScrim="@color/colorWhite"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleMarginStart="20dp"
             app:expandedTitleMarginEnd="30dp"
@@ -41,7 +41,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:layout_above="@+id/product_detail_review_info_layout"/>
+                        android:layout_above="@+id/product_detail_review_info_layout"
+                        android:src="@mipmap/ic_launcher"/>
 
                     <LinearLayout
                         android:id="@+id/product_detail_review_info_layout"
@@ -57,6 +58,7 @@
                             android:layout_height="wrap_content"
                             android:theme="@style/RatingBarTheme"
                             style="@style/ProductListRatingBarStyle"
+                            android:rating="3.5"
                             android:stepSize="0.01"
                             android:numStars="5"/>
 
@@ -67,7 +69,8 @@
                             android:layout_marginStart="6dp"
                             android:layout_gravity="center_vertical"
                             android:textSize="12sp"
-                            android:textColor="@color/colorAccent"/>
+                            android:textColor="@color/colorAccent"
+                            android:text="4.0"/>
 
                         <TextView
                             android:id="@+id/product_detail_review_rating_count_text_view"
@@ -76,7 +79,8 @@
                             android:layout_marginStart="6dp"
                             android:layout_gravity="center_vertical"
                             android:textSize="12sp"
-                            android:textColor="@color/colorFontNormal"/>
+                            android:textColor="@color/colorFontNormal"
+                            android:text="(1300명)"/>
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -86,7 +90,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/product_detail_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
+                android:layout_height="?attr/actionBarSize"
                 app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
                 app:titleTextColor="@color/colorFontToolbarTitle"
                 app:subtitleTextAppearance="@style/ProductToolbarTextAppearance.Subtitle"
@@ -109,51 +113,32 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--<FrameLayout-->
-            <!--android:id="@+id/product_fragment_container"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-        <!--</FrameLayout>-->
-
-        <LinearLayout
-            android:orientation="vertical"
+        <FrameLayout
+            android:id="@+id/product_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/product_detail_tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                style="@style/ProductTabLayoutStyle"
-                app:tabSelectedTextColor="@color/colorPrimary"
-                app:tabTextColor="@color/colorFontNormal">
-
-            </android.support.design.widget.TabLayout>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/product_detail_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorWhite">
-
-            </android.support.v4.view.ViewPager>
-
-        </LinearLayout>
+        </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:visibility="gone"
-        android:id="@+id/review_floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="72dp"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_fab_pencil"
-        app:rippleColor="@color/colorWhite"
-        app:fabSize="mini"/>
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/bottom_navigation_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:elevation="8dp">-->
 
+        <!--<android.support.design.widget.BottomNavigationView-->
+            <!--android:id="@+id/bottom_navigation_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:theme="@style/BottomNavigationViewTheme"-->
+            <!--app:menu="@menu/menu_bottom_navigation"-->
+            <!--app:itemBackground="@color/colorWhite"-->
+            <!--app:itemIconTint="@color/colorPrimary"-->
+            <!--app:itemTextColor="@drawable/selector_bottom_navigation_menu">-->
+        <!--</android.support.design.widget.BottomNavigationView>-->
+    <!--</RelativeLayout>-->
 </android.support.design.widget.CoordinatorLayout>

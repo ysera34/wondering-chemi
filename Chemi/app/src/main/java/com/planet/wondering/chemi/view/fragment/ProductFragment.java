@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,13 +25,26 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.view.activity.ProductPagerActivity;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import static com.planet.wondering.chemi.network.Config.Product.PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 1. 18..
@@ -111,18 +126,10 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         mProductAppBarLayout = (AppBarLayout) view.findViewById(R.id.product_detail_app_bar_layout);
-        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
-                } else {
-                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
-                }
-            }
-        });
+
         mProductToolbar = (Toolbar) view.findViewById(R.id.product_detail_toolbar);
-        ((ProductPagerActivity) getActivity()).setSupportActionBar(mProductToolbar);
+//        ((ProductPagerActivity) getActivity()).setSupportActionBar(mProductToolbar);
+        ((BottomNavigationActivity) getActivity()).setSupportActionBar(mProductToolbar);
 
         mProductDetailImageView = (ImageView) view.findViewById(R.id.product_detail_image_view);
         mProductDetailReviewRatingBar = (RatingBar) view.findViewById(R.id.product_detail_review_rating_bar);
@@ -182,6 +189,25 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+//                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
+                    Log.i(TAG, "hideBottomNavigationView");
+                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                } else {
+//                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
+                    Log.i(TAG, "showBottomNavigationView");
+                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                }
+            }
+        });
+    }
+
     private void addProductDetailFragment(Fragment fragment, String title) {
         mProductDetailListFragments.add(fragment);
         mProductDetailListFragmentTitles.add(title);
@@ -214,42 +240,42 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
     }
 
-//    private void requestProduct() {
+    private void requestProduct() {
+
+//        Product product = new Product();
+//        product.setName("product" + mProductId);
+//        product.setBrand("brand" + mProductId);
 //
-////        Product product = new Product();
-////        product.setName("product" + mProductId);
-////        product.setBrand("brand" + mProductId);
-////
-////        bindProduct(product);
-//        final ProgressDialog progressDialog =
-//                ProgressDialog.show(getActivity(), "상품의 정보를 가져오고 있습니다.",
-//                        "잠시만 기다려 주세요.", false, false);
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                Request.Method.GET, URL_HOST + PATH + mProductId,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        mProduct = Parser.parseProduct(response);
-//                        bindProduct(mProduct);
-//                        progressDialog.dismiss();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
-//                        Log.e(TAG, error.getMessage());
-//                    }
-//                }
-//        );
-//
-//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//
-//        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
-//    }
+//        bindProduct(product);
+        final ProgressDialog progressDialog =
+                ProgressDialog.show(getActivity(), "상품의 정보를 가져오고 있습니다.",
+                        "잠시만 기다려 주세요.", false, false);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + PATH + mProductId,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mProduct = Parser.parseProduct(response);
+                        bindProduct(mProduct);
+                        progressDialog.dismiss();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, error.getMessage());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

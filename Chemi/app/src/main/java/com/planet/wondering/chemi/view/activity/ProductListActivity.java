@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
@@ -75,20 +74,21 @@ public class ProductListActivity extends BottomNavigationActivity {
 
         mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         mProductIds = getIntent().getIntegerArrayListExtra(EXTRA_PRODUCT_IDS);
-        mCategoryId = getIntent().getByteExtra(EXTRA_CATEGORY_ID, (byte) 0);
+        mCategoryId = getIntent().getByteExtra(EXTRA_CATEGORY_ID, (byte) -1);
         mTagName = getIntent().getStringExtra(EXTRA_TAG_NAME);
-        Log.i(TAG, mTagName);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
-        if (mFragment == null) {
+        if (mFragment == null && mCategoryId == -1) {
             mFragment = ProductListFragment.newInstance(mTagName);
+        } else if (mCategoryId != -1) {
+            mFragment = ProductListFragment.newInstance(mCategoryId);
+        }
             mFragmentManager.beginTransaction()
 //                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .add(R.id.fragment_container, mFragment)
                     .commit();
-        }
     }
 
     @Override
