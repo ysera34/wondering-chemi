@@ -1,11 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fragment_category"/>
+    <RelativeLayout
+        android:id="@+id/category_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"
+            android:text="카테고리"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"/>
+
+        <RelativeLayout
+            android:id="@+id/category_cancel_layout"
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="18dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clear_24dp"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_baby_wet_tissue_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_category_baby_wet_tissue"/>
+
+            <TextView
+                android:id="@+id/category_baby_wet_tissue_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="아이용 물티슈"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_baby_hair_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_category_baby_hair_wash"/>
+
+            <TextView
+                android:id="@+id/category_baby_hair_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="아이용 샴푸 린스"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_baby_lotion_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_category_baby_lotion"/>
+
+            <TextView
+                android:id="@+id/category_baby_lotion_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="아이용 그림 로션 오일"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_baby_tooth_paste_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_category_baby_tooth_paste"/>
+
+            <TextView
+                android:id="@+id/category_baby_tooth_paste_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="아이용 치약"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_baby_body_wash_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_category_baby_body_wash"/>
+
+            <TextView
+                android:id="@+id/category_baby_body_wash_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="아이용 바디 워시"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/category_adult_etc_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_category_adult_etc"/>
+
+            <TextView
+                android:id="@+id/category_adult_etc_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="기타"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

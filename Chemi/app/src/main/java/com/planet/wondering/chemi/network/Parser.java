@@ -429,7 +429,7 @@ public class Parser {
                         for (int j = 0; j < jsonArray.length(); j++) {
                             review.getImagePaths().add(jsonArray.getString(j));
                         }
-                        Log.i(TAG, review.toString());
+//                        Log.i(TAG, review.toString());
                         reviews.add(review);
                     }
                 }

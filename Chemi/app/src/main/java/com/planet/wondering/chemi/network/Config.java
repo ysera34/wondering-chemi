@@ -80,7 +80,7 @@ public class Config {
         public static final String PATH = File.separator + "products" + File.separator;
         public static final String QUERY_PATH = File.separator + "products?";
         public static final String QUERY_TAG = "&tag=";
-        public static final String QUERY_CATEGORY = "?categoryid=";
+        public static final String QUERY_CATEGORY = "&categoryid=";
         public static final String QUERY_ORDER = "&orderBy=";
         public static final String ORDER_ACCURACY = QUERY_ORDER + 0;
         public static final String ORDER_RATING_VALUE = QUERY_ORDER + 1;
