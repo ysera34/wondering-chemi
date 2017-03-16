@@ -164,9 +164,9 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 //            @Override
 //            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 //                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
-//                    ((ProductPagerActivity) getActivity()).hideBottomNavigationView();
-//                    Log.i(TAG, "hideBottomNavigationView");
-//                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//                    ((ProductPagerActivity) getActivity()).hideEditTextLayout();
+//                    Log.i(TAG, "hideEditTextLayout");
+//                    ((BottomNavigationActivity) getActivity()).hideEditTextLayout();
 //                } else {
 //                    ((ProductPagerActivity) getActivity()).showBottomNavigationView();
 //                    Log.i(TAG, "showBottomNavigationView");

@@ -260,5 +260,4 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
             mHazardDescriptionTextView.setText(mHazard.getDescription());
         }
     }
-
 }

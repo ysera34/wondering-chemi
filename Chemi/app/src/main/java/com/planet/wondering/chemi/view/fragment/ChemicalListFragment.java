@@ -140,7 +140,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             @Override
             public void onHideView() {
                 ((ProductActivity) getActivity()).hideBottomNavigationView();
-//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//                ((BottomNavigationActivity) getActivity()).hideEditTextLayout();
             }
         });
 
