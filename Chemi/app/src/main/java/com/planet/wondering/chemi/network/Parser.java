@@ -334,7 +334,7 @@ public class Parser {
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                 chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
                 if (chemical.getPurpose().equals("null")) {
-                    chemical.setPurpose("배합목적이 알려지지 않았어요");
+                    chemical.setPurpose("");
                 }
                 chemical.setAllergy(chemicalJSONObject.getBoolean(Key.ALLERGY));
                 chemical.setAllergyDescription(chemicalJSONObject.getString(ALLERGY_DESCRIPTION));

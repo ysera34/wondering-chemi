@@ -144,13 +144,15 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        updateUI();
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        arrangeHexagonFilterLayouts(0);
+//        arrangeHexagonFilterLayouts(0);
         if (mProduct.isWholeChemicals()) {
             mChemicalWholeTextView.setText(getString(R.string.chemical_whole_true_message));
         } else {
@@ -162,7 +164,6 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
     }
 
     private void updateUI() {

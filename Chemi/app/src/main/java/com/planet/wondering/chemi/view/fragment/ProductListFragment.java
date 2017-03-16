@@ -274,7 +274,6 @@ public class ProductListFragment extends Fragment {
 
     private void requestCategoryProductList(byte categoryId) {
 
-        Toast.makeText(getActivity(), "category request" + categoryId, Toast.LENGTH_SHORT).show();
         mProductListProgressBar.setVisibility(View.VISIBLE);
 
         if (mPager == null) {
@@ -399,8 +398,7 @@ public class ProductListFragment extends Fragment {
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                     .crossFade()
-                    .override(330, 220)
-                    .centerCrop()
+                    .override(300, 200)
                     .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));
             mProductNameTextView.setText(String.valueOf(mProduct.getName()));
@@ -411,7 +409,12 @@ public class ProductListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+//            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+            if (mTagName != null) {
+                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId(), (byte) 0));
+            } else if (mCategoryId > 0) {
+                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId(), (byte) 1));
+            }
 //            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
         }
     }

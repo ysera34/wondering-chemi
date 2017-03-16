@@ -232,7 +232,6 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 //                    .error(R.drawable.unloaded_image_holder)
                 .crossFade()
                 .override(700, 460)
-                .centerCrop()
                 .into(mProductDetailImageView);
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
