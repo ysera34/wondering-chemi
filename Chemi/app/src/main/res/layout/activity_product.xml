@@ -15,12 +15,13 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/product_detail_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
             app:titleEnabled="false"
             app:contentScrim="@color/colorWhite"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:expandedTitleMarginStart="20dp"
             app:expandedTitleMarginEnd="30dp"
             android:fitsSystemWindows="true">

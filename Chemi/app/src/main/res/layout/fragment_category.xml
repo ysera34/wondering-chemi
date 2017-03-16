@@ -25,6 +25,7 @@
             android:textColor="@color/colorFontNormal"/>
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/category_cancel_layout"
             android:layout_width="34dp"
             android:layout_height="match_parent"
@@ -43,13 +44,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
@@ -72,7 +72,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 샴푸 린스"
+                android:text="아이용 샴푸\u00B7린스"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -103,9 +103,8 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
@@ -120,14 +119,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 그림 로션 오일"
+                android:text="아이용 크림\u00B7로션\u00B7오일"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">
@@ -158,9 +157,8 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
@@ -175,14 +173,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 바디 워시"
+                android:text="아이용 바디워시"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">

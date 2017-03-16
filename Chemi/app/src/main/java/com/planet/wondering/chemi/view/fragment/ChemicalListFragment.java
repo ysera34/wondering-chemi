@@ -26,7 +26,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
 import org.json.JSONObject;
@@ -133,14 +133,14 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         mChemicalRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
             @Override
             public void onShowView() {
-//                ((ProductActivity) getActivity()).showBottomNavigationView();
-                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                ((ProductActivity) getActivity()).showBottomNavigationView();
+//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
             }
 
             @Override
             public void onHideView() {
-//                ((ProductActivity) getActivity()).hideBottomNavigationView();
-                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                ((ProductActivity) getActivity()).hideBottomNavigationView();
+//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
             }
         });
 
@@ -152,7 +152,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        arrangeHexagonFilterLayouts(0);
+        arrangeHexagonFilterLayouts(0);
         if (mProduct.isWholeChemicals()) {
             mChemicalWholeTextView.setText(getString(R.string.chemical_whole_true_message));
         } else {
@@ -307,7 +307,6 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             } else {
                 mChemicalAllergyImageView.setVisibility(View.GONE);
             }
-
 
             mChemicalCircleTextView.setText(mChemical.getHazardValueString());
             mChemicalCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());

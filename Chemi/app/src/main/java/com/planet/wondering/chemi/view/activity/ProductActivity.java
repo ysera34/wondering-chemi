@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,8 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
+import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
+import com.planet.wondering.chemi.view.fragment.ProductFragment;
 
 import org.json.JSONObject;
 
@@ -77,6 +80,7 @@ public class ProductActivity extends AppBaseActivity
     private Product mProduct;
 
     private AppBarLayout mProductAppBarLayout;
+    private CollapsingToolbarLayout mProductCollapsingToolbarLayout;
     private Toolbar mProductToolbar;
     private ImageView mProductDetailImageView;
     private RatingBar mProductDetailReviewRatingBar;
@@ -105,18 +109,17 @@ public class ProductActivity extends AppBaseActivity
 //        }
 
         mProductAppBarLayout = (AppBarLayout) findViewById(R.id.product_detail_app_bar_layout);
-        mProductAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        mProductAppBarLayout.addOnOffsetChangedListener(new OnAppBarStateChangeListener() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    Log.i(TAG, "hideBottomNavigationView");
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if (state.name().equals("COLLAPSED")) {
                     hideBottomNavigationView();
-                } else {
-                    Log.i(TAG, "showBottomNavigationView");
+                } else if (state.name().equals("EXPANDED")) {
                     showBottomNavigationView();
                 }
             }
         });
+        mProductCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.product_detail_collapsing_toolbar_layout);
 
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
         setSupportActionBar(mProductToolbar);
@@ -201,12 +204,12 @@ public class ProductActivity extends AppBaseActivity
                         bindProduct(mProduct);
 //                        progressDialog.dismiss();
 
-//                        if (mFragment == null) {
-//                            mFragment = ProductFragment.newInstance(mProduct);
-//                            mFragmentManager.beginTransaction()
-//                                    .add(R.id.fragment_container, mFragment)
-//                                    .commit();
-//                        }
+                        if (mFragment == null) {
+                            mFragment = ProductFragment.newInstance(mProduct);
+                            mFragmentManager.beginTransaction()
+                                    .add(R.id.product_fragment_container, mFragment)
+                                    .commit();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
