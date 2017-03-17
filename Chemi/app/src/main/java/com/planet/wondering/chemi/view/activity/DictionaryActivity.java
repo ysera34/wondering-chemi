@@ -54,4 +54,13 @@ public class DictionaryActivity extends BottomNavigationActivity
                 .findFragmentById(R.id.fragment_container);
         fragment.updateSearchEditText(chemical);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mFragment instanceof DictionaryFragment) {
+            ((DictionaryFragment) mFragment).onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

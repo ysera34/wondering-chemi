@@ -22,6 +22,8 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 
+import java.util.Random;
+
 /**
  * Created by yoon on 2016. 12. 31..
  */
@@ -94,11 +96,14 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 if (!isSearchMode) {
                     showSearchMode();
                     isSearchMode = true;
-                }
-//                else {
+                } else {
 //                    hideSearchMode();
 //                    isSearchMode = false;
-//                }
+                    Toast.makeText(getActivity(), "검색모드", Toast.LENGTH_SHORT).show();
+                    Chemical chemical = new Chemical();
+                    chemical.setNameKo(String.valueOf(new Random(10)));
+                    ChemicalSharedPreferences.addStoreChemical(getActivity(), chemical);
+                }
                 break;
             case R.id.dictionary_search_image_view:
                 if (!isSearchMode) {
@@ -107,10 +112,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 } else {
                     Toast.makeText(getActivity(), "검색모드", Toast.LENGTH_SHORT).show();
                 }
-                Chemical chemical = new Chemical();
-                chemical.setNameKo("안녕하세요" + String.valueOf(System.currentTimeMillis() / 100));
-                chemical.setNameEn("Hello");
-                ChemicalSharedPreferences.addStoreChemical(getActivity(), chemical);
                 break;
         }
     }
@@ -173,10 +174,35 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     public void updateSearchEditText(Chemical chemical) {
         mSearchEditText.setText(String.valueOf(chemical.getNameKo()));
 //        mSearchEditText.setSelection(chemical.getNameKo().length());
-//        ChemicalSharedPreferences.addStoreChemical(getActivity(), chemical);
 
-//        mFragmentManager.beginTransaction()
-//                .replace(R.id.dictionary_fragment_container, ChemicalFragment.newInstance())
-//                .commit();
+        mFragmentManager.beginTransaction()
+                .replace(R.id.dictionary_fragment_container, ChemicalFragment.newInstance())
+                .commit();
+    }
+
+    public void replaceFragment() {
+        mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
+
+        if (mFragment instanceof ChemicalLatestListFragment) {
+            mFragmentManager.beginTransaction()
+                    .add(R.id.dictionary_fragment_container, ChemicalFragment.newInstance())
+                    .commit();
+        } else if (mFragment instanceof ChemicalFragment) {
+            mFragmentManager.beginTransaction()
+                    .add(R.id.dictionary_fragment_container, ChemicalLatestListFragment.newInstance((byte) -1))
+                    .commit();
+        }
+    }
+
+    public void onBackPressed() {
+        mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
+
+        if (mFragment instanceof ChemicalLatestListFragment) {
+            getActivity().finish();
+        } else if (mFragment instanceof ChemicalFragment) {
+            mFragmentManager.beginTransaction()
+                    .add(R.id.dictionary_fragment_container, ChemicalLatestListFragment.newInstance((byte) -1))
+                    .commit();
+        }
     }
 }

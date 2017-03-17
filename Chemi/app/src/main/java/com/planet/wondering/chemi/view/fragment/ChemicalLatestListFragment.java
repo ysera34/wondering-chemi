@@ -1,27 +1,41 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnChemicalSelectedListener;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 3. 17..
@@ -266,8 +280,8 @@ public class ChemicalLatestListFragment extends Fragment {
                 mChemicalLatestAdapter.removeChemicals(mChemical);
                 mChemicalLatestAdapter.notifyDataSetChanged();
             } else {
-                Toast.makeText(getActivity(), "최근 검색 성분 상세 요청", Toast.LENGTH_SHORT).show();
-                mSelectedListener.onChemicalSelected(mChemical);
+//                mSelectedListener.onChemicalSelected(mChemical);
+                requestChemical(mChemical.getId());
             }
         }
     }
@@ -283,5 +297,37 @@ public class ChemicalLatestListFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnChemicalSelectedListener");
         }
+    }
+
+    private void requestChemical(int chemicalId) {
+
+        final ProgressDialog progressDialog =
+                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+                        getString(R.string.progress_dialog_message_wait), false, false);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + PATH + chemicalId,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Chemical chemical = Parser.parseChemical(response);
+                        progressDialog.dismiss();
+                        mSelectedListener.onChemicalSelected(chemical);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, error.getMessage());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 }
