@@ -63,6 +63,7 @@ public class Config {
 
     public static final class Tag {
         public static final String PATH = File.separator + "tags?";
+        public static final String CTAG_PATH = File.separator + "chemicalnames?";
 
         public static final class Key {
             public static final String CHARACTER_QUERY = "character=";
@@ -73,6 +74,8 @@ public class Config {
             public static final String TAG_DESCRIPTION = "description";
             public static final String TAG_RANK = "rank";
             public static final String TAG_RANK_DELTA = "rankDelta";
+            public static final String TAG_CHEMICAL_ID = "chemicalid";
+            public static final String TAG_IS_CORRECT = "isCorrect";
         }
     }
 

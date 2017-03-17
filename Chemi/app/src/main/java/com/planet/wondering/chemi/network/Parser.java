@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.network;
 
 import android.util.Log;
 
+import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Pager;
@@ -58,9 +59,11 @@ import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
 import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_CHEMICAL_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ID;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_IS_CORRECT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 import static com.planet.wondering.chemi.network.Config.User.Key.AGE;
@@ -150,6 +153,33 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return tagStrings;
+    }
+
+    public static ArrayList<CTag> parseCTagList(JSONObject responseObject) {
+
+        ArrayList<CTag> cTags = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                if (tagSize > 0) {
+                    JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+                        CTag cTag = new CTag();
+                        cTag.setId(tagJSONObject.getInt(TAG_ID));
+                        cTag.setChemicalId(tagJSONObject.getInt(TAG_CHEMICAL_ID));
+                        cTag.setDescription(tagJSONObject.getString(TAG_DESCRIPTION));
+                        cTag.setCorrect(tagJSONObject.getInt(TAG_IS_CORRECT) == 1);
+                        Log.i(TAG, cTag.toString());
+                        cTags.add(cTag);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return cTags;
     }
 
     public static ArrayList<Tag> parseTagList(JSONObject responseObject) {
