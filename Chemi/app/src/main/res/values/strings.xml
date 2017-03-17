@@ -152,4 +152,9 @@
         <item>@string/ewg_reason_description_robust</item>
     </string-array>
 
+    <string name="search_chemical_latest_title">최근 검색 성분</string>
+    <string name="search_chemical_latest_message">\"최근 검색한 성분이 없어요.\"</string>
+    <string name="search_chemical_suggestion_title">검색어 제안</string>
+    <string name="search_chemical_suggestion_message">\"찾으시는 성분이 이 성분일 것 같아요.\"</string>
+
 </resources>

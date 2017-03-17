@@ -51,7 +51,8 @@ public class TagLatestListFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tag_latest_list, container, false);
         mTagLatestRecyclerView = (RecyclerView) view.findViewById(R.id.tag_latest_recycler_view);
         mTagLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -62,6 +63,11 @@ public class TagLatestListFragment extends Fragment {
         updateUI();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -85,11 +91,6 @@ public class TagLatestListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     private class TagLatestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ArrayList<Tag> mTags = new ArrayList<>();
@@ -109,6 +110,7 @@ public class TagLatestListFragment extends Fragment {
 
         public void clearTag() {
             mTags.clear();
+            TagSharedPreferences.removeAllStoredTag(getActivity());
         }
 
         @Override
@@ -188,7 +190,6 @@ public class TagLatestListFragment extends Fragment {
         public void onClick(View v) {
             mTagLatestAdapter.clearTag();
             mTagLatestAdapter.notifyDataSetChanged();
-            TagSharedPreferences.removeAllStoredTag(getActivity());
         }
     }
 

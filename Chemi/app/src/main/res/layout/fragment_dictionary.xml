@@ -6,14 +6,14 @@
     <LinearLayout
         android:id="@+id/dictionary_header_layout"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
-        android:orientation="vertical"
-        android:background="@color/colorPrimary">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/dictionary_logo_layout"
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="30dp"
+            android:background="@color/colorPrimary">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -38,7 +38,8 @@
             android:id="@+id/dictionary_search_layout"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:background="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/dictionary_search_edit_text"
@@ -65,22 +66,14 @@
                 android:scaleType="centerInside"/>
 
         </RelativeLayout>
-        
+
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dictionary"
-        android:scaleType="centerInside"/>
-
     <FrameLayout
+        android:id="@+id/dictionary_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dictionary_header_layout"
-        android:background="@color/colorAccent">
-
+        android:layout_below="@+id/dictionary_header_layout">
     </FrameLayout>
 
 </RelativeLayout>
