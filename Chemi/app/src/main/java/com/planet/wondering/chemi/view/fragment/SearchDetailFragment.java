@@ -250,8 +250,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                         try {
                             mTagResults.clear();
                             String query = constraint.toString();
-                            Log.i("query", query);
-                            Log.i("deComposer", decomposeKoreanSyllable(constraint.toString()));
+//                            Log.i("query", query);
+//                            Log.i("deComposer", decomposeKoreanSyllable(constraint.toString()));
 
                             String currentTextUnSpaced = constraint.toString().replaceAll("\\s+", "");
                             int currentTextLength = currentTextUnSpaced.length();

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_tag_name_text_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textColor="@color/colorFontHint"
-    android:textSize="15sp"
-    android:padding="8dp"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:maxLines="1"
+    android:layout_height="53dp"
     android:gravity="center_vertical"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentEnd="true"/>
-    <!--android:textAppearance="?android:attr/textAppearanceListItemSmall"-->
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:id="@+id/list_item_tag_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/colorFontToolbarSubtitle"
+        android:ellipsize="end"
+        android:maxLines="1"/>
+
+</LinearLayout>

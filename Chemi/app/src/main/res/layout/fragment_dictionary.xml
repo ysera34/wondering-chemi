@@ -51,7 +51,7 @@
                 android:maxLines="1"
                 android:inputType="textAutoComplete"
                 android:imeOptions="actionDone"
-                android:dropDownAnchor="@+id/dictionary_fragment_container"
+                android:dropDownAnchor="@+id/search_view_bottom_anchor"
                 android:dropDownWidth="wrap_content"
                 android:dropDownSelector="@color/colorPrimary"
                 android:hint="성분명을 입력해보세요."
@@ -87,6 +87,14 @@
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_search_primary_36dp"
                 android:scaleType="centerInside"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/search_view_bottom_anchor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
         </RelativeLayout>
 
