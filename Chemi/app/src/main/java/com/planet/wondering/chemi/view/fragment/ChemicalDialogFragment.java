@@ -135,7 +135,14 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
         mChemicalDialogHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
         mChemicalDialogPurposeTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_purpose_text_view);
-        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+        if (mChemical.getPurpose().equals("null")) {
+            mChemicalDialogPurposeTextView.setVisibility(View.GONE);
+        } else {
+            mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+        }
+//        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+
+
         mChemicalDialogAllergyImageView = (ImageView)
                 view.findViewById(R.id.chemical_dialog_allergy_image_view);
         mChemicalDialogAllergyImageView.setImageResource(mChemical.getAllergyIconResId());

@@ -171,7 +171,6 @@ public class Parser {
                         cTag.setChemicalId(tagJSONObject.getInt(TAG_CHEMICAL_ID));
                         cTag.setDescription(tagJSONObject.getString(TAG_DESCRIPTION));
                         cTag.setCorrect(tagJSONObject.getInt(TAG_IS_CORRECT) == 1);
-                        Log.i(TAG, cTag.toString());
                         cTags.add(cTag);
                     }
                 }
@@ -363,9 +362,9 @@ public class Parser {
                 chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
                 chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
                 chemical.setPurpose(chemicalJSONObject.getString(PURPOSE));
-                if (chemical.getPurpose().equals("null")) {
-                    chemical.setPurpose("");
-                }
+//                if (chemical.getPurpose().equals("null")) {
+//                    chemical.setPurpose("");
+//                }
                 chemical.setAllergy(chemicalJSONObject.getBoolean(Key.ALLERGY));
                 chemical.setAllergyDescription(chemicalJSONObject.getString(ALLERGY_DESCRIPTION));
                 int hazardSize = chemicalJSONObject.getInt(HAZARD_SIZE);

@@ -3,7 +3,6 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="16dp"
     android:background="@color/colorWhite">
 
     <LinearLayout
@@ -97,7 +96,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="근거 자료가 풍부해요"
                 android:textSize="12sp"
                 android:textColor="@color/colorFontBody"/>
 

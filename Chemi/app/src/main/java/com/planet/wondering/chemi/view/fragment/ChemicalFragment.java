@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
+import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,7 @@ public class ChemicalFragment extends Fragment {
 
         mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
         mHazards = mChemical.getHazards();
-
+        ChemicalSharedPreferences.addStoreChemical(getActivity(), mChemical);
     }
 
     @Nullable
@@ -100,7 +101,13 @@ public class ChemicalFragment extends Fragment {
         mChemicalDialogHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
         mChemicalDialogPurposeTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_purpose_text_view);
-        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+        if (mChemical.getPurpose().equals("null")) {
+            mChemicalDialogPurposeTextView.setVisibility(View.GONE);
+        } else {
+            mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+        }
+//        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+
         mChemicalDialogAllergyImageView = (ImageView)
                 view.findViewById(R.id.chemical_dialog_allergy_image_view);
         mChemicalDialogAllergyImageView.setImageResource(mChemical.getAllergyIconResId());

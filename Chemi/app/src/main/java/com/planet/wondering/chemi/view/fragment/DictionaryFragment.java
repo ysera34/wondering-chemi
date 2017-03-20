@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -30,11 +32,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
+import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 
 import org.json.JSONObject;
 
@@ -45,8 +52,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Random;
 
+import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.CTAG_PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -70,6 +78,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private Transition mTransition;
 
+    private InputMethodManager mInputMethodManager;
+
     private LinearLayout mDictionaryHeaderLayout;
     private RelativeLayout mDictionaryLogoLayout;
     private RelativeLayout mDictionarySearchLayout;
@@ -87,6 +97,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -135,11 +146,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mSearchEditText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String cTag = mChemicalCharacterAdapter.getItem(position).getDescription();
-                Toast.makeText(getActivity(), cTag, Toast.LENGTH_SHORT).show();
+                mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+
+                CTag cTag = mChemicalCharacterAdapter.getItem(position);
+
+                mSearchEditText.setText(cTag.getDescription());
+                mSearchEditText.setSelection(cTag.getDescription().length());
+
+                requestChemical(cTag.getChemicalId(), cTag.isCorrect());
             }
         });
-
 
         mDictionaryFragmentContainerFrameLayout = (FrameLayout) view.findViewById(R.id.dictionary_fragment_container);
         mFragmentManager = getChildFragmentManager();
@@ -170,10 +186,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 } else {
 //                    hideSearchMode();
 //                    isSearchMode = false;
-                    Toast.makeText(getActivity(), "검색모드", Toast.LENGTH_SHORT).show();
-                    Chemical chemical = new Chemical();
-                    chemical.setNameKo(String.valueOf(new Random(10)));
-                    ChemicalSharedPreferences.addStoreChemical(getActivity(), chemical);
                 }
                 break;
             case R.id.dictionary_search_image_view:
@@ -181,11 +193,21 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     showSearchMode();
                     isSearchMode = true;
                 } else {
-                    Toast.makeText(getActivity(), "검색모드", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "검색창 안에서 텍스트로 검색", Toast.LENGTH_SHORT).show();
+
                 }
                 break;
             case R.id.dictionary_search_clear_image_layout:
+            case R.id.dictionary_search_clear_image_button:
                 mSearchEditText.getText().clear();
+                mInputMethodManager.showSoftInput(mSearchEditText, 0);
+                Fragment fragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
+                if (fragment instanceof ChemicalFragment) {
+                    mFragmentManager.beginTransaction()
+                            .replace(R.id.dictionary_fragment_container,
+                                    ChemicalLatestListFragment.newInstance((byte) -1))
+                            .commit();
+                }
                 break;
         }
     }
@@ -246,12 +268,15 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     }
 
     public void updateSearchEditText(Chemical chemical) {
-        mSearchEditText.setText(String.valueOf(chemical.getNameKo()));
-//        mSearchEditText.setSelection(chemical.getNameKo().length());
+        mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+        if (!isSearchMode) {
+            showSearchMode();
+        }
 
-        mFragmentManager.beginTransaction()
-                .replace(R.id.dictionary_fragment_container, ChemicalFragment.newInstance())
-                .commit();
+        mSearchEditText.setText(String.valueOf(chemical.getNameKo()));
+        mSearchEditText.setSelection(chemical.getNameKo().length());
+
+        requestChemical(chemical.getId(), true);
     }
 
     public void replaceFragment() {
@@ -274,8 +299,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         if (mFragment instanceof ChemicalLatestListFragment) {
             getActivity().finish();
         } else if (mFragment instanceof ChemicalFragment) {
+            mSearchEditText.getText().clear();
             mFragmentManager.beginTransaction()
-                    .add(R.id.dictionary_fragment_container, ChemicalLatestListFragment.newInstance((byte) -1))
+                    .replace(R.id.dictionary_fragment_container, ChemicalLatestListFragment.newInstance((byte) -1))
                     .commit();
         }
     }
@@ -531,8 +557,47 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 }
             }
         }
-
-
     }
 
+    private void requestChemical(int chemicalId, final boolean isCorrect) {
+
+        final ProgressDialog progressDialog =
+                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+                        getString(R.string.progress_dialog_message_wait), false, false);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + PATH + chemicalId,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Chemical chemical = Parser.parseChemical(response);
+                        progressDialog.dismiss();
+
+                        if (isCorrect) {
+                            mFragmentManager.beginTransaction()
+                                    .replace(R.id.dictionary_fragment_container, ChemicalFragment.newInstance(chemical))
+                                    .commit();
+                        } else {
+                            mFragmentManager.beginTransaction()
+                                    .replace(R.id.dictionary_fragment_container,
+                                            ChemicalLatestListFragment.newInstance((byte) 1, chemical))
+                                    .commit();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, error.getMessage());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
 }
