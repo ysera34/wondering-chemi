@@ -197,6 +197,9 @@ public class ChemicalLatestListFragment extends Fragment {
                 Chemical chemical = mChemicals.get(position - 1);
                 ((ChemicalHolder) holder).bindChemical(chemical);
             }
+            if (holder instanceof FooterHolder && mChemicals != null) {
+                ((FooterHolder) holder).bindFooter(mModeId, mChemicals.size());
+            }
         }
 
         @Override
@@ -256,11 +259,35 @@ public class ChemicalLatestListFragment extends Fragment {
         }
     }
 
-    private class FooterHolder extends RecyclerView.ViewHolder {
+    private class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private LinearLayout mFooterLayout;
+        private LinearLayout mFooterClearLayout;
 
         public FooterHolder(View itemView) {
             super(itemView);
 
+            mFooterLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_chemical_latest_footer_layout);
+            mFooterClearLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_chemical_latest_clear_layout);
+            mFooterClearLayout.setOnClickListener(this);
+        }
+
+        public void bindFooter(int modeId, int chemicalSize) {
+            if (chemicalSize == 0 || modeId != LATEST_MODE) {
+                mFooterLayout.setVisibility(View.GONE);
+            } else if (chemicalSize > 0){
+                mFooterLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.list_item_chemical_latest_clear_layout) {
+                mChemicalLatestAdapter.clearChemical();
+                mChemicalLatestAdapter.notifyDataSetChanged();
+            }
         }
     }
 

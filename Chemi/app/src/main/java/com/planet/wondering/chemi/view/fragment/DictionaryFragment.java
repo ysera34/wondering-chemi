@@ -271,6 +271,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
         if (!isSearchMode) {
             showSearchMode();
+            isSearchMode = true;
         }
 
         mSearchEditText.setText(String.valueOf(chemical.getNameKo()));
