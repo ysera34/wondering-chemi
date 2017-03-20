@@ -4,9 +4,281 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/member_config_profile_header_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment_member_config_profile"/>
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"
+            android:text="프로필 설정"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center"
+        android:background="@color/colorWhite">
+
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="6dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/member_config_profile_user_image_view"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:src="@drawable/ic_user_profile_mommy"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/member_config_profile_camera_image_view"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_add_camera"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_horizontal"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/parent_age_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+                <TextView
+                    android:id="@+id/parent_dry_skin_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="건성"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+                <TextView
+                    android:id="@+id/parent_oily_skin_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="지성"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+                <TextView
+                    android:id="@+id/parent_dry_oily_skin_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="건성/지성"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+                <TextView
+                    android:id="@+id/parent_allergy_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:text="알레르기"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/child_layout"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/child_dry_skin_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="자녀 악건성"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+                <TextView
+                    android:id="@+id/child_allergy_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:text="자녀 알레르기"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/member_config_profile_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_config_body_menu_height"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="닉네임"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <ImageView
+            android:id="@+id/member_config_profile_name_arrow_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_24dp"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/member_config_profile_change_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_config_body_menu_height"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="비밀번호 변경"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <ImageView
+            android:id="@+id/member_config_profile_change_password_arrow_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_24dp"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/member_config_profile_change_survey_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_config_body_menu_height"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="부가정보 변경"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <ImageView
+            android:id="@+id/member_config_profile_change_survey_arrow_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_24dp"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/member_config_profile_sign_out_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_config_body_menu_height"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="로그아웃"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

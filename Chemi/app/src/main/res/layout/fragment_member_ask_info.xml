@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite">
@@ -9,7 +8,6 @@
         android:id="@+id/member_start_info_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
         android:background="@color/colorWhite"
         android:elevation="4dp">
 
@@ -47,7 +45,7 @@
         android:layout_below="@+id/member_start_info_header"
         android:gravity="center_horizontal"
         android:paddingTop="14dp"
-        android:paddingBottom="12dp"
+        android:paddingBottom="14dp"
         android:text="@string/member_start_info_info_message"
         android:textSize="15sp"
         android:textColor="@color/colorFontBody"
@@ -65,6 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="출생년도"
             android:textSize="12sp"
             android:textColor="@color/colorFontBody"/>
@@ -72,11 +71,12 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="24dp"
             android:hint="출생년도를 입력하세요"
-            android:inputType="number|date"
+            android:inputType="phone|numberDecimal"
             android:textSize="16sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorFontBody"
+            android:background="@drawable/selector_edit_text_under_line_primary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,15 +89,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="여성"
                 android:textSize="16sp"
@@ -119,12 +119,27 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이용자 본인 피부고민"
-            android:textSize="12sp"
-            android:textColor="@color/colorFontBody"/>
+            android:gravity="bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="이용자 본인 피부고민"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontBody"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(중복 선택 가능)"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontHint"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,11 +152,24 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:layout_marginEnd="8dp"
+                android:text="없음"
+                android:textSize="15sp"
+                android:textColor="@color/colorFrenchGray"
+                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:layout_marginEnd="8dp"
                 android:text="건성"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textColor="@color/colorFrenchGray"
                 android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
 
@@ -150,24 +178,11 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_marginEnd="8dp"
-                android:text="중성"
-                android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:layout_marginEnd="8dp"
                 android:text="지성"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textColor="@color/colorFrenchGray"
                 android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
 
@@ -176,11 +191,11 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:layout_marginEnd="8dp"
-                android:text="복합성"
-                android:textSize="16sp"
+                android:text="알레르기 (아토피 등)"
+                android:textSize="15sp"
                 android:textColor="@color/colorFrenchGray"
                 android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
 
@@ -227,12 +242,27 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="자녀 피부고민"
-            android:textSize="12sp"
-            android:textColor="@color/colorFontBody"/>
+            android:gravity="bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="자녀 피부고민"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontBody"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(중복 선택 가능)"
+                android:textSize="12sp"
+                android:textColor="@color/colorFontHint"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -244,8 +274,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:layout_marginEnd="8dp"
                 android:text="없음"
                 android:textSize="16sp"
@@ -257,35 +287,23 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:layout_marginEnd="8dp"
-                android:text="알레르기"
-                android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_marginEnd="8dp"
-                android:text="아토피"
-                android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
                 android:text="악건성"
+                android:textSize="16sp"
+                android:textColor="@color/colorFrenchGray"
+                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:layout_marginEnd="8dp"
+                android:text="알레르기 (아토피 등)"
                 android:textSize="16sp"
                 android:textColor="@color/colorFrenchGray"
                 android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
@@ -303,8 +321,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
-            android:layout_marginBottom="38dp"
+            android:layout_marginBottom="65dp"
             android:layout_marginStart="47dp"
             android:layout_marginEnd="47dp"
             android:paddingTop="14dp"

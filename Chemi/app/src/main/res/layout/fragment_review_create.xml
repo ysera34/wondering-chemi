@@ -116,7 +116,7 @@
                 <!--android:layout_marginBottom="16dp"-->
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="225dp"
+                android:layout_height="205dp"
                 android:layout_below="@+id/review_create_review_header_layout"
                 android:clipToPadding="true"
                 android:fillViewport="true">

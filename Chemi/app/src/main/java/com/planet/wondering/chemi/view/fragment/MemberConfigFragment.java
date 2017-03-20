@@ -4,11 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -18,7 +14,6 @@ import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
-import com.planet.wondering.chemi.view.activity.MemberActivity;
 
 /**
  * Created by yoon on 2017. 2. 10..
@@ -36,7 +31,6 @@ public class MemberConfigFragment extends Fragment
         return fragment;
     }
 
-    private Toolbar mConfigToolbar;
     private int[] mConfigLayoutIds;
     private RelativeLayout[] mConfigLayouts;
     private Switch mPushSwitch;
@@ -61,10 +55,6 @@ public class MemberConfigFragment extends Fragment
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_config, container, false);
 
-        mConfigToolbar = (Toolbar) view.findViewById(R.id.member_config_toolbar);
-        ((MemberActivity) getActivity()).setSupportActionBar(mConfigToolbar);
-//        mConfigToolbar.setTitle("설정");
-        ((MemberActivity) getActivity()).getSupportActionBar().setTitle("설정");
         for (int i = 0; i < mConfigLayoutIds.length; i++) {
             mConfigLayouts[i] = (RelativeLayout) view.findViewById(mConfigLayoutIds[i]);
             mConfigLayouts[i].setOnClickListener(this);
@@ -85,24 +75,24 @@ public class MemberConfigFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_config_profile_layout:
-                mMenuSelectedListener.onMenuSelected(0);
-                break;
-            case R.id.member_config_notice_layout:
                 mMenuSelectedListener.onMenuSelected(1);
                 break;
-            case R.id.member_config_request_product_layout:
+            case R.id.member_config_notice_layout:
                 mMenuSelectedListener.onMenuSelected(2);
                 break;
-            case R.id.member_config_faq_layout:
+            case R.id.member_config_request_product_layout:
                 mMenuSelectedListener.onMenuSelected(3);
+                break;
+            case R.id.member_config_faq_layout:
+                mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_version_layout:
                 break;
             case R.id.member_config_privacy_layout:
-                mMenuSelectedListener.onMenuSelected(4);
+                mMenuSelectedListener.onMenuSelected(5);
                 break;
             case R.id.member_config_collaboration_layout:
-                mMenuSelectedListener.onMenuSelected(5);
+                mMenuSelectedListener.onMenuSelected(6);
                 break;
         }
     }
@@ -124,24 +114,6 @@ public class MemberConfigFragment extends Fragment
                     Toast.makeText(getActivity(), "email false", Toast.LENGTH_SHORT).show();
                 }
                 break;
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_toolbar_member_config, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_config_confirm:
-                Toast.makeText(getActivity(), "action_config_confirm", Toast.LENGTH_SHORT).show();
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

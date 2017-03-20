@@ -2,11 +2,150 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/member_config_request_header_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment_member_config_request"/>
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:id="@+id/member_config_request_back_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_back_primary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제품 분석 요청"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="브랜드"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"/>
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:hint="브랜드를 입력해주세요"
+            android:textColorHint="@color/colorFontFrenchGray"
+            android:textSize="15sp"
+            android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="제품"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"/>
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:hint="제품명을 입력해주세요"
+            android:textColorHint="@color/colorFontFrenchGray"
+            android:textSize="15sp"
+            android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="제품 사진 및 전성분표기 사진 업로드"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="start">
+            
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_review_camera"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="리뷰"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"/>
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            android:gravity="top"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:hint="제품명을 입력해주세요"
+            android:textColorHint="@color/colorFontFrenchGray"
+            android:textSize="15sp"
+            android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

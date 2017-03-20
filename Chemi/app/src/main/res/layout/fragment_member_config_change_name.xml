@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+            android:background="@color/colorWhite">
+
+    <RelativeLayout
+        android:id="@+id/member_config_change_name_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:id="@+id/member_config_change_name_back_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_back_primary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="닉네임 변경"
+                android:textSize="16sp"
+                android:textColor="@color/colorFontNormal"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="28dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:text="닉네임 변경"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"/>
+
+        <EditText
+            android:id="@+id/member_config_change_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:hint="닉네임을 입력하세요"
+            android:inputType="text"
+            android:textSize="18sp"
+            android:textColor="@color/colorFontToolbarSubtitle"
+            android:textColorHint="@color/colorFontIron"
+            android:background="@drawable/selector_edit_text_under_line_accent"/>
+
+        <TextView
+            android:id="@+id/member_config_change_name_validation_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/member_config_change_name_auth_button_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:layout_marginBottom="38dp"
+            android:layout_marginStart="47dp"
+            android:layout_marginEnd="47dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:text="닉네임 변경하기"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/widget_solid_oval_rectangle_iron"/>
+        <!--color_selector_white-->
+        <!--selector_opaque_primary-->
+
+    </LinearLayout>
+
+</LinearLayout>

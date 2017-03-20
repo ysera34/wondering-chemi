@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
+import com.planet.wondering.chemi.view.fragment.MemberConfigChangeNameFragment;
+import com.planet.wondering.chemi.view.fragment.MemberConfigChangePasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigFAQFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigNoticeFragment;
@@ -63,40 +66,59 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
                         .commit();
                 break;
-            case 0:
+            case 1:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
                         .commit();
                 break;
-            case 1:
+            case 2:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigNoticeFragment.newInstance())
                         .commit();
                 break;
-            case 2:
+            case 3:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigRequestFragment.newInstance())
                         .commit();
                 break;
-            case 3:
+            case 4:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
                 break;
-            case 4:
+            case 5:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigTermsFragment.newInstance())
                         .commit();
                 break;
-            case 5:
+            case 6:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberConfigPartnerFragment.newInstance())
+                        .commit();
+                break;
+
+            case 11:
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, MemberConfigChangeNameFragment.newInstance())
+                        .commit();
+                break;
+            case 12:
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, MemberConfigChangePasswordFragment.newInstance())
+                        .commit();
+                break;
+            case 13:
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, MemberAskInfoFragment.newInstance())
                         .commit();
                 break;
 
@@ -141,6 +163,21 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberConfigChangeNameFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberConfigChangePasswordFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberAskInfoFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
                     .commit();
         } else {
             super.onBackPressed();
