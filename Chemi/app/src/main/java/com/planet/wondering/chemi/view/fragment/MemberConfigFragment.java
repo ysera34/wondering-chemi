@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 
 /**
@@ -45,11 +47,12 @@ public class MemberConfigFragment extends Fragment
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mConfigLayoutIds = new int[]{
-                R.id.member_config_profile_layout, R.id.member_config_request_product_layout,
+                R.id.member_config_profile_layout, R.id.member_config_notice_layout,
+                R.id.member_config_request_product_layout,
                 R.id.member_config_faq_layout, R.id.member_config_version_layout,
                 R.id.member_config_push_notification_layout, R.id.member_config_email_layout,
                 R.id.member_config_privacy_layout, R.id.member_config_collaboration_layout};
-        mConfigLayouts = new RelativeLayout[8];
+        mConfigLayouts = new RelativeLayout[mConfigLayoutIds.length];
     }
 
     @Nullable
@@ -82,16 +85,24 @@ public class MemberConfigFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_config_profile_layout:
+                mMenuSelectedListener.onMenuSelected(0);
+                break;
+            case R.id.member_config_notice_layout:
+                mMenuSelectedListener.onMenuSelected(1);
                 break;
             case R.id.member_config_request_product_layout:
+                mMenuSelectedListener.onMenuSelected(2);
                 break;
             case R.id.member_config_faq_layout:
+                mMenuSelectedListener.onMenuSelected(3);
                 break;
             case R.id.member_config_version_layout:
                 break;
             case R.id.member_config_privacy_layout:
+                mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_collaboration_layout:
+                mMenuSelectedListener.onMenuSelected(5);
                 break;
         }
     }
@@ -127,10 +138,23 @@ public class MemberConfigFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_config_confirm:
                 Toast.makeText(getActivity(), "action_config_confirm", Toast.LENGTH_SHORT).show();
-//                mMenuSelectedListener.onMenuSelected();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMenuSelectedListener");
         }
     }
 }

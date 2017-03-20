@@ -6,5 +6,5 @@ package com.planet.wondering.chemi.util.listener;
 
 public interface OnMenuSelectedListener {
 
-    void onMenuSelected();
+    void onMenuSelected(int layoutIndex);
 }

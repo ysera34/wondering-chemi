@@ -178,7 +178,7 @@ public class MemberFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_config:
 //                Toast.makeText(getActivity(), "action_config", Toast.LENGTH_SHORT).show();
-                mMenuSelectedListener.onMenuSelected();
+                mMenuSelectedListener.onMenuSelected(-1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
