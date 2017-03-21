@@ -294,6 +294,13 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    public void onDialogFinished(boolean isChose) {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
+        if (fragment instanceof ChemicalLatestListFragment) {
+            ((ChemicalLatestListFragment) fragment).onDialogFinished(isChose);
+        }
+    }
+
     public void onBackPressed() {
         mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
 

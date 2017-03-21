@@ -131,7 +131,7 @@ public class MemberActivity extends BottomNavigationActivity
     public void onDialogFinished(boolean isChose) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment instanceof MemberConfigProfileFragment) {
-            ((MemberConfigProfileFragment) fragment).OnDialogFinished(isChose);
+            ((MemberConfigProfileFragment) fragment).onDialogFinished(isChose);
         }
     }
 

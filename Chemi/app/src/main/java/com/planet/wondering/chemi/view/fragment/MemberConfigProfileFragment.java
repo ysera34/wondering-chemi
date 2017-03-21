@@ -91,7 +91,7 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         }
     }
 
-    public void OnDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose) {
         Toast.makeText(getActivity(), String.valueOf(isChose), Toast.LENGTH_SHORT).show();
     }
 

@@ -27,6 +27,7 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnChemicalSelectedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
@@ -36,6 +37,7 @@ import java.util.Collections;
 import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.CLEAR_DIALOG;
 
 /**
  * Created by yoon on 2017. 3. 17..
@@ -285,9 +287,20 @@ public class ChemicalLatestListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.list_item_chemical_latest_clear_layout) {
-                mChemicalLatestAdapter.clearChemical();
-                mChemicalLatestAdapter.notifyDataSetChanged();
+                CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment
+                        .newInstance(R.drawable.ic_dictionary, R.string.search_clear_info_message,
+                                R.string.search_clear_button_title);
+                dialogFragment.show(getFragmentManager(), CLEAR_DIALOG);
+//                mChemicalLatestAdapter.clearChemical();
+//                mChemicalLatestAdapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    public void onDialogFinished(boolean isChose) {
+        if (isChose) {
+            mChemicalLatestAdapter.clearChemical();
+            mChemicalLatestAdapter.notifyDataSetChanged();
         }
     }
 

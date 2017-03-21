@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.util.listener.OnChemicalSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.fragment.DictionaryFragment;
 
 /**
@@ -16,7 +17,7 @@ import com.planet.wondering.chemi.view.fragment.DictionaryFragment;
  */
 
 public class DictionaryActivity extends BottomNavigationActivity
-        implements OnChemicalSelectedListener {
+        implements OnChemicalSelectedListener, OnDialogFinishedListener {
 
     private static final String TAG = DictionaryActivity.class.getSimpleName();
     private FragmentManager mFragmentManager;
@@ -53,6 +54,14 @@ public class DictionaryActivity extends BottomNavigationActivity
         DictionaryFragment fragment = (DictionaryFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_container);
         fragment.updateSearchEditText(chemical);
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment instanceof DictionaryFragment) {
+            ((DictionaryFragment) fragment).onDialogFinished(isChose);
+        }
     }
 
     @Override
