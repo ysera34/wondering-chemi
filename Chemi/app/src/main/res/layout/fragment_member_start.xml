@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+    android:layout_height="match_parent"
+                android:background="@drawable/home_baby02">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,7 +58,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="30dp"
                     android:src="@drawable/ic_naver"
                     android:scaleType="centerInside"/>
 
@@ -106,7 +102,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="30dp"
                     android:src="@drawable/ic_google"
                     android:scaleType="centerInside"/>
 
@@ -150,7 +146,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="30dp"
                     android:src="@drawable/ic_email_24dp"
                     android:scaleType="centerInside"/>
 
@@ -162,14 +158,15 @@
                     android:layout_centerVertical="true"
                     android:text="@string/member_start_local"
                     android:textSize="16sp"
-                    android:textColor="@color/color_selector_white_armadillo"
                     android:textAppearance="@style/MemberStartTextAppearance"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="26dp">
+                android:layout_marginBottom="26dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
 
                 <TextView
                     android:id="@+id/member_start_browse_text_view"

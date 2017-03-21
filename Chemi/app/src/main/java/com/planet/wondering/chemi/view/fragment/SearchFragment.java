@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.planet.wondering.chemi.R;
@@ -26,7 +25,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
-    private ImageView mSearchBackgroundImageView;
     private RelativeLayout mSearchView;
     private Button mSearchButton;
     private ImageButton mSearchImageButton;
@@ -53,7 +51,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        mSearchBackgroundImageView = (ImageView) view.findViewById(R.id.search_background_image_view);
         mSearchView = (RelativeLayout) view.findViewById(R.id.search_view);
         mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
         mSearchImageButton.setOnClickListener(this);
