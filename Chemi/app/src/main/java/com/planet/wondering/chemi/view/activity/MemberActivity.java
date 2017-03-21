@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigChangeNameFragment;
@@ -25,7 +26,8 @@ import com.planet.wondering.chemi.view.fragment.MemberFragment;
  * Created by yoon on 2016. 12. 31..
  */
 
-public class MemberActivity extends BottomNavigationActivity implements OnMenuSelectedListener {
+public class MemberActivity extends BottomNavigationActivity
+        implements OnMenuSelectedListener, OnDialogFinishedListener {
 
     private static final String TAG = MemberActivity.class.getSimpleName();
     private FragmentManager mFragmentManager;
@@ -122,6 +124,14 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .commit();
                 break;
 
+        }
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment instanceof MemberConfigProfileFragment) {
+            ((MemberConfigProfileFragment) fragment).OnDialogFinished(isChose);
         }
     }
 

@@ -8,17 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGOUT_DIALOG;
 
 /**
  * Created by yoon on 2017. 2. 11..
  */
 
 public class MemberConfigProfileFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = MemberConfigProfileFragment.class.getSimpleName();
 
     public static MemberConfigProfileFragment newInstance() {
 
@@ -78,8 +84,15 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                 mMenuSelectedListener.onMenuSelected(13);
                 break;
             case R.id.member_config_profile_sign_out_layout:
+                CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment
+                        .newInstance(R.drawable.ic_logout, R.string.logout_info_message, R.string.logout_button_title);
+                dialogFragment.show(getFragmentManager(), LOGOUT_DIALOG);
                 break;
         }
+    }
+
+    public void OnDialogFinished(boolean isChose) {
+        Toast.makeText(getActivity(), String.valueOf(isChose), Toast.LENGTH_SHORT).show();
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

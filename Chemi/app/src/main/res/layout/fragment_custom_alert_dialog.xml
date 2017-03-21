@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background_custom_alert_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:background="@drawable/widget_border_bottom_custom_alert_dialog">
+
+        <ImageView
+            android:id="@+id/custom_alert_dialog_icon_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:scaleType="centerInside"/>
+
+        <TextView
+            android:id="@+id/custom_alert_dialog_message_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="4dp">
+
+        <Button
+            android:id="@+id/custom_alert_dialog_negative_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textSize="16sp"
+            android:textColor="@color/color_selector_aluminum_primary"
+            android:background="@android:color/transparent"/>
+
+        <Button
+            android:id="@+id/custom_alert_dialog_positive_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:textSize="16sp"
+            android:textColor="@color/color_selector_aluminum_primary"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+</LinearLayout>
