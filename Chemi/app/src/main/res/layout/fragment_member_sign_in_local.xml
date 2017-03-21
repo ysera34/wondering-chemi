@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorWhite">
+                android:background="#77ffffff">
 
     <RelativeLayout
         android:id="@+id/member_forget_email_header"
@@ -127,6 +127,7 @@
             android:background="@drawable/widget_border_oval_rectangle_primary"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/member_sign_in_submit_result_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,35 +137,33 @@
             android:textSize="12sp"
             android:textColor="@color/colorFontNormal"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="40dp"
-            android:paddingEnd="40dp">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/member_sign_in_forget_password_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:layout_marginEnd="8dp"
                 android:padding="10dp"
                 android:clickable="true"
                 android:text="비밀번호를 잊으셨나요?"
-                android:textSize="12sp"
-                android:textColor="@color/color_selector_dovegray_primary"/>
+                android:textColor="@color/color_selector_white_dove_gray"
+                android:textAppearance="@style/MemberStartTextAppearance"/>
 
             <TextView
                 android:id="@+id/member_sign_in_recommend_user_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:padding="10dp"
                 android:clickable="true"
                 android:text="아직 계정이 없으신가요?"
-                android:textSize="12sp"
-                android:textColor="@color/color_selector_dovegray_primary"/>
+                android:textColor="@color/color_selector_white_dove_gray"
+                android:textAppearance="@style/MemberStartTextAppearance"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

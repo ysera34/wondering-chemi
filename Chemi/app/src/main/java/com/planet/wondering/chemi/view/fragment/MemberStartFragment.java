@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
-import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 /**
  * Created by yoon on 2017. 2. 12..
@@ -35,9 +36,6 @@ public class MemberStartFragment extends Fragment
     private RelativeLayout mStartGoogleLayout;
     private RelativeLayout mStartLocalLayout;
 
-    private TextView mStartNaverTextView;
-    private TextView mStartGoogleTextView;
-    private TextView mStartLocalTextView;
     private TextView mStartBrowseTextView;
     private TextView mStartAlreadyUserTextView;
 
@@ -54,22 +52,14 @@ public class MemberStartFragment extends Fragment
 
         mStartNaverLayout = (RelativeLayout) view.findViewById(R.id.member_start_naver_layout);
         mStartNaverLayout.setOnClickListener(this);
-        mStartNaverTextView = (TextView) view.findViewById(R.id.member_start_naver_text_view);
-//        mStartNaverTextView.setOnClickListener(this);
         mStartGoogleLayout = (RelativeLayout) view.findViewById(R.id.member_start_google_layout);
         mStartGoogleLayout.setOnClickListener(this);
-        mStartGoogleTextView = (TextView) view.findViewById(R.id.member_start_google_text_view);
-//        mStartGoogleTextView.setOnClickListener(this);
         mStartLocalLayout = (RelativeLayout) view.findViewById(R.id.member_start_local_layout);
         mStartLocalLayout.setOnClickListener(this);
-        mStartLocalTextView = (TextView) view.findViewById(R.id.member_start_local_text_view);
-//        mStartLocalTextView.setOnClickListener(this);
         mStartBrowseTextView = (TextView) view.findViewById(R.id.member_start_browse_text_view);
         mStartBrowseTextView.setOnClickListener(this);
         mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
         mStartAlreadyUserTextView.setOnClickListener(this);
-
-        view.findViewById(R.id.member_survey_info_button).setOnClickListener(this);
 
         view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
@@ -87,28 +77,24 @@ public class MemberStartFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_naver_layout:
-            case R.id.member_start_naver_text_view:
-                ((MemberStartActivity) getActivity()).signInNaver();
+//                ((MemberStartActivity) getActivity()).signInNaver();
+                mMenuSelectedListener.onMenuSelected(7020);
                 break;
             case R.id.member_start_google_layout:
-            case R.id.member_start_google_text_view:
-                ((MemberStartActivity) getActivity()).signInGoogle();
+//                ((MemberStartActivity) getActivity()).signInGoogle();
+                mMenuSelectedListener.onMenuSelected(7010);
                 break;
             case R.id.member_start_local_layout:
-            case R.id.member_start_local_text_view:
-                ((MemberStartActivity) getActivity()).signUpForLocal();
+                mMenuSelectedListener.onMenuSelected(7001);
+//                ((MemberStartActivity) getActivity()).signUpForLocal();
                 break;
             case R.id.member_start_browse_text_view:
-                startActivity(SearchActivity.newIntent(getActivity()));
-                getActivity().finish();
+                mMenuSelectedListener.onMenuSelected(7000);
                 break;
             case R.id.member_start_already_user_text_view:
-                ((MemberStartActivity) getActivity()).signInLocal();
+                mMenuSelectedListener.onMenuSelected(7002);
+//                ((MemberStartActivity) getActivity()).signInLocal();
                 break;
-
-            case R.id.member_survey_info_button:
-                ((MemberStartActivity) getActivity()).moveToFragment(3);
-
             case R.id.naver_sign_out_button:
                 ((MemberStartActivity) getActivity()).signOutNaver();
                 break;
@@ -121,6 +107,19 @@ public class MemberStartFragment extends Fragment
             case R.id.google_revoke_button:
                 ((MemberStartActivity) getActivity()).revokeAccessGoogle();
                 break;
+        }
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMenuSelectedListener");
         }
     }
 }

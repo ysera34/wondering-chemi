@@ -4,6 +4,6 @@
         android:fromYDelta="100%"
         android:toYDelta="0"
         android:interpolator="@android:anim/accelerate_interpolator"
-        android:duration="700" />
+        android:duration="500" />
 </set>
     <!--android:duration="@android:integer/config_mediumAnimTime"-->

@@ -30,7 +30,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
-import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 import org.json.JSONObject;
@@ -138,8 +138,8 @@ public class MemberSignInLocalFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
@@ -155,7 +155,8 @@ public class MemberSignInLocalFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_sign_in_cancel_layout:
-                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+//                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+                mMenuSelectedListener.onMenuSelected(7004);
                 break;
             case R.id.member_sign_in_submit_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
@@ -170,11 +171,13 @@ public class MemberSignInLocalFragment extends Fragment
                 break;
             case R.id.member_sign_in_forget_password_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
-                ((MemberStartActivity) getActivity()).findPassword();
+//                ((MemberStartActivity) getActivity()).findPassword();
+                mMenuSelectedListener.onMenuSelected(7005);
                 break;
             case R.id.member_sign_in_recommend_user_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
-                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+//                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+                mMenuSelectedListener.onMenuSelected(7004);
                 break;
         }
     }
@@ -320,5 +323,18 @@ public class MemberSignInLocalFragment extends Fragment
                         }
                     }
                 });
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMenuSelectedListener");
+        }
     }
 }

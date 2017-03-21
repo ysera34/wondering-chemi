@@ -34,6 +34,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 import org.json.JSONObject;
@@ -189,7 +190,8 @@ public class MemberStartLocalFragment extends Fragment
         switch (v.getId()) {
             case R.id.member_start_local_cancel_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
-                ((MemberStartActivity) getActivity()).cancelSignUpForLocal();
+//                ((MemberStartActivity) getActivity()).cancelSignUpForLocal();
+                mMenuSelectedListener.onMenuSelected(7003);
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
@@ -538,6 +540,19 @@ public class MemberStartLocalFragment extends Fragment
                         }
                     }
                 });
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMenuSelectedListener");
+        }
     }
 
 }

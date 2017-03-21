@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-                android:background="@drawable/home_baby02">
+    android:background="@android:color/transparent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/member_survey_info_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="survey"
-            android:textAllCaps="false"/>
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -37,7 +27,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -74,6 +64,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -118,6 +109,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -165,8 +157,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:id="@+id/member_start_browse_text_view"
@@ -176,6 +168,7 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_browse"
+                    android:textColor="@color/color_selector_white_dove_gray"
                     android:textAppearance="@style/MemberStartTextAppearance"/>
 
                 <TextView
@@ -186,12 +179,11 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_already_user"
+                    android:textColor="@color/color_selector_white_dove_gray"
                     android:textAppearance="@style/MemberStartTextAppearance"/>
 
             </RelativeLayout>
 
         </LinearLayout>
-
-    </RelativeLayout>
 
 </RelativeLayout>

@@ -44,6 +44,7 @@ import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberChangePasswordFragment;
@@ -73,12 +74,10 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
  * Created by yoon on 2017. 2. 12..
  */
 
-public class MemberStartActivity extends AppCompatActivity
-        implements GoogleApiClient.OnConnectionFailedListener, OnSurveyCompletedListener {
+public class MemberStartActivity extends AppCompatActivity implements OnMenuSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener, OnSurveyCompletedListener {
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();
-    public static final String START_NAVER = "start.naver";
-    public static final String START_GOOGLE = "start.google";
     public static final int RC_SIGN_IN = 9001;
 
     public static Intent newIntent(Context packageContext) {
@@ -104,9 +103,12 @@ public class MemberStartActivity extends AppCompatActivity
 
         Log.i(TAG, "shared preferences accessToken : "
                 + UserSharedPreferences.getStoredToken(getApplicationContext()));
+//        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+//            startActivity(SearchActivity.newIntent(getApplicationContext()));
+//            finish();
+//        }
 
-
-        setContentView(R.layout.activity_member_start);
+        setContentView(R.layout.activity_fragment);
 
         GoogleSignInOptions googleSignInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -143,12 +145,12 @@ public class MemberStartActivity extends AppCompatActivity
                 getString(R.string.app_name));
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.member_start_fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
 
         if (mFragment == null) {
             mFragment = MemberStartFragment.newInstance();
             mFragmentManager.beginTransaction()
-                    .add(R.id.member_start_fragment_container, mFragment)
+                    .add(R.id.pure_fragment_container, mFragment)
                     .commit();
         }
     }
@@ -159,9 +161,6 @@ public class MemberStartActivity extends AppCompatActivity
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
-    private MemberStartLocalFragment mMemberStartLocalFragment;
-    private MemberSendEmailFragment mMemberSendEmailFragment;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -170,35 +169,35 @@ public class MemberStartActivity extends AppCompatActivity
         String accessToken = null;
         String resetsPassword = null;
         if (uriData != null) {
-            Log.i(TAG, String.valueOf(uriData.toString()));
+//            Log.i(TAG, String.valueOf(uriData.toString()));
             accessToken = uriData.getQueryParameter("accesstoken");
             resetsPassword = uriData.getQueryParameter("resetspassword");
         } else {
-            Log.i(TAG, "uriData : did not get it");
+//            Log.i(TAG, "uriData : did not get it");
         }
         if (accessToken != null) {
 //            Log.i(TAG, "accesstoken : " + accessToken);
             if (resetsPassword.equals("0")) {
                 try {
-                    mMemberStartLocalFragment = (MemberStartLocalFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.member_start_fragment_container);
-                    mMemberStartLocalFragment.updateUIByAuthEmail(accessToken);
+                    MemberStartLocalFragment fragment = (MemberStartLocalFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.pure_fragment_container);
+                    fragment.updateUIByAuthEmail(accessToken);
                 } catch (ClassCastException e) {
                     Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
                     startActivity(MemberStartActivity.newIntent(getApplication()));
                 }
             } else if (resetsPassword.equals("1")) {
                 try {
-                    mMemberSendEmailFragment = (MemberSendEmailFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.member_start_fragment_container);
-                    mMemberSendEmailFragment.updateUIByAuthEmail(accessToken);
+                    MemberSendEmailFragment fragment = (MemberSendEmailFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.pure_fragment_container);
+                    fragment.updateUIByAuthEmail(accessToken);
                 } catch (ClassCastException e) {
                     Toast.makeText(getApplicationContext(), "비정상 요청이예요.", Toast.LENGTH_SHORT).show();
                     startActivity(MemberStartActivity.newIntent(getApplication()));
                 }
             }
         } else {
-            Log.e(TAG, "accesstoken : did not get it");
+//            Log.e(TAG, "accesstoken : did not get it");
         }
     }
 
@@ -226,10 +225,11 @@ public class MemberStartActivity extends AppCompatActivity
             if (result.isSuccess()) {
                 Log.i(TAG, "GoogleSignInResult" + " isSuccess");
                 GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthGoogle(account, 0);
+
                 // TODO(user): send token to server and validate server-side
                 if (account != null) {
                     requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
+                    //                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
                     mGoogleSignInAccount = account;
                 }
 //              requestSubmitUserInfo(account.getIdToken(), 1);
@@ -242,7 +242,7 @@ public class MemberStartActivity extends AppCompatActivity
 
     private GoogleSignInAccount mGoogleSignInAccount;
 
-    private void firebaseAuthGoogle(GoogleSignInAccount account, int platformId) {
+    private void firebaseAuthGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle: id : " + account.getId());
         Log.d(TAG, "firebaseAuthWithGoogle: id token : " + account.getIdToken());
         Log.d(TAG, "firebaseAuthWithGoogle: full name : " + account.getDisplayName());
@@ -252,25 +252,23 @@ public class MemberStartActivity extends AppCompatActivity
         Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
         Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
 
-        if (platformId == 1) {
-            showProgressDialog();
+        showProgressDialog();
 
-            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-            mFirebaseAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mFirebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "signInWithCredential", task.getException());
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                            hideProgressDialog();
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
-        }
+                        hideProgressDialog();
+                    }
+                });
     }
 
     public void signInGoogle() {
@@ -311,7 +309,7 @@ public class MemberStartActivity extends AppCompatActivity
             Log.i(TAG, getString(R.string.google_status_fmt, user.getEmail()));
             Log.i(TAG, getString(R.string.firebase_status_fmt, user.getUid()));
         } else {
-            Log.i(TAG, "사용자 정보가 없거나, 로그아웃, 연동 해제 되었습니다.");
+            Log.i(TAG, "Google User, Firebase User is null");
         }
     }
 
@@ -320,7 +318,7 @@ public class MemberStartActivity extends AppCompatActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
     public void signInNaver() {
@@ -367,52 +365,52 @@ public class MemberStartActivity extends AppCompatActivity
             } else {
                 String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
                 String errorDesc = mNaverOAuthLogin.getLastErrorDesc(mContext);
-                Toast.makeText(mContext, "errorCode:" + errorCode + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "naver OAuthLogin " + "errorCode:" + errorCode + ", errorDesc:" + errorDesc);
             }
         }
     };
 
-    public void signUpForLocal() {
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-                .replace(R.id.member_start_fragment_container, MemberStartLocalFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
-    }
+//    public void signUpForLocal() {
+//        mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
+//                .replace(R.id.pure_fragment_container, MemberStartLocalFragment.newInstance())
+//                .addToBackStack(null)
+//                .commit();
+//    }
 
-    public void cancelSignUpForLocal() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
-        if (fragment instanceof MemberStartLocalFragment) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
-                    .commit();
-        }
-    }
+//    public void cancelSignUpForLocal() {
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
+//        if (fragment instanceof MemberStartLocalFragment) {
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
+//                    .commit();
+//        }
+//    }
 
-    public void signInLocal() {
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-                .replace(R.id.member_start_fragment_container, MemberSignInLocalFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
-    }
+//    public void signInLocal() {
+//        mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
+//                .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
+//                .addToBackStack(null)
+//                .commit();
+//    }
 
-    public void cancelSignInLocal() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.member_start_fragment_container);
-        if (fragment instanceof MemberSignInLocalFragment) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
-                    .commit();
-        }
-    }
+//    public void cancelSignInLocal() {
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
+//        if (fragment instanceof MemberSignInLocalFragment) {
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
+//                    .commit();
+//        }
+//    }
 
-    public void findPassword() {
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-                .replace(R.id.member_start_fragment_container, MemberForgetPasswordFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
-    }
+//    public void findPassword() {
+//        mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
+//                .replace(R.id.pure_fragment_container, MemberForgetPasswordFragment.newInstance())
+//                .addToBackStack(null)
+//                .commit();
+//    }
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
@@ -510,7 +508,7 @@ public class MemberStartActivity extends AppCompatActivity
                             if (user == null) {
                                 mFragmentManager.beginTransaction()
                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                                        .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                                        .replace(R.id.pure_fragment_container, MemberStartNameFragment.newInstance())
                                         .commit();
 
                                 mNaverEmail = emailAddress;
@@ -532,13 +530,13 @@ public class MemberStartActivity extends AppCompatActivity
                                 Toast.makeText(getApplicationContext(),
                                         "동일 이메일이 구글을 통하지 않고 가입 되었다.... 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
-                                signOutGoogle();
+//                                signOutGoogle();
                                 revokeAccessGoogle();
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "동일 이메일이 네이버를 통하지 않고 가입 되었다... 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
-                                signOutNaver();
+//                                signOutNaver();
                                 revokeAccessNaver();
                             }
                         }
@@ -593,7 +591,7 @@ public class MemberStartActivity extends AppCompatActivity
                         mUser = Parser.parseUser(response);
 
                         if (mPlatformId == 1) {
-                            firebaseAuthGoogle(mGoogleSignInAccount, mPlatformId);
+                            firebaseAuthGoogle(mGoogleSignInAccount);
                         } else {
                         // platform id 2
                             createFirebaseAccount(mNaverEmail,
@@ -608,7 +606,7 @@ public class MemberStartActivity extends AppCompatActivity
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
+                                .replace(R.id.pure_fragment_container, MemberSurveyInfoFragment.newInstance())
                                 .commit();
                     }
                 },
@@ -631,13 +629,6 @@ public class MemberStartActivity extends AppCompatActivity
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    public void determineActivity() {
-        String token = UserSharedPreferences.getStoredToken(getApplicationContext());
-        if (token != null) {
-            startActivity(SearchActivity.newIntent(getApplicationContext()));
-        }
-    }
-
     private void createFirebaseAccount(String email, String password) {
         Log.d(TAG, "createFirebaseAccount with Firebase: " + email);
 
@@ -648,8 +639,9 @@ public class MemberStartActivity extends AppCompatActivity
                         Log.d(TAG, "createUserWithEmail:onComplete: " + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(MemberStartActivity.this,
-                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MemberStartActivity.this,
+//                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "fail to create firebase user");
                         }
                     }
                 });
@@ -657,60 +649,99 @@ public class MemberStartActivity extends AppCompatActivity
 
     public void replaceFragment(String email) {
         Fragment fragment = getSupportFragmentManager()
-                .findFragmentById(R.id.member_start_fragment_container);
+                .findFragmentById(R.id.pure_fragment_container);
         if (fragment instanceof MemberStartFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
+                    .replace(R.id.pure_fragment_container, MemberStartNameFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberStartLocalFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
+                    .replace(R.id.pure_fragment_container, MemberSurveyInfoFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberForgetPasswordFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_start_fragment_container, MemberSendEmailFragment.newInstance(email))
+                    .replace(R.id.pure_fragment_container, MemberSendEmailFragment.newInstance(email))
                     .commit();
         } else if (fragment instanceof MemberSendEmailFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_start_fragment_container, MemberChangePasswordFragment.newInstance(email))
+                    .replace(R.id.pure_fragment_container, MemberChangePasswordFragment.newInstance(email))
                     .commit();
         }
     }
 
-    public void moveToFragment(int fragmentId) {
-        if (fragmentId == 1) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartNameFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
-        } else if (fragmentId == 2) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberAskInfoFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
-        } else if (fragmentId == 3) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberSurveyInfoFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
+    @Override
+    public void onMenuSelected(int layoutIndex) {
+        Fragment fragment;
+        switch (layoutIndex) {
+            case 7000: /* browsing user  */
+                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                finish();
+                break;
+            case 7001: /* signUpForLocal  */
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.pure_fragment_container, MemberStartLocalFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case 7002: /* signInLocal  */
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case 7003: /* cancel signUpForLocal  */
+                fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
+                if (fragment instanceof MemberStartLocalFragment) {
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
+                            .commit();
+                }
+                break;
+            case 7004: /* cancel signInLocal  */
+                fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
+                if (fragment instanceof MemberSignInLocalFragment) {
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
+                            .commit();
+                }
+                break;
+            case 7005: /* find password local  */
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.pure_fragment_container, MemberForgetPasswordFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+            case 7010: /* signInGoogle  */
+                signInGoogle();
+                break;
+
+            case 7020: /* signInNaver */
+                signInNaver();
+                break;
         }
     }
 
     @Override
     public void onSurveyCompleted(int stageNumber, boolean isCompleted) {
         MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.member_start_fragment_container);
+                .findFragmentById(R.id.pure_fragment_container);
         surveyInfoFragment.updateConfirmButtonTextView(stageNumber, isCompleted);
     }
 
     @Override
     public void onSurveyValueSubmit(int stageNumber, int value) {
         MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.member_start_fragment_container);
+                .findFragmentById(R.id.pure_fragment_container);
         surveyInfoFragment.updateUserInfo(stageNumber, value);
     }
 
@@ -720,18 +751,21 @@ public class MemberStartActivity extends AppCompatActivity
 //                .findFragmentById(R.id.member_start_fragment_container);
 //        surveyInfoFragment.onBackPressed();
         Fragment fragment = getSupportFragmentManager()
-                .findFragmentById(R.id.member_start_fragment_container);
+                .findFragmentById(R.id.pure_fragment_container);
         if (fragment instanceof MemberStartNameFragment) {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberSignInLocalFragment) {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberStartFragment.newInstance())
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberForgetPasswordFragment) {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.member_start_fragment_container, MemberSignInLocalFragment.newInstance())
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
             startActivity(SearchActivity.newIntent(getApplicationContext()));
