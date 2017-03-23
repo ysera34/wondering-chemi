@@ -43,6 +43,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.BackPressCloseHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
@@ -85,6 +86,8 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
         return intent;
     }
 
+    private BackPressCloseHandler mBackPressCloseHandler;
+
     private User mUser;
 
     private FirebaseAuth mFirebaseAuth;
@@ -109,6 +112,8 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 //        }
 
         setContentView(R.layout.activity_fragment);
+
+        mBackPressCloseHandler = new BackPressCloseHandler(MemberStartActivity.this);
 
         GoogleSignInOptions googleSignInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -484,7 +489,7 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
         }
     }
 
-    private String mNaverEmail;
+    private String mNaverEmail = null;
     private String mAccessToken = null;
     private int mPlatformId = -1;
 
@@ -685,14 +690,14 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.pure_fragment_container, MemberStartLocalFragment.newInstance())
-                        .addToBackStack(null)
+//                        .addToBackStack(null)
                         .commit();
                 break;
             case 7002: /* signInLocal  */
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
-                        .addToBackStack(null)
+//                        .addToBackStack(null)
                         .commit();
                 break;
             case 7003: /* cancel signUpForLocal  */
@@ -717,9 +722,18 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.pure_fragment_container, MemberForgetPasswordFragment.newInstance())
-                        .addToBackStack(null)
+//                        .addToBackStack(null)
                         .commit();
                 break;
+            case 7006: /* cancel forget password  */
+                fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
+                if (fragment instanceof MemberForgetPasswordFragment) {
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
+                            .commit();
+                }
+
 
             case 7010: /* signInGoogle  */
                 signInGoogle();
@@ -752,7 +766,12 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 //        surveyInfoFragment.onBackPressed();
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.pure_fragment_container);
-        if (fragment instanceof MemberStartNameFragment) {
+        if (fragment instanceof MemberStartLocalFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberStartNameFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
@@ -775,7 +794,8 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 //            finish();
             super.onBackPressed();
         } else {
-            super.onBackPressed();
+//            super.onBackPressed();
+            mBackPressCloseHandler.onBackPressed();
         }
     }
 }

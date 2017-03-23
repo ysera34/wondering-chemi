@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.BackPressCloseHandler;
 import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
 import com.planet.wondering.chemi.view.fragment.SearchFragment;
@@ -19,17 +20,22 @@ public class SearchActivity extends BottomNavigationActivity
         implements OnTagSelectedListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, SearchActivity.class);
         return intent;
     }
 
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
+    private BackPressCloseHandler mBackPressCloseHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mBackPressCloseHandler = new BackPressCloseHandler(SearchActivity.this);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
@@ -56,5 +62,11 @@ public class SearchActivity extends BottomNavigationActivity
         mSearchDetailFragment = (SearchDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_container);
         mSearchDetailFragment.updateSearchEditText(tag);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        mBackPressCloseHandler.onBackPressed();
     }
 }
