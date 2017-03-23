@@ -66,7 +66,7 @@ public class SearchActivity extends BottomNavigationActivity
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        mBackPressCloseHandler.onBackPressed();
+        super.onBackPressed();
+//        mBackPressCloseHandler.onBackPressed();
     }
 }

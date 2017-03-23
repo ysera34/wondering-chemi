@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -167,24 +166,13 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-                    Toast.makeText(getActivity(), "검색창 안에서 텍스트로 검색", Toast.LENGTH_SHORT).show();
                     if (mSearchEditText.isPopupShowing()) {
                         mSearchEditText.dismissDropDown();
                     }
-//                    ChemicalLatestListFragment chemicalLatestListFragment =
-//                            (ChemicalLatestListFragment) mFragmentManager.findFragmentByTag("chemical_search");
-//                    if (chemicalLatestListFragment == null) {
-//                        chemicalLatestListFragment = ChemicalLatestListFragment.newInstance(textView.getText().toString());
-//                    }
-//                    mFragmentManager.beginTransaction()
-//                            .replace(R.id.dictionary_fragment_container, chemicalLatestListFragment, "chemical_search")
-//                            .addToBackStack(null)
-//                            .commit();
 
-                    Fragment fragment = ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString());
                     mFragmentManager.beginTransaction()
-                            .replace(R.id.dictionary_fragment_container, fragment)
-//                            .addToBackStack("chemical_search_result_list")
+                            .replace(R.id.dictionary_fragment_container,
+                                    ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
                             .commit();
                     mCurrentMode = RESULT_MODE;
                 }
@@ -193,8 +181,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         });
 
         mDictionaryFragmentContainerFrameLayout = (FrameLayout) view.findViewById(R.id.dictionary_fragment_container);
-//        mFragmentManager = getActivity().getSupportFragmentManager();
-        mFragmentManager = this.getChildFragmentManager();
+//        mFragmentManager = this.getChildFragmentManager();
+        mFragmentManager = getChildFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
 
         if (mFragment == null) {
@@ -231,30 +219,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     showSearchMode();
                     isSearchMode = true;
                 } else {
-                    Toast.makeText(getActivity(), "검색창 안에서 텍스트로 검색", Toast.LENGTH_SHORT).show();
                     if (mSearchEditText.isPopupShowing()) {
                         mSearchEditText.dismissDropDown();
                     }
                     mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
 
-//                    ChemicalLatestListFragment chemicalLatestListFragment =
-//                            (ChemicalLatestListFragment) mFragmentManager.findFragmentByTag("chemical_search");
-//                    if (chemicalLatestListFragment == null) {
-//                        chemicalLatestListFragment = ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString());
-//                    }
-//                    mFragmentManager.beginTransaction()
-//                            .replace(R.id.dictionary_fragment_container, chemicalLatestListFragment, "chemical_search")
-//                            .addToBackStack(null)
-//                            .commit();
-//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-
-                    Fragment fragment = ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString());
                     mFragmentManager.beginTransaction()
-                            .replace(R.id.dictionary_fragment_container, fragment)
-//                            .addToBackStack("chemical_search_result_list")
+                            .replace(R.id.dictionary_fragment_container,
+                                    ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
                             .commit();
                     mCurrentMode = RESULT_MODE;
-
                 }
                 break;
             case R.id.dictionary_search_clear_image_layout:
@@ -262,21 +236,11 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 mSearchEditText.getText().clear();
                 mSearchEditText.setThreshold(1);
                 mInputMethodManager.showSoftInput(mSearchEditText, 0);
-//                Fragment fragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
-//                if (fragment instanceof ChemicalFragment) {
-//                    if (mCurrentMode == LATEST_MODE) {
-                        mFragmentManager.beginTransaction()
-                                .replace(R.id.dictionary_fragment_container,
-                                        ChemicalLatestListFragment.newInstance(LATEST_MODE))
-                                .commit();
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.dictionary_fragment_container,
+                                ChemicalLatestListFragment.newInstance(LATEST_MODE))
+                        .commit();
                 mCurrentMode = LATEST_MODE;
-//                    } else if (mCurrentMode == RESULT_MODE) {
-//                        mFragmentManager.beginTransaction()
-//                                .replace(R.id.dictionary_fragment_container,
-//                                        ChemicalLatestListFragment.newInstance(LATEST_MODE))
-//                                .commit();
-//                    }
-//                }
                 break;
         }
     }
@@ -348,33 +312,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mSearchEditText.setSelection(chemical.getNameKo().length());
 
 //        requestChemical(chemical.getId(), true);
-        Log.i(TAG, "mCurrentMode = " + mCurrentMode);
         mFragmentManager.beginTransaction()
-
                 .add(R.id.dictionary_fragment_container, ChemicalFragment.newInstance(chemical))
                 .addToBackStack(null)
                 .commit();
-
-//        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-//        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-
-//        if (mSearchEditText.isPopupShowing()) {
-//            mSearchEditText.dismissDropDown();
-//        }
-    }
-
-    public void replaceFragment() {
-        mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
-
-        if (mFragment instanceof ChemicalLatestListFragment) {
-            mFragmentManager.beginTransaction()
-                    .add(R.id.dictionary_fragment_container, ChemicalFragment.newInstance())
-                    .commit();
-        } else if (mFragment instanceof ChemicalFragment) {
-            mFragmentManager.beginTransaction()
-                    .add(R.id.dictionary_fragment_container, ChemicalLatestListFragment.newInstance((byte) -1))
-                    .commit();
-        }
     }
 
     public void onDialogFinished(boolean isChose) {
@@ -388,7 +329,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
 
         if (mFragment instanceof ChemicalLatestListFragment) {
-            Log.i(TAG, "mCurrentMode = " + mCurrentMode);
             switch (mCurrentMode) {
                 case LATEST_MODE:
                     getActivity().finish();
@@ -403,7 +343,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     break;
             }
         } else if (mFragment instanceof ChemicalFragment) {
-            Log.i(TAG, "mCurrentMode = " + mCurrentMode);
             switch (mCurrentMode) {
                 case LATEST_MODE:
                 case SUGGESTION_MODE:
@@ -414,15 +353,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     mCurrentMode = LATEST_MODE;
                     break;
                 case RESULT_MODE:
-                    Toast.makeText(getActivity(), "back stack... popup before " + mFragmentManager.getBackStackEntryCount(), Toast.LENGTH_SHORT).show();
-//                    String name = mFragmentManager.getBackStackEntryAt(0).getName();
-//                    Log.i(TAG, "name : " + name);
                     mFragmentManager.popBackStackImmediate();
-//                    mFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    Toast.makeText(getActivity(), "back stack... popup after " + mFragmentManager.getBackStackEntryCount(), Toast.LENGTH_SHORT).show();
-//                    mFragmentManager.popBackStack();
-
-
                     break;
             }
         }

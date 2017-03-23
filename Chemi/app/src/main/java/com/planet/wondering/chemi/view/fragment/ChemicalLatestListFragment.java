@@ -113,7 +113,6 @@ public class ChemicalLatestListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate" + mModeId);
 
         mChemicals = new ArrayList<>();
         mModeId = getArguments().getByte(ARG_MODE_ID, (byte) 0);
@@ -125,7 +124,6 @@ public class ChemicalLatestListFragment extends Fragment {
             mUrlBuilder = new StringBuilder();
             mModeId = RESULT_MODE;
         }
-        Log.i(TAG, "mode id = " + mModeId);
     }
 
     @Nullable
@@ -142,18 +140,17 @@ public class ChemicalLatestListFragment extends Fragment {
             mChemicalLatestRecyclerView.addItemDecoration(decoration);
         }
 
-        Log.i(TAG, "onCreateView" + mModeId);
         updateUI();
         if (mModeId == RESULT_MODE) {
             requestChemicals(mChemicalName);
         }
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i(TAG, "onViewCreated" + mModeId);
     }
 
     @Override
@@ -169,41 +166,6 @@ public class ChemicalLatestListFragment extends Fragment {
             mChemicals.add(mChemical);
         }
         updateUI();
-
-        Log.i(TAG, "onResume" + mModeId);
-        for (Chemical c : mChemicals) {
-            Log.i(TAG, c.toString());
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart" + mModeId);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause" + mModeId);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop" + mModeId);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView" + mModeId);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy" + mModeId);
     }
 
     private void updateUI() {
@@ -214,7 +176,6 @@ public class ChemicalLatestListFragment extends Fragment {
             mChemicalLatestAdapter.setChemicals(mChemicals);
             mChemicalLatestAdapter.notifyDataSetChanged();
         }
-        Log.i(TAG, "mChemicalLatestAdapter : " + mChemicalLatestAdapter.toString());
     }
 
     private class ChemicalLatestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
