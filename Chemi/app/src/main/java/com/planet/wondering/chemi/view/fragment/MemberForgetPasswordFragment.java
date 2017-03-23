@@ -23,6 +23,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 import org.json.JSONObject;
@@ -98,7 +99,7 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_forget_password_cancel_layout:
-                Toast.makeText(getActivity(), "where i am", Toast.LENGTH_SHORT).show();
+                mMenuSelectedListener.onMenuSelected(7006);
                 break;
             case R.id.member_forget_password_email_submit_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberForgetPasswordEmailEditText.getWindowToken(), 0);
@@ -191,5 +192,18 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMenuSelectedListener");
+        }
     }
 }

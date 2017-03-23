@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/member_start_app_info"
-                android:textAppearance="@style/MemberStartTextAppearance"/>
+                android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
 
         </LinearLayout>
 
@@ -60,7 +60,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/member_start_naver"
                     android:textSize="16sp"
-                    android:textAppearance="@style/MemberStartTextAppearance"/>
+                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -105,7 +105,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/member_start_google"
                     android:textSize="16sp"
-                    android:textAppearance="@style/MemberStartTextAppearance"/>
+                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -139,7 +139,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="30dp"
-                    android:src="@drawable/ic_email_24dp"
+                    android:src="@drawable/ic_email_primary"
                     android:scaleType="centerInside"/>
 
                 <TextView
@@ -150,7 +150,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/member_start_local"
                     android:textSize="16sp"
-                    android:textAppearance="@style/MemberStartTextAppearance"/>
+                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -168,8 +168,8 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_browse"
-                    android:textColor="@color/color_selector_white_dove_gray"
-                    android:textAppearance="@style/MemberStartTextAppearance"/>
+                    android:textColor="@color/color_selector_dove_gray_white"
+                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
                 <TextView
                     android:id="@+id/member_start_already_user_text_view"
@@ -179,8 +179,8 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_already_user"
-                    android:textColor="@color/color_selector_white_dove_gray"
-                    android:textAppearance="@style/MemberStartTextAppearance"/>
+                    android:textColor="@color/color_selector_dove_gray_white"
+                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
             </RelativeLayout>
 

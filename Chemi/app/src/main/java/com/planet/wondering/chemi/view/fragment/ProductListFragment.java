@@ -249,7 +249,7 @@ public class ProductListFragment extends Fragment {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
                         mProducts.addAll(Parser.parseProductList(response));
-                        mPager = Parser.parseProductListPagingQuery(response);
+                        mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
                     }
                 },
@@ -300,7 +300,7 @@ public class ProductListFragment extends Fragment {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
                         mProducts.addAll(Parser.parseProductList(response));
-                        mPager = Parser.parseProductListPagingQuery(response);
+                        mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
                     }
                 },

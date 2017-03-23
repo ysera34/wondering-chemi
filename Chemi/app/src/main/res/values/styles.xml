@@ -20,13 +20,22 @@
     <style name="BottomNavigationViewTheme" parent="Widget.Design.BottomNavigationView">
     </style>
 
-    <style name="MemberStartTextAppearance">
+    <style name="MemberStartWhiteTextAppearance">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
         <item name="android:shadowColor">@color/colorFontBody</item>
+    </style>
+
+    <style name="MemberStartGrayTextAppearance">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorFontBody</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowColor">@color/colorWhite</item>
     </style>
 
     <style name="ArchiveContentTitleTextAppearance">
