@@ -251,7 +251,7 @@ public class Parser {
         return products;
     }
 
-    public static Pager parseProductListPagingQuery(JSONObject responseObject) {
+    public static Pager parseListPaginationQuery(JSONObject responseObject) {
 
         Pager pager = new Pager();
         try {
@@ -390,6 +390,46 @@ public class Parser {
         }
 //        Log.i(TAG, chemical.toString());
         return chemical;
+    }
+
+    public static ArrayList<Chemical> parseChemicalList(JSONObject responseObject) {
+
+        ArrayList<Chemical> chemicals = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int chemicalSize = responseObject.getInt(COUNT);
+                if (chemicalSize > 0) {
+                    JSONArray chemicalJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < chemicalSize; i++) {
+                        JSONObject chemicalJSONObject = (JSONObject) chemicalJSONArray.get(i);
+                        Chemical chemical = new Chemical();
+                        chemical.setId(chemicalJSONObject.getInt(CHEMICAL_ID));
+                        chemical.setNameKo(chemicalJSONObject.getString(NAMEKO_ORIGIN));
+                        chemical.setNameEn(chemicalJSONObject.getString(NAMEEN));
+                        int maxValue = chemicalJSONObject.getInt(MAX_VALUE);
+                        if (maxValue != -1) {
+                            chemical.setMaxHazard((byte) maxValue);
+                        }
+                        int minValue = chemicalJSONObject.getInt(MIN_VALUE);
+                        if (minValue != -1) {
+                            chemical.setMinHazard((byte) minValue);
+                        }
+                        int dataScore = chemicalJSONObject.getInt(DATA_SCORE);
+                        chemical.setDataScore((byte) dataScore);
+                        int allergyState = chemicalJSONObject.getInt(Key.ALLERGY);
+                        if (allergyState > 0) {
+                            chemical.setAllergy(true);
+                        }
+                        chemicals.add(chemical);
+                    }
+                }
+
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return chemicals;
     }
 
     public static ArrayList<Review> parseReviewList(JSONObject responseObject) {
@@ -539,19 +579,5 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return token;
-    }
-
-    public static ArrayList<Chemical> parseChemicalList(JSONObject responseObject) {
-
-        ArrayList<Chemical> chemicals = new ArrayList<>();
-        try {
-            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
-            if (responseMessage.equals(RESPONSE_SUCCESS)) {
-
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return chemicals;
     }
 }

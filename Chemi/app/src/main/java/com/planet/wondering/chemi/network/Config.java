@@ -111,6 +111,8 @@ public class Config {
 
     public static final class Chemical {
         public static final String PATH = File.separator + "chemicals" + File.separator;
+        public static final String QUERY_PATH = File.separator + "chemicals?";
+        public static final String QUERY_CHEMICAL_NAME = "&chemicalname=";
 
         public static final class Key {
             public static final String CHEMICALS = "chemicals";
