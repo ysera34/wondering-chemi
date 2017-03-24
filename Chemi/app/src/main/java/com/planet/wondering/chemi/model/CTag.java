@@ -10,6 +10,7 @@ public class CTag {
     private int mChemicalId;
     private String mDescription;
     private boolean isCorrect;
+    private String mAlternativeName;
 
     public int getId() {
         return mId;
@@ -43,6 +44,14 @@ public class CTag {
         isCorrect = correct;
     }
 
+    public String getAlternativeName() {
+        return mAlternativeName;
+    }
+
+    public void setAlternativeName(String alternativeName) {
+        mAlternativeName = alternativeName;
+    }
+
     @Override
     public String toString() {
         return "CTag{" +
@@ -50,6 +59,7 @@ public class CTag {
                 ", mChemicalId=" + mChemicalId +
                 ", mDescription='" + mDescription + '\'' +
                 ", isCorrect=" + isCorrect +
+                ", mAlternativeName='" + mAlternativeName + '\'' +
                 '}';
     }
 }

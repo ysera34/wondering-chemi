@@ -313,6 +313,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
 //        requestChemical(chemical.getId(), true);
         mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                 .add(R.id.dictionary_fragment_container, ChemicalFragment.newInstance(chemical))
                 .addToBackStack(null)
                 .commit();
@@ -567,7 +568,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         private void initializeViews(CTag cTag, ChemicalCharacterHolder holder) {
             holder.mChemicalNameKoTextView.setText(String.valueOf(cTag.getDescription()));
-            holder.mChemicalNameEnTextView.setText(String.valueOf(cTag.getChemicalId()));
+            holder.mChemicalNameEnTextView.setText(String.valueOf(cTag.getAlternativeName()));
         }
 
         class ChemicalCharacterHolder {

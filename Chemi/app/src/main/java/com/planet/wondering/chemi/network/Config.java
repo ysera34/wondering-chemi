@@ -76,6 +76,7 @@ public class Config {
             public static final String TAG_RANK_DELTA = "rankDelta";
             public static final String TAG_CHEMICAL_ID = "chemicalid";
             public static final String TAG_IS_CORRECT = "isCorrect";
+            public static final String TAG_ALTERNATIVE_NAME = "alternativeName";
         }
     }
 

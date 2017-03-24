@@ -59,6 +59,7 @@ import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
 import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ALTERNATIVE_NAME;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_CHEMICAL_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
@@ -171,6 +172,7 @@ public class Parser {
                         cTag.setChemicalId(tagJSONObject.getInt(TAG_CHEMICAL_ID));
                         cTag.setDescription(tagJSONObject.getString(TAG_DESCRIPTION));
                         cTag.setCorrect(tagJSONObject.getInt(TAG_IS_CORRECT) == 1);
+                        cTag.setAlternativeName(tagJSONObject.getString(TAG_ALTERNATIVE_NAME));
                         cTags.add(cTag);
                     }
                 }
