@@ -54,8 +54,6 @@ public class MemberFragment extends Fragment
     private AppBarLayout mMemberAppBarLayout;
     private CircleImageView mMemberProfileCircleImageView;
     private TextView mMemberNameTextView;
-    private TextView mMemberInfoTextView;
-    private TextView mMemberSkinTypeTextView;
 //    private ImageView mMemberConfigImageView;
     private Toolbar mMemberToolbar;
     private RecyclerView mArchiveProductRecyclerView;
@@ -104,9 +102,6 @@ public class MemberFragment extends Fragment
 
         mMemberProfileCircleImageView = (CircleImageView) view.findViewById(R.id.member_profile_circle_image_view);
         mMemberNameTextView = (TextView) view.findViewById(R.id.member_name_text_view);
-        mMemberNameTextView.setText("안녕하세요");
-        mMemberInfoTextView = (TextView) view.findViewById(R.id.member_info_text_view);
-        mMemberSkinTypeTextView = (TextView) view.findViewById(R.id.member_skin_type_text_view);
 //        mMemberConfigImageView = (ImageView) view.findViewById(R.id.member_config_image_view);
 //        mMemberConfigImageView.setOnTouchListener(this);
 

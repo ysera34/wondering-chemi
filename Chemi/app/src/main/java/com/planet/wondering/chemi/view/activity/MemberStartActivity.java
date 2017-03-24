@@ -794,8 +794,8 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 //            finish();
             super.onBackPressed();
         } else {
-//            super.onBackPressed();
-            mBackPressCloseHandler.onBackPressed();
+            super.onBackPressed();
+//            mBackPressCloseHandler.onBackPressed();
         }
     }
 }

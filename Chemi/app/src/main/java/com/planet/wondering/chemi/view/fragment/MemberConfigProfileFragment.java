@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
@@ -92,7 +93,11 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
     }
 
     public void onDialogFinished(boolean isChose) {
-        Toast.makeText(getActivity(), String.valueOf(isChose), Toast.LENGTH_SHORT).show();
+        if (isChose) {
+            UserSharedPreferences.removeStoredToken(getActivity());
+            Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+            getActivity().onBackPressed();
+        }
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

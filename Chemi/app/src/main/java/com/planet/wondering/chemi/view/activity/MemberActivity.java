@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
@@ -19,6 +20,7 @@ import com.planet.wondering.chemi.view.fragment.MemberConfigNoticeFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigPartnerFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigProfileFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigRequestFragment;
+import com.planet.wondering.chemi.view.fragment.MemberConfigSignInFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigTermsFragment;
 import com.planet.wondering.chemi.view.fragment.MemberFragment;
 
@@ -46,10 +48,17 @@ public class MemberActivity extends BottomNavigationActivity
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
         if (mFragment == null) {
-            mFragment = MemberFragment.newInstance();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
-                    .commit();
+            if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                mFragment = MemberFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, mFragment)
+                        .commit();
+            } else {
+                mFragment = MemberConfigSignInFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, mFragment)
+                        .commit();
+            }
         }
     }
 
@@ -69,10 +78,15 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 1:
-                mFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
-                        .commit();
+                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                            .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
+                            .commit();
+                } else {
+                    startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+                }
+
                 break;
             case 2:
                 mFragmentManager.beginTransaction()
@@ -140,15 +154,22 @@ public class MemberActivity extends BottomNavigationActivity
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
         if (fragment instanceof MemberConfigFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberFragment.newInstance())
-                    .commit();
+            if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, MemberFragment.newInstance())
+                        .commit();
+            } else {
+                finish();
+            }
         } else if (fragment instanceof MemberConfigProfileFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
                     .commit();
+
+
+
         } else if (fragment instanceof MemberConfigNoticeFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)

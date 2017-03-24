@@ -33,7 +33,7 @@
         android:clickable="true"
         android:text="제품 보러가기"
         android:textSize="14sp"
-        android:textColor="@color/color_selector_primary_white"
-        android:background="@drawable/selector_transparent_primary_opaque_primary"/>
+        android:textColor="@color/color_selector_button_white_primary"
+        android:background="@drawable/selector_opaque_primary"/>
 
 </LinearLayout>
