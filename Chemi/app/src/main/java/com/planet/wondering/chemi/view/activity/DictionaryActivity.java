@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
@@ -47,6 +49,13 @@ public class DictionaryActivity extends BottomNavigationActivity
     protected void onResume() {
         super.onResume();
         setupBottomNavigation(3);
+    }
+
+    public void resizeFrameLayout(int resize) {
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.fragment_container);
+        ViewGroup.LayoutParams layoutParams1 = frameLayout.getLayoutParams();
+        layoutParams1.height = frameLayout.getHeight() + resize;
+        frameLayout.setLayoutParams(layoutParams1);
     }
 
     @Override

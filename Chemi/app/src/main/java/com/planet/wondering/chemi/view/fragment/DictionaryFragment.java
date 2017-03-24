@@ -43,6 +43,8 @@ import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.DictionaryActivity;
 
 import org.json.JSONObject;
 
@@ -236,6 +238,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 mSearchEditText.getText().clear();
                 mSearchEditText.setThreshold(1);
                 mInputMethodManager.showSoftInput(mSearchEditText, 0);
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .replace(R.id.dictionary_fragment_container,
                                 ChemicalLatestListFragment.newInstance(LATEST_MODE))
@@ -276,6 +279,15 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         mDictionaryFragmentContainerFrameLayout.animate().translationY(-mDictionaryLogoLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
+
+        ((DictionaryActivity) getActivity()).resizeFrameLayout(mDictionaryLogoLayout.getHeight());
+
+//        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT,
+//                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+//        params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//        mDictionaryFragmentContainerFrameLayout.setLayoutParams(params1);
     }
 
     public void hideSearchMode() {

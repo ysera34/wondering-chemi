@@ -34,23 +34,22 @@
 
         </LinearLayout>
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/list_item_chemical_search_result_empty_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="검색 결과가 없습니다."
-            android:textSize="13sp"
-            android:textColor="@color/colorFontAluminum"/>
-
     </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:src="@drawable/dictionary"
         android:scaleType="centerInside"/>
+
+    <TextView
+        android:id="@+id/list_item_chemical_search_result_empty_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/colorFontAluminum"/>
 
 </LinearLayout>

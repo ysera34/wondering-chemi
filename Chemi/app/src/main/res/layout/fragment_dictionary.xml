@@ -7,7 +7,9 @@
         android:id="@+id/dictionary_header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:elevation="4dp">
 
         <RelativeLayout
             android:id="@+id/dictionary_logo_layout"
@@ -93,8 +95,7 @@
         <RelativeLayout
             android:id="@+id/search_view_bottom_anchor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_height="wrap_content">
 
         </RelativeLayout>
 
@@ -103,7 +104,7 @@
     <FrameLayout
         android:id="@+id/dictionary_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/dictionary_header_layout"
         android:layout_alignParentBottom="true">
     </FrameLayout>

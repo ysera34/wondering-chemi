@@ -29,6 +29,8 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnChemicalSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
@@ -121,8 +123,8 @@ public class ChemicalLatestListFragment extends Fragment {
 
         mChemicalName = getArguments().getString(ARG_CHEMICAL_NAME, null);
         if (mChemicalName != null) {
-            mUrlBuilder = new StringBuilder();
             mModeId = RESULT_MODE;
+            mUrlBuilder = new StringBuilder();
         }
     }
 
@@ -132,19 +134,47 @@ public class ChemicalLatestListFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical_latest_list, container, false);
 
-        if (mChemicalLatestAdapter == null) {
-            mChemicalLatestRecyclerView = (RecyclerView) view.findViewById(R.id.chemical_latest_recycler_view);
-            mChemicalLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            SeparatorDecoration decoration =
-                    new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-            mChemicalLatestRecyclerView.addItemDecoration(decoration);
+        mChemicalLatestRecyclerView = (RecyclerView) view.findViewById(R.id.chemical_latest_recycler_view);
+        mChemicalLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        SeparatorDecoration decoration =
+                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+        mChemicalLatestRecyclerView.addItemDecoration(decoration);
+        mChemicalLatestRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+            @Override
+            public void onShowView() {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+            }
+
+            @Override
+            public void onHideView() {
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
+        if (mModeId == RESULT_MODE) {
+            mChemicalLatestRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int lastItem = ((LinearLayoutManager) mChemicalLatestRecyclerView.getLayoutManager())
+                            .findLastCompletelyVisibleItemPosition();
+                    if (lastItem == mChemicalLatestAdapter.getItemCount() - 1 && mPager != null
+                            && mPager.getTotal() > mChemicalLatestAdapter.getItemCount() - 2) {
+                        requestChemicals(mChemicalName);
+                    }
+//                    Log.i("lastItem", String.valueOf(lastItem));
+//                    Log.i("getItemCount", String.valueOf(mChemicalLatestAdapter.getItemCount()));
+//                    if (mPager != null) {
+//                        Log.i("mPager.getTotal()", String.valueOf(mPager.getTotal()));
+//                    }
+                }
+            });
         }
 
         updateUI();
+
         if (mModeId == RESULT_MODE) {
             requestChemicals(mChemicalName);
         }
-
         return view;
     }
 
@@ -162,10 +192,11 @@ public class ChemicalLatestListFragment extends Fragment {
             if (mChemicals != null) {
                 Collections.reverse(mChemicals);
             }
+            updateUI();
         } else if (mModeId == SUGGESTION_MODE) {
             mChemicals.add(mChemical);
+            updateUI();
         }
-        updateUI();
     }
 
     private void updateUI() {
@@ -286,7 +317,7 @@ public class ChemicalLatestListFragment extends Fragment {
                 case LATEST_MODE:
                     mHeaderTitleTextView.setText(getString(R.string.search_chemical_latest_title));
                     if (mChemicals == null || mChemicals.size() == 0) {
-                        mHeaderSubTitleTextView.setText(getString(R.string.search_chemical_latest_message));
+//                        mHeaderSubTitleTextView.setText(getString(R.string.search_chemical_latest_message));
                     }
                     break;
                 case SUGGESTION_MODE:
@@ -329,6 +360,7 @@ public class ChemicalLatestListFragment extends Fragment {
                         mFooterLayout.setVisibility(View.VISIBLE);
                     } else if (chemicalSize == 0) {
                         mFooterLayout.setVisibility(View.GONE);
+                        mEmptyTextView.setText(getString(R.string.search_chemical_latest_message));
                     }
                     break;
                 case SUGGESTION_MODE:
@@ -337,10 +369,11 @@ public class ChemicalLatestListFragment extends Fragment {
                 case RESULT_MODE:
                     if (chemicalSize > 0) {
                         mFooterLayout.setVisibility(View.GONE);
+                        mEmptyTextView.setVisibility(View.GONE);
                     } else if (chemicalSize == 0) {
-                        mFooterLayout.setVisibility(View.VISIBLE);
-                        mFooterClearLayout.setVisibility(View.GONE);
-                        mEmptyTextView.setVisibility(View.VISIBLE);
+//                        mFooterLayout.setVisibility(View.VISIBLE);
+//                        mFooterClearLayout.setVisibility(View.GONE);
+                        mEmptyTextView.setText(getString(R.string.search_chemical_result_message));
                     }
                     break;
             }
