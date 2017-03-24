@@ -98,7 +98,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.category_adult_etc_image_view:
             case R.id.category_adult_etc_text_view:
-                categoryId = 10;
+                categoryId = 6;
                 break;
         }
         startActivity(ProductListActivity.newIntent(getActivity(), categoryId));

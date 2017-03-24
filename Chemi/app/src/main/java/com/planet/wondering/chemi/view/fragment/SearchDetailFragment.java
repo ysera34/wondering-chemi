@@ -236,6 +236,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             return mTagResults.get(position);
         }
 
+        public void refreshAdapter(ArrayList<String> tagResults) {
+            mTagResults.clear();
+            mTagResults.addAll(tagResults);
+            notifyDataSetChanged();
+        }
+
         @NonNull
         @Override
         public Filter getFilter() {
@@ -310,12 +316,17 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                 }
 
                 @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
+                protected void publishResults(CharSequence constraint, final FilterResults results) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (results != null && results.count > 0) {
+                                notifyDataSetChanged();
+                            } else {
+                                notifyDataSetInvalidated();
+                            }
+                        }
+                    });
                 }
 
                 public char convertConsonantToStandAlone(char consonant) {

@@ -36,7 +36,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="56dp">
+                    android:paddingTop="71dp">
+                    <!--status bar + toolbar height-->
 
                     <ImageView
                         android:id="@+id/product_detail_image_view"

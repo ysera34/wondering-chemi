@@ -154,7 +154,7 @@ public class ProductActivity extends AppBaseActivity
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                 .crossFade()
-                .override(700, 460)
+//                .override(700, 460)
                 .into(mProductDetailImageView);
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));

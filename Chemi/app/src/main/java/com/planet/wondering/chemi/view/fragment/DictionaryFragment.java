@@ -466,12 +466,17 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 }
 
                 @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
+                protected void publishResults(CharSequence constraint, final FilterResults results) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (results != null && results.count > 0) {
+                                notifyDataSetChanged();
+                            } else {
+                                notifyDataSetInvalidated();
+                            }
+                        }
+                    });
                 }
 
                 public char convertConsonantToStandAlone(char consonant) {
