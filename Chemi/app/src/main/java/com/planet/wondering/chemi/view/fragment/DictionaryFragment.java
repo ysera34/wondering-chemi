@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -172,11 +173,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                         mSearchEditText.dismissDropDown();
                     }
 
-                    mFragmentManager.beginTransaction()
-                            .replace(R.id.dictionary_fragment_container,
-                                    ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
-                            .commit();
-                    mCurrentMode = RESULT_MODE;
+                    if (mSearchEditText.getText().length() > 0) {
+                        mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.dictionary_fragment_container,
+                                        ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
+                                .commit();
+                        mCurrentMode = RESULT_MODE;
+                    } else {
+                        Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return false;
             }
@@ -224,13 +230,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     if (mSearchEditText.isPopupShowing()) {
                         mSearchEditText.dismissDropDown();
                     }
-                    mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
-
-                    mFragmentManager.beginTransaction()
-                            .replace(R.id.dictionary_fragment_container,
-                                    ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
-                            .commit();
-                    mCurrentMode = RESULT_MODE;
+                    if (mSearchEditText.getText().length() > 0) {
+                        mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.dictionary_fragment_container,
+                                        ChemicalLatestListFragment.newInstance(mSearchEditText.getText().toString()))
+                                .commit();
+                        mCurrentMode = RESULT_MODE;
+                    } else {
+                        Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case R.id.dictionary_search_clear_image_layout:
@@ -374,24 +383,34 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private class ChemicalCharacterAdapter extends ArrayAdapter<CTag> implements Filterable {
 
-        private ArrayList<CTag> mChemicalRequestResults;
-        private ArrayList<CTag> mChemicalResults;
+        private ArrayList<CTag> mChemicalRequestResults = new ArrayList<>();
+        private ArrayList<CTag> mChemicalResults = new ArrayList<>();
 
         public ChemicalCharacterAdapter(Context context, int resource) {
             super(context, resource);
-            mChemicalRequestResults = new ArrayList<>();
-            mChemicalResults = new ArrayList<>();
+//            mChemicalRequestResults = new ArrayList<>();
+//            mChemicalResults = new ArrayList<>();
         }
 
         @Override
         public int getCount() {
-            return mChemicalResults.size();
+            synchronized (mChemicalResults) {
+                return mChemicalResults.size();
+            }
         }
 
         @Nullable
         @Override
         public CTag getItem(int position) {
-            return mChemicalResults.get(position);
+            synchronized (mChemicalResults) {
+                try {
+                    return mChemicalResults.get(position);
+                } catch (IndexOutOfBoundsException e) {
+//                    e.printStackTrace();
+                    Log.e(TAG, "ChemicalCharacterAdapter : IndexOutOfBoundsException");
+                    return null;
+                }
+            }
         }
 
         @NonNull
@@ -404,6 +423,12 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
+                    synchronized (filterResults) {
+//                        mChemicalRequestResults.clear();
+//                        if (mChemicalResults != null) {
+//                            mChemicalResults.clear();
+//                        }
+
                     if (constraint != null) {
                         try {
                             mChemicalResults.clear();
@@ -462,21 +487,26 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                         filterResults.values = mChemicalResults;
                         filterResults.count = mChemicalResults.size();
                     }
+                    }
                     return filterResults;
                 }
 
                 @Override
                 protected void publishResults(CharSequence constraint, final FilterResults results) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (results != null && results.count > 0) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+                    synchronized (results) {
+                        mChemicalRequestResults = (ArrayList<CTag>) results.values;
+
+                            if (mChemicalRequestResults != null && results.count > 0) {
                                 notifyDataSetChanged();
                             } else {
                                 notifyDataSetInvalidated();
                             }
-                        }
-                    });
+                    }
+//                        }
+//                    });
                 }
 
                 public char convertConsonantToStandAlone(char consonant) {

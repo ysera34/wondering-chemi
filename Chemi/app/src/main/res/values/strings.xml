@@ -157,8 +157,9 @@
     <string name="search_chemical_latest_message">\"최근 검색한 성분이 없어요.\"</string>
     <string name="search_chemical_suggestion_title">검색어 제안</string>
     <string name="search_chemical_suggestion_message">\"찾으시는 성분이 이 성분일 것 같아요.\"</string>
-    <string name="search_chemical_result_message">\"검색한 성분이 없어요.\"</string>
-    <string name="search_result_title">검색결과</string>
+    <string name="search_chemical_result_empty_message">\"검색한 성분이 없어요.\"</string>
+    <string name="search_chemical_result_title">검색결과 : </string>
+    <string name="search_chemical_result_message">\"%1$s\"의 검색결과는 총 %2$s건 이예요.</string>
     <string name="partner_information_message">함께 만들어가는 케미!\n제휴를 원하시는 경우, 아래의 주소로 연락주세요</string>
     <string name="logout_info_message">로그아웃 하시겠어요?</string>
     <string name="search_clear_info_message">최근 검색어를 모두\n삭제하시겠어요?</string>

@@ -325,8 +325,11 @@ public class ChemicalLatestListFragment extends Fragment {
                     mHeaderSubTitleTextView.setText(getString(R.string.search_chemical_suggestion_message));
                     break;
                 case RESULT_MODE:
-                    mHeaderTitleTextView.setText("\"" + mChemicalName + "\"");
-                    mHeaderSubTitleTextView.setText(getString(R.string.search_result_title));
+                    mHeaderTitleTextView.setText(getString(R.string.search_chemical_result_title));
+                    if (mPager != null) {
+                        mHeaderSubTitleTextView.setText(getString(R.string.search_chemical_result_message,
+                                String.valueOf(mChemicalName), String.valueOf(mPager.getTotal())));
+                    }
             }
         }
     }
@@ -373,7 +376,7 @@ public class ChemicalLatestListFragment extends Fragment {
                     } else if (chemicalSize == 0) {
 //                        mFooterLayout.setVisibility(View.VISIBLE);
 //                        mFooterClearLayout.setVisibility(View.GONE);
-                        mEmptyTextView.setText(getString(R.string.search_chemical_result_message));
+                        mEmptyTextView.setText(getString(R.string.search_chemical_result_empty_message));
                     }
                     break;
             }
