@@ -2,25 +2,51 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/toolbar_height"
+    android:layout_height="60dp"
+    android:gravity="center"
     android:background="@color/colorWhite">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="리뷰"
-        android:textSize="16sp"
-        android:textColor="@color/colorFontNormal"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:text="리뷰"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textColor="@color/colorFontNormal"/>-->
 
-    <TextView
-        android:id="@+id/list_item_review_header_count_text_view"
+    <!--<TextView-->
+        <!--android:id="@+id/list_item_review_header_count_text_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textSize="12sp"-->
+        <!--android:textColor="@color/colorFontAluminum"/>-->
+
+    <LinearLayout
+        android:id="@+id/list_item_review_header_review_create_layout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:textSize="12sp"
-        android:textColor="@color/colorFontAluminum"/>
+        android:layout_height="wrap_content"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:paddingStart="56dp"
+        android:paddingEnd="56dp"
+        android:background="@drawable/selector_opaque_primary">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/selector_create_review_pencil_image_state"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리뷰를 남겨주세요"
+            android:textSize="16sp"
+            android:textColor="@color/color_selector_button_white_primary"/>
+
+    </LinearLayout>
 
 </LinearLayout>

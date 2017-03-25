@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -212,9 +211,9 @@ public class ReviewListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof ReviewHeaderHolder) {
-                ((ReviewHeaderHolder) holder).bindReviewHeader(mReviews.size());
-            }
+//            if (holder instanceof ReviewHeaderHolder) {
+//                ((ReviewHeaderHolder) holder).bindReviewHeader(mReviews.size());
+//            }
             if (holder instanceof ReviewHolder) {
                 Review review = mReviews.get(position - 1);
                 ((ReviewHolder) holder).bindReview(review);
@@ -248,40 +247,54 @@ public class ReviewListFragment extends Fragment {
     private static final int VIEW_TYPE_EMPTY = 0;
     private static final int VIEW_TYPE_ITEM = 1;
 
-    private class ReviewHeaderHolder extends RecyclerView.ViewHolder {
+    private class ReviewHeaderHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
-        private TextView mReviewCountTextView;
+//        private TextView mReviewCountTextView;
+        private LinearLayout mReviewCreateLayout;
 
         public ReviewHeaderHolder(View itemView) {
             super(itemView);
 
-            mReviewCountTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_review_header_count_text_view);
+//            mReviewCountTextView = (TextView)
+//                    itemView.findViewById(R.id.list_item_review_header_count_text_view);
+            mReviewCreateLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_review_header_review_create_layout);
+            mReviewCreateLayout.setOnClickListener(this);
         }
 
         public void bindReviewHeader(int reviewCount) {
-            mReviewCountTextView.setText(getString(R.string.review_count_format, String.valueOf(reviewCount)));
-        }
-    }
-
-    private class EmptyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private ImageButton mReviewCreateImageButton;
-
-        EmptyViewHolder(View itemView) {
-            super(itemView);
-
-            mReviewCreateImageButton = (ImageButton)
-                    itemView.findViewById(R.id.list_item_review_empty_review_create_image_button);
-            mReviewCreateImageButton.setOnClickListener(this);
+//            mReviewCountTextView.setText(getString(R.string.review_count_format, String.valueOf(reviewCount)));
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.list_item_review_empty_review_create_image_button:
+                case R.id.list_item_review_header_review_create_layout:
                     startActivity(ReviewActivity.newIntent(getActivity(), mProduct));
                     break;
+            }
+        }
+    }
+
+    private class EmptyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+//        private ImageButton mReviewCreateImageButton;
+
+        EmptyViewHolder(View itemView) {
+            super(itemView);
+
+//            mReviewCreateImageButton = (ImageButton)
+//                    itemView.findViewById(R.id.list_item_review_empty_review_create_image_button);
+//            mReviewCreateImageButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+//                case R.id.list_item_review_empty_review_create_image_button:
+//
+//                    break;
             }
         }
     }

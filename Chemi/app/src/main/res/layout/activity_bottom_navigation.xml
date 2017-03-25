@@ -35,7 +35,7 @@
             android:theme="@style/BottomNavigationViewTheme"
             app:menu="@menu/menu_bottom_navigation"
             app:itemBackground="@color/colorWhite"
-            app:itemIconTint="@color/colorPrimary"
+            app:itemIconTint="@color/color_selector_bottom_navigation_menu"
             app:itemTextColor="@drawable/selector_bottom_navigation_menu">
         </android.support.design.widget.BottomNavigationView>
     </LinearLayout>

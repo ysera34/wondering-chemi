@@ -2,24 +2,27 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@color/colorWhite">
 
-    <ImageButton
-        android:id="@+id/list_item_review_empty_review_create_image_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/ic_pencil_gray"
-        android:background="@android:color/transparent"/>
+    <!--<ImageButton-->
+        <!--android:id="@+id/list_item_review_empty_review_create_image_button"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:layout_marginBottom="12dp"-->
+        <!--android:src="@drawable/ic_pencil_gray"-->
+        <!--android:background="@android:color/transparent"/>-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="첫 번째 리뷰의 주인공이 되어보세요."
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="아직 등록된 리뷰가 없어요\n첫 번째 리뷰의 주인공이 되어보세요."
         android:textSize="15sp"
         android:textColor="@color/colorFontAluminum"/>
 

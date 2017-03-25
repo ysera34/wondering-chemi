@@ -85,7 +85,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         addProductDetailFragment(ChemicalListFragment.newInstance(mProduct),
                 getString(R.string.product_detail_tab_title1));
         addProductDetailFragment(ReviewListFragment.newInstance(mProduct),
-                getString(R.string.product_detail_tab_title2));
+                getString(R.string.product_detail_tab_title2) +
+                        getString(R.string.product_detail_tab_title2_description, String.valueOf(mProduct.getRatingCount())));
     }
 
     @Nullable
