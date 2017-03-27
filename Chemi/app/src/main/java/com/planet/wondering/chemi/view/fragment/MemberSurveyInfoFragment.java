@@ -196,7 +196,7 @@ public class MemberSurveyInfoFragment extends Fragment
     @Override
     public void onPageSelected(int position) {
         if (!isShownPage[position]) {
-            disalbleConfirmButton();
+            disableConfirmButton();
         } else {
             enableConfirmButton();
         }
@@ -250,7 +250,7 @@ public class MemberSurveyInfoFragment extends Fragment
 //                    mMemberSurveyInfoConfirmButtonTextView
 //                            .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
                 } else {
-                    disalbleConfirmButton();
+                    disableConfirmButton();
 //                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
 //                    mMemberSurveyInfoConfirmButtonTextView
 //                            .setTextColor(getResources().getColor(R.color.colorReef));
@@ -362,7 +362,7 @@ public class MemberSurveyInfoFragment extends Fragment
                 .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
     }
 
-    private void disalbleConfirmButton() {
+    private void disableConfirmButton() {
         mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
         mMemberSurveyInfoConfirmButtonTextView
                 .setTextColor(getResources().getColor(R.color.colorReef));

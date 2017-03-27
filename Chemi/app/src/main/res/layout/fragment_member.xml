@@ -54,10 +54,9 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/member_name_text_view"
+                        android:id="@+id/member_profile_name_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="yoco"
                         android:textSize="18sp"
                         android:textColor="@color/colorFontToolbarSubtitle"/>
 
@@ -68,12 +67,13 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/member_profile_parent_layout"
                             android:layout_width="match_parent"
                             android:layout_height="24dp"
-                            android:gravity="center_horizontal">
+                            android:gravity="start">
 
                             <TextView
-                                android:id="@+id/parent_age_text_view"
+                                android:id="@+id/member_profile_parent_age_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -86,7 +86,7 @@
                                 android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
 
                             <TextView
-                                android:id="@+id/parent_dry_skin_text_view"
+                                android:id="@+id/member_profile_parent_dry_skin_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -100,7 +100,7 @@
                                 android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
 
                             <TextView
-                                android:id="@+id/parent_oily_skin_text_view"
+                                android:id="@+id/member_profile_parent_oily_skin_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -114,7 +114,7 @@
                                 android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
 
                             <TextView
-                                android:id="@+id/parent_dry_oily_skin_text_view"
+                                android:id="@+id/member_profile_parent_dry_oily_skin_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -128,7 +128,7 @@
                                 android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
 
                             <TextView
-                                android:id="@+id/parent_allergy_text_view"
+                                android:id="@+id/member_profile_parent_allergy_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -143,13 +143,13 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/child_layout"
+                            android:id="@+id/member_profile_child_layout"
                             android:layout_width="match_parent"
                             android:layout_height="24dp"
                             android:gravity="start">
 
                             <TextView
-                                android:id="@+id/child_dry_skin_text_view"
+                                android:id="@+id/member_profile_child_dry_skin_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -163,7 +163,7 @@
                                 android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>
 
                             <TextView
-                                android:id="@+id/child_allergy_text_view"
+                                android:id="@+id/member_profile_child_allergy_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingStart="6dp"
@@ -178,22 +178,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp">
-
-                    <!--<ImageView-->
-                        <!--android:id="@+id/member_config_image_view"-->
-                        <!--android:layout_width="30dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:src="@drawable/ic_search_primary_24dp"-->
-                        <!--android:scaleType="centerInside"/>-->
 
                 </LinearLayout>
 
@@ -242,15 +226,16 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/archive_product_title_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
-                        android:text="yoco 님이 관심있는 제품"
                         android:textSize="16sp"
                         android:textColor="@color/colorFontToolbarSubtitle"/>
 
                     <TextView
+                        android:id="@+id/archive_product_more_button_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -292,15 +277,16 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/archive_content_title_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
-                        android:text="yoco 님이 관심있는 컨텐츠"
                         android:textSize="16sp"
                         android:textColor="@color/colorFontToolbarSubtitle"/>
 
                     <TextView
+                        android:id="@+id/archive_content_more_button_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -341,15 +327,16 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/archive_review_product_title_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
-                        android:text="yoco 님이 리뷰를 작성한 제품"
                         android:textSize="16sp"
                         android:textColor="@color/colorFontToolbarSubtitle"/>
 
                     <TextView
+                        android:id="@+id/archive_review_product_more_button_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"

@@ -10,7 +10,9 @@ public class ReviewProduct {
 
     private int mProductId;
     private String mProductName;
+    private String mProductImagePath;
     private float mRatingValue;
+    private String mCreateDate;
     private Date mWriteDate;
 
     public int getProductId() {
@@ -29,6 +31,14 @@ public class ReviewProduct {
         mProductName = productName;
     }
 
+    public String getProductImagePath() {
+        return mProductImagePath;
+    }
+
+    public void setProductImagePath(String productImagePath) {
+        mProductImagePath = productImagePath;
+    }
+
     public float getRatingValue() {
         return mRatingValue;
     }
@@ -43,5 +53,13 @@ public class ReviewProduct {
 
     public void setWriteDate(Date writeDate) {
         mWriteDate = writeDate;
+    }
+
+    public String getCreateDate() {
+        return mCreateDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        mCreateDate = createDate;
     }
 }

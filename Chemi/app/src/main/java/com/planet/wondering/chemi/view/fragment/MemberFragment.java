@@ -17,10 +17,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.Content;
 import com.planet.wondering.chemi.model.archive.Product;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
@@ -28,7 +31,6 @@ import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,6 +44,8 @@ public class MemberFragment extends Fragment
 
     private static final String TAG = MemberFragment.class.getSimpleName();
 
+    private static final String ARG_CONFIG_USER = "config_user";
+
     public static MemberFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -51,11 +55,40 @@ public class MemberFragment extends Fragment
         return fragment;
     }
 
+    public static MemberFragment newInstance(User user) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CONFIG_USER, user);
+
+        MemberFragment fragment = new MemberFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private AppBarLayout mMemberAppBarLayout;
     private CircleImageView mMemberProfileCircleImageView;
-    private TextView mMemberNameTextView;
 //    private ImageView mMemberConfigImageView;
+    private TextView mMemberNameTextView;
+
+    private LinearLayout mParentLayout;
+    private TextView mParentAgeTextView;
+    private TextView mParentDrySkinTextView;
+    private TextView mParentOilySkinTextView;
+    private TextView mParentDryOilySkinTextView;
+    private TextView mParentAllergyTextView;
+
+    private LinearLayout mChildLayout;
+    private TextView mChildDrySkinTextView;
+    private TextView mChildAllergyTextView;
+
     private Toolbar mMemberToolbar;
+    private TextView mArchiveProductTitleTextView;
+    private TextView mArchiveContentTitleTextView;
+    private TextView mArchiveReviewProductTitleTextView;
+    private TextView mArchiveProductMoreButtonTextView;
+    private TextView mArchiveContentMoreButtonTextView;
+    private TextView mArchiveReviewProductMoreButtonTextView;
+
     private RecyclerView mArchiveProductRecyclerView;
     private RecyclerView mArchiveContentRecyclerView;
     private RecyclerView mArchiveReviewProductRecyclerView;
@@ -66,14 +99,19 @@ public class MemberFragment extends Fragment
     private ArrayList<Content> mArchiveContents;
     private ArrayList<ReviewProduct> mArchiveReviewProducts;
 
+    private User mUser;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
+
         mArchiveProducts = new ArrayList<>();
         mArchiveContents = new ArrayList<>();
         mArchiveReviewProducts = new ArrayList<>();
+
     }
 
     @Nullable
@@ -101,9 +139,32 @@ public class MemberFragment extends Fragment
         });
 
         mMemberProfileCircleImageView = (CircleImageView) view.findViewById(R.id.member_profile_circle_image_view);
-        mMemberNameTextView = (TextView) view.findViewById(R.id.member_name_text_view);
+        mMemberNameTextView = (TextView) view.findViewById(R.id.member_profile_name_text_view);
 //        mMemberConfigImageView = (ImageView) view.findViewById(R.id.member_config_image_view);
 //        mMemberConfigImageView.setOnTouchListener(this);
+
+        mParentLayout = (LinearLayout) view.findViewById(R.id.member_profile_parent_layout);
+        mParentAgeTextView = (TextView) view.findViewById(R.id.member_profile_parent_age_text_view);
+        mParentDrySkinTextView = (TextView) view.findViewById(R.id.member_profile_parent_dry_skin_text_view);
+        mParentOilySkinTextView = (TextView) view.findViewById(R.id.member_profile_parent_oily_skin_text_view);
+        mParentDryOilySkinTextView = (TextView) view.findViewById(R.id.member_profile_parent_dry_oily_skin_text_view);
+        mParentAllergyTextView = (TextView) view.findViewById(R.id.member_profile_parent_allergy_text_view);
+
+        mChildLayout = (LinearLayout) view.findViewById(R.id.member_profile_child_layout);
+        mChildDrySkinTextView = (TextView) view.findViewById(R.id.member_profile_child_dry_skin_text_view);
+        mChildAllergyTextView = (TextView) view.findViewById(R.id.member_profile_child_allergy_text_view);
+
+        mArchiveProductTitleTextView = (TextView) view.findViewById(R.id.archive_product_title_text_view);
+        mArchiveContentTitleTextView = (TextView) view.findViewById(R.id.archive_content_title_text_view);
+        mArchiveReviewProductTitleTextView = (TextView) view.findViewById(R.id.archive_review_product_title_text_view);
+
+        mArchiveProductMoreButtonTextView = (TextView) view.findViewById(R.id.archive_product_more_button_text_view);
+        mArchiveProductMoreButtonTextView.setOnClickListener(this);
+        mArchiveContentMoreButtonTextView = (TextView) view.findViewById(R.id.archive_content_more_button_text_view);
+        mArchiveContentMoreButtonTextView.setOnClickListener(this);
+        mArchiveReviewProductMoreButtonTextView = (TextView) view.findViewById(R.id.archive_review_product_more_button_text_view);
+        mArchiveReviewProductMoreButtonTextView.setOnClickListener(this);
+
 
         mArchiveProductRecyclerView = (RecyclerView) view.findViewById(R.id.archive_product_recycler_view);
         mArchiveProductRecyclerView.setLayoutManager(
@@ -132,6 +193,92 @@ public class MemberFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (mUser.getImagePath() == null || mUser.getImagePath().equals("null")) {
+            if (mUser.isHasExtraInfo()) {
+                if (mUser.isGender()) {
+                    mMemberProfileCircleImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                } else {
+                    mMemberProfileCircleImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                }
+            } else {
+                mMemberProfileCircleImageView.setImageResource(R.drawable.ic_user);
+            }
+        } else {
+            Glide.with(getActivity())
+                    .load(mUser.getImagePath())
+                    .crossFade()
+                    .into(mMemberProfileCircleImageView);
+        }
+
+        mMemberNameTextView.setText(mUser.getName());
+
+        if (mUser.isHasExtraInfo()) {
+//            promote member survey
+
+        } else {
+//            display member info
+        }
+
+        if (mUser.isHasDrySkin() && mUser.isHasOilySkin()) {
+            mParentDrySkinTextView.setVisibility(View.GONE);
+            mParentOilySkinTextView.setVisibility(View.GONE);
+            mParentDryOilySkinTextView.setVisibility(View.VISIBLE);
+        } else if (mUser.isHasDrySkin() && !mUser.isHasOilySkin()) {
+            mParentDrySkinTextView.setVisibility(View.VISIBLE);
+            mParentOilySkinTextView.setVisibility(View.GONE);
+            mParentDryOilySkinTextView.setVisibility(View.GONE);
+        } else if (!mUser.isHasDrySkin() && mUser.isHasOilySkin()) {
+            mParentDrySkinTextView.setVisibility(View.GONE);
+            mParentOilySkinTextView.setVisibility(View.VISIBLE);
+            mParentDryOilySkinTextView.setVisibility(View.GONE);
+        } else if (!mUser.isHasDrySkin() && !mUser.isHasOilySkin()) {
+            mParentDrySkinTextView.setVisibility(View.GONE);
+            mParentOilySkinTextView.setVisibility(View.GONE);
+            mParentDryOilySkinTextView.setVisibility(View.GONE);
+        }
+
+        if (mUser.isHasAllergy()) {
+            mParentAllergyTextView.setVisibility(View.VISIBLE);
+        } else {
+            mParentAllergyTextView.setVisibility(View.GONE);
+        }
+
+        if (mUser.isHasChild()) {
+            mChildLayout.setVisibility(View.VISIBLE);
+
+            if (mUser.isChildHasDrySkin()) {
+                mChildDrySkinTextView.setVisibility(View.VISIBLE);
+            } else {
+                mChildDrySkinTextView.setVisibility(View.GONE);
+            }
+
+            if (mUser.isChildHasAllergy()) {
+                mChildAllergyTextView.setVisibility(View.VISIBLE);
+            } else {
+                mChildAllergyTextView.setVisibility(View.GONE);
+            }
+
+        } else {
+            mChildLayout.setVisibility(View.GONE);
+        }
+
+        mArchiveProductTitleTextView.setText(getString(
+                R.string.member_profile_archive_product_title, mUser.getName()));
+        mArchiveContentTitleTextView.setText(
+                getString(R.string.member_profile_archive_content_title, mUser.getName()));
+        mArchiveReviewProductTitleTextView.setText(
+                getString(R.string.member_profile_archive_review_product_title, mUser.getName()));
+
+        if (mArchiveProducts.size() <= 0) {
+            mArchiveProductMoreButtonTextView.setVisibility(View.GONE);
+        }
+        if (mArchiveContents.size() <= 0) {
+            mArchiveContentMoreButtonTextView.setVisibility(View.GONE);
+        }
+        if (mArchiveReviewProducts.size() <= 0) {
+            mArchiveReviewProductMoreButtonTextView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -143,12 +290,21 @@ public class MemberFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
+        switch (v.getId()) {
 //            case R.id.member_config_image_view:
 //                Toast.makeText(getActivity(), "member_config_image_view", Toast.LENGTH_SHORT).show();
 //                mMenuSelectedListener.onMenuSelected();
 //                break;
-//        }
+            case R.id.archive_product_more_button_text_view:
+//                more to ArchiveActivity.ArchiveFragment.ArchiveProduct Tab;
+                break;
+            case R.id.archive_content_more_button_text_view:
+//                more to ArchiveActivity.ArchiveFragment.ArchiveContent Tab
+                break;
+            case R.id.archive_review_product_more_button_text_view:
+//                more to ArchiveActivity.ArchiveFragment.ArchiveReviewProduct Tab
+                break;
+        }
     }
 
     @Override
@@ -451,7 +607,7 @@ public class MemberFragment extends Fragment
         private RatingBar mArchiveReviewProductRatingBar;
         private TextView mArchiveReviewProductDateTextView;
 
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+//        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
 
         public ArchiveReviewProductHolder(View itemView) {
             super(itemView);
@@ -472,7 +628,8 @@ public class MemberFragment extends Fragment
 //            mArchiveReviewProductImageView
             mArchiveReviewProductNameTextView.setText(mReviewProduct.getProductName());
             mArchiveReviewProductRatingBar.setRating(mReviewProduct.getRatingValue());
-            mArchiveReviewProductDateTextView.setText(format.format(mReviewProduct.getWriteDate()));
+//            mArchiveReviewProductDateTextView.setText(format.format(mReviewProduct.getWriteDate()));
+            mArchiveReviewProductDateTextView.setText(mReviewProduct.getCreateDate());
         }
     }
 

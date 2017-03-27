@@ -29,6 +29,7 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
 
     public static final String LOGOUT_DIALOG = "logout_dialog";
     public static final String CLEAR_DIALOG = "clear_dialog";
+    public static final String REVOKE_DIALOG = "revoke_dialog";
 
     private static final String ARG_ICON_ID = "icon_id";
     private static final String ARG_TITLE_ID = "title_id";

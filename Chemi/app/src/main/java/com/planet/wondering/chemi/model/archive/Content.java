@@ -8,7 +8,9 @@ public class Content {
 
     private int mContentId;
     private String mTitle;
+    private String mSubTitle;
     private String mImagePath;
+    private String mKeepDate;
 
     public int getContentId() {
         return mContentId;
@@ -26,11 +28,27 @@ public class Content {
         mTitle = title;
     }
 
+    public String getSubTitle() {
+        return mSubTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        mSubTitle = subTitle;
+    }
+
     public String getImagePath() {
         return mImagePath;
     }
 
     public void setImagePath(String imagePath) {
         mImagePath = imagePath;
+    }
+
+    public String getKeepDate() {
+        return mKeepDate;
+    }
+
+    public void setKeepDate(String keepDate) {
+        mKeepDate = keepDate;
     }
 }

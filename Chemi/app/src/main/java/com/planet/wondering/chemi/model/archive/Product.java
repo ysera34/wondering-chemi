@@ -10,6 +10,7 @@ public class Product {
     private String mBrand;
     private String mName;
     private String mImagePath;
+    private String mKeepDate;
 
     public int getProductId() {
         return mProductId;
@@ -41,5 +42,13 @@ public class Product {
 
     public void setImagePath(String imagePath) {
         mImagePath = imagePath;
+    }
+
+    public String getKeepDate() {
+        return mKeepDate;
+    }
+
+    public void setKeepDate(String keepDate) {
+        mKeepDate = keepDate;
     }
 }

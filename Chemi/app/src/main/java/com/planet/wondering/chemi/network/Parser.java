@@ -10,6 +10,7 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
@@ -21,6 +22,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_ID;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_KEPT;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_CONTENTS;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_CONTENTS_SIZE;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_CONTENT_TITLE;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_CONTENT_TITLE2;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_PRODUCTS;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_PRODUCTS_SIZE;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_PRODUCT_BRAND;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_PRODUCT_NAME;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEWS;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_DATE;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_PRODUCT_ID;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_PRODUCT_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_RATING;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_SIZE;
 import static com.planet.wondering.chemi.network.Config.COUNT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.ALLERGY_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.CHEMICALS;
@@ -68,18 +86,22 @@ import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_IS_CORRECT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 import static com.planet.wondering.chemi.network.Config.User.Key.AGE;
+import static com.planet.wondering.chemi.network.Config.User.Key.BIRTH_YEAR;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_ALLERGY;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_DRY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.CREATE_DATE;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.Key.GENDER;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_ALLERGY;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_CHILD;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_DRY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_OILY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.MODIFY_DATE;
 import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER_ID;
+import static com.planet.wondering.chemi.network.Config.User.Key.USER_IMAGE_PATH;
 
 /**
  * Created by yoon on 2017. 1. 26..
@@ -534,7 +556,7 @@ public class Parser {
         return user;
     }
 
-    public static User parseUser(JSONObject responseObject) {
+    public static User parseSignUpForUser(JSONObject responseObject) {
 
         User user = new User();
         try {
@@ -581,5 +603,112 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return token;
+    }
+
+    public static User parseMemberConfigUser(JSONObject responseObject) {
+
+        User user = new User();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject userObject = responseObject.getJSONObject(RESPONSE_DATA);
+//                user.setId(userObject.getInt(USER_ID));
+                user.setEmail(userObject.getString(EMAIL));
+                user.setName(userObject.getString(Config.User.Key.NAME));
+                user.setGender(userObject.getInt(GENDER) == 0);
+
+                if (userObject.getInt(BIRTH_YEAR) == -1) {
+                    user.setHasExtraInfo(false);
+                } else {
+                    user.setHasExtraInfo(true);
+                }
+                user.setBirthYear(userObject.getInt(BIRTH_YEAR));
+                user.setImagePath(userObject.getString(USER_IMAGE_PATH));
+
+                user.setHasDrySkin(userObject.getInt(HAS_DRY_SKIN) == 1);
+                user.setHasOilySkin(userObject.getInt(HAS_OILY_SKIN) == 1);
+                user.setHasAllergy(userObject.getInt(HAS_ALLERGY) == 1);
+                user.setHasChild(userObject.getInt(HAS_CHILD) == 1);
+                user.setChildHasDrySkin(userObject.getInt(CHILD_HAS_DRY_SKIN) == 1);
+                user.setChildHasAllergy(userObject.getInt(CHILD_HAS_ALLERGY) == 1);
+
+                user.setCreateDate(userObject.getString(CREATE_DATE));
+                user.setModifyDate(userObject.getString(MODIFY_DATE));
+
+                int productSize = userObject.getInt(USER_PRODUCTS_SIZE);
+                if (productSize > 0) {
+                    user.setArchiveProducts(new ArrayList<com.planet.wondering.chemi.model.archive.Product>());
+                    JSONArray productJSONArray = userObject.getJSONArray(USER_PRODUCTS);
+                    for (int i = 0; i < productSize; i++) {
+                        JSONObject productJSONObject = (JSONObject) productJSONArray.get(i);
+                        com.planet.wondering.chemi.model.archive.Product product = new com.planet.wondering.chemi.model.archive.Product();
+                        product.setProductId(productJSONObject.getInt(USER_ARCHIVE_ID));
+                        product.setBrand(productJSONObject.getString(USER_PRODUCT_BRAND));
+                        product.setName(productJSONObject.getString(USER_PRODUCT_NAME));
+                        product.setImagePath(productJSONObject.getString(USER_ARCHIVE_IMAGE_PATH));
+                        product.setKeepDate(productJSONObject.getString(USER_ARCHIVE_KEPT));
+                        user.getArchiveProducts().add(product);
+                    }
+                }
+
+                int contentSize = userObject.getInt(USER_CONTENTS_SIZE);
+                if (contentSize > 0) {
+                    user.setArchiveContents(new ArrayList<com.planet.wondering.chemi.model.archive.Content>());
+                    JSONArray contentJSONArray = userObject.getJSONArray(USER_CONTENTS);
+                    for (int i = 0; i < contentSize; i++) {
+                        JSONObject contentJSONObject = (JSONObject) contentJSONArray.get(i);
+                        com.planet.wondering.chemi.model.archive.Content content = new com.planet.wondering.chemi.model.archive.Content();
+                        content.setContentId(contentJSONObject.getInt(USER_ARCHIVE_ID));
+                        content.setTitle(contentJSONObject.getString(USER_CONTENT_TITLE));
+                        content.setSubTitle(contentJSONObject.getString(USER_CONTENT_TITLE2));
+                        content.setImagePath(contentJSONObject.getString(USER_ARCHIVE_IMAGE_PATH));
+                        content.setKeepDate(contentJSONObject.getString(USER_ARCHIVE_KEPT));
+                        user.getArchiveContents().add(content);
+                    }
+                }
+
+                int reviewSize = userObject.getInt(USER_REVIEW_SIZE);
+                if (reviewSize > 0) {
+                    user.setReviewProducts(new ArrayList<ReviewProduct>());
+                    JSONArray reviewJSONArray = userObject.getJSONArray(USER_REVIEWS);
+                    for (int i = 0; i < reviewSize; i++) {
+                        JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
+                        ReviewProduct reviewProduct = new ReviewProduct();
+                        reviewProduct.setProductId(reviewJSONObject.getInt(USER_REVIEW_PRODUCT_ID));
+                        reviewProduct.setProductImagePath(reviewJSONObject.getString(USER_REVIEW_PRODUCT_IMAGE_PATH));
+
+                        Object ratingObject = reviewJSONObject.get(USER_REVIEW_RATING);
+                        float ratingFloat = 0.0f;
+                        if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
+                            ratingFloat = 0.0f;
+                        } else if (ratingObject instanceof Integer) {
+                            ratingFloat = ((Integer) ratingObject).floatValue();
+                        } else {
+                            ratingFloat = ((Double) ratingObject).floatValue();
+                        }
+                        reviewProduct.setRatingValue(ratingFloat);
+                        reviewProduct.setCreateDate(reviewJSONObject.getString(USER_REVIEW_DATE));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return user;
+    }
+
+    public static String parseUpdatedUserName(JSONObject responseObject) {
+
+        String userName = null;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject userObject = responseObject.getJSONObject(RESPONSE_DATA);
+                userName = userObject.getString(Config.User.Key.NAME);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return userName;
     }
 }

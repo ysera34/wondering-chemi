@@ -494,7 +494,7 @@ public class MemberStartLocalFragment extends Fragment
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(),
                                 "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                        mUser = Parser.parseUser(response);
+                        mUser = Parser.parseSignUpForUser(response);
 
                         createFirebaseAccount(mMemberStartLocalEmailEditText.getText().toString(),
                                 mMemberStartLocalConfirmEditText.getText().toString());

@@ -1,16 +1,26 @@
 package com.planet.wondering.chemi.model;
 
+import com.planet.wondering.chemi.model.archive.Product;
+import com.planet.wondering.chemi.model.archive.Content;
+import com.planet.wondering.chemi.model.archive.ReviewProduct;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+
 /**
  * Created by yoon on 2017. 2. 17..
  */
 
-public class User {
+public class User implements Serializable {
 
     private int mId;
     private String mEmail;
     private String mName;
     private String mToken;
     private String mPushToken;
+    private String mImagePath;
+    private boolean mHasExtraInfo;
     private boolean mGender;
     private int mBirthYear;
     private String mAge;
@@ -20,6 +30,14 @@ public class User {
     private boolean mHasChild;
     private boolean mChildHasDrySkin;
     private boolean mChildHasAllergy;
+
+    private String mCreateDate;
+    private String mModifyDate;
+
+    private ArrayList<Product> mArchiveProducts;
+    private ArrayList<Content> mArchiveContents;
+    private ArrayList<ReviewProduct> mReviewProducts;
+
 
 
     public int getId() {
@@ -62,6 +80,14 @@ public class User {
         mPushToken = pushToken;
     }
 
+    public String getImagePath() {
+        return mImagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        mImagePath = imagePath;
+    }
+
     // female : 0; male : 1;
     public int getGender() {
         if (isGender()) {
@@ -69,6 +95,14 @@ public class User {
         } else {
             return 1;
         }
+    }
+
+    public boolean isHasExtraInfo() {
+        return mHasExtraInfo;
+    }
+
+    public void setHasExtraInfo(boolean hasExtraInfo) {
+        mHasExtraInfo = hasExtraInfo;
     }
 
     public boolean isGender() {
@@ -202,6 +236,46 @@ public class User {
 //                '}';
 //    }
 
+
+    public ArrayList<Product> getArchiveProducts() {
+        return mArchiveProducts;
+    }
+
+    public void setArchiveProducts(ArrayList<Product> archiveProducts) {
+        mArchiveProducts = archiveProducts;
+    }
+
+    public ArrayList<Content> getArchiveContents() {
+        return mArchiveContents;
+    }
+
+    public void setArchiveContents(ArrayList<Content> archiveContents) {
+        mArchiveContents = archiveContents;
+    }
+
+    public ArrayList<ReviewProduct> getReviewProducts() {
+        return mReviewProducts;
+    }
+
+    public void setReviewProducts(ArrayList<ReviewProduct> reviewProducts) {
+        mReviewProducts = reviewProducts;
+    }
+
+    public String getCreateDate() {
+        return mCreateDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        mCreateDate = createDate;
+    }
+
+    public String getModifyDate() {
+        return mModifyDate;
+    }
+
+    public void setModifyDate(String modifyDate) {
+        mModifyDate = modifyDate;
+    }
 
     @Override
     public String toString() {

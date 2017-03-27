@@ -52,14 +52,44 @@ public class Config {
             public static final String USER = "user";
             public static final String GENDER = "gender";
             public static final String AGE = "age";
+            public static final String BIRTH_YEAR = "birthYear";
             public static final String HAS_DRY_SKIN = "hasDrySkin";
             public static final String HAS_OILY_SKIN = "hasOilySkin";
             public static final String HAS_ALLERGY = "hasAllergy";
             public static final String HAS_CHILD = "hasChild";
             public static final String CHILD_HAS_DRY_SKIN = "childHasDrySkin";
             public static final String CHILD_HAS_ALLERGY = "childHasAllergy";
+            public static final String USER_IMAGE_PATH = "imagePath";
+            public static final String CREATE_DATE = "created";
+            public static final String MODIFY_DATE = "modified";
         }
     }
+
+    public static final class Archive {
+
+        public static final class Key {
+            public static final String USER_PRODUCTS_SIZE = "producted";
+            public static final String USER_PRODUCTS = "products";
+            public static final String USER_CONTENTS_SIZE = "contented";
+            public static final String USER_CONTENTS = "contents";
+            public static final String USER_REVIEW_SIZE = "reviewed";
+            public static final String USER_REVIEWS = "reviews";
+
+            public static final String USER_ARCHIVE_ID = "id";
+            public static final String USER_ARCHIVE_IMAGE_PATH = "imagePath";
+            public static final String USER_ARCHIVE_KEPT = "kept";
+
+            public static final String USER_PRODUCT_BRAND = "brand";
+            public static final String USER_PRODUCT_NAME = "name";
+            public static final String USER_CONTENT_TITLE = "title";
+            public static final String USER_CONTENT_TITLE2 = "title2";
+            public static final String USER_REVIEW_PRODUCT_ID = "productId";
+            public static final String USER_REVIEW_PRODUCT_IMAGE_PATH = "productImagePath";
+            public static final String USER_REVIEW_RATING = "rated";
+            public static final String USER_REVIEW_DATE = "dated";
+        }
+    }
+
 
     public static final class Tag {
         public static final String PATH = File.separator + "tags?";

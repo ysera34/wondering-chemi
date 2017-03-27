@@ -593,7 +593,7 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                         Toast.makeText(getApplicationContext(),
                                 "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, response.toString());
-                        mUser = Parser.parseUser(response);
+                        mUser = Parser.parseSignUpForUser(response);
 
                         if (mPlatformId == 1) {
                             firebaseAuthGoogle(mGoogleSignInAccount);

@@ -35,7 +35,7 @@ public class MemberConfigFragment extends Fragment
 
     private int[] mConfigLayoutIds;
     private RelativeLayout[] mConfigLayouts;
-    private TextView mMemeberConfigProfileTextView;
+    private TextView mMemberConfigProfileTextView;
     private Switch mPushSwitch;
     private Switch mEmailSwitch;
 
@@ -62,7 +62,7 @@ public class MemberConfigFragment extends Fragment
             mConfigLayouts[i] = (RelativeLayout) view.findViewById(mConfigLayoutIds[i]);
             mConfigLayouts[i].setOnClickListener(this);
         }
-        mMemeberConfigProfileTextView = (TextView) view.findViewById(R.id.member_config_profile_text_view);
+        mMemberConfigProfileTextView = (TextView) view.findViewById(R.id.member_config_profile_text_view);
 
         mPushSwitch = (Switch) view.findViewById(R.id.member_config_push_notification_switch);
         mPushSwitch.setOnCheckedChangeListener(this);
@@ -75,7 +75,7 @@ public class MemberConfigFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
-            mMemeberConfigProfileTextView.setText("회원 가입 및 로그인");
+            mMemberConfigProfileTextView.setText("회원 가입 및 로그인");
         }
     }
 
