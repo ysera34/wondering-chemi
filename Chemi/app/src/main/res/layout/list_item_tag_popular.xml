@@ -12,9 +12,9 @@
         android:layout_width="20sp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_marginEnd="20dp"
-        android:textSize="16sp"
-        android:textColor="@color/colorFontHint"/>
+        android:layout_marginEnd="12dp"
+        android:textSize="14sp"
+        android:textColor="@color/colorFontAluminum"/>
 
     <TextView
         android:id="@+id/list_item_tag_popular_tag_name_text_view"
@@ -22,8 +22,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
-        android:textSize="16sp"
-        android:textColor="@color/colorFontHint"/>
+        android:textSize="14sp"
+        android:textColor="@color/colorFontBody"/>
 
     <RelativeLayout
         android:layout_width="42dp"
@@ -32,10 +32,10 @@
 
         <ImageView
             android:id="@+id/list_item_tag_popular_tag_variation_state_image_view"
-            android:layout_width="wrap_content"
+            android:layout_width="16dp"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
             android:gravity="center"
+            android:scaleType="centerInside"
             android:layout_marginEnd="3dp"/>
 
         <TextView
@@ -44,8 +44,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@color/colorFontHint"/>
+            android:textSize="14sp"
+            android:textColor="@color/colorFontAluminum"/>
     </RelativeLayout>
 
 </LinearLayout>

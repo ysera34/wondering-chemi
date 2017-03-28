@@ -46,9 +46,10 @@
                 android:background="@drawable/selector_bg_member_start_button_layout">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginStart="30dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_naver"
                     android:scaleType="centerInside"/>
 
@@ -90,9 +91,10 @@
                 android:background="@drawable/selector_bg_member_start_button_layout">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginStart="30dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_google"
                     android:scaleType="centerInside"/>
 
@@ -134,9 +136,10 @@
                 android:background="@drawable/selector_bg_member_start_button_layout">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginStart="30dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_email_primary"
                     android:scaleType="centerInside"/>
 

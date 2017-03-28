@@ -8,8 +8,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:gravity="center_vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_tag_popular_update_date"
-            android:textColor="@color/colorFontHint"/>
+            android:textSize="13sp"
+            android:textColor="@color/colorFontAluminum"/>
 
     </RelativeLayout>
     

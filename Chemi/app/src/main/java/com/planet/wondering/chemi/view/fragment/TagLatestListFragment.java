@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -176,12 +177,12 @@ public class TagLatestListFragment extends Fragment {
     private class TagFooterViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private RelativeLayout mTagLatestAllDeleteLayout;
+        private LinearLayout mTagLatestAllDeleteLayout;
 
         public TagFooterViewHolder(View itemView) {
             super(itemView);
 
-            mTagLatestAllDeleteLayout = (RelativeLayout)
+            mTagLatestAllDeleteLayout = (LinearLayout)
                     itemView.findViewById(R.id.list_item_tag_latest_all_delete_view);
             mTagLatestAllDeleteLayout.setOnClickListener(this);
         }

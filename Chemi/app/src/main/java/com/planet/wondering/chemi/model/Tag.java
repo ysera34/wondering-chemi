@@ -58,6 +58,10 @@ public class Tag {
         mVariation = variation;
     }
 
+    public int getAbsoluteVariation() {
+        return Math.abs(getVariation());
+    }
+
     public Date getRankDate() {
         return mRankDate;
     }

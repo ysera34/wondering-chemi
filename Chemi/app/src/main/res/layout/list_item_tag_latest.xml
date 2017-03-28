@@ -19,9 +19,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:gravity="center_vertical|start"
-            android:textSize="16sp"
-            android:textColor="@color/colorFontHint"
             android:maxLines="1"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontBody"
             android:layout_toStartOf="@+id/list_item_tag_latest_date_text_view"/>
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical|end"
             android:textSize="12sp"
-            android:textColor="@color/colorFontHint"/>
+            android:textColor="@color/colorFontAluminum"/>
 
     </RelativeLayout>
 
@@ -52,7 +52,5 @@
             android:contentDescription="@string/list_item_latest_search_delete"/>
 
     </RelativeLayout>
-
-
 
 </RelativeLayout>
