@@ -213,12 +213,15 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         if (isChose) {
             switch (mDialogType) {
                 case 1:
+                    // need to know platform id and have to sign out
                     UserSharedPreferences.removeStoredToken(getActivity());
                     Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
                     mDialogType = 0;
                     break;
                 case 2:
+                    // need to know platform id and have to revoke
+                    // want to leave member and then have to revoke
                     Toast.makeText(getActivity(), "연동해제 되었습니다.", Toast.LENGTH_SHORT).show();
                     mDialogType = 0;
                     break;

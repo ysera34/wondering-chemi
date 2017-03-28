@@ -68,7 +68,10 @@ import java.util.Map;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
-import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING;
+import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
+import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL_STRING;
+import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -233,9 +236,9 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 
                 // TODO(user): send token to server and validate server-side
                 if (account != null) {
-                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
-                    //                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
-                    mGoogleSignInAccount = account;
+//                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
+                    requestConfirmEmailRepetition(account, null, null, 1);
+//                    mGoogleSignInAccount = account;
                 }
 //              requestSubmitUserInfo(account.getIdToken(), 1);
             } else {
@@ -244,8 +247,6 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
             }
         }
     }
-
-    private GoogleSignInAccount mGoogleSignInAccount;
 
     private void firebaseAuthGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle: id : " + account.getId());
@@ -364,7 +365,7 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                requestConfirmEmailRepetition(email, accessToken, 2);
+                requestConfirmEmailRepetition(null, email, accessToken, 2);
 //                requestSubmitUserInfo(accessToken, 2);
 
             } else {
@@ -374,48 +375,6 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
             }
         }
     };
-
-//    public void signUpForLocal() {
-//        mFragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-//                .replace(R.id.pure_fragment_container, MemberStartLocalFragment.newInstance())
-//                .addToBackStack(null)
-//                .commit();
-//    }
-
-//    public void cancelSignUpForLocal() {
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
-//        if (fragment instanceof MemberStartLocalFragment) {
-//            mFragmentManager.beginTransaction()
-//                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
-//                    .commit();
-//        }
-//    }
-
-//    public void signInLocal() {
-//        mFragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-//                .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
-//                .addToBackStack(null)
-//                .commit();
-//    }
-
-//    public void cancelSignInLocal() {
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.pure_fragment_container);
-//        if (fragment instanceof MemberSignInLocalFragment) {
-//            mFragmentManager.beginTransaction()
-//                    .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
-//                    .commit();
-//        }
-//    }
-
-//    public void findPassword() {
-//        mFragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
-//                .replace(R.id.pure_fragment_container, MemberForgetPasswordFragment.newInstance())
-//                .addToBackStack(null)
-//                .commit();
-//    }
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
@@ -489,19 +448,27 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
         }
     }
 
+    private GoogleSignInAccount mGoogleSignInAccount;
     private String mNaverEmail = null;
     private String mAccessToken = null;
     private int mPlatformId = -1;
 
-    private void requestConfirmEmailRepetition(final String emailAddress, final String accessToken, final int platformId) {
+    private void requestConfirmEmailRepetition(final GoogleSignInAccount googleSignInAccount,
+            final String emailAddress, final String accessToken, final int platformId) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("accessToken", accessToken);
-        params.put("emailString", emailAddress);
-        params.put("platform", String.valueOf(platformId));
+        if (platformId == 1) {
+            params.put(ACCESS_TOKEN, googleSignInAccount.getIdToken());
+            params.put(EMAIL_STRING, googleSignInAccount.getEmail());
+            params.put(PLATFORM, String.valueOf(platformId));
+        } else if (platformId == 2) {
+            params.put(ACCESS_TOKEN, accessToken);
+            params.put(EMAIL_STRING, emailAddress);
+            params.put(PLATFORM, String.valueOf(platformId));
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),
+                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -510,21 +477,27 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 //                            requestSubmitUserInfo(accessToken, platformId);
                             User user = Parser.parseEmailConfirm(response);
 
-                            if (user == null) {
+                            if (user == null) { /*member sign up for*/
                                 mFragmentManager.beginTransaction()
                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                                         .replace(R.id.pure_fragment_container, MemberStartNameFragment.newInstance())
                                         .commit();
 
-                                mNaverEmail = emailAddress;
-                                mAccessToken = accessToken;
+                                if (platformId == 1) {
+                                    mGoogleSignInAccount = googleSignInAccount;
+                                } else if (platformId == 2) {
+                                    mNaverEmail = emailAddress;
+                                    mAccessToken = accessToken;
+                                }
                                 mPlatformId = platformId;
+
                             } else {
                                 if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
                                     UserSharedPreferences.removeStoredToken(getApplicationContext());
                                 }
                                 UserSharedPreferences.setStoreToken(getApplicationContext(), user.getToken());
                                 Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+                                Toast.makeText(getApplicationContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
 
                                 startActivity(SearchActivity.newIntent(getApplicationContext()));
                                 finish();
@@ -533,13 +506,13 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                         } else {
                             if (platformId == 1) {
                                 Toast.makeText(getApplicationContext(),
-                                        "동일 이메일이 구글을 통하지 않고 가입 되었다.... 다른 이메일로 가입해주세요.",
+                                        "동일한 이메일이 구글 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
 //                                signOutGoogle();
                                 revokeAccessGoogle();
-                            } else {
+                            } else if (platformId == 2) {
                                 Toast.makeText(getApplicationContext(),
-                                        "동일 이메일이 네이버를 통하지 않고 가입 되었다... 다른 이메일로 가입해주세요.",
+                                        "동일한 이메일이 네이버 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
 //                                signOutNaver();
                                 revokeAccessNaver();
@@ -553,6 +526,11 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                         Log.e(TAG, String.valueOf(error.getMessage()));
                         Toast.makeText(getApplicationContext(),
                                 "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                        if (platformId == 1) {
+                            revokeAccessGoogle();
+                        } else if (platformId == 2) {
+                            revokeAccessNaver();
+                        }
                     }
                 }
         );
@@ -595,12 +573,11 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                         Log.i(TAG, response.toString());
                         mUser = Parser.parseSignUpForUser(response);
 
+                        /*firebase sign up for or sign in*/
                         if (mPlatformId == 1) {
                             firebaseAuthGoogle(mGoogleSignInAccount);
-                        } else {
-                        // platform id 2
-                            createFirebaseAccount(mNaverEmail,
-                                    FirebaseInstanceId.getInstance().getToken());
+                        } else if (mPlatformId == 2) {
+                            createFirebaseAccount(mNaverEmail, mNaverEmail);
                         }
 
                         if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
@@ -776,6 +753,12 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
                     .commit();
+            if (mPlatformId == 1) {
+                revokeAccessGoogle();
+            } else if (mPlatformId == 2) {
+                revokeAccessNaver();
+            }
+
         } else if (fragment instanceof MemberSignInLocalFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)

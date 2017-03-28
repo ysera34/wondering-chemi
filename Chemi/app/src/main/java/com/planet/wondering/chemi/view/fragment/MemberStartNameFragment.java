@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
-import static com.planet.wondering.chemi.network.Config.User.NAME_STRING;
+import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -51,6 +52,7 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
     }
 
     private InputMethodManager mInputMethodManager;
+    private RelativeLayout mMemberStartNameCancelLayout;
     private EditText mMemberStartNameNameEditText;
     private TextView mMemberStartNameNameValidationTextView;
     private TextView mMemberStartNameNameAuthButtonTextView;
@@ -68,6 +70,8 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_start_name, container, false);
 
+        mMemberStartNameCancelLayout = (RelativeLayout) view.findViewById(R.id.member_start_name_cancel_layout);
+        mMemberStartNameCancelLayout.setOnClickListener(this);
         mMemberStartNameNameEditText = (EditText) view.findViewById(R.id.member_start_name_name_edit_text);
         mMemberStartNameNameValidationTextView = (TextView)
                 view.findViewById(R.id.member_start_name_name_validation_text_view);
@@ -86,6 +90,10 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.member_start_name_cancel_layout:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberStartNameNameEditText.getWindowToken(), 0);
+                getActivity().onBackPressed();
+                break;
             case R.id.member_start_name_name_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartNameNameEditText.getWindowToken(), 0);
                 if (isAuthNameValidation) {
@@ -147,7 +155,7 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
         params.put("nameString", name);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + NAME_STRING, new JSONObject(params),
+                Request.Method.POST, URL_HOST + PATH + NAME_STRING_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

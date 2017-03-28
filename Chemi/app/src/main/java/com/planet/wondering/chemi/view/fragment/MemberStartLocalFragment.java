@@ -47,10 +47,10 @@ import java.util.regex.Pattern;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_PATH;
-import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING;
+import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
-import static com.planet.wondering.chemi.network.Config.User.NAME_STRING;
+import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -191,7 +191,8 @@ public class MemberStartLocalFragment extends Fragment
             case R.id.member_start_local_cancel_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
 //                ((MemberStartActivity) getActivity()).cancelSignUpForLocal();
-                mMenuSelectedListener.onMenuSelected(7003);
+//                mMenuSelectedListener.onMenuSelected(7003);
+                getActivity().onBackPressed();
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
@@ -365,7 +366,7 @@ public class MemberStartLocalFragment extends Fragment
         params.put("platform", "0");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING, new JSONObject(params),
+                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -436,7 +437,7 @@ public class MemberStartLocalFragment extends Fragment
         params.put("nameString", name);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + NAME_STRING, new JSONObject(params),
+                Request.Method.POST, URL_HOST + PATH + NAME_STRING_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
