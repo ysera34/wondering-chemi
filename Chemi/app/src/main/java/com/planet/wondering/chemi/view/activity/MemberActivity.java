@@ -235,12 +235,12 @@ public class MemberActivity extends BottomNavigationActivity
         } else if (fragment instanceof MemberConfigChangePasswordFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
+                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance())
+                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else {
             super.onBackPressed();

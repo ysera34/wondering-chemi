@@ -42,11 +42,11 @@ public class Tag {
 
     public int getStateImageResId() {
         if (getVariation() > 0) {
-            return R.drawable.ic_arrow_upward_24dp;
+            return R.drawable.ic_upward;
         } else if (getVariation() < 0){
-            return R.drawable.ic_arrow_downward_24dp;
+            return R.drawable.ic_downward;
         } else {
-            return R.drawable.ic_search_primary_24dp;
+            return R.drawable.ic_unward;
         }
     }
 

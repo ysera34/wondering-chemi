@@ -75,7 +75,9 @@ public class BottomSheetMenuAdapter extends RecyclerView.Adapter<BottomSheetMenu
 
         public void bindMenuItem(BottomSheetMenu bottomSheetMenu) {
             mBottomSheetMenu = bottomSheetMenu;
-            mMenuItemIconImageView.setImageResource(mBottomSheetMenu.getImageId());
+            if (mBottomSheetMenu.getImageId() != 0) {
+                mMenuItemIconImageView.setImageResource(mBottomSheetMenu.getImageId());
+            }
             mMenuItemTitleTextView.setText(mBottomSheetMenu.getTitleId());
         }
 

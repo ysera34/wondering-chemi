@@ -281,10 +281,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         ViewGroup.LayoutParams layoutParams = mSearchEditText.getLayoutParams();
 //        layoutParams.width = 1080;
 //        layoutParams.height = 300;
-        layoutParams.width = mSearchEditText.getWidth() * 5 / 6;
+        layoutParams.width = mSearchEditText.getWidth() * 52 / 60;
 
         mSearchEditText.setLayoutParams(layoutParams);
-        mSearchImageView.setImageResource(R.drawable.ic_search_white_36dp);
+        mSearchImageView.setImageResource(R.drawable.ic_search_white);
 
         mDictionaryFragmentContainerFrameLayout.animate().translationY(-mDictionaryLogoLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
@@ -312,10 +312,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         ViewGroup.LayoutParams layoutParams = mSearchEditText.getLayoutParams();
 
-        layoutParams.width = mSearchEditText.getWidth() * 6 / 5;
+        layoutParams.width = mSearchEditText.getWidth() * 60 / 52;
 
         mSearchEditText.setLayoutParams(layoutParams);
-        mSearchImageView.setImageResource(R.drawable.ic_search_primary_36dp);
+        mSearchImageView.setImageResource(R.drawable.ic_search_primary);
 
         mDictionaryFragmentContainerFrameLayout.animate().translationY(0)
                 .setInterpolator(new AccelerateInterpolator(2));

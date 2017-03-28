@@ -550,14 +550,22 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
 
         showProgressDialog();
 
+        if (mPlatformId == 1) {
+            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mGoogleSignInAccount.getIdToken());
+        } else if (mPlatformId == 2){
+            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
+        }
         Log.i(TAG, "requestSubmitUserInfo : name :" + name);
-        Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
         Log.i(TAG, "requestSubmitUserInfo : mPlatformId :" + String.valueOf(mPlatformId));
         Log.i(TAG, "requestSubmitUserInfo : pushToken :" + FirebaseInstanceId.getInstance().getToken());
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
-        params.put("accessToken", mAccessToken);
+        if (mPlatformId == 1) {
+            params.put("accessToken", mGoogleSignInAccount.getIdToken());
+        } else if (mPlatformId == 2) {
+            params.put("accessToken", mAccessToken);
+        }
         params.put("platform", String.valueOf(mPlatformId));
         params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
 

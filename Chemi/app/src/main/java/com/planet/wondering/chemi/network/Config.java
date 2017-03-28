@@ -36,13 +36,15 @@ public class Config {
         public static final String PATH = File.separator + "users";
         public static final String EMAIL_PATH = File.separator + EMAIL;
         public static final String PASSWORD_PATH = File.separator + PASSWORD;
-        public static final String EMAIL_STRING = File.separator + "emailstring";
-        public static final String NAME_STRING = File.separator + "namestring";
+        public static final String EMAIL_STRING_PATH = File.separator + "emailstring";
+        public static final String NAME_STRING_PATH = File.separator + "namestring";
         public static final String LOGIN_PARAMS = File.separator + "loginparams";
 
         public static final class Key {
             public static final String USER_ID = "id";
             public static final String EMAIL = "email";
+            public static final String EMAIL_STRING = "emailString";
+            public static final String PLATFORM = "platform";
             public static final String NAME = "name";
             public static final String PASSWORD = "password";
             public static final String TOKEN = "token";

@@ -42,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:src="@drawable/ic_search_primary_24dp"
+                android:src="@drawable/ic_search_primary"
                 android:background="@android:color/transparent"/>
 
             <!--<RelativeLayout-->

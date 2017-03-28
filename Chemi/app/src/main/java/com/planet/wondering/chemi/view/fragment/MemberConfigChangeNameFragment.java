@@ -47,7 +47,7 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
 public class MemberConfigChangeNameFragment extends Fragment
         implements View.OnClickListener, View.OnFocusChangeListener {
 
-    public static final String TAG = MemberConfigChangeNameFragment.class.getSimpleName();
+    private static final String TAG = MemberConfigChangeNameFragment.class.getSimpleName();
 
     private static final String ARG_USER_NAME = "user_name";
 

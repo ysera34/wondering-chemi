@@ -137,12 +137,12 @@
     <string name="review_create_review_length_format">%s자</string>
     <string name="member_send_email_format">%s 으로</string>
 
-    <string name="ewg_reason_description_null">근거자료가 없어요</string>
-    <string name="ewg_reason_description_none">근거자료가 없어요</string>
-    <string name="ewg_reason_description_limited">근거자료가 미약해요</string>
-    <string name="ewg_reason_description_fair">근거자료가 적절해요</string>
-    <string name="ewg_reason_description_good">근거자료가 많아요</string>
-    <string name="ewg_reason_description_robust">근거자료가 풍부해요</string>
+    <string name="ewg_reason_description_null">EWG 미등록 성분</string>
+    <string name="ewg_reason_description_none">등급판정 근거가 없어요</string>
+    <string name="ewg_reason_description_limited">등급판정 근거가 미약해요</string>
+    <string name="ewg_reason_description_fair">등급판정 근거가 적절해요</string>
+    <string name="ewg_reason_description_good">등급판정 근거가 많아요</string>
+    <string name="ewg_reason_description_robust">등급판정 근거가 확실해요</string>
 
     <string-array name="ewg_reason_description_array">
         <item>@string/ewg_reason_description_null</item>

@@ -321,8 +321,8 @@ public class ReviewCreateFragment extends Fragment
             return;
         }
         ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
-        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_camera));
-        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_gallery));
+        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_camera, R.string.bottom_sheet_menu_camera));
+        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_gallery, R.string.bottom_sheet_menu_gallery));
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);
@@ -362,8 +362,8 @@ public class ReviewCreateFragment extends Fragment
             return;
         }
         ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
-        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_pick));
-        bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_search_primary_24dp, R.string.bottom_sheet_menu_delete));
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_pick));
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_delete));
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);

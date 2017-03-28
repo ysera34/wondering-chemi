@@ -4,21 +4,21 @@
 
     <item
         android:id="@+id/action_faq"
-        android:icon="@drawable/ic_search_primary_24dp"
+        android:icon="@drawable/ic_question"
         android:title="@string/menu_toolbar_product_action_faq"
         android:orderInCategory="100"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_archive"
-        android:icon="@drawable/ic_search_primary_24dp"
+        android:icon="@drawable/ic_archive"
         android:title="@string/menu_toolbar_product_action_archive"
         android:orderInCategory="100"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_share"
-        android:icon="@drawable/ic_search_primary_24dp"
+        android:icon="@drawable/ic_share"
         android:title="@string/menu_toolbar_product_action_share"
         android:orderInCategory="100"
         app:showAsAction="always" />

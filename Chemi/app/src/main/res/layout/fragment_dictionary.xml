@@ -66,8 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toStartOf="@+id/dictionary_search_image_view"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp">
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
 
                 <ImageButton
                     android:visibility="gone"
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_clear_24dp"
+                    android:src="@drawable/ic_clear_light_gray"
                     android:background="@android:color/transparent"/>
 
             </RelativeLayout>
@@ -84,10 +84,10 @@
                 android:id="@+id/dictionary_search_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_search_primary_36dp"
+                android:src="@drawable/ic_search_primary"
                 android:scaleType="centerInside"/>
 
         </RelativeLayout>
