@@ -195,16 +195,16 @@ public class MemberSignInLocalFragment extends Fragment
                             mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                             mEmailValidationMessageTextView.setText("");
 
-                            mMemberSignInSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_white_primary));
-                            mMemberSignInSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary_transparent_white);
+                            mMemberSignInSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                            mMemberSignInSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
                             isValidatedEmail = true;
                         } else {
                             mMemberSignInEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mEmailValidationMessageTextView.setText(validateEmail(text));
                             mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
 
-                            mMemberSignInSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                            mMemberSignInSubmitButtonTextView.setBackgroundResource(R.drawable.widget_border_oval_rectangle_primary);
+                            mMemberSignInSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                            mMemberSignInSubmitButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                             isValidatedEmail = false;
                         }
                     }

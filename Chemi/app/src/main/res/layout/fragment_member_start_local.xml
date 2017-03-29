@@ -97,8 +97,8 @@
             android:clickable="true"
             android:text="중복 확인 후 인증 메일 발송하기"
             android:textSize="16sp"
-            android:textColor="@color/colorPrimary"
-            android:background="@drawable/widget_border_oval_rectangle_primary"/>
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/widget_solid_oval_rectangle_iron"/>
         <!--android:textColor="@color/colorWhite"-->
         <!--android:background="@drawable/widget_solid_oval_rectangle_primary"-->
 
@@ -235,8 +235,8 @@
             android:clickable="true"
             android:text="약관에 동의하고 회원가입"
             android:textSize="16sp"
-            android:textColor="@color/color_selector_white_primary"
-            android:background="@drawable/selector_opaque_primary_transparent_white"/>
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/widget_solid_oval_rectangle_iron"/>
 
     </LinearLayout>
 

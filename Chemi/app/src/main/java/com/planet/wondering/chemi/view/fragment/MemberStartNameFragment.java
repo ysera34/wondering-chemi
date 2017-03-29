@@ -119,16 +119,16 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
                             mMemberStartNameNameValidationTextView.setText(getString(R.string.name_validation_message_correct));
                             mMemberStartNameNameValidationTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            mMemberStartNameNameAuthButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_white_primary));
-                            mMemberStartNameNameAuthButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary_transparent_white);
+                            mMemberStartNameNameAuthButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                            mMemberStartNameNameAuthButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
                             isAuthNameValidation = true;
                         } else {
                             mMemberStartNameNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mMemberStartNameNameValidationTextView.setText(validateName(text));
                             mMemberStartNameNameValidationTextView.setTextColor(getResources().getColor(R.color.colorAccent));
 
-                            mMemberStartNameNameAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                            mMemberStartNameNameAuthButtonTextView.setBackgroundResource(R.drawable.widget_border_oval_rectangle_primary);
+                            mMemberStartNameNameAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                            mMemberStartNameNameAuthButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                             isAuthNameValidation = false;
                         }
                     }

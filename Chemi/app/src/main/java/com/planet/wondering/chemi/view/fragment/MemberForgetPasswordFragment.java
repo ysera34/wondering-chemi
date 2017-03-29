@@ -125,18 +125,16 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                     mEmailValidationMessageTextView.setText("");
                     mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-//                    mEmailAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
-//                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_primary);
-                    mMemberForgetPasswordSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_white_primary));
-                    mMemberForgetPasswordSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary_transparent_white);
+                    mMemberForgetPasswordSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                    mMemberForgetPasswordSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
                     isAuthEmailValidation = true;
                 } else {
                     mMemberForgetPasswordEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mEmailValidationMessageTextView.setText(validateEmail(text));
                     mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
 
-                    mMemberForgetPasswordSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mMemberForgetPasswordSubmitButtonTextView.setBackgroundResource(R.drawable.widget_border_oval_rectangle_primary);
+                    mMemberForgetPasswordSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                    mMemberForgetPasswordSubmitButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                     isAuthEmailValidation = false;
                 }
             }

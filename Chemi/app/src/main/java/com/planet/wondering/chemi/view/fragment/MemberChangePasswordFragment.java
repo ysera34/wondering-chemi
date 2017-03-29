@@ -134,14 +134,20 @@ public class MemberChangePasswordFragment extends Fragment implements View.OnCli
                         if (validatePassword(text) == null) {
                             mMemberChangePasswordPWEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                             mPasswordValidationMessageTextView.setText("");
+                            mPasswordValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            mMemberChangePasswordSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                            mMemberChangePasswordSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
                             isPasswordValidation = true;
                         } else {
                             mMemberChangePasswordPWEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mPasswordValidationMessageTextView.setText(validatePassword(text));
                             mPasswordValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+
+                            mMemberChangePasswordSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                            mMemberChangePasswordSubmitButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                             isPasswordValidation = false;
                             mPasswordValidationMessage = validatePassword(text);
-
                         }
                     }
                 }

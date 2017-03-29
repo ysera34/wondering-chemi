@@ -48,8 +48,14 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_PATH;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
+import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL_STRING;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
+import static com.planet.wondering.chemi.network.Config.User.Key.NAME_STRING;
+import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
+import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
+import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
@@ -172,8 +178,8 @@ public class MemberStartLocalFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
@@ -220,7 +226,10 @@ public class MemberStartLocalFragment extends Fragment
     private boolean isAuthEmailValidation = false;
     private boolean isAuthEmailResult = false;
     private boolean isConfirmName = false;
+    private boolean isPassword = false;
+    private String mPassword;
     private boolean isConfirmPassword = false;
+    private String mConfirmPassword;
     private String mAccessToken;
 
     public void updateUIByAuthEmail(String accessToken) {
@@ -245,18 +254,16 @@ public class MemberStartLocalFragment extends Fragment
                     mEmailValidationMessageTextView.setText(mValidationMessages[2]);
                     mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-//                    mEmailAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
-//                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_primary);
-                    mEmailAuthButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_white_primary));
-                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary_transparent_white);
+                    mEmailAuthButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
                     isAuthEmailValidation = true;
                 } else {
                     mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mEmailValidationMessageTextView.setText(validateEmail(text));
                     mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
 
-                    mEmailAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.widget_border_oval_rectangle_primary);
+                    mEmailAuthButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                    mEmailAuthButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                     isAuthEmailValidation = false;
                 }
             }
@@ -283,10 +290,51 @@ public class MemberStartLocalFragment extends Fragment
                 if (validatePassword(text) == null) {
                     mMemberStartLocalPasswordEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                     mPasswordValidationMessageTextView.setText("");
+                    isPassword = true;
+
                 } else {
                     mMemberStartLocalPasswordEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mPasswordValidationMessageTextView.setText(validatePassword(text));
                     mPasswordValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                    isPassword = false;
+                }
+
+                // update password When the password does not match with confirm password
+                if (mConfirmPassword != null && text.equals(mConfirmPassword)) {
+                    mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
+                    mConfirmValidationMessageTextView.setText(mValidationMessages[10]);
+                    mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    isConfirmPassword = true;
+                } else if (mConfirmPassword != null && !text.equals(mConfirmPassword)) {
+                    mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
+                    mConfirmValidationMessageTextView.setText(validateConfirm(text));
+                    mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                    isConfirmPassword = false;
+                }
+
+                if (isPassword && isConfirmPassword) {
+                    mMemberStartLocalSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                    mMemberStartLocalSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
+                } else {
+                    mMemberStartLocalSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                    mMemberStartLocalSubmitButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+                }
+            }
+        });
+        mMemberStartLocalPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mPassword = mMemberStartLocalPasswordEditText.getText().toString();
+                    Log.i("password", "mMemberStartLocalPasswordEditText.setOnFocusChangeListener");
+                } else if (hasFocus && isPassword) {
+                    Log.i("password", ".setOnFocusChangeListener");
+                    if (mConfirmPassword != null && !mPassword.equals(mConfirmPassword)) {
+                        mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
+                        mConfirmValidationMessageTextView.setText("");
+                        mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                        isConfirmPassword = false;
+                    }
                 }
             }
         });
@@ -304,6 +352,22 @@ public class MemberStartLocalFragment extends Fragment
                     mConfirmValidationMessageTextView.setText(validateConfirm(text));
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
                     isConfirmPassword = false;
+                }
+                if (isPassword && isConfirmPassword) {
+                    mMemberStartLocalSubmitButtonTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                    mMemberStartLocalSubmitButtonTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
+                } else {
+                    mMemberStartLocalSubmitButtonTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                    mMemberStartLocalSubmitButtonTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+                }
+            }
+        });
+        mMemberStartLocalConfirmEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mConfirmPassword = mMemberStartLocalConfirmEditText.getText().toString();
+                    Log.i("confirmPassword", "mMemberStartLocalConfirmEditText.setOnFocusChangeListener");
                 }
             }
         });
@@ -326,9 +390,9 @@ public class MemberStartLocalFragment extends Fragment
         if (nameText != null) {
             if (nameText.length() < 2) {
                 return mValidationMessages[3];
-            } else if (nameText.length() >= 2 && nameText.length() < 11) {
+            } else if (nameText.length() >= 2 && nameText.length() < 9) {
                 return null;
-            } else if (nameText.length() >= 11) {
+            } else if (nameText.length() >= 9) {
                 return mValidationMessages[4];
             }
         }
@@ -337,11 +401,13 @@ public class MemberStartLocalFragment extends Fragment
 
     private String validatePassword(String passwordText) {
         if (passwordText != null) {
-            if (passwordText.length() < 6) {
+            if (passwordText.length() == 0) {
+                return "";
+            } else if (passwordText.length() < 6) {
                 return mValidationMessages[7];
-            } else if (passwordText.length() >= 6 && passwordText.length() < 13) {
+            } else if (passwordText.length() >= 6 && passwordText.length() < 14) {
                 return null;
-            } else if (passwordText.length() >= 13) {
+            } else if (passwordText.length() >= 14) {
                 return mValidationMessages[8];
             }
         }
@@ -352,18 +418,22 @@ public class MemberStartLocalFragment extends Fragment
         if (confirmText.length() == 0) {
             return "";
         }
-        if (confirmText.length() > 0
-                && !mMemberStartLocalPasswordEditText.getText().toString().equals(confirmText)) {
+        if (confirmText.length() < 6) {
+            return "";
+        } else if (confirmText.length() >= 6 && !mPassword.equals(confirmText)) {
             return mValidationMessages[9];
+        } else if (confirmText.length() >= 6 && mPassword.equals(confirmText)) {
+            return null;
+        } else {
+            return "";
         }
-        return null;
     }
 
     private void requestConfirmEmailRepetition(String emailAddress) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("emailString", emailAddress);
-        params.put("platform", "0");
+        params.put(EMAIL_STRING, emailAddress);
+        params.put(PLATFORM, "0");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + EMAIL_STRING_PATH, new JSONObject(params),
@@ -384,7 +454,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
                     }
@@ -416,7 +486,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
                         isAuthEmailResult = false;
@@ -434,7 +504,7 @@ public class MemberStartLocalFragment extends Fragment
     private void requestConfirmNameRepetition(String name) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("nameString", name);
+        params.put(NAME_STRING, name);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + NAME_STRING_PATH, new JSONObject(params),
@@ -447,7 +517,7 @@ public class MemberStartLocalFragment extends Fragment
                             isConfirmName = false;
                         }
 
-                        if (isAuthEmailResult && isConfirmPassword && isConfirmName) {
+                        if (isAuthEmailResult && isConfirmName && isConfirmPassword) {
                             requestSubmitUserInfo();
                         } else {
                             mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
@@ -459,7 +529,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "닉네임 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
                     }
@@ -482,10 +552,10 @@ public class MemberStartLocalFragment extends Fragment
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL, mMemberStartLocalEmailEditText.getText().toString());
         params.put(NAME, mMemberStartLocalNameEditText.getText().toString());
-        params.put("password", mMemberStartLocalConfirmEditText.getText().toString());
-        params.put("accessToken", mAccessToken);
-        params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
-        params.put("platform", "0");
+        params.put(PASSWORD, mMemberStartLocalConfirmEditText.getText().toString());
+        params.put(ACCESS_TOKEN, mAccessToken);
+        params.put(PUSH_TOKEN, FirebaseInstanceId.getInstance().getToken());
+        params.put(PLATFORM, "0");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
@@ -498,7 +568,7 @@ public class MemberStartLocalFragment extends Fragment
                         mUser = Parser.parseSignUpForUser(response);
 
                         createFirebaseAccount(mMemberStartLocalEmailEditText.getText().toString(),
-                                mMemberStartLocalConfirmEditText.getText().toString());
+                                mMemberStartLocalEmailEditText.getText().toString());
 
                         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
                             UserSharedPreferences.removeStoredToken(getActivity());
@@ -512,7 +582,7 @@ public class MemberStartLocalFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                     }
@@ -536,8 +606,9 @@ public class MemberStartLocalFragment extends Fragment
                         Log.d(TAG, "createUserWithEmail:onComplete: " + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(),
-                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(),
+//                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "fail to create firebase user");
                         }
                     }
                 });

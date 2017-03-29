@@ -44,6 +44,7 @@ public class Config {
             public static final String USER_ID = "id";
             public static final String EMAIL = "email";
             public static final String EMAIL_STRING = "emailString";
+            public static final String NAME_STRING = "nameString";
             public static final String PLATFORM = "platform";
             public static final String NAME = "name";
             public static final String PASSWORD = "password";
