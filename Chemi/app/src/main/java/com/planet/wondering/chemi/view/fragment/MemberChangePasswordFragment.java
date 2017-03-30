@@ -185,8 +185,8 @@ public class MemberChangePasswordFragment extends Fragment implements View.OnCli
                         UserSharedPreferences.setStoreToken(getActivity(), Parser.parseSignInUserToken(response));
                         Log.d(TAG, "user token after changing password: " + UserSharedPreferences.getStoredToken(getActivity()));
 
-                        // change password and sign in firebase user
-
+                        Toast.makeText(getActivity(),
+                                "비밀 번호 변경 되었습니다.", Toast.LENGTH_SHORT).show();
                         startActivity(SearchActivity.newIntent(getActivity()));
                         getActivity().finish();
                     }

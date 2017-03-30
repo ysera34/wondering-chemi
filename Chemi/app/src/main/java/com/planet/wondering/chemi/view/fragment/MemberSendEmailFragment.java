@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
@@ -78,7 +78,8 @@ public class MemberSendEmailFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_send_email_confirm_button_text_view:
-                Toast.makeText(getActivity(), "where i am", Toast.LENGTH_SHORT).show();
+                Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.android.email");
+                startActivity(intent);
                 break;
         }
     }

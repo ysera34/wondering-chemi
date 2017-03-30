@@ -37,6 +37,8 @@ import java.util.Map;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
@@ -277,7 +279,7 @@ public class MemberConfigChangeNameFragment extends Fragment
     private void requestUpdateUserName(final String userName) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("name", String.valueOf(userName));
+        params.put(NAME, String.valueOf(userName));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.PUT, URL_HOST + PATH, new JSONObject(params),
@@ -304,7 +306,7 @@ public class MemberConfigChangeNameFragment extends Fragment
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("token", UserSharedPreferences.getStoredToken(getActivity()));
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
                 return params;
             }
         };

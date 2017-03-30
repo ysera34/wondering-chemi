@@ -20,4 +20,6 @@
     <dimen name="member_header_height">130dp</dimen>
     <dimen name="member_config_body_menu_height">48dp</dimen>
     <dimen name="member_survey_info_body_height">330dp</dimen>
+    <dimen name="custom_dialog_fragment_width">300dp</dimen>
+    <dimen name="custom_dialog_fragment_height">145dp</dimen>
 </resources>

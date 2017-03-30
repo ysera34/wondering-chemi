@@ -104,6 +104,7 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
             case R.id.member_forget_password_email_submit_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberForgetPasswordEmailEditText.getWindowToken(), 0);
                 if (isAuthEmailValidation) {
+                    mMemberForgetPasswordSubmitButtonTextView.setEnabled(false);
                     requestSendAuthEmail(mMemberForgetPasswordEmailEditText.getText().toString());
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.email_validation_message_wrong_pattern),
@@ -170,6 +171,7 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                             Toast.makeText(getActivity(),
                                     "메일 발송이 완료 되었습니다.\n메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
                         } else {
+                            mMemberForgetPasswordSubmitButtonTextView.setEnabled(true);
                             Toast.makeText(getActivity(),
                                     "사용 할 수 없는 메일 주소예요. 메일 주소를 확인해주세요.", Toast.LENGTH_SHORT).show();
                         }
@@ -178,7 +180,8 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
+                        mMemberForgetPasswordSubmitButtonTextView.setEnabled(true);
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
                     }

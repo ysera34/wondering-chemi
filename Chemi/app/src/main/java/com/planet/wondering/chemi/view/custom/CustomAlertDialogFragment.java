@@ -2,8 +2,6 @@ package com.planet.wondering.chemi.view.custom;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -130,7 +128,10 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        int width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_fragment_width);
+//        int height = getResources().getDimensionPixelSize(R.dimen.custom_dialog_fragment_height);
+        getDialog().getWindow().setLayout(920, 435);
 //        getDialog().getWindow().setDimAmount(0);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

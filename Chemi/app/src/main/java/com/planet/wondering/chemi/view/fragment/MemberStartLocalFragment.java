@@ -203,6 +203,7 @@ public class MemberStartLocalFragment extends Fragment
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
                 if (isAuthEmailValidation) {
+                    mEmailAuthButtonTextView.setEnabled(false);
                     requestConfirmEmailRepetition(mMemberStartLocalEmailEditText.getText().toString());
 //                    requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
                 } else {
@@ -210,6 +211,7 @@ public class MemberStartLocalFragment extends Fragment
                 }
                 break;
             case R.id.member_start_local_privacy_info_text_view:
+                mMenuSelectedListener.onMenuSelected(7007);
                 break;
             case R.id.member_start_local_submit_button_text_view:
                 if (isAuthEmailResult && isConfirmPassword) {
@@ -235,6 +237,7 @@ public class MemberStartLocalFragment extends Fragment
     public void updateUIByAuthEmail(String accessToken) {
         if (isAuthEmailValidation && isAuthEmailResult) {
             mEmailValidationMessageTextView.setText(getString(R.string.email_validation_message_correct));
+            mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
             mEmailAuthButtonLayout.setVisibility(View.GONE);
             mBodyLayout.setVisibility(View.VISIBLE);
             mFooterLayout.setVisibility(View.VISIBLE);
@@ -300,7 +303,7 @@ public class MemberStartLocalFragment extends Fragment
                 }
 
                 // update password When the password does not match with confirm password
-                if (mConfirmPassword != null && text.equals(mConfirmPassword)) {
+                if (mConfirmPassword != null && text.length() > 0 && text.equals(mConfirmPassword)) {
                     mMemberStartLocalConfirmEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                     mConfirmValidationMessageTextView.setText(mValidationMessages[10]);
                     mConfirmValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -441,10 +444,12 @@ public class MemberStartLocalFragment extends Fragment
                     @Override
                     public void onResponse(JSONObject response) {
                         if (Parser.parseSimpleResult(response)) {
+                            mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                             mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_correct));
-                            mEmailAuthButtonTextView.setEnabled(false);
+                            mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                             requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
                         } else {
+                            mEmailAuthButtonTextView.setEnabled(true);
                             mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_incorrect));
                             mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
@@ -455,6 +460,7 @@ public class MemberStartLocalFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.toString()));
+                        mEmailAuthButtonTextView.setEnabled(true);
                         Toast.makeText(getActivity(),
                                 "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
                     }

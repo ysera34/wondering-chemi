@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.planet.wondering.chemi.R;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * Created by yoon on 2017. 3. 20..
  */
 
-public class MemberConfigTermsFragment extends Fragment {
+public class MemberConfigTermsFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = MemberConfigTermsFragment.class.getSimpleName();
 
@@ -30,6 +31,8 @@ public class MemberConfigTermsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private LinearLayout mBackLayout;
 
     private TabLayout mMemberConfigTermsTabLayout;
     private ViewPager mMemberConfigTermsViewPager;
@@ -53,6 +56,9 @@ public class MemberConfigTermsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_config_terms, container, false);
+
+        mBackLayout = (LinearLayout) view.findViewById(R.id.member_config_terms_back_layout);
+        mBackLayout.setOnClickListener(this);
 
         mMemberConfigTermsTabLayout = (TabLayout) view.findViewById(R.id.member_config_terms_tab_layout);
         mMemberConfigTermsViewPager = (ViewPager) view.findViewById(R.id.member_config_terms_view_pager);
@@ -80,6 +86,14 @@ public class MemberConfigTermsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.member_config_terms_back_layout:
+                getActivity().onBackPressed();
+        }
     }
 
     private void addFragment(Fragment fragment, String title) {

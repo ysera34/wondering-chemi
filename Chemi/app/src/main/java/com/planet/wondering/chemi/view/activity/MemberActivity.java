@@ -187,14 +187,20 @@ public class MemberActivity extends BottomNavigationActivity
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
-        if (fragment instanceof MemberConfigFragment) {
+        if (fragment instanceof MemberConfigSignInFragment) {
+            finish();
+        } else if (fragment instanceof MemberConfigFragment) {
             if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                         .replace(R.id.fragment_container, MemberFragment.newInstance(mUser))
                         .commit();
             } else {
-                finish();
+//                finish();
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, MemberConfigSignInFragment.newInstance())
+                        .commit();
             }
         } else if (fragment instanceof MemberConfigProfileFragment) {
             mFragmentManager.beginTransaction()

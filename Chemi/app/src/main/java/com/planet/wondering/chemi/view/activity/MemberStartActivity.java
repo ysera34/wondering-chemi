@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -49,6 +51,7 @@ import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberChangePasswordFragment;
+import com.planet.wondering.chemi.view.fragment.MemberConfigTermsFragment;
 import com.planet.wondering.chemi.view.fragment.MemberForgetPasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSendEmailFragment;
 import com.planet.wondering.chemi.view.fragment.MemberSignInLocalFragment;
@@ -718,8 +721,14 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                             .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
                             .commit();
                 }
-
-
+                break;
+            case 7007: /* watch terms */
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .add(R.id.pure_fragment_container, MemberConfigTermsFragment.newInstance())
+                        .addToBackStack("terms_fragment")
+                        .commit();
+                break;
             case 7010: /* signInGoogle  */
                 signInGoogle();
                 break;
@@ -728,6 +737,26 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                 signInNaver();
                 break;
         }
+    }
+
+    private void popupAlertDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -756,6 +785,8 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
                     .commit();
+        } else if (fragment instanceof MemberConfigTermsFragment) {
+            mFragmentManager.popBackStackImmediate();
         } else if (fragment instanceof MemberStartNameFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
@@ -773,6 +804,17 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                     .replace(R.id.pure_fragment_container, MemberStartFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberForgetPasswordFragment) {
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
+                    .commit();
+        } else if (fragment instanceof MemberSendEmailFragment) {
+//            Toast.makeText(getApplicationContext(), "비밀번호 변경이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+//            mFragmentManager.beginTransaction()
+//                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//                    .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())
+//                    .commit();
+        } else if (fragment instanceof MemberChangePasswordFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.pure_fragment_container, MemberSignInLocalFragment.newInstance())

@@ -26,23 +26,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/member_send_email_format"
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="인증 메일이 발송되었습니다."
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="이메일을 확인하시고 링크를 통해서 비밀번호를 변경해주세요."
-        android:textSize="14sp"/>
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="메일함에서 이메일을 확인하시고\n해당 링크를 눌러주세요"
+        android:textSize="18sp"
+        android:lineSpacingMultiplier="1.3"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/member_send_email_confirm_button_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,8 +57,8 @@
         android:clickable="true"
         android:text="확인"
         android:textSize="16sp"
-        android:textColor="@color/color_selector_white_primary"
-        android:background="@drawable/selector_opaque_primary_transparent_white"/>
+        android:textColor="@color/color_selector_button_white_primary"
+        android:background="@drawable/selector_opaque_primary"/>
 
 
 </LinearLayout>
