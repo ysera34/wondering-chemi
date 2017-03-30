@@ -285,8 +285,10 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
             mChemicalNameKoTextView = (TextView)
                     itemView.findViewById(R.id.list_item_chemical_name_ko_text_view);
+//            mChemicalNameKoTextView.setSelected(true);
             mChemicalNameEngTextView = (TextView)
                     itemView.findViewById(R.id.list_item_chemical_name_eng_text_view);
+//            mChemicalNameEngTextView.setSelected(true);
 //            mChemicalCircleHazardView = (CircleHazardView)
 //                    itemView.findViewById(R.id.list_item_chemical_circle_hazard_view);
             mChemicalAllergyImageView = (ImageView)

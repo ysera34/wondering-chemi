@@ -126,9 +126,11 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
 
         mChemicalDialogNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_ko_text_view);
+        mChemicalDialogNameKoTextView.setSelected(true);
         mChemicalDialogNameKoTextView.setText(mChemical.getNameKo());
         mChemicalDialogNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_eng_text_view);
+        mChemicalDialogNameEngTextView.setSelected(true);
         mChemicalDialogNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
         mChemicalDialogHazardLineTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_hazard_bg_text_view);

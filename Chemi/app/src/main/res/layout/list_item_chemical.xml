@@ -23,8 +23,11 @@
             android:layout_marginBottom="4dp"
             android:textSize="14sp"
             android:textColor="@color/colorFontNormal"
-            android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"/>
 
         <TextView
             android:id="@+id/list_item_chemical_name_eng_text_view"
@@ -32,8 +35,11 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/colorFontBody"
-            android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"/>
 
     </LinearLayout>
 

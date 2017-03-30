@@ -28,8 +28,11 @@
             android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="@color/colorFontNormal"
-            android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"/>
 
         <TextView
             android:id="@+id/chemical_dialog_name_eng_text_view"
@@ -37,8 +40,11 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/colorFontNormal"
-            android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"/>
 
         <TextView
             android:id="@+id/chemical_dialog_hazard_bg_text_view"

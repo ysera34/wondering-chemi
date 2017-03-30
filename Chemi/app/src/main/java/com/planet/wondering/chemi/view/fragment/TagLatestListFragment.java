@@ -219,7 +219,7 @@ public class TagLatestListFragment extends Fragment {
         public void bindTag(Tag tag) {
             mTag = tag;
             mTagNameTextView.setText(mTag.getName());
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
             String transFormedDate = transFormat.format(mTag.getRankDate());
             mDateTextView.setText(transFormedDate);
         }
