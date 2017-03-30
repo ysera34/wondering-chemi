@@ -18,11 +18,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="10dp"
-        android:text="케미에서 제공하는 다양한 컨텐츠를 구경해보세요!"
+        android:text="가정의 건강을 더하는 소중한 이야기들을 들어보세요!"
         android:textSize="12sp"
         android:textColor="@color/colorFontFrenchGray"/>
 
     <TextView
+        android:id="@+id/archive_content_empty_promote_button_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="110dp"

@@ -29,6 +29,8 @@ import com.planet.wondering.chemi.model.archive.Product;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.CategoryActivity;
+import com.planet.wondering.chemi.view.activity.ContentActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 
 import java.util.ArrayList;
@@ -438,10 +440,25 @@ public class MemberFragment extends Fragment
 
     private static final int ARCHIVE_PRODUCT_EMPTY_VIEW = -1;
 
-    private class ArchiveProductEmptyHolder extends RecyclerView.ViewHolder {
+    private class ArchiveProductEmptyHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private TextView mArchiveProductEmptyPromoteButtonTextView;
 
         public ArchiveProductEmptyHolder(View itemView) {
             super(itemView);
+            mArchiveProductEmptyPromoteButtonTextView = (TextView)
+                    itemView.findViewById(R.id.archive_product_empty_promote_button_text_view);
+            mArchiveProductEmptyPromoteButtonTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.archive_product_empty_promote_button_text_view:
+                    startActivity(CategoryActivity.newIntent(getActivity()));
+                    break;
+            }
         }
     }
 
@@ -517,10 +534,25 @@ public class MemberFragment extends Fragment
 
     private static final int ARCHIVE_CONTENT_EMPTY_VIEW = -1;
 
-    private class ArchiveContentEmptyHolder extends RecyclerView.ViewHolder {
+    private class ArchiveContentEmptyHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private TextView mArchiveContentEmptyPromoteButtonTextView;
 
         public ArchiveContentEmptyHolder(View itemView) {
             super(itemView);
+            mArchiveContentEmptyPromoteButtonTextView = (TextView)
+                    itemView.findViewById(R.id.archive_content_empty_promote_button_text_view);
+            mArchiveContentEmptyPromoteButtonTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.archive_content_empty_promote_button_text_view:
+                    startActivity(ContentActivity.newIntent(getActivity()));
+                    break;
+            }
         }
     }
 
@@ -591,10 +623,25 @@ public class MemberFragment extends Fragment
 
     private static final int ARCHIVE_REVIEW_PRODUCT_EMPTY_VIEW = -1;
 
-    private class ArchiveReviewProductEmptyHolder extends RecyclerView.ViewHolder {
+    private class ArchiveReviewProductEmptyHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private TextView mArchiveReviewEmptyPromoteButtonTextView;
 
         public ArchiveReviewProductEmptyHolder(View itemView) {
             super(itemView);
+            mArchiveReviewEmptyPromoteButtonTextView = (TextView)
+                    itemView.findViewById(R.id.archive_review_empty_promote_button_text_view);
+            mArchiveReviewEmptyPromoteButtonTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.archive_review_empty_promote_button_text_view:
+                    startActivity(CategoryActivity.newIntent(getActivity()));
+                    break;
+            }
         }
     }
 

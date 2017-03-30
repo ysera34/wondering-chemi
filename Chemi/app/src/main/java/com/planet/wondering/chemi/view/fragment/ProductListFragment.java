@@ -52,7 +52,7 @@ import static com.planet.wondering.chemi.network.Config.encodeUTF8;
  * Created by yoon on 2017. 1. 18..
  */
 
-public class ProductListFragment extends Fragment {
+public class ProductListFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ProductListFragment.class.getSimpleName();
 
@@ -119,6 +119,8 @@ public class ProductListFragment extends Fragment {
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private String mTagName;
     private byte mCategoryId;
+    String[] mCategoryNameArray;
+    private String mCategoryName;
     private TextView mProductTotalTextView;
     private Button mProductSortButton;
 
@@ -135,6 +137,13 @@ public class ProductListFragment extends Fragment {
         mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
         mUrlBuilder = new StringBuilder();
+
+        if (mCategoryId > 0) {
+            mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
+            mCategoryName = mCategoryNameArray[(int) mCategoryId];
+        }
+
+
     }
 
     @Nullable
@@ -144,8 +153,13 @@ public class ProductListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         mSearchAutoCompleteTextView =
                 (AutoCompleteTextView) view.findViewById(R.id.product_list_search_auto_text_view);
-        mSearchAutoCompleteTextView.setText(mTagName);
-        mSearchAutoCompleteTextView.setEnabled(false);
+        if (mTagName != null) {
+            mSearchAutoCompleteTextView.setText(mTagName);
+        } else if (mCategoryId > 0) {
+            mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+        }
+
+        mSearchAutoCompleteTextView.setOnClickListener(this);
 
         mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
         mProductSortButton = (Button) view.findViewById(R.id.product_sort_button);
@@ -205,6 +219,19 @@ public class ProductListFragment extends Fragment {
 //        updateUI();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.product_list_search_auto_text_view:
+                if (mTagName != null) {
+                    getActivity().onBackPressed();
+                } else if (mCategoryId > 0) {
+
+                }
+                break;
+        }
+    }
+
     private void updateUI() {
         if (mProductAdapter == null) {
             mProductAdapter = new ProductAdapter(mProducts);
@@ -212,7 +239,8 @@ public class ProductListFragment extends Fragment {
         } else {
             mProductAdapter.setProducts(mProducts);
             mProductAdapter.notifyDataSetChanged();
-            mProductTotalTextView.setText(highlightTotalText());
+//            mProductTotalTextView.setText(highlightTotalText());
+
             mProductIds.clear();
             for (Product product : mProducts) {
                 mProductIds.add(product.getId());
@@ -248,6 +276,7 @@ public class ProductListFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
+                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -299,6 +328,7 @@ public class ProductListFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
+                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -427,6 +457,24 @@ public class ProductListFragment extends Fragment {
         if (mProducts.size() >= 0 && mProducts.size() < 10) {
             endIndex = startIndex + 1;
         } else if (mProducts.size() >= 10 && mProducts.size() <= 99) {
+            endIndex = startIndex + 2;
+        } else {
+            endIndex = startIndex + 3;
+        }
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
+                startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
+    }
+
+    private SpannableString highlightTotalText(int total) {
+        SpannableString spannableString = new SpannableString(
+                getString(R.string.product_total_count, String.valueOf(total)));
+        int startIndex = 6;
+        int endIndex;
+        if (total >= 0 && total < 10) {
+            endIndex = startIndex + 1;
+        } else if (total >= 10 && total <= 99) {
             endIndex = startIndex + 2;
         } else {
             endIndex = startIndex + 3;

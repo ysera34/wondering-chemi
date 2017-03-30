@@ -509,13 +509,15 @@ public class MemberStartActivity extends AppCompatActivity implements OnMenuSele
                         } else {
                             if (platformId == 1) {
                                 Toast.makeText(getApplicationContext(),
-                                        "동일한 이메일이 구글 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
+                                        "이미 가입된 계정 입니다. 다른 계정으로 시도해주세요.",
+//                                        "동일한 이메일이 구글 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
 //                                signOutGoogle();
                                 revokeAccessGoogle();
                             } else if (platformId == 2) {
                                 Toast.makeText(getApplicationContext(),
-                                        "동일한 이메일이 네이버 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
+                                        "이미 가입된 아이디 입니다. 다른 아이디로 시도해주세요.",
+//                                        "동일한 이메일이 네이버 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
                                         Toast.LENGTH_SHORT).show();
 //                                signOutNaver();
                                 revokeAccessNaver();

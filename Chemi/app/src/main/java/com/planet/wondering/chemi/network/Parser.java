@@ -229,6 +229,20 @@ public class Parser {
         return tags;
     }
 
+    public static int parseTotalCount(JSONObject responseObject) {
+
+        int total = 0;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                total = responseObject.getInt(TOTAL);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return total;
+    }
+
     public static ArrayList<Product> parseProductList(JSONObject responseObject) {
 
         ArrayList<Product> products = new ArrayList<>();

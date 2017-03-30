@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -192,12 +193,30 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mSearchAutoCompleteTextView.getText().length() > 0) {
+            mSearchViewPager.setCurrentItem(1);
+            mSearchAutoCompleteTextView.requestFocus();
+            mSearchAutoCompleteTextView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mSearchAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, 200);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_auto_text_view:
                 mSearchViewPager.setCurrentItem(1);
                 break;
             case R.id.search_clear_image_layout:
+            case R.id.search_clear_image_button:
                 mSearchAutoCompleteTextView.getText().clear();
                 break;
         }

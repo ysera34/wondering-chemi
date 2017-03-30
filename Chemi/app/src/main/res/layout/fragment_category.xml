@@ -10,7 +10,6 @@
         android:id="@+id/category_header_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
         android:background="@color/colorWhite"
         android:elevation="4dp">
 
@@ -49,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 물티슈"
+                android:text="@string/category_name_baby_wet_tissue"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -72,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 샴푸\u00B7린스"
+                android:text="@string/category_name_baby_hair"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -103,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 크림\u00B7로션\u00B7오일"
+                android:text="@string/category_name_baby_lotion"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -126,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 치약"
+                android:text="@string/category_name_baby_tooth_paste"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -157,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="아이용 바디워시"
+                android:text="@string/category_name_baby_body_wash"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 
@@ -180,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="기타"
+                android:text="@string/category_name_etc"
                 android:textSize="16sp"
                 android:textColor="@color/colorFontNormal"/>
 

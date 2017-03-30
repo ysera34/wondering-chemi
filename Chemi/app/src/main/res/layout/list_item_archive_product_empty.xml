@@ -18,11 +18,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="10dp"
-        android:text="지금 바로 제품을 둘러보세요!"
+        android:text="지금 바로 당신에게 맞는 제품을 찾아볼까요?"
         android:textSize="12sp"
         android:textColor="@color/colorFontFrenchGray"/>
 
     <TextView
+        android:id="@+id/archive_product_empty_promote_button_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="110dp"
