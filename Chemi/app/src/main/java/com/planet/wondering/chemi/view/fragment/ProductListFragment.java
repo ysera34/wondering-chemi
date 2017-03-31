@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -122,7 +121,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     String[] mCategoryNameArray;
     private String mCategoryName;
     private TextView mProductTotalTextView;
-    private Button mProductSortButton;
+    private TextView mProductSortButtonTextView;
 
     private RecyclerView mProductRecyclerView;
     private ProductAdapter mProductAdapter;
@@ -161,8 +160,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         mSearchAutoCompleteTextView.setOnClickListener(this);
 
-        mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
-        mProductSortButton = (Button) view.findViewById(R.id.product_sort_button);
+//        mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
+//        mProductSortButtonTextView = (TextView) view.findViewById(R.id.product_sort_button_text_view);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SeparatorDecoration decoration =
@@ -185,8 +184,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
                         .findLastCompletelyVisibleItemPosition();
-                if (lastItem == mProductAdapter.getItemCount() - 1
-                        && mPager.getTotal() > mProductAdapter.getItemCount()) {
+                if (lastItem == mProductAdapter.getItemCount() - 1 && mPager != null
+                        && mPager.getTotal() > mProductAdapter.getItemCount() - 1) {
                     // all product == > mTagName = ""
                     if (mTagName != null) {
                         requestTagProductList(mTagName);
@@ -276,7 +275,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
-                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
+//                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -328,7 +327,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
-                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
+//                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -353,7 +352,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
+    private class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
 
         private ArrayList<Product> mProducts;
 
@@ -366,28 +365,74 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         }
 
         @Override
-        public ProductHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_product, parent, false);
-            return new ProductHolder(view);
+            View view;
+            switch (viewType) {
+                case VIEW_TYPE_HEADER:
+                    view = layoutInflater.inflate(R.layout.list_item_product_header, parent, false);
+                    return new HeaderHolder(view);
+                case VIEW_TYPE_ITEM:
+                    view = layoutInflater.inflate(R.layout.list_item_product, parent, false);
+                    return new ProductHolder(view);
+            }
+            return null;
         }
 
         @Override
-        public void onBindViewHolder(ProductHolder holder, int position) {
-            Product product = mProducts.get(position);
-            holder.bindProduct(product);
-//            setFadeAnimation(holder.itemView);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof HeaderHolder) {
+                ((HeaderHolder) holder).bindHeader();
+            }
+
+            if (holder instanceof ProductHolder) {
+                Product product = mProducts.get(position - 1);
+                ((ProductHolder) holder).bindProduct(product);
+    //            setFadeAnimation(holder.itemView);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mProducts.size();
+            return mProducts.size() + 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == 0) {
+                return VIEW_TYPE_HEADER;
+            }  else {
+                return VIEW_TYPE_ITEM;
+            }
         }
 
         private void setFadeAnimation(View view) {
             AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
             anim.setDuration(250);
             view.startAnimation(anim);
+        }
+    }
+
+    private static final int VIEW_TYPE_HEADER = -1;
+    private static final int VIEW_TYPE_ITEM = 0;
+
+    private class HeaderHolder extends RecyclerView.ViewHolder {
+
+        private TextView mHeaderTotalTextView;
+        private TextView mHeaderSortButtonTextView;
+
+        public HeaderHolder(View itemView) {
+            super(itemView);
+            mHeaderTotalTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_product_header_total_text_view);
+            mHeaderSortButtonTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_product_header_sort_button_text_view);
+        }
+
+        public void bindHeader() {
+            if (mPager != null) {
+                mHeaderTotalTextView.setText(highlightTotalText(mPager.getTotal()));
+            }
         }
     }
 
