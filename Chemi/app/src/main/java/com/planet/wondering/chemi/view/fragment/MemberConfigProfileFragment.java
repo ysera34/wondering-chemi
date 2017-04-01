@@ -308,6 +308,7 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                     startActivityForResult(mImageHandler.dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
                 } else if (position == 1) {
                     Toast.makeText(getActivity(), "갤러리", Toast.LENGTH_SHORT).show();
+                    startActivityForResult(mImageHandler.pickGalleryPictureIntent(), GALLERY_IMAGE_REQUEST_CODE);
                 }
             }
         });
@@ -331,12 +332,19 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    mImageHandler.handleCameraPhoto(mUserCircleImageView);
+                    mImageHandler.handleCameraImage(mUserCircleImageView);
+                    requestUserImage();
+                }
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    mImageHandler.handleGalleryImage(data, mUserCircleImageView);
                     requestUserImage();
                 }
                 break;
 
         }
+        mImageHandler = null;
     }
 
     private void requestUserImage() {

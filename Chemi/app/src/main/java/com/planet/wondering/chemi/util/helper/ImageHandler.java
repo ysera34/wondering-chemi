@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.util.helper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -120,6 +121,8 @@ public class ImageHandler {
 
         /* Decode the JPEG file into a Bitmap */
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentImageAbsolutePath, bmOptions);
+        Log.d(TAG, "setPicture >> " + "bitmap width : " + bitmap.getWidth() +
+                " | bitmap height : " + bitmap.getHeight());
         return rotateImageIfRequired(bitmap);
     }
 
@@ -142,13 +145,29 @@ public class ImageHandler {
         return takePictureIntent;
     }
 
-    public void handleCameraPhoto(ImageView imageView) {
+    public Intent pickGalleryPictureIntent() {
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
+        return pickIntent;
+    }
+
+    public void handleCameraImage(ImageView imageView) {
 
         if (mCurrentImageAbsolutePath != null) {
             imageView.setImageBitmap(setPicture(imageView));
             galleryAddPicture();
             mCurrentImageAbsolutePath = null;
         }
+    }
+
+    public void handleGalleryImage(Intent intent, ImageView imageView) {
+
+        mCurrentImageAbsolutePath = getRealPathFromURI(intent.getData());
+        imageView.setImageBitmap(setPicture(imageView));
+        mCurrentImageAbsolutePath = null;
     }
 
     private void galleryAddPicture() {
@@ -189,6 +208,23 @@ public class ImageHandler {
         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         bitmap.recycle();
+        Log.d(TAG, "rotateImage >> " + "rotatedBitmap width : " + rotatedBitmap.getWidth() +
+                " | rotatedBitmap height : " + rotatedBitmap.getHeight());
         return rotatedBitmap;
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+
+        String imagePath;
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = mContext.getContentResolver().query(uri, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        imagePath = cursor.getString(columnIndex);
+        cursor.close();
+
+        return imagePath;
     }
 }
