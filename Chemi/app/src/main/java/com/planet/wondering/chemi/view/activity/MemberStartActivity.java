@@ -13,7 +13,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginDefine;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
@@ -81,7 +81,7 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
  * Created by yoon on 2017. 2. 12..
  */
 
-public class MemberStartActivity extends AppCompatActivity implements OnMenuSelectedListener,
+public class MemberStartActivity extends AppBaseActivity implements OnMenuSelectedListener,
         GoogleApiClient.OnConnectionFailedListener, OnSurveyCompletedListener {
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();

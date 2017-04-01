@@ -13,6 +13,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.ContentActivity;
 
 import java.util.ArrayList;
 
@@ -115,16 +116,23 @@ public class ContentListFragment extends Fragment {
         }
     }
 
-    private class ContentHolder extends RecyclerView.ViewHolder {
+    private class ContentHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private Content mContent;
 
         public ContentHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
         public void bindContent(Content content) {
             mContent = content;
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(ContentActivity.newIntent(getActivity()));
         }
     }
 }

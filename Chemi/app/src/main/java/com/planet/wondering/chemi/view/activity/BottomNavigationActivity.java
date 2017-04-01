@@ -40,7 +40,7 @@ public class BottomNavigationActivity extends AppBaseActivity
                 startActivity(CategoryActivity.newIntent(getApplicationContext()));
                 break;
             case R.id.action_content:
-                startActivity(ContentActivity.newIntent(getApplicationContext()));
+                startActivity(ContentListActivity.newIntent(getApplicationContext()));
                 break;
             case R.id.action_dictionary:
                 startActivity(DictionaryActivity.newIntent(getApplicationContext()));

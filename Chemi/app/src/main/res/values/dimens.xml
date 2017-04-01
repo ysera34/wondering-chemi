@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -9,7 +9,7 @@
     <dimen name="list_item_tag_height">40dp</dimen>
     <dimen name="list_item_search_product_height">80dp</dimen>
     <dimen name="list_item_archive_product_height">160dp</dimen>
-    <dimen name="list_item_chemical_height">53dp</dimen>
+    <dimen name="list_item_chemical_height">54dp</dimen>
     <dimen name="list_item_hazard_height">60dp</dimen>
     <dimen name="toolbar_height">48dp</dimen>
     <dimen name="product_detail_app_bar_layout_height">250dp</dimen>
@@ -22,4 +22,6 @@
     <dimen name="member_survey_info_body_height">330dp</dimen>
     <dimen name="custom_dialog_fragment_width">300dp</dimen>
     <dimen name="custom_dialog_fragment_height">145dp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">9sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">9sp</dimen>
 </resources>
