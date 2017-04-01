@@ -39,6 +39,7 @@ public class Config {
         public static final String EMAIL_STRING_PATH = File.separator + "emailstring";
         public static final String NAME_STRING_PATH = File.separator + "namestring";
         public static final String LOGIN_PARAMS = File.separator + "loginparams";
+        public static final String IMAGE_PATH = File.separator + "image";
 
         public static final class Key {
             public static final String USER_ID = "id";

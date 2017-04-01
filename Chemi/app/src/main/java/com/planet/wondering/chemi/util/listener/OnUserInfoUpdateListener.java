@@ -8,4 +8,6 @@ public interface OnUserInfoUpdateListener {
 
     void onUserNameInfoUpdate(String userName);
 
+    void onUserImagePathUpdate(String userImagePath);
+
 }

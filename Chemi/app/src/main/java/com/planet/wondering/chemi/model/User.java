@@ -280,19 +280,27 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-//                "mId=" + mId +
-//                ", mEmail='" + mEmail + '\'' +
-//                ", mName='" + mName + '\'' +
-//                ", mToken='" + mToken + '\'' +
-//                ", mPushToken='" + mPushToken + '\'' +
-//                ", mGender=" + mGender +
-//                ", mBirthYear=" + mBirthYear +
+                "mId=" + mId +
+                ", mEmail='" + mEmail + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mToken='" + mToken + '\'' +
+                ", mPushToken='" + mPushToken + '\'' + '\n' +
+                ", mImagePath='" + mImagePath + '\'' +
+                ", mHasExtraInfo=" + mHasExtraInfo + '\n' +
+                ", mGender=" + mGender +
+                ", mBirthYear=" + mBirthYear +
+                ", mAge='" + mAge + '\'' +
                 ", mHasDrySkin=" + mHasDrySkin +
                 ", mHasOilySkin=" + mHasOilySkin +
                 ", mHasAllergy=" + mHasAllergy +
                 ", mHasChild=" + mHasChild +
                 ", mChildHasDrySkin=" + mChildHasDrySkin +
-                ", mChildHasAllergy=" + mChildHasAllergy +
+                ", mChildHasAllergy=" + mChildHasAllergy + '\n' +
+                ", mCreateDate='" + mCreateDate + '\'' +
+                ", mModifyDate='" + mModifyDate + '\'' +
+                ", mArchiveProducts=" + mArchiveProducts +
+                ", mArchiveContents=" + mArchiveContents +
+                ", mReviewProducts=" + mReviewProducts +
                 '}';
     }
 }

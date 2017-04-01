@@ -619,6 +619,21 @@ public class Parser {
         return token;
     }
 
+    public static String parseMemberImagePath(JSONObject responseObject) {
+
+        String imagePath = null;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject imagePathObject = responseObject.getJSONObject(RESPONSE_DATA);
+                imagePath = imagePathObject.getString(USER_IMAGE_PATH);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return imagePath;
+    }
+
     public static User parseMemberConfigUser(JSONObject responseObject) {
 
         User user = new User();

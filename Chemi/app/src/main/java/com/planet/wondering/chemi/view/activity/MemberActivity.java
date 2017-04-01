@@ -184,6 +184,13 @@ public class MemberActivity extends BottomNavigationActivity
     }
 
     @Override
+    public void onUserImagePathUpdate(String userImagePath) {
+        Log.d(TAG, userImagePath);
+        mUser.setImagePath(userImagePath);
+        Log.d(TAG, mUser.toString());
+    }
+
+    @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();

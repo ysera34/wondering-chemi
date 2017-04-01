@@ -30,7 +30,7 @@ import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.CategoryActivity;
-import com.planet.wondering.chemi.view.activity.ContentActivity;
+import com.planet.wondering.chemi.view.activity.ContentListActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 
 import java.util.ArrayList;
@@ -550,7 +550,7 @@ public class MemberFragment extends Fragment
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.archive_content_empty_promote_button_text_view:
-                    startActivity(ContentActivity.newIntent(getActivity()));
+                    startActivity(ContentListActivity.newIntent(getActivity()));
                     break;
             }
         }
