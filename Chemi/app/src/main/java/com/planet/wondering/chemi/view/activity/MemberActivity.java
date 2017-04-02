@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -54,6 +55,9 @@ public class MemberActivity extends BottomNavigationActivity
         implements OnMenuSelectedListener, OnDialogFinishedListener, OnUserInfoUpdateListener {
 
     private static final String TAG = MemberActivity.class.getSimpleName();
+
+    private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
+
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
@@ -62,14 +66,23 @@ public class MemberActivity extends BottomNavigationActivity
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, byte requestId) {
+        Intent intent = new Intent(packageContext, MemberActivity.class);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
+        return intent;
+    }
+
     private String mAccessToken;
     private User mUser;
+    private byte mRequestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mAccessToken = UserSharedPreferences.getStoredToken(getApplicationContext());
+
+        mRequestId = getIntent().getByteExtra(EXTRA_REQUEST_ID, (byte) -1);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
@@ -81,17 +94,25 @@ public class MemberActivity extends BottomNavigationActivity
         setupBottomNavigation(4);
 
         if (mFragment == null) {
-            if (mAccessToken != null) {
-//                mFragment = MemberFragment.newInstance();
-//                mFragmentManager.beginTransaction()
-//                        .add(R.id.fragment_container, mFragment)
-//                        .commit();
-                requestMemberConfigUser();
+            if (mRequestId == -1) {
+                if (mAccessToken != null) {
+    //                mFragment = MemberFragment.newInstance();
+    //                mFragmentManager.beginTransaction()
+    //                        .add(R.id.fragment_container, mFragment)
+    //                        .commit();
+                    requestMemberConfigUser();
 
-            } else {
-                mFragment = MemberConfigSignInFragment.newInstance();
+                } else {
+                    mFragment = MemberConfigSignInFragment.newInstance();
+                    mFragmentManager.beginTransaction()
+                            .add(R.id.fragment_container, mFragment)
+                            .commit();
+                }
+            } else if (mRequestId == 4) {
+                mBottomNavigationLayout.setVisibility(View.GONE);
                 mFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, mFragment)
+//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
             }
         }
@@ -214,7 +235,6 @@ public class MemberActivity extends BottomNavigationActivity
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
                     .commit();
-
         } else if (fragment instanceof MemberConfigNoticeFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
@@ -226,10 +246,15 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigFAQFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
-                    .commit();
+            if (mRequestId == -1) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                        .commit();
+            } else if (mRequestId == 4){
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         } else if (fragment instanceof MemberConfigTermsFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)

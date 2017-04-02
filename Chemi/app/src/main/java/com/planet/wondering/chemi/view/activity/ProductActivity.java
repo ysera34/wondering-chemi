@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -33,21 +34,31 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ProductFragment;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 3. 15..
  */
 
 public class ProductActivity extends AppBaseActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener{
+        implements BottomNavigationView.OnNavigationItemSelectedListener, OnDialogFinishedListener {
 
     private static final String TAG = ProductActivity.class.getSimpleName();
 
@@ -172,16 +183,33 @@ public class ProductActivity extends AppBaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_faq:
-                Toast.makeText(getApplicationContext(), "action_faq", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "action_faq", Toast.LENGTH_SHORT).show();
+                startActivity(MemberActivity.newIntent(getApplicationContext(), (byte) 4));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.action_archive:
-                Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
+                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+//                    Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
+                    requestArchiveProduct();
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
+                }
                 break;
             case R.id.action_share:
                 Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose) {
+        if (isChose) {
+            startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
     }
 
     private void requestProduct() {
@@ -216,12 +244,51 @@ public class ProductActivity extends AppBaseActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                        progressDialog.dismiss();
-                        Log.e(TAG, error.getMessage());
+                        Log.e(TAG, error.toString());
                     }
                 }
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestArchiveProduct() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH + mProductId + KEEP_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+                            Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "보관함에 이미 있어요.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(),
+                                "상품을 보관하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

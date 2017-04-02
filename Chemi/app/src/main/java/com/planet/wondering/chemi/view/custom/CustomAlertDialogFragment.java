@@ -25,6 +25,7 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
 
     private static final String TAG = CustomAlertDialogFragment.class.getSimpleName();
 
+    public static final String LOGIN_DIALOG = "login_dialog";
     public static final String LOGOUT_DIALOG = "logout_dialog";
     public static final String CLEAR_DIALOG = "clear_dialog";
     public static final String REVOKE_DIALOG = "revoke_dialog";

@@ -123,6 +123,7 @@ public class Config {
     public static final class Product {
         public static final String PATH = File.separator + "products" + File.separator;
         public static final String QUERY_PATH = File.separator + "products?";
+        public static final String KEEP_PATH = File.separator + "keepers";
         public static final String QUERY_TAG = "&tag=";
         public static final String QUERY_CATEGORY = "&categoryid=";
         public static final String QUERY_ORDER = "&orderBy=";

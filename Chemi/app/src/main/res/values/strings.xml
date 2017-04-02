@@ -161,6 +161,8 @@
     <string name="search_chemical_result_title">검색결과 : </string>
     <string name="search_chemical_result_message">\"%1$s\"의 검색결과는 총 %2$s건 이예요.</string>
     <string name="partner_information_message">함께 만들어가는 케미!\n제휴를 원하시는 경우, 아래의 주소로 연락주세요</string>
+    <string name="login_button_title">로그인</string>
+    <string name="login_info_message">로그인 해야 사용하실 수 있어요.\n 로그인 하시겠어요?</string>
     <string name="logout_button_title">로그아웃</string>
     <string name="logout_info_message">로그아웃 하시겠어요?</string>
     <string name="withdraw_button_title">회원탈퇴</string>
