@@ -14,7 +14,7 @@
             android:id="@+id/list_item_archive_product_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:scaleType="centerInside"/>
 
     </LinearLayout>
 
@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:text="크리넥스크리넥스크리넥스"
             android:textSize="12sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:ellipsize="end"
@@ -45,7 +44,6 @@
             android:layout_height="wrap_content"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:text="안심물티슈안심물티슈안심물티슈"
             android:textSize="12sp"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:ellipsize="end"

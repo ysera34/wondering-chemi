@@ -305,10 +305,10 @@ public class User implements Serializable {
                 ", mChildHasDrySkin=" + mChildHasDrySkin +
                 ", mChildHasAllergy=" + mChildHasAllergy + '\n' +
                 ", mCreateDate='" + mCreateDate + '\'' +
-                ", mModifyDate='" + mModifyDate + '\'' +
-                ", mArchiveProducts=" + mArchiveProducts +
-                ", mArchiveContents=" + mArchiveContents +
-                ", mReviewProducts=" + mReviewProducts +
+                ", mModifyDate='" + mModifyDate + '\'' + '\n' +
+                ", mArchiveProducts=" + mArchiveProducts + '\n' +
+                ", mArchiveContents=" + mArchiveContents + '\n' +
+                ", mReviewProducts=" + mReviewProducts + '\n' +
                 '}';
     }
 }

@@ -1,12 +1,13 @@
 package com.planet.wondering.chemi.model.archive;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by yoon on 2017. 2. 10..
  */
 
-public class ReviewProduct {
+public class ReviewProduct implements Serializable {
 
     private int mProductId;
     private String mProductName;
@@ -61,5 +62,17 @@ public class ReviewProduct {
 
     public void setCreateDate(String createDate) {
         mCreateDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        return "ReviewProduct{" +
+                "mProductId=" + mProductId +
+                ", mProductName='" + mProductName + '\'' +
+                ", mProductImagePath='" + mProductImagePath + '\'' +
+                ", mRatingValue=" + mRatingValue +
+                ", mCreateDate='" + mCreateDate + '\'' +
+                ", mWriteDate=" + mWriteDate +
+                '}';
     }
 }

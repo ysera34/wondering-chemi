@@ -30,27 +30,25 @@
 
             <TextView
                 android:id="@+id/chemical_whole_text_view"
-                android:layout_width="65dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/chemical_sort_info_text_view"
                 android:layout_marginEnd="4dp"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:padding="3dp"
                 android:textSize="13sp"
                 android:textColor="@color/colorFontBody"
                 android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
             <TextView
                 android:id="@+id/chemical_sort_info_text_view"
-                android:layout_width="65dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:padding="3dp"
                 android:textSize="13sp"
                 android:textColor="@color/colorFontBody"
                 android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
@@ -72,8 +70,8 @@
 
             <TextView
                 android:id="@+id/chemical_include_allergy_total_text_view"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="2dp"
                 android:gravity="center"

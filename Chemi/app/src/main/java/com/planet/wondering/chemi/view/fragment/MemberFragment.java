@@ -32,6 +32,7 @@ import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.CategoryActivity;
 import com.planet.wondering.chemi.view.activity.ContentListActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 
 import java.util.ArrayList;
 
@@ -110,10 +111,23 @@ public class MemberFragment extends Fragment
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
 
-        mArchiveProducts = new ArrayList<>();
-        mArchiveContents = new ArrayList<>();
-        mArchiveReviewProducts = new ArrayList<>();
+        if (mUser.getArchiveProducts() == null) {
+            mArchiveProducts = new ArrayList<>();
+        } else {
+            mArchiveProducts = mUser.getArchiveProducts();
+        }
 
+        if (mUser.getArchiveContents() == null) {
+            mArchiveContents = new ArrayList<>();
+        } else {
+            mArchiveContents = mUser.getArchiveContents();
+        }
+
+        if (mUser.getReviewProducts() == null) {
+            mArchiveReviewProducts = new ArrayList<>();
+        } else {
+            mArchiveReviewProducts = mUser.getReviewProducts();
+        }
     }
 
     @Nullable
@@ -464,7 +478,8 @@ public class MemberFragment extends Fragment
         }
     }
 
-    private class ArchiveProductHolder extends RecyclerView.ViewHolder {
+    private class ArchiveProductHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private Product mProduct;
 
@@ -474,6 +489,7 @@ public class MemberFragment extends Fragment
 
         public ArchiveProductHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mArchiveProductImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_archive_product_image_view);
@@ -486,9 +502,17 @@ public class MemberFragment extends Fragment
         public void bindProduct(Product product) {
             mProduct = product;
 
-//            mArchiveProductImageView
+            Glide.with(getActivity())
+                    .load(mProduct.getImagePath())
+                    .crossFade()
+                    .into(mArchiveProductImageView);
             mArchiveProductBrandTextView.setText(mProduct.getBrand());
             mArchiveProductNameTextView.setText(mProduct.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getProductId(), (byte) 0));
         }
     }
 

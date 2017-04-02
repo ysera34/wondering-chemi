@@ -1,10 +1,12 @@
 package com.planet.wondering.chemi.model.archive;
 
+import java.io.Serializable;
+
 /**
  * Created by yoon on 2017. 2. 10..
  */
 
-public class Content {
+public class Content implements Serializable {
 
     private int mContentId;
     private String mTitle;
@@ -50,5 +52,16 @@ public class Content {
 
     public void setKeepDate(String keepDate) {
         mKeepDate = keepDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Content{" +
+                "mContentId=" + mContentId +
+                ", mTitle='" + mTitle + '\'' +
+                ", mSubTitle='" + mSubTitle + '\'' +
+                ", mImagePath='" + mImagePath + '\'' +
+                ", mKeepDate='" + mKeepDate + '\'' +
+                '}';
     }
 }
