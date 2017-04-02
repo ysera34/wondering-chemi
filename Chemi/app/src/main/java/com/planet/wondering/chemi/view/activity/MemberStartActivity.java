@@ -112,10 +112,12 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 
         Log.i(TAG, "shared preferences accessToken : "
                 + UserSharedPreferences.getStoredToken(getApplicationContext()));
-//        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-//            startActivity(SearchActivity.newIntent(getApplicationContext()));
-//            finish();
-//        }
+        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+            Intent intent = new Intent(MemberStartActivity.this, SearchActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        }
 
         setContentView(R.layout.activity_fragment);
 
@@ -581,8 +583,8 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     public void onResponse(JSONObject response) {
 //                        progressDialog.dismiss();
                         hideProgressDialog();
-                        Toast.makeText(getApplicationContext(),
-                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, response.toString());
                         mUser = Parser.parseSignUpForUser(response);
 

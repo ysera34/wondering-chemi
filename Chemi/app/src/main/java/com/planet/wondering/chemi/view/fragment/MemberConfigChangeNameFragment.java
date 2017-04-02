@@ -39,6 +39,7 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.NAME_PATH;
 import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
@@ -282,7 +283,7 @@ public class MemberConfigChangeNameFragment extends Fragment
         params.put(NAME, String.valueOf(userName));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT, URL_HOST + PATH, new JSONObject(params),
+                Request.Method.PUT, URL_HOST + PATH + NAME_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +34,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.nhn.android.naverlogin.OAuthLogin;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.User;
@@ -72,7 +83,8 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.W
  * Created by yoon on 2017. 2. 11..
  */
 
-public class MemberConfigProfileFragment extends Fragment implements View.OnClickListener {
+public class MemberConfigProfileFragment extends Fragment
+        implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MemberConfigProfileFragment.class.getSimpleName();
 
@@ -109,6 +121,9 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
 
     private BottomSheetDialog mMenuBottomSheetDialog;
 
+    private LinearLayout mProfileInfoLayout;
+    private TextView mPromoteTextView;
+
     private LinearLayout mParentLayout;
     private TextView mParentAgeTextView;
     private TextView mParentDrySkinTextView;
@@ -122,8 +137,17 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
 
     private int[] mConfigProfileLayoutIds;
     private RelativeLayout[] mConfigProfileLayouts;
+    private ImageView mRevokeTargetImageView;
 
     private User mUser;
+    private byte mUserPlatformId;
+
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private GoogleApiClient mGoogleApiClient;
+
+    private static OAuthLogin mNaverOAuthLogin;
+    private static Context mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,6 +160,40 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         mConfigProfileLayouts = new RelativeLayout[mConfigProfileLayoutIds.length];
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
+        mUserPlatformId = mUser.getPlatformId();
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged : sign_in : " + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged : sign_out");
+                }
+            }
+        };
+
+        if (mUserPlatformId == 1) {
+            GoogleSignInOptions googleSignInOptions =
+                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.google_default_web_client_id))
+                            .requestEmail()
+                            .build();
+
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity(), 0, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                    .build();
+        } else if (mUserPlatformId == 2) {
+            mContext = getActivity();
+            mNaverOAuthLogin = OAuthLogin.getInstance();
+            mNaverOAuthLogin.init(getActivity(),
+                    getString(R.string.naver_oauth_client_id),
+                    getString(R.string.naver_oauth_client_secret),
+                    getString(R.string.app_name));
+        }
     }
 
     @Nullable
@@ -153,6 +211,10 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
             mConfigProfileLayouts[i] = (RelativeLayout) view.findViewById(mConfigProfileLayoutIds[i]);
             mConfigProfileLayouts[i].setOnClickListener(this);
         }
+
+        mProfileInfoLayout = (LinearLayout) view.findViewById(R.id.member_config_profile_info_layout);
+        mPromoteTextView = (TextView) view.findViewById(R.id.member_config_profile_info_promote_text_view);
+        mRevokeTargetImageView = (ImageView) view.findViewById(R.id.member_config_profile_revoke_target_image_view);
 
         mParentLayout = (LinearLayout) view.findViewById(R.id.member_config_profile_parent_layout);
         mParentAgeTextView = (TextView) view.findViewById(R.id.member_config_profile_parent_age_text_view);
@@ -188,6 +250,29 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                     .crossFade()
                     .into(mUserCircleImageView);
         }
+
+        if (mUser.isHasExtraInfo()) {
+            mPromoteTextView.setVisibility(View.GONE);
+            showUserInfo();
+        } else {
+            mProfileInfoLayout.setVisibility(View.GONE);
+        }
+
+        if (mUserPlatformId == 0) {
+            mConfigProfileLayouts[4].setVisibility(View.GONE);
+        } else if (mUserPlatformId == 1) {
+            mRevokeTargetImageView.setImageResource(R.drawable.ic_google);
+            mConfigProfileLayouts[1].setVisibility(View.GONE);
+        } else if (mUserPlatformId == 2) {
+            mRevokeTargetImageView.setImageResource(R.drawable.ic_naver);
+            mConfigProfileLayouts[1].setVisibility(View.GONE);
+        }
+        mConfigProfileLayouts[5].setVisibility(View.GONE);
+    }
+
+    private void showUserInfo() {
+
+        mParentAgeTextView.setText(mUser.getAge());
 
         if (mUser.isHasDrySkin() && mUser.isHasOilySkin()) {
             mParentDrySkinTextView.setVisibility(View.GONE);
@@ -230,10 +315,6 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
 
         } else {
             mChildLayout.setVisibility(View.GONE);
-        }
-
-        if (mUser.getPlatformId() == 0) {
-            mConfigProfileLayouts[4].setVisibility(View.GONE);
         }
     }
 
@@ -283,14 +364,28 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                 case 1:
                     // need to know platform id and have to sign out
                     UserSharedPreferences.removeStoredToken(getActivity());
+
+                    if (mUserPlatformId == 1) {
+                        signOutGoogle();
+                    } else if (mUserPlatformId == 2) {
+                        signOutNaver();
+                    }
+
                     Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
                     mDialogType = 0;
                     break;
                 case 2:
-                    // need to know platform id and have to revoke
-                    // want to leave member and then have to revoke
+                    UserSharedPreferences.removeStoredToken(getActivity());
+
+                    if (mUserPlatformId == 1) {
+                        revokeAccessGoogle();
+                    } else if (mUserPlatformId == 2) {
+                        revokeAccessNaver();
+                    }
+
                     Toast.makeText(getActivity(), "연동해제 되었습니다.", Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
                     mDialogType = 0;
                     break;
                 case 3:
@@ -489,6 +584,99 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnMenuSelectedListener or OnUserInfoUpdateListener");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    public void signOutGoogle() {
+        mFirebaseAuth.signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        updateUI(null);
+                    }
+                }
+        );
+    }
+
+    public void revokeAccessGoogle() {
+        mFirebaseAuth.signOut();
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        updateUI(null);
+                    }
+                }
+        );
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            Log.i(TAG, getString(R.string.google_status_fmt, user.getEmail()));
+            Log.i(TAG, getString(R.string.firebase_status_fmt, user.getUid()));
+        } else {
+            Log.i(TAG, "Google User, Firebase User is null");
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+//        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void signOutNaver() {
+        mFirebaseAuth.signOut();
+
+        mNaverOAuthLogin.logout(mContext);
+//        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+    }
+
+    public void revokeAccessNaver() {
+        mFirebaseAuth.signOut();
+
+        new DeleteTokenTask().execute();
+    }
+
+    private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            boolean isSuccessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
+
+            if (!isSuccessDeleteToken) {
+                Log.d(TAG, "errorCode:" + mNaverOAuthLogin.getLastErrorCode(mContext));
+                Log.d(TAG, "errorDese:" + mNaverOAuthLogin.getLastErrorDesc(mContext));
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mUserPlatformId == 1) {
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        } else if (mUserPlatformId == 2) {
+            mContext = null;
+            mNaverOAuthLogin = null;
         }
     }
 }

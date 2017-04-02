@@ -44,6 +44,13 @@ public class UserSharedPreferences {
                 .apply();
     }
 
+    public static void removeStoredGetPush(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_GET_PUSH)
+                .apply();
+    }
+
     public static boolean getStoredGetEmail(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(PREF_GET_EMAIL, true);
@@ -53,6 +60,13 @@ public class UserSharedPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(PREF_GET_EMAIL, getEmail)
+                .apply();
+    }
+
+    public static void removeStoredGetEmail(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_GET_EMAIL)
                 .apply();
     }
 }

@@ -73,7 +73,6 @@ public class MemberActivity extends BottomNavigationActivity
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-
     }
 
     @Override
@@ -115,6 +114,7 @@ public class MemberActivity extends BottomNavigationActivity
                             .commit();
                 } else {
                     startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+                    finish();
                 }
 
                 break;

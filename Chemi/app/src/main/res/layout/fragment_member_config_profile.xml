@@ -25,7 +25,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="145dp"
+        android:layout_height="160dp"
         android:gravity="center"
         android:background="@color/colorWhite">
 
@@ -54,11 +54,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
+        android:paddingBottom="20dp"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:background="@color/colorWhite">
 
+        <TextView
+            android:id="@+id/member_config_profile_info_promote_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아래 버튼을 눌러 부가 정보를 입력해보세요"/>
+
         <LinearLayout
+            android:id="@+id/member_config_profile_info_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -300,6 +308,14 @@
             android:text="연동해제"
             android:textSize="14sp"
             android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <ImageView
+            android:id="@+id/member_config_profile_revoke_target_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"/>
 
     </RelativeLayout>
 

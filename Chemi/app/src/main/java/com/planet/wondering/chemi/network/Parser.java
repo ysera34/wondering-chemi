@@ -650,22 +650,23 @@ public class Parser {
                 user.setEmail(userObject.getString(EMAIL));
                 user.setName(userObject.getString(Config.User.Key.NAME));
                 user.setPlatformId((byte) userObject.getInt(PLATFORM));
-                user.setGender(userObject.getInt(GENDER) == 0);
+                user.setImagePath(userObject.getString(USER_IMAGE_PATH));
 
                 if (userObject.getInt(BIRTH_YEAR) == -1) {
                     user.setHasExtraInfo(false);
                 } else {
                     user.setHasExtraInfo(true);
+                    user.setGender(userObject.getInt(GENDER) == 0);
+                    user.setAge(userObject.getString(AGE));
+                    user.setBirthYear(userObject.getInt(BIRTH_YEAR));
+                    user.setHasDrySkin(userObject.getInt(HAS_DRY_SKIN) == 1);
+                    user.setHasOilySkin(userObject.getInt(HAS_OILY_SKIN) == 1);
+                    user.setHasAllergy(userObject.getInt(HAS_ALLERGY) == 1);
+                    user.setHasChild(userObject.getInt(HAS_CHILD) == 1);
+                    user.setChildHasDrySkin(userObject.getInt(CHILD_HAS_DRY_SKIN) == 1);
+                    user.setChildHasAllergy(userObject.getInt(CHILD_HAS_ALLERGY) == 1);
                 }
-                user.setBirthYear(userObject.getInt(BIRTH_YEAR));
-                user.setImagePath(userObject.getString(USER_IMAGE_PATH));
 
-                user.setHasDrySkin(userObject.getInt(HAS_DRY_SKIN) == 1);
-                user.setHasOilySkin(userObject.getInt(HAS_OILY_SKIN) == 1);
-                user.setHasAllergy(userObject.getInt(HAS_ALLERGY) == 1);
-                user.setHasChild(userObject.getInt(HAS_CHILD) == 1);
-                user.setChildHasDrySkin(userObject.getInt(CHILD_HAS_DRY_SKIN) == 1);
-                user.setChildHasAllergy(userObject.getInt(CHILD_HAS_ALLERGY) == 1);
 
                 user.setCreateDate(userObject.getString(CREATE_DATE));
                 user.setModifyDate(userObject.getString(MODIFY_DATE));

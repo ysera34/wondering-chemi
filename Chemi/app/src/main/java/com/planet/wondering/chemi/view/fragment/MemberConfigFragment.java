@@ -106,8 +106,17 @@ public class MemberConfigFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        /**
+         * 1. anonymous user
+         * 2. local user
+         * 3. google or naver user
+         */
+
+        requestGetUserConfig(); /* only for app version */
         if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
             mMemberConfigProfileTextView.setText("회원 가입 및 로그인");
+            mConfigLayouts[6].setVisibility(View.GONE);
         }
 
         try {
@@ -119,7 +128,7 @@ public class MemberConfigFragment extends Fragment
             e.printStackTrace();
         }
 
-        requestGetUserConfig(); /* only for app version */
+
         mPushSwitch.setChecked(UserSharedPreferences.getStoredGetPush(getActivity()));
         mEmailSwitch.setChecked(UserSharedPreferences.getStoredGetEmail(getActivity()));
         mPushSwitch.setOnCheckedChangeListener(this);
@@ -142,12 +151,14 @@ public class MemberConfigFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_version_layout:
-                if (mUserConfig != null) {
-                    if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
-                        Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(),
-                                "최신 버전은 " + mUserConfig.getAppVersion() + "입니다. 업데이트가 필요합니다.", Toast.LENGTH_SHORT).show();
+                if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
+                    if (mUserConfig != null) {
+                        if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
+                            Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "최신 버전은 " + mUserConfig.getAppVersion() + "입니다. 업데이트가 필요합니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 break;
@@ -209,7 +220,9 @@ public class MemberConfigFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, error.toString());
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                "앱 정보를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -249,7 +262,9 @@ public class MemberConfigFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, error.toString());
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                "앱 정보 업데이트 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
                     }
                 }
         )

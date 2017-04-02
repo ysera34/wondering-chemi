@@ -62,6 +62,7 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
                 break;
             case R.id.member_config_sign_in_text_view:
                 startActivity(MemberStartActivity.newIntent(getActivity()));
+                getActivity().finish();
                 break;
         }
     }

@@ -222,6 +222,8 @@ public class MemberFragment extends Fragment
 //            display member info
         }
 
+        mParentAgeTextView.setText(mUser.getAge());
+
         if (mUser.isHasDrySkin() && mUser.isHasOilySkin()) {
             mParentDrySkinTextView.setVisibility(View.GONE);
             mParentOilySkinTextView.setVisibility(View.GONE);
