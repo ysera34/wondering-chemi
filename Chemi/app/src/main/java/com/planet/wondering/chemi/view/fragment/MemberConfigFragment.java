@@ -1,9 +1,12 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,32 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.UserConfig;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.GET_EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.GET_PUSH;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.PATH;
+import static com.planet.wondering.chemi.network.Config.User.SETTING_PATH;
 
 /**
  * Created by yoon on 2017. 2. 10..
@@ -23,6 +49,8 @@ import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 
 public class MemberConfigFragment extends Fragment
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+    private static final String TAG = MemberConfigFragment.class.getSimpleName();
 
     public static MemberConfigFragment newInstance() {
 
@@ -36,8 +64,12 @@ public class MemberConfigFragment extends Fragment
     private int[] mConfigLayoutIds;
     private RelativeLayout[] mConfigLayouts;
     private TextView mMemberConfigProfileTextView;
+    private TextView mMemberConfigVersionTextView;
     private Switch mPushSwitch;
     private Switch mEmailSwitch;
+
+    private UserConfig mUserConfig;
+    private String mCurrentAppVersion;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,11 +95,11 @@ public class MemberConfigFragment extends Fragment
             mConfigLayouts[i].setOnClickListener(this);
         }
         mMemberConfigProfileTextView = (TextView) view.findViewById(R.id.member_config_profile_text_view);
+        mMemberConfigVersionTextView = (TextView) view.findViewById(R.id.member_config_version_text_view);
 
         mPushSwitch = (Switch) view.findViewById(R.id.member_config_push_notification_switch);
-        mPushSwitch.setOnCheckedChangeListener(this);
         mEmailSwitch = (Switch) view.findViewById(R.id.member_config_email_switch);
-        mEmailSwitch.setOnCheckedChangeListener(this);
+
         return view;
     }
 
@@ -77,6 +109,21 @@ public class MemberConfigFragment extends Fragment
         if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
             mMemberConfigProfileTextView.setText("회원 가입 및 로그인");
         }
+
+        try {
+            PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            mCurrentAppVersion = packageInfo.versionName;
+//            Log.i("version info", version);
+            mMemberConfigVersionTextView.setText(mCurrentAppVersion);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        requestGetUserConfig(); /* only for app version */
+        mPushSwitch.setChecked(UserSharedPreferences.getStoredGetPush(getActivity()));
+        mEmailSwitch.setChecked(UserSharedPreferences.getStoredGetEmail(getActivity()));
+        mPushSwitch.setOnCheckedChangeListener(this);
+        mEmailSwitch.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -95,6 +142,28 @@ public class MemberConfigFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_version_layout:
+                if (mUserConfig != null) {
+                    if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
+                        Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(),
+                                "최신 버전은 " + mUserConfig.getAppVersion() + "입니다. 업데이트가 필요합니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case R.id.member_config_push_notification_layout:
+                if (mPushSwitch.isChecked()) {
+                    mPushSwitch.setChecked(false);
+                } else {
+                    mPushSwitch.setChecked(true);
+                }
+                break;
+            case R.id.member_config_email_layout:
+                if (mEmailSwitch.isChecked()) {
+                    mEmailSwitch.setChecked(false);
+                } else {
+                    mEmailSwitch.setChecked(true);
+                }
                 break;
             case R.id.member_config_privacy_layout:
                 mMenuSelectedListener.onMenuSelected(5);
@@ -125,6 +194,81 @@ public class MemberConfigFragment extends Fragment
         }
     }
 
+    private void requestGetUserConfig() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + PATH + SETTING_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mUserConfig = Parser.parseUserConfig(response);
+//                        mPushSwitch.setChecked(mUserConfig.isGetPush());
+//                        mEmailSwitch.setChecked(mUserConfig.isGetEmail());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestPutUserConfig() {
+
+        Map<String, Boolean> params = new HashMap<>();
+        params.put(GET_PUSH, mPushSwitch.isChecked());
+        params.put(GET_EMAIL, mEmailSwitch.isChecked());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, URL_HOST + PATH + SETTING_PATH, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+                            UserSharedPreferences.setStoredGetPush(getActivity(), mPushSwitch.isChecked());
+                            UserSharedPreferences.setStoredGetEmail(getActivity(), mEmailSwitch.isChecked());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
     OnMenuSelectedListener mMenuSelectedListener;
 
     @Override
@@ -135,6 +279,26 @@ public class MemberConfigFragment extends Fragment
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnMenuSelectedListener");
+        }
+    }
+
+    private boolean determineRequestUserConfig() {
+
+        boolean isCheckPush = mPushSwitch.isChecked();
+        boolean isCheckEmail = mEmailSwitch.isChecked();
+
+        if (isCheckPush != UserSharedPreferences.getStoredGetPush(getActivity())
+                || isCheckEmail != UserSharedPreferences.getStoredGetEmail(getActivity())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (determineRequestUserConfig()) {
+            requestPutUserConfig();
         }
     }
 }

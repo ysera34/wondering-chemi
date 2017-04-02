@@ -10,6 +10,7 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.model.UserConfig;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
@@ -86,17 +87,21 @@ import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_IS_CORRECT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 import static com.planet.wondering.chemi.network.Config.User.Key.AGE;
+import static com.planet.wondering.chemi.network.Config.User.Key.APP_VERSION;
 import static com.planet.wondering.chemi.network.Config.User.Key.BIRTH_YEAR;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_ALLERGY;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_DRY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.CREATE_DATE;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.Key.GENDER;
+import static com.planet.wondering.chemi.network.Config.User.Key.GET_EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.GET_PUSH;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_ALLERGY;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_CHILD;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_DRY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.HAS_OILY_SKIN;
 import static com.planet.wondering.chemi.network.Config.User.Key.MODIFY_DATE;
+import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
 import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER;
@@ -644,6 +649,7 @@ public class Parser {
 //                user.setId(userObject.getInt(USER_ID));
                 user.setEmail(userObject.getString(EMAIL));
                 user.setName(userObject.getString(Config.User.Key.NAME));
+                user.setPlatformId((byte) userObject.getInt(PLATFORM));
                 user.setGender(userObject.getInt(GENDER) == 0);
 
                 if (userObject.getInt(BIRTH_YEAR) == -1) {
@@ -739,5 +745,22 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return userName;
+    }
+
+    public static UserConfig parseUserConfig(JSONObject responseObject) {
+
+        UserConfig userConfig = new UserConfig();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject userConfigObject = responseObject.getJSONObject(RESPONSE_DATA);
+                userConfig.setGetPush(userConfigObject.getInt(GET_PUSH) == 1);
+                userConfig.setGetEmail(userConfigObject.getInt(GET_EMAIL) == 1);
+                userConfig.setAppVersion(userConfigObject.getString(APP_VERSION));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return userConfig;
     }
 }

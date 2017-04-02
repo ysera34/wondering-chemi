@@ -160,10 +160,12 @@
     <string name="search_chemical_result_title">검색결과 : </string>
     <string name="search_chemical_result_message">\"%1$s\"의 검색결과는 총 %2$s건 이예요.</string>
     <string name="partner_information_message">함께 만들어가는 케미!\n제휴를 원하시는 경우, 아래의 주소로 연락주세요</string>
-    <string name="logout_info_message">로그아웃 하시겠어요?</string>
     <string name="logout_button_title">로그아웃</string>
-    <string name="revoke_info_message">연동해제 하시겠어요?</string>
+    <string name="logout_info_message">로그아웃 하시겠어요?</string>
+    <string name="withdraw_button_title">회원탈퇴</string>
+    <string name="withdraw_info_message">회원탈퇴를 하시겠어요?</string>
     <string name="revoke_button_title">연동해제</string>
+    <string name="revoke_info_message">연동해제 하시겠어요?</string>
     <string name="search_clear_info_message">최근 검색어를 모두\n삭제하시겠어요?</string>
     <string name="search_clear_button_title">삭제</string>
     <string name="member_profile_archive_product_title">%s님이 관심있는 제품</string>

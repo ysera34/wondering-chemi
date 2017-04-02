@@ -25,7 +25,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="145dp"
         android:gravity="center"
         android:background="@color/colorWhite">
 
@@ -53,7 +53,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
         android:gravity="center_horizontal"
         android:background="@color/colorWhite">
 
@@ -297,6 +298,26 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="연동해제"
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/member_config_profile_withdraw_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/member_config_body_menu_height"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="회원탈퇴"
             android:textSize="14sp"
             android:textColor="@color/colorFontToolbarSubtitle"/>
 

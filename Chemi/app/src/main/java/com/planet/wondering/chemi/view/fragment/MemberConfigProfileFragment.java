@@ -66,6 +66,7 @@ import static com.planet.wondering.chemi.network.Config.User.Key.USER_IMAGE_PATH
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGOUT_DIALOG;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.REVOKE_DIALOG;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.WITHDRAW_DIALOG;
 
 /**
  * Created by yoon on 2017. 2. 11..
@@ -131,7 +132,7 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         mConfigProfileLayoutIds = new int[]{
                 R.id.member_config_profile_name_layout, R.id.member_config_profile_change_password_layout,
                 R.id.member_config_profile_change_survey_layout, R.id.member_config_profile_sign_out_layout,
-                R.id.member_config_profile_revoke_layout,};
+                R.id.member_config_profile_revoke_layout, R.id.member_config_profile_withdraw_layout,};
         mConfigProfileLayouts = new RelativeLayout[mConfigProfileLayoutIds.length];
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
@@ -230,6 +231,10 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         } else {
             mChildLayout.setVisibility(View.GONE);
         }
+
+        if (mUser.getPlatformId() == 0) {
+            mConfigProfileLayouts[4].setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -250,16 +255,22 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                 mMenuSelectedListener.onMenuSelected(13);
                 break;
             case R.id.member_config_profile_sign_out_layout:
-                CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment
+                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
                         .newInstance(R.drawable.ic_logout, R.string.logout_info_message, R.string.logout_button_title);
-                dialogFragment.show(getFragmentManager(), LOGOUT_DIALOG);
+                dialogFragment1.show(getFragmentManager(), LOGOUT_DIALOG);
                 mDialogType = 1;
                 break;
             case R.id.member_config_profile_revoke_layout:
-                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                CustomAlertDialogFragment dialogFragment3 = CustomAlertDialogFragment
                         .newInstance(R.drawable.ic_logout, R.string.revoke_info_message, R.string.revoke_button_title);
-                dialogFragment1.show(getFragmentManager(), REVOKE_DIALOG);
+                dialogFragment3.show(getFragmentManager(), REVOKE_DIALOG);
                 mDialogType = 2;
+                break;
+            case R.id.member_config_profile_withdraw_layout:
+                CustomAlertDialogFragment dialogFragment2 = CustomAlertDialogFragment
+                        .newInstance(R.drawable.ic_logout, R.string.withdraw_info_message, R.string.withdraw_button_title);
+                dialogFragment2.show(getFragmentManager(), WITHDRAW_DIALOG);
+                mDialogType = 3;
                 break;
         }
     }
@@ -280,6 +291,12 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                     // need to know platform id and have to revoke
                     // want to leave member and then have to revoke
                     Toast.makeText(getActivity(), "연동해제 되었습니다.", Toast.LENGTH_SHORT).show();
+                    mDialogType = 0;
+                    break;
+                case 3:
+                    // need to know platform id and have to revoke
+                    // want to leave member and then have to revoke
+                    Toast.makeText(getActivity(), "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
                     mDialogType = 0;
                     break;
             }
@@ -304,10 +321,8 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                 dismissMenuBottomSheetDialog();
                 mImageHandler = new ImageHandler(getActivity());
                 if (position == 0) {
-                    Toast.makeText(getActivity(), "카메라", Toast.LENGTH_SHORT).show();
                     startActivityForResult(mImageHandler.dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
                 } else if (position == 1) {
-                    Toast.makeText(getActivity(), "갤러리", Toast.LENGTH_SHORT).show();
                     startActivityForResult(mImageHandler.pickGalleryPictureIntent(), GALLERY_IMAGE_REQUEST_CODE);
                 }
             }

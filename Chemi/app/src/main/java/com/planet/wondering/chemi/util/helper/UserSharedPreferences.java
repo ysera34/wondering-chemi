@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 public class UserSharedPreferences {
 
     private static final String PREF_TOKEN = "com.planet.wondering.chemi.user.token";
+    private static final String PREF_GET_PUSH = "com.planet.wondering.chemi.user.get_push";
+    private static final String PREF_GET_EMAIL = "com.planet.wondering.chemi.user.get_email";
 
     public static String getStoredToken(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -27,6 +29,30 @@ public class UserSharedPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .remove(PREF_TOKEN)
+                .apply();
+    }
+
+    public static boolean getStoredGetPush(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(PREF_GET_PUSH, true);
+    }
+
+    public static void setStoredGetPush(Context context, boolean getPush) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_GET_PUSH, getPush)
+                .apply();
+    }
+
+    public static boolean getStoredGetEmail(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(PREF_GET_EMAIL, true);
+    }
+
+    public static void setStoredGetEmail(Context context, boolean getEmail) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_GET_EMAIL, getEmail)
                 .apply();
     }
 }

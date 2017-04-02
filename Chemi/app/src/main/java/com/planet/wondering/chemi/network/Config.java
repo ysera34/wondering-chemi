@@ -36,8 +36,10 @@ public class Config {
         public static final String PATH = File.separator + "users";
         public static final String EMAIL_PATH = File.separator + EMAIL;
         public static final String PASSWORD_PATH = File.separator + PASSWORD;
+        public static final String SETTING_PATH = File.separator + "setting";
         public static final String EMAIL_STRING_PATH = File.separator + "emailstring";
         public static final String NAME_STRING_PATH = File.separator + "namestring";
+        public static final String NAME_PATH = File.separator + "name";
         public static final String LOGIN_PARAMS = File.separator + "loginparams";
         public static final String IMAGE_PATH = File.separator + "image";
 
@@ -52,6 +54,10 @@ public class Config {
             public static final String TOKEN = "token";
             public static final String ACCESS_TOKEN = "accessToken";
             public static final String PUSH_TOKEN = "pushToken";
+
+            public static final String GET_PUSH = "getsPush";
+            public static final String GET_EMAIL = "getsEmail";
+            public static final String APP_VERSION = "version";
 
             public static final String USER = "user";
             public static final String GENDER = "gender";

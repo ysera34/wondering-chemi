@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String mName;
     private String mToken;
     private String mPushToken;
+    private byte mPlatformId;
     private String mImagePath;
     private boolean mHasExtraInfo;
     private boolean mGender;
@@ -37,7 +38,6 @@ public class User implements Serializable {
     private ArrayList<Product> mArchiveProducts;
     private ArrayList<Content> mArchiveContents;
     private ArrayList<ReviewProduct> mReviewProducts;
-
 
 
     public int getId() {
@@ -78,6 +78,14 @@ public class User implements Serializable {
 
     public void setPushToken(String pushToken) {
         mPushToken = pushToken;
+    }
+
+    public byte getPlatformId() {
+        return mPlatformId;
+    }
+
+    public void setPlatformId(byte platformId) {
+        mPlatformId = platformId;
     }
 
     public String getImagePath() {
