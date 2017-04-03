@@ -151,7 +151,7 @@ public class MemberConfigFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_version_layout:
-                if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
+                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
                     if (mUserConfig != null) {
                         if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
                             Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();

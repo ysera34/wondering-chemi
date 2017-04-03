@@ -332,6 +332,23 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 //        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
+    private void signInFirebase(String email, String password) {
+        Log.d(TAG, "signIn Firebase:" + email);
+
+        mFirebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWIthEmail:onComplete: " + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(MemberStartActivity.this, "signInWithEmail:failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     public void signInNaver() {
         mNaverOAuthLogin.startOauthLoginActivity(MemberStartActivity.this, mOAuthLoginHandler);
     }
@@ -502,6 +519,13 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                                 }
                                 UserSharedPreferences.setStoreToken(getApplicationContext(), user.getToken());
                                 Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+                                if (platformId == 1) {
+                                    firebaseAuthGoogle(googleSignInAccount);
+                                } else if (platformId == 2) {
+                                    signInFirebase(emailAddress, emailAddress);
+                                }
+
                                 Toast.makeText(getApplicationContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
 
                                 startActivity(SearchActivity.newIntent(getApplicationContext()));

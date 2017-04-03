@@ -276,7 +276,7 @@ public class MemberSignInLocalFragment extends Fragment
                             Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
 
                             // sign in firebase user
-                            signInFirebaseAccount(email, password);
+                            signInFirebaseAccount(email, email);
 
                             startActivity(SearchActivity.newIntent(getActivity()));
                             getActivity().finish();
