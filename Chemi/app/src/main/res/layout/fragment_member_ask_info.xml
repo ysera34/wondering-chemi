@@ -68,6 +68,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/member_ask_info_submit_button_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="47dp"
+            android:layout_marginEnd="47dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:gravity="center_horizontal"
+            android:text="입력 완료"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/widget_solid_oval_rectangle_iron"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="16dp"
         android:paddingStart="16dp"
@@ -87,12 +110,23 @@
             android:id="@+id/member_ask_info_birth_year_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:hint="출생년도를 입력하세요"
-            android:inputType="phone|numberDecimal"
+            android:layout_marginBottom="4dp"
+            android:hint="출생년도를 4자리를 입력해주세요"
+            android:maxLength="4"
+            android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
             android:textSize="16sp"
             android:textColor="@color/colorFontBody"
             android:background="@drawable/selector_edit_text_under_line_primary"/>
+
+        <TextView
+            android:id="@+id/member_ask_info_birth_year_validation_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="10sp"
+            android:textColor="@color/colorAccent"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -367,28 +401,6 @@
         </LinearLayout>
 
         </HorizontalScrollView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginStart="47dp"
-            android:layout_marginEnd="47dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:gravity="center_horizontal"
-            android:text="입력 완료"
-            android:textSize="16sp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/widget_solid_oval_rectangle_iron"/>
 
     </LinearLayout>
 

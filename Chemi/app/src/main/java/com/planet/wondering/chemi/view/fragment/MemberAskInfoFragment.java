@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.util.helper.TextValidator;
 
 /**
  * Created by yoon on 2017. 2. 17..
@@ -34,6 +39,7 @@ public class MemberAskInfoFragment extends Fragment
     private LinearLayout mBackLayout;
 
     private EditText mBirthYearEditText;
+    private TextView mBirthYearValidationTextView;
 
     private CheckBox mFemaleCheckBox;
     private CheckBox mMaleCheckBox;
@@ -50,6 +56,8 @@ public class MemberAskInfoFragment extends Fragment
     private CheckBox mChildDrySkinCheckBox;
     private CheckBox mChildAllergyCheckBox;
 
+    private TextView mAskInfoSubmitTextView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +72,8 @@ public class MemberAskInfoFragment extends Fragment
         mBackLayout.setOnClickListener(this);
 
         mBirthYearEditText = (EditText) view.findViewById(R.id.member_ask_info_birth_year_edit_text);
+        mBirthYearValidationTextView = (TextView) view.findViewById(R.id.member_ask_info_birth_year_validation_text_view);
+
         mFemaleCheckBox = (CheckBox) view.findViewById(R.id.member_ask_info_female_check_box);
         mFemaleCheckBox.setOnCheckedChangeListener(this);
         mMaleCheckBox = (CheckBox) view.findViewById(R.id.member_ask_info_male_check_box);
@@ -87,12 +97,15 @@ public class MemberAskInfoFragment extends Fragment
         mChildAllergyCheckBox = (CheckBox) view.findViewById(R.id.member_ask_info_child_allergy_check_box);
         mChildAllergyCheckBox.setOnCheckedChangeListener(this);
 
+        mAskInfoSubmitTextView = (TextView) view.findViewById(R.id.member_ask_info_submit_button_text_view);
+        mAskInfoSubmitTextView.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        validateBirthYearEditText();
     }
 
     @Override
@@ -101,7 +114,47 @@ public class MemberAskInfoFragment extends Fragment
             case R.id.member_config_ask_back_layout:
                 getActivity().onBackPressed();
                 break;
+            case R.id.member_ask_info_submit_button_text_view:
+                if (isBirthYearValidate && isFormValidate) {
+                    requestSubmitUserAskInfo();
+                } else {
+
+                }
+
+                break;
         }
+    }
+
+    private boolean isBirthYearValidate = false;
+    private boolean isFormValidate = false;
+
+    private void validateBirthYearEditText() {
+        mBirthYearEditText.addTextChangedListener(
+                new TextValidator(mBirthYearEditText) {
+                    @Override
+                    public void validate(TextView textView, String text) {
+                        if (validateBirthYear(text)) {
+                            mBirthYearEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
+                            mBirthYearValidationTextView.setText("");
+                            isBirthYearValidate = true;
+
+                            if (isFormValidate) {
+                                mAskInfoSubmitTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                                mAskInfoSubmitTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
+                            }
+                        } else {
+                            if (text.length() > 3) {
+                                mBirthYearValidationTextView.setText("출생년도 입력란을 확인해주세요.");
+                            }
+                            mBirthYearEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
+                            isBirthYearValidate = false;
+
+                            mAskInfoSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                            mAskInfoSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -145,12 +198,26 @@ public class MemberAskInfoFragment extends Fragment
                 }
                 break;
         }
+
+//        findInfoValue();
+
+        if (validateForms()) {
+            isFormValidate = true;
+
+            if (isBirthYearValidate) {
+                mAskInfoSubmitTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                mAskInfoSubmitTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
+            }
+        } else {
+            mAskInfoSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+            mAskInfoSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+            isFormValidate = false;
+        }
     }
 
     private void checkOffBoxState(CheckBox checkBox1, CheckBox... checkBoxes) {
 
         if (checkBox1.isChecked()) {
-
             for (CheckBox checkBox : checkBoxes) {
                 checkBox.setChecked(false);
             }
@@ -171,5 +238,65 @@ public class MemberAskInfoFragment extends Fragment
         if (isCheck) {
             checkBox1.setChecked(false);
         }
+    }
+
+    private boolean validateBirthYear(String birthYearString) {
+        if (birthYearString == null || birthYearString.equals("")) {
+            return false;
+        }
+
+        int birthYear = Integer.valueOf(birthYearString);
+        return birthYear >= 1950 && birthYear < 2015;
+    }
+
+    private void findInfoValue() {
+
+        User infoValueUser = new User();
+        infoValueUser.setBirthYear(Integer.valueOf(mBirthYearEditText.getText().toString()));
+
+        infoValueUser.setGender(mFemaleCheckBox.isChecked());
+        if (!mParentNoneCheckBox.isChecked()) {
+            infoValueUser.setHasDrySkin(mParentDrySkinCheckBox.isChecked());
+            infoValueUser.setHasOilySkin(mParentOilySkinCheckBox.isChecked());
+            infoValueUser.setHasAllergy(mParentAllergyCheckBox.isChecked());
+        }
+
+        infoValueUser.setHasChild(mHaveChildCheckBox.isChecked());
+        if (!mChildNoneCheckBox.isChecked()) {
+            infoValueUser.setChildHasDrySkin(mChildDrySkinCheckBox.isChecked());
+            infoValueUser.setChildHasAllergy(mChildAllergyCheckBox.isChecked());
+        }
+
+        Log.i("info user : ", infoValueUser.toString());
+    }
+
+    private boolean validateForms() {
+
+        boolean isValidate1 = false;
+        boolean isValidate2 = false;
+        boolean isValidate3 = false;
+        boolean isValidate4 = false;
+
+        if (mFemaleCheckBox.isChecked() || mMaleCheckBox.isChecked()) {
+            isValidate1 = true;
+        }
+        if (mParentNoneCheckBox.isChecked() || mParentDrySkinCheckBox.isChecked()
+                || mParentOilySkinCheckBox.isChecked() || mParentAllergyCheckBox.isChecked()) {
+            isValidate2 = true;
+        }
+        if (mHaveChildCheckBox.isChecked() || mHaveNoChildCheckBox.isChecked()) {
+            isValidate3= true;
+        }
+        if (mChildNoneCheckBox.isChecked()
+                || mChildDrySkinCheckBox.isChecked() || mChildAllergyCheckBox.isChecked()) {
+            isValidate4 = true;
+        }
+
+        return isValidate1 && isValidate2 && isValidate3 && isValidate4;
+    }
+
+    private void requestSubmitUserAskInfo() {
+
+        Toast.makeText(getActivity(), "request", Toast.LENGTH_SHORT).show();
     }
 }
