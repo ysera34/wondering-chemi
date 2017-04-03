@@ -37,6 +37,15 @@ import java.util.Map;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.BIRTH_YEAR;
+import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_ALLERGY;
+import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_DRY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.GENDER;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_ALLERGY;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_CHILD;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_DRY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.HAS_OILY_SKIN;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -314,14 +323,14 @@ public class MemberSurveyInfoFragment extends Fragment
         Log.i(TAG, user.toString());
 
         Map<String, String> params = new HashMap<>();
-        params.put("gender", String.valueOf(user.getGender()));
-        params.put("birthYear", String.valueOf(user.getBirthYear()));
-        params.put("hasDrySkin", String.valueOf(user.getHasDrySkin()));
-        params.put("hasOilySkin", String.valueOf(user.getHasOilySkin()));
-        params.put("hasAllergy", String.valueOf(user.getHasAllergy()));
-        params.put("hasChild", String.valueOf(user.getHasChild()));
-        params.put("childHasDrySkin", String.valueOf(user.getChildHasDrySkin()));
-        params.put("childHasAllergy", String.valueOf(user.getChildHasAllergy()));
+        params.put(GENDER, String.valueOf(user.getGender()));
+        params.put(BIRTH_YEAR, String.valueOf(user.getBirthYear()));
+        params.put(HAS_DRY_SKIN, String.valueOf(user.getHasDrySkin()));
+        params.put(HAS_OILY_SKIN, String.valueOf(user.getHasOilySkin()));
+        params.put(HAS_ALLERGY, String.valueOf(user.getHasAllergy()));
+        params.put(HAS_CHILD, String.valueOf(user.getHasChild()));
+        params.put(CHILD_HAS_DRY_SKIN, String.valueOf(user.getChildHasDrySkin()));
+        params.put(CHILD_HAS_ALLERGY, String.valueOf(user.getChildHasAllergy()));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.PUT, URL_HOST + PATH, new JSONObject(params),
@@ -342,7 +351,7 @@ public class MemberSurveyInfoFragment extends Fragment
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("token", UserSharedPreferences.getStoredToken(getActivity()));
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
                 return params;
             }
         };

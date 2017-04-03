@@ -186,7 +186,7 @@ public class MemberActivity extends BottomNavigationActivity
                 mBottomNavigationLayout.setVisibility(View.GONE);
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberAskInfoFragment.newInstance())
+                        .replace(R.id.fragment_container, MemberAskInfoFragment.newInstance(mUser))
                         .commit();
                 break;
         }
@@ -210,6 +210,19 @@ public class MemberActivity extends BottomNavigationActivity
         Log.d(TAG, userImagePath);
         mUser.setImagePath(userImagePath);
         Log.d(TAG, mUser.toString());
+    }
+
+    @Override
+    public void onUserInfoValueUpdate(User user) {
+
+        mUser.setBirthYear(user.getBirthYear());
+        mUser.setGender(user.isGender());
+        mUser.setHasDrySkin(user.isHasDrySkin());
+        mUser.setHasOilySkin(user.isHasOilySkin());
+        mUser.setHasAllergy(user.isHasAllergy());
+        mUser.setHasChild(user.isHasChild());
+        mUser.setChildHasDrySkin(user.isChildHasDrySkin());
+        mUser.setChildHasAllergy(user.isChildHasAllergy());
     }
 
     @Override
