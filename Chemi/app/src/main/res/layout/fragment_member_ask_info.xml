@@ -35,21 +35,21 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="18dp"
-            android:gravity="center">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="65dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginEnd="18dp"-->
+            <!--android:gravity="center">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="건너뛰기"
-                android:textSize="12sp"
-                android:textColor="@color/colorFontToolbarSubtitle"/>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="건너뛰기"-->
+                <!--android:textSize="12sp"-->
+                <!--android:textColor="@color/colorFontToolbarSubtitle"/>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
     </RelativeLayout>
 
     <TextView
@@ -68,11 +68,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/member_start_info_info_text_view"
         android:orientation="vertical"
         android:paddingTop="16dp"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_below="@+id/member_start_info_info_text_view"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,6 +84,7 @@
             android:textColor="@color/colorFontBody"/>
 
         <EditText
+            android:id="@+id/member_ask_info_birth_year_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -105,7 +107,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="24dp">
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_female_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -113,23 +116,27 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="여성"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_male_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_marginEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
                 android:text="남성"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
         </LinearLayout>
 
@@ -155,65 +162,82 @@
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp">
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_parent_none_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="없음"
                 android:textSize="15sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_parent_dry_skin_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="건성"
                 android:textSize="15sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_parent_oily_skin_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="지성"
                 android:textSize="15sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_parent_allergy_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:layout_marginEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
                 android:text="알레르기 (아토피 등)"
                 android:textSize="15sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
         </LinearLayout>
+        </HorizontalScrollView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -228,31 +252,36 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp">
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_have_child_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp"
+                android:paddingStart="22dp"
+                android:paddingEnd="22dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="유"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_have_no_child_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp"
-                android:layout_marginEnd="8dp"
+                android:paddingStart="22dp"
+                android:paddingEnd="22dp"
+                android:clickable="true"
                 android:text="무"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
         </LinearLayout>
 
@@ -278,51 +307,66 @@
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_child_none_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="없음"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_child_dry_skin_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
+                android:clickable="true"
                 android:text="악건성"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/member_ask_info_child_allergy_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:layout_marginEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
                 android:text="알레르기 (아토피 등)"
                 android:textSize="16sp"
-                android:textColor="@color/colorFrenchGray"
-                android:background="@drawable/widget_border_oval_rectangle_french_gray"/>
+                android:textColor="@color/color_selector_check_dove_gray_primary"
+                android:button="@null"
+                android:background="@drawable/selector_check_box_ask_info"/>
 
         </LinearLayout>
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 
@@ -335,7 +379,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="65dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginStart="47dp"
             android:layout_marginEnd="47dp"
             android:paddingTop="14dp"

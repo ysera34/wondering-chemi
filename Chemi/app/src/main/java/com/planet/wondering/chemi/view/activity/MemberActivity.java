@@ -183,6 +183,7 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 13:
+                mBottomNavigationLayout.setVisibility(View.GONE);
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, MemberAskInfoFragment.newInstance())
@@ -276,6 +277,7 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
+            mBottomNavigationLayout.setVisibility(View.VISIBLE);
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
