@@ -473,6 +473,7 @@ public class MemberConfigProfileFragment extends Fragment
                             if (responseJSONObject.getString(RESPONSE_MESSAGE).equals(RESPONSE_SUCCESS)) {
                                 String imagePath = responseJSONObject.getJSONObject(RESPONSE_DATA).getString(USER_IMAGE_PATH);
                                 mUserInfoUpdateListener.onUserImagePathUpdate(imagePath);
+                                Toast.makeText(getActivity(), "프로필 사진이 수정되었어요.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

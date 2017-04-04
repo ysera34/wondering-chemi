@@ -12,6 +12,8 @@ public interface OnUserInfoUpdateListener {
 
     void onUserImagePathUpdate(String userImagePath);
 
+    void onUserInfoValueUpdate();
+
     void onUserInfoValueUpdate(User user);
 
 }

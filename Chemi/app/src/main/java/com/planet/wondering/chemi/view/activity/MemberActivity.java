@@ -45,6 +45,7 @@ import java.util.Map;
 
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -212,6 +213,15 @@ public class MemberActivity extends BottomNavigationActivity
         Log.d(TAG, mUser.toString());
     }
 
+    private boolean isInfoValueUpdate = false;
+
+    @Override
+    public void onUserInfoValueUpdate() {
+
+        isInfoValueUpdate = true;
+        requestMemberConfigUser();
+    }
+
     @Override
     public void onUserInfoValueUpdate(User user) {
 
@@ -316,12 +326,21 @@ public class MemberActivity extends BottomNavigationActivity
                         mUser = Parser.parseMemberConfigUser(response);
                         progressDialog.dismiss();
 
-                        Log.i(TAG, mUser.toString());
+//                        Log.i(TAG, mUser.toString());
 
-                        mFragment = MemberFragment.newInstance(mUser);
-                        mFragmentManager.beginTransaction()
-                                .add(R.id.fragment_container, mFragment)
-                                .commit();
+                        if (!isInfoValueUpdate) {
+                            mFragment = MemberFragment.newInstance(mUser);
+                            mFragmentManager.beginTransaction()
+                                    .add(R.id.fragment_container, mFragment)
+                                    .commit();
+                        } else {
+                            isInfoValueUpdate = false;
+                            mBottomNavigationLayout.setVisibility(View.VISIBLE);
+                            mFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                                    .commit();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -348,7 +367,7 @@ public class MemberActivity extends BottomNavigationActivity
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("token", mAccessToken);
+                params.put(TOKEN, mAccessToken);
                 return params;
             }
         };
