@@ -73,7 +73,8 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_member_forget_password, container, false);
+//        View view = inflater.inflate(R.layout.fragment_member_forget_password, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_forget_password_transparent, container, false);
         mMemberForgetPasswordCancelLayout = (RelativeLayout)
                 view.findViewById(R.id.member_forget_password_cancel_layout);
         mMemberForgetPasswordCancelLayout.setOnClickListener(this);

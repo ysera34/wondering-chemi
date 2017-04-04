@@ -103,7 +103,8 @@ public class MemberSignInLocalFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_member_sign_in_local, container, false);
+//        View view = inflater.inflate(R.layout.fragment_member_sign_in_local, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_sign_in_local_transparent, container, false);
         mMemberSignInCancelLayout = (RelativeLayout) view.findViewById(R.id.member_sign_in_cancel_layout);
         mMemberSignInCancelLayout.setOnClickListener(this);
 
@@ -156,9 +157,12 @@ public class MemberSignInLocalFragment extends Fragment
         switch (v.getId()) {
             case R.id.member_sign_in_cancel_layout:
 //                ((MemberStartActivity) getActivity()).cancelSignInLocal();
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 mMenuSelectedListener.onMenuSelected(7004);
                 break;
             case R.id.member_sign_in_submit_button_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 if (isValidatedEmail && isValidatedPassword) {
                     requestSignInLocal(mMemberSignInEmailEditText.getText().toString(),
@@ -170,11 +174,13 @@ public class MemberSignInLocalFragment extends Fragment
 
                 break;
             case R.id.member_sign_in_forget_password_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
 //                ((MemberStartActivity) getActivity()).findPassword();
                 mMenuSelectedListener.onMenuSelected(7005);
                 break;
             case R.id.member_sign_in_recommend_user_text_view:
+                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
 //                ((MemberStartActivity) getActivity()).cancelSignInLocal();
                 mMenuSelectedListener.onMenuSelected(7004);
