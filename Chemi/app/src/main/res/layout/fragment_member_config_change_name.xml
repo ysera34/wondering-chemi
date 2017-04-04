@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="닉네임 변경"
-            android:textSize="14sp"
+            android:textSize="@dimen/user_info_edit_text_title_text_size"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
@@ -61,7 +61,7 @@
             android:maxLines="1"
             android:inputType="textAutoComplete"
             android:imeOptions="actionDone"
-            android:textSize="18sp"
+            android:textSize="@dimen/user_info_edit_text_hint_text_size"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
             android:background="@drawable/selector_edit_text_under_line_accent"/>
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/user_info_edit_text_validation_text_size"
             android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
@@ -94,7 +94,7 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="닉네임 변경하기"
-            android:textSize="16sp"
+            android:textSize="@dimen/user_info_submit_button_text_size"
             android:textColor="@color/colorWhite"
             android:background="@drawable/widget_solid_oval_rectangle_iron"/>
         <!--color_selector_white-->

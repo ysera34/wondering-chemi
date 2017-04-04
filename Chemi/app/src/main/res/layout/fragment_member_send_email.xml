@@ -56,7 +56,7 @@
         android:paddingEnd="50dp"
         android:clickable="true"
         android:text="확인"
-        android:textSize="16sp"
+        android:textSize="@dimen/user_info_submit_button_text_size"
         android:textColor="@color/color_selector_button_white_primary"
         android:background="@drawable/selector_opaque_primary"/>
 

@@ -17,6 +17,10 @@
     <dimen name="chemical_dialog_header_height">150dp</dimen>
     <dimen name="chemical_dialog_allergy_info_height">55dp</dimen>
     <dimen name="chemical_dialog_hazard_info_height">325dp</dimen>
+    <dimen name="user_info_edit_text_title_text_size">12sp</dimen>
+    <dimen name="user_info_edit_text_hint_text_size">16sp</dimen>
+    <dimen name="user_info_edit_text_validation_text_size">10sp</dimen>
+    <dimen name="user_info_submit_button_text_size">16sp</dimen>
     <dimen name="member_header_height">130dp</dimen>
     <dimen name="member_config_body_menu_height">48dp</dimen>
     <dimen name="member_survey_info_body_height">330dp</dimen>

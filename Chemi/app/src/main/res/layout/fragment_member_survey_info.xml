@@ -103,7 +103,7 @@
         android:gravity="center_horizontal"
         android:clickable="true"
         android:text="다음"
-        android:textSize="16sp"
+        android:textSize="@dimen/user_info_submit_button_text_size"
         android:textColor="@color/colorReef"
         android:background="@drawable/widget_solid_oval_rectangle_pale"/>
 

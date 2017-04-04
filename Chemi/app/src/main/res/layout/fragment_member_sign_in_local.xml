@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#88ffffff">
+                android:background="@color/colorWhite">
 
     <RelativeLayout
         android:id="@+id/member_forget_email_header"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="이메일 주소"
-            android:textSize="14sp"
+            android:textSize="@dimen/user_info_edit_text_title_text_size"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
@@ -61,7 +61,7 @@
             android:layout_marginBottom="4dp"
             android:hint="example@chemi.com"
             android:inputType="textEmailAddress"
-            android:textSize="18sp"
+            android:textSize="@dimen/user_info_edit_text_hint_text_size"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
             android:background="@drawable/selector_edit_text_under_line_primary"/>
@@ -71,14 +71,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/user_info_edit_text_validation_text_size"
             android:textColor="@color/colorAccent"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="비밀번호"
-            android:textSize="14sp"
+            android:textSize="@dimen/user_info_edit_text_title_text_size"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
@@ -88,7 +88,7 @@
             android:layout_marginBottom="4dp"
             android:hint="비밀번호를 입력해주세요"
             android:inputType="textPassword"
-            android:textSize="18sp"
+            android:textSize="@dimen/user_info_edit_text_hint_text_size"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
             android:background="@drawable/selector_edit_text_under_line_primary"/>
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/user_info_edit_text_validation_text_size"
             android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
@@ -122,7 +122,7 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="이메일로 로그인"
-            android:textSize="16sp"
+            android:textSize="@dimen/user_info_submit_button_text_size"
             android:textColor="@color/colorWhite"
             android:background="@drawable/widget_solid_oval_rectangle_iron"/>
 
@@ -149,8 +149,9 @@
                 android:padding="10dp"
                 android:clickable="true"
                 android:text="비밀번호를 잊으셨나요?"
-                android:textColor="@color/color_selector_white_dove_gray"
-                android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+                android:textSize="12sp"
+                android:textColor="@color/color_selector_dove_gray_primary"
+                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
             <TextView
                 android:id="@+id/member_sign_in_recommend_user_text_view"
@@ -159,8 +160,9 @@
                 android:padding="10dp"
                 android:clickable="true"
                 android:text="아직 계정이 없으신가요?"
-                android:textColor="@color/color_selector_white_dove_gray"
-                android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+                android:textSize="12sp"
+                android:textColor="@color/color_selector_dove_gray_primary"
+                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
         </LinearLayout>
 

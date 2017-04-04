@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="출생년도"
-            android:textSize="12sp"
+            android:textSize="@dimen/user_info_edit_text_title_text_size"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
@@ -116,7 +116,7 @@
             android:digits="0123456789"
             android:inputType="numberDecimal"
             android:imeOptions="actionDone"
-            android:textSize="16sp"
+            android:textSize="@dimen/user_info_edit_text_hint_text_size"
             android:textColor="@color/colorFontBody"
             android:background="@drawable/selector_edit_text_under_line_primary"/>
 
@@ -125,7 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="10sp"
+            android:textSize="@dimen/user_info_edit_text_validation_text_size"
             android:textColor="@color/colorAccent"/>
 
         <TextView
@@ -152,7 +152,7 @@
                 android:layout_marginEnd="8dp"
                 android:clickable="true"
                 android:text="여성"
-                android:textSize="16sp"
+                android:textSize="@dimen/user_info_submit_button_text_size"
                 android:textColor="@color/color_selector_check_dove_gray_primary"
                 android:button="@null"
                 android:background="@drawable/selector_check_box_ask_info"/>

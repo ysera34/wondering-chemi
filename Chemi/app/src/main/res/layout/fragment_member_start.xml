@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="28dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_naver"
                     android:scaleType="centerInside"/>
@@ -94,7 +94,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="28dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_google"
                     android:scaleType="centerInside"/>
@@ -140,7 +140,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="28dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_email_primary"
                     android:scaleType="centerInside"/>
@@ -171,7 +171,8 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_browse"
-                    android:textColor="@color/color_selector_dove_gray_white"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_selector_dove_gray_primary"
                     android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
                 <TextView
@@ -182,7 +183,8 @@
                     android:padding="10dp"
                     android:clickable="true"
                     android:text="@string/member_start_already_user"
-                    android:textColor="@color/color_selector_dove_gray_white"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_selector_dove_gray_primary"
                     android:textAppearance="@style/MemberStartGrayTextAppearance"/>
 
             </RelativeLayout>

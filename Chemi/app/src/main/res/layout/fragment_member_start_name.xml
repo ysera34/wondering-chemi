@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#88ffffff">
+                android:background="@color/colorWhite">
 
     <RelativeLayout
         android:id="@+id/member_start_name_header"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="닉네임"
-            android:textSize="14sp"
+            android:textSize="@dimen/user_info_edit_text_title_text_size"
             android:textColor="@color/colorFontBody"/>
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_marginBottom="4dp"
             android:hint="닉네임을 입력하세요"
             android:inputType="text"
-            android:textSize="18sp"
+            android:textSize="@dimen/user_info_edit_text_hint_text_size"
             android:textColor="@color/colorFontToolbarSubtitle"
             android:textColorHint="@color/colorFontIron"
             android:background="@drawable/selector_edit_text_under_line_accent"/>
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/user_info_edit_text_validation_text_size"
             android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
@@ -94,7 +94,7 @@
             android:gravity="center_horizontal"
             android:clickable="true"
             android:text="닉네임 입력하고 시작하기"
-            android:textSize="16sp"
+            android:textSize="@dimen/user_info_submit_button_text_size"
             android:textColor="@color/colorWhite"
             android:background="@drawable/widget_solid_oval_rectangle_iron"/>
 

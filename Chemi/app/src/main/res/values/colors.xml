@@ -6,6 +6,7 @@
     <color name="colorAccent">#ff9800</color>
     <color name="colorMainBackground">#eeeeee</color>
     <color name="colorWhiteBackground">#f5f5f5</color>
+    <color name="colorTransparentBackground">#80000000</color>
     <color name="colorBorder">#eeeeee</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorProgressed">#7eb21b</color>
