@@ -173,7 +173,8 @@ public class MultipartRequest extends Request<NetworkResponse> {
     private void buildTextPart(DataOutputStream dataOutputStream, String parameterName, String parameterValue) throws IOException {
 //        try{
 //            parameterName = URLEncoder.encode(parameterName, "UTF-8");
-//        }catch(UnsupportedEncodingException un){}new String (s.getBytes ("iso-8859-1"), "UTF-8");
+//        }catch(UnsupportedEncodingException un){}
+//        new String (s.getBytes ("iso-8859-1"), "UTF-8");
 //        parameterValue = new String(parameterValue.getBytes("iso-8859-1"),"UTF-8");
         dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" + parameterName + "\"" + lineEnd);

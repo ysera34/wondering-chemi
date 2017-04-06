@@ -38,12 +38,22 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Config;
+import com.planet.wondering.chemi.network.MultipartRequest;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
@@ -52,6 +62,16 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.Product.PATH;
+import static com.planet.wondering.chemi.network.Config.Review.Key.DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Review.Key.RATING;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.network.Config.encodeUTF8;
 
 /**
  * Created by yoon on 2017. 2. 23..
@@ -246,6 +266,7 @@ public class ReviewCreateFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_review_confirm:
                 Toast.makeText(getActivity(), "action_review_confirm", Toast.LENGTH_SHORT).show();
+                requestCreateReview();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -821,5 +842,72 @@ public class ReviewCreateFragment extends Fragment
                 return;
             }
         }
+    }
+
+    private void requestCreateReview() {
+
+        MultipartRequest multipartRequest = new MultipartRequest(
+                Request.Method.POST, URL_HOST + PATH + mProduct.getId() + Config.Review.PATH,
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+//                        String responseString = new String(response.data);
+//                        try {
+//                            JSONObject responseJSONObject = new JSONObject(responseString);
+//                            ArrayList<Review> reviews = Parser.parseReviewList(responseJSONObject);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+                        String responseString = new String(response.data);
+                        Log.i(TAG, responseString.toString());
+                        getActivity().finish();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+//                return super.getHeaders();
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(RATING, String.valueOf(mReviewCreateRatingValueRatingBar.getRating()));
+                params.put(DESCRIPTION, encodeUTF8(mReviewCreateReviewTextView.getText().toString()));
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() throws AuthFailureError {
+//                return super.getByteData();
+                Map<String, DataPart> params = new HashMap<>();
+//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+//                        getActivity(), mReviewCreateImage1ImageView.getDrawable()), "image/*"));
+//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+//                        getActivity(), mReviewCreateImage2ImageView.getDrawable()), "image/*"));
+//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+//                        getActivity(), mReviewCreateImage3ImageView.getDrawable()), "image/*"));
+                return params;
+            }
+        };
+
+        multipartRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(multipartRequest, TAG);
     }
 }

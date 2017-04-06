@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +13,7 @@ import java.util.HashMap;
  * Created by yoon on 2017. 1. 17..
  */
 
-public class Review {
+public class Review implements Serializable {
 
     private int mId;
     private int mUserId;

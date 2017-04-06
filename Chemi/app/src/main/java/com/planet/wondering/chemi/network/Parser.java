@@ -491,6 +491,7 @@ public class Parser {
                         JSONObject userJSONObject = reviewJSONObject.getJSONObject(USER);
                         review.getUser().setId(userJSONObject.getInt(USER_ID));
                         review.getUser().setName(userJSONObject.getString(NAME));
+                        review.getUser().setImagePath(userJSONObject.getString(IMAGE_PATH));
                         int gender = userJSONObject.getInt(GENDER);
                         if (gender == 0) {
                             review.getUser().setGender(true);

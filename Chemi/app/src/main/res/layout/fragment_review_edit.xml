@@ -36,7 +36,7 @@
             android:paddingTop="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="40dp"
+            android:paddingBottom="50dp"
             android:gravity="top"
             android:focusable="true"
             android:focusableInTouchMode="true"

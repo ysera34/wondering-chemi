@@ -35,9 +35,9 @@
                 android:id="@+id/review_create_product_name_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="상품명"
+                android:layout_marginBottom="25dp"
                 android:textSize="15sp"
+                android:textStyle="bold|italic"
                 android:textColor="@color/colorFontNormal"/>
 
             <TextView

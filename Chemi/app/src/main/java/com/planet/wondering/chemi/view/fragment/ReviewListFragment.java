@@ -27,8 +27,6 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import org.json.JSONObject;
@@ -110,17 +108,17 @@ public class ReviewListFragment extends Fragment {
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mReviewRecyclerView.addItemDecoration(decoration);
-        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-            @Override
-            public void onShowView() {
-                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-            }
-
-            @Override
-            public void onHideView() {
-                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-            }
-        });
+//        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+//            @Override
+//            public void onShowView() {
+//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+//            }
+//
+//            @Override
+//            public void onHideView() {
+//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//            }
+//        });
 
         updateUI();
 
@@ -363,10 +361,17 @@ public class ReviewListFragment extends Fragment {
             mRatingBar.setRating(mReview.getRatingValue());
             mDateTextView.setText(mReview.getDate());
 
-            if (mReview.getUser().isGender()) {
-                mParentIconTextView.setBackgroundResource(R.drawable.ic_mommy_gray);
+            if (mReview.getUser().getImagePath() == null || mReview.getUser().getImagePath().equals("null")) {
+                if (mReview.getUser().isGender()) {
+                    mUserProfileImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                } else {
+                    mUserProfileImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                }
             } else {
-                mParentIconTextView.setBackgroundResource(R.drawable.ic_daddy_gray);
+                Glide.with(getActivity())
+                        .load(mReview.getUser().getImagePath())
+                        .crossFade()
+                        .into(mUserProfileImageView);
             }
 
             mParentAgeTextView.setText(mReview.getUser().getAge());
