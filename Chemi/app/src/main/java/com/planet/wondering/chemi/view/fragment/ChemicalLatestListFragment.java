@@ -247,7 +247,7 @@ public class ChemicalLatestListFragment extends Fragment {
                         view = layoutInflater.inflate(R.layout.list_item_chemical_suggestion, parent, false);
                         return new ChemicalHolder(view);
                     } else if (mModeId == RESULT_MODE) {
-                        view = layoutInflater.inflate(R.layout.list_item_chemical, parent, false);
+                        view = layoutInflater.inflate(R.layout.list_item_chemical_result, parent, false);
                         return new ChemicalHolder(view);
                     }
                 case VIEW_TYPE_FOOTER:
