@@ -342,7 +342,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, error.getMessage());
+                        Log.e(TAG, error.toString());
                     }
                 }
         );

@@ -153,7 +153,7 @@ public class ProductPagerFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, error.getMessage());
+                        Log.e(TAG, error.toString());
                     }
                 }
         );

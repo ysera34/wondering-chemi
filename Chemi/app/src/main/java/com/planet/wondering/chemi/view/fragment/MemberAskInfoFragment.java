@@ -297,14 +297,11 @@ public class MemberAskInfoFragment extends Fragment
                 checkOffBoxState(mChildNoneCheckBox, new CheckBox[]{mChildDrySkinCheckBox, mChildAllergyCheckBox});
 
                 break;
-
         }
 
 //        findInfoValue();
-
         if (validateForms()) {
             isFormValidate = true;
-
             if (isBirthYearValidate) {
                 mAskInfoSubmitTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
                 mAskInfoSubmitTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
@@ -410,8 +407,6 @@ public class MemberAskInfoFragment extends Fragment
 
     private void requestSubmitUserAskInfo(final User user) {
 
-//        Toast.makeText(getActivity(), "request", Toast.LENGTH_SHORT).show();
-
         Map<String, String> params = new HashMap<>();
         params.put(GENDER, String.valueOf(user.getGender()));
         params.put(BIRTH_YEAR, String.valueOf(user.getBirthYear()));
@@ -437,7 +432,7 @@ public class MemberAskInfoFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.getMessage());
+                        Log.e(TAG, error.toString());
                     }
                 }
         )

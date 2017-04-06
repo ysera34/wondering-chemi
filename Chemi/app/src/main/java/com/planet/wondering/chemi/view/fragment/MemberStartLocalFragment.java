@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -175,6 +177,7 @@ public class MemberStartLocalFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         validateEditText();
+        mMemberStartLocalPrivacyInfoTextView.setText(highlightText());
     }
 
     @Override
@@ -631,6 +634,18 @@ public class MemberStartLocalFragment extends Fragment
             throw new ClassCastException(context.toString()
                     + " must implement OnMenuSelectedListener");
         }
+    }
+
+    private SpannableString highlightText() {
+
+        SpannableString spannableString = new SpannableString(
+                getString(R.string.member_start_local_agree_info));
+        int startIndex = 8;
+        int endIndex = 24;
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorFontToolbarSubtitle)),
+                startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
     }
 
 }

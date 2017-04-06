@@ -194,7 +194,7 @@ public class MemberChangePasswordFragment extends Fragment implements View.OnCli
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "비밀 번호 변경 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
                     }
