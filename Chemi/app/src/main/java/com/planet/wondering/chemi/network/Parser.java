@@ -707,6 +707,7 @@ public class Parser {
                 int reviewSize = userObject.getInt(USER_REVIEW_SIZE);
                 if (reviewSize > 0) {
                     user.setReviewProducts(new ArrayList<ReviewProduct>());
+//                    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
                     JSONArray reviewJSONArray = userObject.getJSONArray(USER_REVIEWS);
                     for (int i = 0; i < reviewSize; i++) {
                         JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
@@ -724,11 +725,14 @@ public class Parser {
                             ratingFloat = ((Double) ratingObject).floatValue();
                         }
                         reviewProduct.setRatingValue(ratingFloat);
-                        reviewProduct.setCreateDate(reviewJSONObject.getString(USER_REVIEW_DATE));
+                        reviewProduct.setCreateDate(reviewJSONObject.getString(USER_REVIEW_DATE).substring(5, 10));
+//                        reviewProduct.setWriteDate(dateFormat.parse(reviewJSONObject.getString(USER_REVIEW_DATE)));
+                        Log.i(TAG, "Date" + reviewProduct.getCreateDate());
+                        user.getReviewProducts().add(reviewProduct);
                     }
                 }
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
         return user;

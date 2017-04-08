@@ -588,6 +588,7 @@ public class MemberFragment extends Fragment
 
         private ImageView mArchiveContentImageView;
         private TextView mArchiveContentTitleTextView;
+        private TextView mArchiveContentSubTitleTextView;
 
         public ArchiveContentHolder(View itemView) {
             super(itemView);
@@ -596,12 +597,18 @@ public class MemberFragment extends Fragment
                     itemView.findViewById(R.id.list_item_archive_content_image_view);
             mArchiveContentTitleTextView = (TextView)
                     itemView.findViewById(R.id.list_item_archive_content_title_text_view);
+            mArchiveContentSubTitleTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_archive_content_sub_title_text_view);
         }
 
         public void bindContent(Content content) {
             mContent = content;
-
+            Glide.with(getActivity())
+                    .load(mContent.getImagePath())
+                    .crossFade()
+                    .into(mArchiveContentImageView);
             mArchiveContentTitleTextView.setText(mContent.getTitle());
+            mArchiveContentSubTitleTextView.setText(mContent.getSubTitle());
         }
     }
 
@@ -680,8 +687,6 @@ public class MemberFragment extends Fragment
         private RatingBar mArchiveReviewProductRatingBar;
         private TextView mArchiveReviewProductDateTextView;
 
-//        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-
         public ArchiveReviewProductHolder(View itemView) {
             super(itemView);
 
@@ -698,11 +703,15 @@ public class MemberFragment extends Fragment
         public void bindReviewProduct(ReviewProduct reviewProduct) {
             mReviewProduct = reviewProduct;
 
-//            mArchiveReviewProductImageView
+            Glide.with(getActivity())
+                    .load(mReviewProduct.getProductImagePath())
+                    .crossFade()
+                    .into(mArchiveReviewProductImageView);
             mArchiveReviewProductNameTextView.setText(mReviewProduct.getProductName());
             mArchiveReviewProductRatingBar.setRating(mReviewProduct.getRatingValue());
-//            mArchiveReviewProductDateTextView.setText(format.format(mReviewProduct.getWriteDate()));
             mArchiveReviewProductDateTextView.setText(mReviewProduct.getCreateDate());
+//            mArchiveReviewProductDateTextView.setText(String.valueOf(mReviewProduct.getWriteDate()));
+
         }
     }
 

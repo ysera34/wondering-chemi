@@ -322,7 +322,7 @@ public class MemberActivity extends BottomNavigationActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, response.toString());
+//                        Log.i(TAG, response.toString());
                         mUser = Parser.parseMemberConfigUser(response);
                         progressDialog.dismiss();
 
