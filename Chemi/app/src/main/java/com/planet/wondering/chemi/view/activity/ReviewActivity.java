@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
-import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
@@ -73,14 +72,21 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         if (isEdit) {
             mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
+//                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
+                    .add(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
+                    .addToBackStack(null)
                     .commit();
         } else {
             mReviewContent = reviewContent;
-            mFragmentManager.beginTransaction()
+//            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
-                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, reviewContent))
-                    .commit();
+
+//                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, reviewContent))
+//                    .commit();
+
+            mFragmentManager.popBackStackImmediate();
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+            ((ReviewCreateFragment) fragment).updateContentTextView(mReviewContent);
 //            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
 //                    .addToBackStack(null)
@@ -89,26 +95,29 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
-        preferences.removeStoredRatingValue(getApplicationContext());
-        preferences.removeStoredImage1Path(getApplicationContext());
-        preferences.removeStoredImage2Path(getApplicationContext());
-        preferences.removeStoredImage3Path(getApplicationContext());
-    }
-
-    @Override
     public void onBackPressed() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
         if (fragment instanceof ReviewEditFragment) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, mReviewContent))
-                    .commit();
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, mReviewContent))
+//                    .commit();
+
+            mFragmentManager.popBackStackImmediate();
+
         } else {
             setResult(Activity.RESULT_OK, new Intent());
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
+//        preferences.removeStoredRatingValue(getApplicationContext());
+//        preferences.removeStoredImage1Path(getApplicationContext());
+//        preferences.removeStoredImage2Path(getApplicationContext());
+//        preferences.removeStoredImage3Path(getApplicationContext());
     }
 }

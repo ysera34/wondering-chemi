@@ -29,6 +29,8 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import org.json.JSONObject;
@@ -117,17 +119,17 @@ public class ReviewListFragment extends Fragment {
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mReviewRecyclerView.addItemDecoration(decoration);
-//        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-//            @Override
-//            public void onShowView() {
-//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-//            }
-//
-//            @Override
-//            public void onHideView() {
-//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-//            }
-//        });
+        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+            @Override
+            public void onShowView() {
+                ((ProductActivity) getActivity()).showBottomNavigationView();
+            }
+
+            @Override
+            public void onHideView() {
+                ((ProductActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
         mReviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -483,24 +485,7 @@ public class ReviewListFragment extends Fragment {
                 mImagesLayout.setVisibility(View.VISIBLE);
 
                 switch (mReview.getImagePaths().size()) {
-                    case 3:
-                        Glide.with(getActivity())
-                                .load(mReview.getImagePaths().get(2))
-//                    .placeholder(R.drawable.unloaded_image_holder)
-//                    .error(R.drawable.unloaded_image_holder)
-                                .crossFade()
-                                .override(210, 210)
-//                                .centerCrop()
-                                .into(mImage3ImageView);
-                    case 2:
-                        Glide.with(getActivity())
-                                .load(mReview.getImagePaths().get(1))
-//                    .placeholder(R.drawable.unloaded_image_holder)
-//                    .error(R.drawable.unloaded_image_holder)
-                                .crossFade()
-                                .override(210, 210)
-//                                .centerCrop()
-                                .into(mImage2ImageView);
+
                     case 1:
                         Glide.with(getActivity())
                                 .load(mReview.getImagePaths().get(0))
@@ -510,6 +495,53 @@ public class ReviewListFragment extends Fragment {
                                 .override(210, 210)
 //                                .centerCrop()
                                 .into(mImage1ImageView);
+                        mImage2ImageView.setVisibility(View.GONE);
+                        mImage3ImageView.setVisibility(View.GONE);
+                        break;
+                    case 2:
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(0))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(210, 210)
+//                                .centerCrop()
+                                .into(mImage1ImageView);
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(1))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(210, 210)
+//                                .centerCrop()
+                                .into(mImage2ImageView);
+                        mImage3ImageView.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(0))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(210, 210)
+//                                .centerCrop()
+                                .into(mImage1ImageView);
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(1))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(210, 210)
+//                                .centerCrop()
+                                .into(mImage2ImageView);
+                        Glide.with(getActivity())
+                                .load(mReview.getImagePaths().get(2))
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                                .crossFade()
+                                .override(210, 210)
+//                                .centerCrop()
+                                .into(mImage3ImageView);
                         break;
                 }
             }

@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,16 +16,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,12 +42,9 @@ import com.planet.wondering.chemi.network.MultipartRequest;
 import com.planet.wondering.chemi.network.MultipartRequestHelper;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ImageHandler;
-import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
-import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +69,6 @@ public class ReviewCreateFragment extends Fragment
 
     private static final String ARG_PRODUCT = "product";
     private static final String ARG_REVIEW_CONTENT = "review_content";
-
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1000;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2000;
@@ -126,7 +116,7 @@ public class ReviewCreateFragment extends Fragment
         return fragment;
     }
 
-    private Toolbar mReviewCreateToolbar;
+    private RelativeLayout mReviewCreateConfirmLayout;
     private TextView mReviewCreateProductNameTextView;
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
@@ -141,12 +131,6 @@ public class ReviewCreateFragment extends Fragment
     private ImageHandler mReviewImageHandler;
 
     private BottomSheetDialog mMenuBottomSheetDialog;
-    private Uri mImageUri;
-    private File mImageDir;
-    private String mImagePath;
-    private Bitmap mImage1Bitmap;
-    private Bitmap mImage2Bitmap;
-    private Bitmap mImage3Bitmap;
 
     private Product mProduct;
     private Review mReview;
@@ -154,7 +138,7 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
         mReview = new Review();
         mReviewImageHandler = new ImageHandler(getActivity());
@@ -169,9 +153,8 @@ public class ReviewCreateFragment extends Fragment
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_create, container, false);
 
-        mReviewCreateToolbar = (Toolbar) view.findViewById(R.id.review_create_toolbar);
-        ((ReviewActivity) getActivity()).setSupportActionBar(mReviewCreateToolbar);
-        ((ReviewActivity) getActivity()).getSupportActionBar().setTitle("리뷰 작성");
+        mReviewCreateConfirmLayout = (RelativeLayout) view.findViewById(R.id.review_create_confirm_layout);
+        mReviewCreateConfirmLayout.setOnClickListener(this);
         mReviewCreateProductNameTextView = (TextView) view.findViewById(R.id.review_create_product_name_text_view);
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
@@ -194,80 +177,25 @@ public class ReviewCreateFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mReviewCreateProductNameTextView.setText(mProduct.getName());
-        if (mReviewContent.equals("") || mReviewContent == null) {
+        updateContentTextView("");
+    }
+
+    public void updateContentTextView(String reviewContent) {
+        if (reviewContent == null || reviewContent.equals("")) {
             mReviewCreateReviewTextView.setText(mReviewHint);
         } else {
-            mReviewCreateReviewTextView.setText(mReviewContent);
+            mReviewCreateReviewTextView.setText(reviewContent);
+            isWriteContent = true;
         }
         mReviewCreateReviewLengthTextView.setText(
                 getString(R.string.review_create_review_length_format,
                         String.valueOf(mReviewCreateReviewTextView.getText().length())));
-    }
 
-    private String mImage1Path;
-    private String mImage2Path;
-    private String mImage3Path;
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
-        float ratingValue = preferences.getStoredRatingValue(getActivity());
-        if (ratingValue != 0.0f) {
-            mReviewCreateRatingValueRatingBar.setRating(ratingValue);
-        }
-
-        mReview.setImagePathMap(getActivity());
-        int imageViewArrayLength = mReview.getImagePathMapSize();
-        if (imageViewArrayLength > 0) {
-            switch (imageViewArrayLength) {
-                case 3:
-                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                    File file3 = new File(mReview.getImagePathMap().get(3));
-                    mImage3Path = file3.getAbsolutePath();
-                    mImage3Bitmap = BitmapFactory.decodeFile(mImage3Path);
-                    mReviewCreateImage3ImageView.setImageBitmap(mImage3Bitmap);
-
-                case 2:
-                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-//                    mReviewCreateImage2ImageView.setImageURI(
-//                            Uri.fromFile(new File(mReview.getImagePathMap().get(2))));
-                    File file2 = new File(mReview.getImagePathMap().get(2));
-                    mImage2Path = file2.getAbsolutePath();
-                    mImage2Bitmap = BitmapFactory.decodeFile(mImage2Path);
-                    mReviewCreateImage2ImageView.setImageBitmap(mImage2Bitmap);
-                case 1:
-                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-//                    mReviewCreateImage1ImageView.setImageURI(
-//                            Uri.fromFile(new File(mReview.getImagePathMap().get(1))));
-                    File file1 = new File(mReview.getImagePathMap().get(1));
-                    mImage1Path = file1.getAbsolutePath();
-                    mImage1Bitmap = BitmapFactory.decodeFile(mImage1Path);
-                    mReviewCreateImage1ImageView.setImageBitmap(mImage1Bitmap);
-                    break;
-            }
-            Log.i(TAG, "imageViewArrayLength: " + String.valueOf(imageViewArrayLength));
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_toolbar_review_create, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_review_confirm:
-//                Toast.makeText(getActivity(), "action_review_confirm", Toast.LENGTH_SHORT).show();
-                requestCreateReview();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -280,15 +208,25 @@ public class ReviewCreateFragment extends Fragment
                 break;
             }
         }
-        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
-        if (mReviewCreateRatingValueRatingBar.getRating() != 0.0f) {
-            preferences.setStoreRatingValue(getActivity(), mReviewCreateRatingValueRatingBar.getRating());
-        }
+        isRatingBarChanged = true;
     }
+
+    private boolean isRatingBarChanged = false;
+    private boolean isWriteContent = false;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.review_create_confirm_layout:
+                if (!isRatingBarChanged) {
+                    Toast.makeText(getActivity(), "제품의 별점을 매겨보세요", Toast.LENGTH_SHORT).show();
+                } else if (!isWriteContent) {
+                    Toast.makeText(getActivity(), "제품의 리뷰를 작성해보세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    requestCreateReview();
+                    mReviewCreateConfirmLayout.setEnabled(false);
+                }
+                break;
             case R.id.review_create_review_text_view:
                 String reviewContent = mReviewCreateReviewTextView.getText().toString();
                 if (reviewContent.equals(mReviewHint)) {
@@ -298,21 +236,21 @@ public class ReviewCreateFragment extends Fragment
                 }
                 break;
             case R.id.review_create_review_image1_image_view:
-                if (mImage1Bitmap == null) {
+                if (!isHasUploadImage1) {
                     checkStoragePermission(1);
                 } else {
                     createEditImageMenuBottomSheetDialog(1);
                 }
                 break;
             case R.id.review_create_review_image2_image_view:
-                if (mImage2Bitmap == null) {
+                if (!isHasUploadImage2) {
                     checkStoragePermission(2);
                 } else {
                     createEditImageMenuBottomSheetDialog(2);
                 }
                 break;
             case R.id.review_create_review_image3_image_view:
-                if (mImage3Bitmap == null) {
+                if (!isHasUploadImage3) {
                     checkStoragePermission(3);
                 } else {
                     createEditImageMenuBottomSheetDialog(3);
@@ -391,7 +329,8 @@ public class ReviewCreateFragment extends Fragment
                 if (position == 0 /* re_pick */) {
                     createPickImageMenuBottomSheetDialog(imagePosition);
                 } else if (position == 1 /* delete */) {
-                    deleteImage(imagePosition);
+//                    deleteImage(imagePosition);
+                    deleteReviewUploadImage(imagePosition);
                 }
             }
         });
@@ -408,72 +347,46 @@ public class ReviewCreateFragment extends Fragment
         return false;
     }
 
-    private void deleteImage(int imagePosition) {
+    private void deleteReviewUploadImage(int imagePosition) {
+
         switch (imagePosition) {
             case 1:
-                if (mImage2Bitmap == null && mImage3Bitmap == null) {
-                    mReviewCreateImage1ImageView.setImageBitmap(null);
-                    mImage1Path = null;
-                    mReview.removeImagePath(getActivity(), 1);
-                    mImage1Bitmap = null;
-                    mReviewCreateImage2ImageView.setVisibility(View.INVISIBLE);
-                } else if (mImage2Bitmap != null && mImage3Bitmap == null) {
-                    mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
-                    mImage1Path = mImage2Path;
-                    mReview.removeImagePath(getActivity(), 1);
-                    mReview.putImagePath(getActivity(), 1, mImage1Path);
-                    mImage1Bitmap = mImage2Bitmap;
-                    mReviewCreateImage2ImageView.setImageBitmap(null);
-                    mImage2Path = null;
-                    mReview.removeImagePath(getActivity(), 2);
-                    mImage2Bitmap = null;
-                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
-                } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
-                    mReviewCreateImage1ImageView.setImageBitmap(mImage2Bitmap);
-                    mImage1Path = mImage2Path;
-                    mReview.removeImagePath(getActivity(), 1);
-                    mReview.putImagePath(getActivity(), 1, mImage1Path);
-                    mImage1Bitmap = mImage2Bitmap;
-                    mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
-                    mImage2Path = mImage3Path;
-                    mReview.removeImagePath(getActivity(), 2);
-                    mReview.putImagePath(getActivity(), 2, mImage2Path);
-                    mImage2Bitmap = mImage3Bitmap;
+                if (isHasUploadImage3) {
+                    mReviewCreateImage1ImageView.setImageDrawable(mReviewCreateImage2ImageView.getDrawable());
+                    mReviewCreateImage2ImageView.setImageDrawable(mReviewCreateImage3ImageView.getDrawable());
                     mReviewCreateImage3ImageView.setImageBitmap(null);
-                    mImage3Path = null;
-                    mReview.removeImagePath(getActivity(), 3);
-                    mImage3Bitmap = null;
+                    isHasUploadImage3 = false;
+
+                } else if (isHasUploadImage2) {
+                    mReviewCreateImage1ImageView.setImageDrawable(mReviewCreateImage2ImageView.getDrawable());
+                    mReviewCreateImage2ImageView.setImageBitmap(null);
+                    isHasUploadImage2 = false;
+                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
+                } else if (isHasUploadImage1) {
+                    mReviewCreateImage1ImageView.setImageBitmap(null);
+                    isHasUploadImage1 = false;
+                    mReviewCreateImage2ImageView.setVisibility(View.INVISIBLE);
                 }
                 break;
             case 2:
-                if (mImage2Bitmap != null && mImage3Bitmap == null) {
-                    mReviewCreateImage2ImageView.setImageBitmap(null);
-                    mImage2Path = null;
-                    mReview.removeImagePath(getActivity(), 2);
-                    mImage2Bitmap = null;
-                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
-                } else if (mImage2Bitmap != null && mImage3Bitmap != null) {
-                    mReviewCreateImage2ImageView.setImageBitmap(mImage3Bitmap);
-                    mImage2Path = mImage3Path;
-                    Log.i(TAG, "mImage2Path " + mImage2Path);
-                    Log.i(TAG, "mImage3Path " + mImage3Path);
-                    mReview.removeImagePath(getActivity(), 2);
-                    mReview.putImagePath(getActivity(), 2, mImage2Path);
-                    mImage2Bitmap = mImage3Bitmap;
-
+                if (isHasUploadImage3) {
+                    mReviewCreateImage2ImageView.setImageDrawable(mReviewCreateImage3ImageView.getDrawable());
                     mReviewCreateImage3ImageView.setImageBitmap(null);
-                    mImage3Path = null;
-                    mReview.removeImagePath(getActivity(), 3);
-                    mImage3Bitmap = null;
+                    isHasUploadImage3 = false;
+                } else if (isHasUploadImage2) {
+                    mReviewCreateImage2ImageView.setImageBitmap(null);
+                    isHasUploadImage2 = false;
+                    mReviewCreateImage3ImageView.setVisibility(View.INVISIBLE);
                 }
                 break;
             case 3:
-                mReviewCreateImage3ImageView.setImageBitmap(null);
-                mImage3Path = null;
-                mReview.removeImagePath(getActivity(), 3);
-                mImage3Bitmap = null;
+                if (isHasUploadImage3) {
+                    mReviewCreateImage3ImageView.setImageBitmap(null);
+                    isHasUploadImage3 = false;
+                }
                 break;
         }
+
     }
 
     private boolean isHasUploadImage1 = false;
@@ -488,64 +401,43 @@ public class ReviewCreateFragment extends Fragment
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 1:
                 if (resultCode == RESULT_OK) {
                     mReviewImageHandler.handleCameraImage(mReviewCreateImage1ImageView);
+                    isHasUploadImage1 = true;
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
                 }
-                isHasUploadImage1 = true;
-                mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                mReview.putImagePath(getActivity(), 1, mImage1Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 2:
                 if (resultCode == RESULT_OK) {
                     mReviewImageHandler.handleCameraImage(mReviewCreateImage2ImageView);
+                    isHasUploadImage2 = true;
+                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                 }
-                isHasUploadImage2 = true;
-                mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-                mReview.putImagePath(getActivity(), 2, mImage2Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 3:
                 if (resultCode == RESULT_OK) {
                     mReviewImageHandler.handleCameraImage(mReviewCreateImage3ImageView);
+                    isHasUploadImage3 = true;
                 }
-                isHasUploadImage3 = true;
-                mReview.putImagePath(getActivity(), 3, mImage3Path);
                 break;
-//            case GALLERY_IMAGE_REQUEST_CODE + 1:
-//                galleryImageUri = data.getData();
-//                if (galleryImageUri != null) {
-////                    mReviewCreateImage1ImageView.setImageURI(galleryImageUri);
-//                    mImagePath = getRealPathFromURI(galleryImageUri);
-//                    mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
-//                    mImage1Path = mImagePath;
-//                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-//                    mReview.putImagePath(getActivity(), 1, mImage1Path);
-//                } else {
-//
-//                }
-//                break;
-//            case GALLERY_IMAGE_REQUEST_CODE + 2:
-//                galleryImageUri = data.getData();
-//                if (galleryImageUri != null) {
-////                    mReviewCreateImage2ImageView.setImageURI(galleryImageUri);
-//                    mImagePath = getRealPathFromURI(galleryImageUri);
-//                    mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
-//                    mImage2Path = mImagePath;
-//                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-//                    mReview.putImagePath(getActivity(), 2, mImage2Path);
-//                } else {
-//
-//                }
-//                break;
-//            case GALLERY_IMAGE_REQUEST_CODE + 3:
-//                galleryImageUri = data.getData();
-//                if (galleryImageUri != null) {
-////                    mReviewCreateImage3ImageView.setImageURI(galleryImageUri);
-//                    mImagePath = getRealPathFromURI(galleryImageUri);
-//                    mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
-//                    mImage3Path = mImagePath;
-//                    mReview.putImagePath(getActivity(), 3, mImage3Path);
-//                } else {
-//
-//                }
-//                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 1:
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleGalleryImage(data, mReviewCreateImage1ImageView);
+                    isHasUploadImage1 = true;
+                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+                }
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 2:
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleGalleryImage(data, mReviewCreateImage2ImageView);
+                    isHasUploadImage2 = true;
+                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+                }
+                break;
+            case GALLERY_IMAGE_REQUEST_CODE + 3:
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleGalleryImage(data, mReviewCreateImage3ImageView);
+                    isHasUploadImage3 = true;
+                }
+                break;
         }
     }
 
@@ -631,6 +523,8 @@ public class ReviewCreateFragment extends Fragment
 //                        }
 //                        String responseString = new String(response.data);
 //                        Log.i(TAG, responseString.toString());
+                        Toast.makeText(getActivity(),
+                                "작성하신 리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                         getActivity().onBackPressed();
                     }
                 },
@@ -640,6 +534,7 @@ public class ReviewCreateFragment extends Fragment
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                        mReviewCreateConfirmLayout.setEnabled(true);
                     }
                 }
         )

@@ -4,21 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
-import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 /**
  * Created by yoon on 2017. 2. 28..
@@ -51,7 +47,7 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
 
     private String mReviewContent;
 
-    private Toolbar mReviewEditToolbar;
+    private RelativeLayout mReviewEditConfirmLayout;
     private InputMethodManager mInputMethodManager;
     private EditText mReviewEditReviewEditText;
     private Button mReviewEditReviewEditCompleteButton;
@@ -72,10 +68,8 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_edit, container, false);
 
-        mReviewEditToolbar = (Toolbar) view.findViewById(R.id.review_edit_toolbar);
-        ((ReviewActivity) getActivity()).setSupportActionBar(mReviewEditToolbar);
-        ((ReviewActivity) getActivity()).getSupportActionBar().setTitle("리뷰 작성");
-
+        mReviewEditConfirmLayout = (RelativeLayout) view.findViewById(R.id.review_edit_confirm_layout);
+        mReviewEditConfirmLayout.setOnClickListener(this);
         mReviewEditReviewEditText = (EditText) view.findViewById(R.id.review_edit_review_edit_text);
         if (!mReviewContent.equals("")) {
             mReviewEditReviewEditText.setText(mReviewContent);
@@ -93,27 +87,12 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_toolbar_review_edit, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_review_confirm:
-//                Toast.makeText(getActivity(), "action_review_confirm", Toast.LENGTH_SHORT).show();
-                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false);
-                mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.review_edit_confirm_layout:
+                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false);
+                mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
+                break;
             case R.id.review_edit_review_edit_complete_button:
                 mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false);
                 mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
@@ -133,6 +112,4 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
                     + " must implements OnReviewEditListener");
         }
     }
-
-
 }
