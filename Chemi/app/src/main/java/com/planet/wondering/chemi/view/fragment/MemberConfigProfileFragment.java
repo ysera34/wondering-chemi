@@ -93,7 +93,7 @@ public class MemberConfigProfileFragment extends Fragment
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1100;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2100;
     private static final int PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 9101;
-    String[] mStoragePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+    private String[] mStoragePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     public static MemberConfigProfileFragment newInstance() {
@@ -416,7 +416,11 @@ public class MemberConfigProfileFragment extends Fragment
                 dismissMenuBottomSheetDialog();
                 mImageHandler = new ImageHandler(getActivity());
                 if (position == 0) {
-                    startActivityForResult(mImageHandler.dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                    if (mImageHandler.hasCamera()) {
+                        startActivityForResult(mImageHandler.dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(getActivity(), "카메라를 사용할 수 없어요.", Toast.LENGTH_SHORT).show();
+                    }
                 } else if (position == 1) {
                     startActivityForResult(mImageHandler.pickGalleryPictureIntent(), GALLERY_IMAGE_REQUEST_CODE);
                 }

@@ -9,8 +9,7 @@
             android:id="@+id/list_item_archive_content_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/content_sample"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerInside"/>
 
         <TextView
             android:id="@+id/list_item_archive_content_title_text_view"
@@ -20,7 +19,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="우리 아이 피부를 지켜줄 유아용 물티슈 10선 입니다."
             android:textSize="12sp"
             android:textColor="@color/colorWhite"
             android:textAppearance="@style/ArchiveContentTitleTextAppearance"

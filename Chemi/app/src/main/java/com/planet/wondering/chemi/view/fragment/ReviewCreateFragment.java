@@ -1,22 +1,16 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
@@ -51,20 +45,20 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.MultipartRequest;
+import com.planet.wondering.chemi.network.MultipartRequestHelper;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
+import com.planet.wondering.chemi.util.helper.ImageHandler;
 import com.planet.wondering.chemi.util.helper.ReviewSharedPreferences;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Review.Key.RATING;
@@ -89,7 +83,7 @@ public class ReviewCreateFragment extends Fragment
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1000;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2000;
     private static final int PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 9001;
-    String[] storagePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+    private String[] mStoragePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     public static ReviewCreateFragment newInstance() {
@@ -144,6 +138,8 @@ public class ReviewCreateFragment extends Fragment
     private ImageView mReviewCreateImage2ImageView;
     private ImageView mReviewCreateImage3ImageView;
 
+    private ImageHandler mReviewImageHandler;
+
     private BottomSheetDialog mMenuBottomSheetDialog;
     private Uri mImageUri;
     private File mImageDir;
@@ -161,6 +157,7 @@ public class ReviewCreateFragment extends Fragment
         setHasOptionsMenu(true);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
         mReview = new Review();
+        mReviewImageHandler = new ImageHandler(getActivity());
 
         mReviewHint = getString(R.string.review_create_review_hint);
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
@@ -265,7 +262,7 @@ public class ReviewCreateFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_review_confirm:
-                Toast.makeText(getActivity(), "action_review_confirm", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "action_review_confirm", Toast.LENGTH_SHORT).show();
                 requestCreateReview();
                 return true;
             default:
@@ -354,22 +351,17 @@ public class ReviewCreateFragment extends Fragment
         bottomSheetMenuAdapter.setItemClickListener(new BottomSheetMenuAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
-                String state = Environment.getExternalStorageState();
-                if (!Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-                    dismissMenuBottomSheetDialog();
-                    Toast.makeText(getActivity(), "SD 카드가 없으므로 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                } else {
-                    dismissMenuBottomSheetDialog();
-                    if (position == 0 /* camera */) {
-                        if (hasCamera()) {
-                            startActivityForResult(dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE + imagePosition);
-                        } else {
-                            Toast.makeText(getActivity(), "카메라를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (position == 1 /* gallery */) {
-                    // gallery
-                        startActivityForResult(galleryIntent(), GALLERY_IMAGE_REQUEST_CODE + imagePosition);
+                dismissMenuBottomSheetDialog();
+                if (position == 0 /* camera */) {
+                    if (mReviewImageHandler.hasCamera()) {
+                        startActivityForResult(mReviewImageHandler.dispatchTakePictureIntent(),
+                                CAMERA_CAPTURE_IMAGE_REQUEST_CODE + imagePosition);
+                    } else {
+                        Toast.makeText(getActivity(), "카메라를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     }
+                } else if (position == 1 /* gallery */) {
+                    startActivityForResult(mReviewImageHandler.pickGalleryPictureIntent(),
+                            GALLERY_IMAGE_REQUEST_CODE + imagePosition);
                 }
             }
         });
@@ -397,7 +389,7 @@ public class ReviewCreateFragment extends Fragment
             public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
                 dismissMenuBottomSheetDialog();
                 if (position == 0 /* re_pick */) {
-                    checkStoragePermission(imagePosition);
+                    createPickImageMenuBottomSheetDialog(imagePosition);
                 } else if (position == 1 /* delete */) {
                     deleteImage(imagePosition);
                 }
@@ -484,311 +476,94 @@ public class ReviewCreateFragment extends Fragment
         }
     }
 
-    private File getAlbumDir() {
-
-        File storageDir = null;
-
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            storageDir = new File(Environment.getExternalStorageDirectory()
-                    + "/dcim/" + getString(R.string.app_name));
-
-            if (storageDir != null) {
-                if (!storageDir.mkdirs()) {
-                    if (!storageDir.exists()) {
-                        Log.d(TAG, "failed to create directory");
-                        return null;
-                    }
-                }
-            }
-        } else {
-            Log.v(TAG, "External storage is not mounted READ/WRITE");
-        }
-        return storageDir;
-    }
-
-    private static final String PNG_FILE_PREFIX = "IMG_";
-    private static final String PNG_FILE_SUFFIX = ".png";
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyymmdd_HHmmss").format(new Date());
-        String imageFileName = PNG_FILE_PREFIX + timeStamp + "_";
-        File albumFolder = getAlbumDir();
-        File imageFile = File.createTempFile(imageFileName, PNG_FILE_SUFFIX, albumFolder);
-        return imageFile;
-    }
-
-    private File setupPhotoFile() throws IOException {
-        File file = createImageFile();
-        mImagePath = file.getAbsolutePath();
-        return file;
-    }
-
-    private Bitmap setPicture(ImageView imageView) {
-        int targetWidth = imageView.getWidth();
-        int targetHeight = imageView.getHeight();
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mImagePath, options);
-
-        int photoWidth = options.outWidth;
-        int photoHeight = options.outHeight;
-
-        int scaleFactor = 1;
-        if ((targetWidth > 0) || (targetHeight > 0)) {
-            scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
-        }
-
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = scaleFactor;
-        options.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mImagePath, options);
-
-        ExifInterface exif = null;
-        try {
-            exif = new ExifInterface(mImagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
-        int rotationAngle = 0;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            rotationAngle = 90;
-        }
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            rotationAngle = 180;
-        }
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            rotationAngle = 270;
-        }
-        Matrix matrix = new Matrix();
-        matrix.setRotate(rotationAngle, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
-        return Bitmap.createBitmap(bitmap, 0, 0, options.outWidth, options.outHeight, matrix, true);
-    }
-
-    private Intent galleryAddPictureIntent() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File file = new File(mImagePath);
-        Uri contentUri = Uri.fromFile(file);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
-        return mediaScanIntent;
-    }
-
-    private Intent dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = null;
-        try {
-            file = setupPhotoFile();
-            mImagePath = file.getAbsolutePath();
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-            file = null;
-            mImagePath = null;
-        }
-        return takePictureIntent;
-    }
-
-    private Bitmap handleSmallCameraPhoto(Intent intent) {
-        Bundle extras = intent.getExtras();
-        return (Bitmap) extras.get("data");
-    }
-
-    private Bitmap handleBigCameraPhoto(ImageView imageView) {
-        if (mImagePath != null) {
-            Bitmap bitmap = setPicture(imageView);
-            imageView.setImageBitmap(bitmap);
-            getActivity().sendBroadcast(galleryAddPictureIntent());
-//            mImagePath = null;
-            return bitmap;
-        }
-        return null;
-    }
-
-    private Bitmap getThumbnailBitmap(String imagePath, int thumbnailSize) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, options);
-        if ((options.outWidth == -1 || options.outHeight == -1)) {
-            return null;
-        }
-        int originalSize = (options.outHeight > options.outWidth) ? options.outHeight : options.outWidth;
-        BitmapFactory.Options options1 = new BitmapFactory.Options();
-        options1.inSampleSize = originalSize / thumbnailSize;
-        return BitmapFactory.decodeFile(imagePath, options1);
-    }
-
-    private Bitmap getRotatedBitmap(String imagePath) {
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, bounds);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-
-        ExifInterface exif = null;
-        try {
-            exif = new ExifInterface(imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
-        int rotationAngle = 0;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            rotationAngle = 90;
-        }
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            rotationAngle = 180;
-        }
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            rotationAngle = 270;
-        }
-        Matrix matrix = new Matrix();
-        matrix.setRotate(rotationAngle, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
-        return Bitmap.createBitmap(bitmap, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
-    }
-
-    public Intent cameraIntent() {
-        mImageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), getString(R.string.app_name));
-
-        if (!mImageDir.exists()) {
-            Toast.makeText(getActivity(), "저장할 디렉토리를 생성 하였습니다.", Toast.LENGTH_SHORT).show();
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (mImagePath != null) {
-            mImagePath = "";
-        }
-        String imageName = "upload_" + String.valueOf(System.currentTimeMillis() / 100) + ".png";
-        File imageFile = new File(mImageDir, imageName);
-        mImagePath = imageFile.getAbsolutePath();
-
-//        try {
-//            ExifInterface exif = new ExifInterface(mImagePath);
-//            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//            int rotate = 0;
-//            switch (orientation) {
-//                case ExifInterface.ORIENTATION_ROTATE_270:
-//                    rotate -= 90;
-//                case ExifInterface.ORIENTATION_ROTATE_180:
-//                    rotate -= 90;
-//                case ExifInterface.ORIENTATION_ROTATE_90:
-//                    rotate-= 90;
-//            }
-//            Canvas canvas = new Canvas(bitmap);
-//            canvas.rotate(rotate);
-//        } catch (Exception e) {
-//            Log.e(TAG, e.getMessage());
-//        }
-
-        mImageUri = Uri.fromFile(imageFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-        return intent;
-    }
-
-    public Intent galleryIntent() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setType(Media.CONTENT_TYPE);
-        return intent;
-    }
+    private boolean isHasUploadImage1 = false;
+    private boolean isHasUploadImage2 = false;
+    private boolean isHasUploadImage3 = false;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri galleryImageUri;
-        if (resultCode != Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED) {
-            return;
-        }
 
         switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 1:
-//                mReviewCreateImage1ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
-                mImage1Path = mImagePath;
-                mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleCameraImage(mReviewCreateImage1ImageView);
+                }
+                isHasUploadImage1 = true;
                 mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
                 mReview.putImagePath(getActivity(), 1, mImage1Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 2:
-//                mReviewCreateImage2ImageButton.setImageURI(Uri.fromFile(new File(mImagePath)));
-                mImage2Path = mImagePath;
-                mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleCameraImage(mReviewCreateImage2ImageView);
+                }
+                isHasUploadImage2 = true;
                 mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
                 mReview.putImagePath(getActivity(), 2, mImage2Path);
                 break;
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE + 3:
-//                mReviewCreateImage3ImageView.setImageURI(Uri.fromFile(new File(mImagePath)));
-                mImage3Path = mImagePath;
-                mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
+                if (resultCode == RESULT_OK) {
+                    mReviewImageHandler.handleCameraImage(mReviewCreateImage3ImageView);
+                }
+                isHasUploadImage3 = true;
                 mReview.putImagePath(getActivity(), 3, mImage3Path);
                 break;
-            case GALLERY_IMAGE_REQUEST_CODE + 1:
-                galleryImageUri = data.getData();
-                if (galleryImageUri != null) {
-//                    mReviewCreateImage1ImageView.setImageURI(galleryImageUri);
-                    mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
-                    mImage1Path = mImagePath;
-                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
-                    mReview.putImagePath(getActivity(), 1, mImage1Path);
-                } else {
-
-                }
-                break;
-            case GALLERY_IMAGE_REQUEST_CODE + 2:
-                galleryImageUri = data.getData();
-                if (galleryImageUri != null) {
-//                    mReviewCreateImage2ImageView.setImageURI(galleryImageUri);
-                    mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
-                    mImage2Path = mImagePath;
-                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
-                    mReview.putImagePath(getActivity(), 2, mImage2Path);
-                } else {
-
-                }
-                break;
-            case GALLERY_IMAGE_REQUEST_CODE + 3:
-                galleryImageUri = data.getData();
-                if (galleryImageUri != null) {
-//                    mReviewCreateImage3ImageView.setImageURI(galleryImageUri);
-                    mImagePath = getRealPathFromURI(galleryImageUri);
-                    mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
-                    mImage3Path = mImagePath;
-                    mReview.putImagePath(getActivity(), 3, mImage3Path);
-                } else {
-
-                }
-                break;
+//            case GALLERY_IMAGE_REQUEST_CODE + 1:
+//                galleryImageUri = data.getData();
+//                if (galleryImageUri != null) {
+////                    mReviewCreateImage1ImageView.setImageURI(galleryImageUri);
+//                    mImagePath = getRealPathFromURI(galleryImageUri);
+//                    mImage1Bitmap = handleBigCameraPhoto(mReviewCreateImage1ImageView);
+//                    mImage1Path = mImagePath;
+//                    mReviewCreateImage2ImageView.setVisibility(View.VISIBLE);
+//                    mReview.putImagePath(getActivity(), 1, mImage1Path);
+//                } else {
+//
+//                }
+//                break;
+//            case GALLERY_IMAGE_REQUEST_CODE + 2:
+//                galleryImageUri = data.getData();
+//                if (galleryImageUri != null) {
+////                    mReviewCreateImage2ImageView.setImageURI(galleryImageUri);
+//                    mImagePath = getRealPathFromURI(galleryImageUri);
+//                    mImage2Bitmap = handleBigCameraPhoto(mReviewCreateImage2ImageView);
+//                    mImage2Path = mImagePath;
+//                    mReviewCreateImage3ImageView.setVisibility(View.VISIBLE);
+//                    mReview.putImagePath(getActivity(), 2, mImage2Path);
+//                } else {
+//
+//                }
+//                break;
+//            case GALLERY_IMAGE_REQUEST_CODE + 3:
+//                galleryImageUri = data.getData();
+//                if (galleryImageUri != null) {
+////                    mReviewCreateImage3ImageView.setImageURI(galleryImageUri);
+//                    mImagePath = getRealPathFromURI(galleryImageUri);
+//                    mImage3Bitmap = handleBigCameraPhoto(mReviewCreateImage3ImageView);
+//                    mImage3Path = mImagePath;
+//                    mReview.putImagePath(getActivity(), 3, mImage3Path);
+//                } else {
+//
+//                }
+//                break;
         }
     }
 
-    public String getRealPathFromURI(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        @SuppressWarnings("deprecation")
-        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    private boolean hasCamera() {
-        return (getActivity().getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA));
-    }
-
     private void checkStoragePermission(int imagePosition) {
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            dismissMenuBottomSheetDialog();
+            Toast.makeText(getActivity(), "SD 카드가 없으므로 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), storagePermissions[0]) != PackageManager.PERMISSION_GRANTED
-                    || ActivityCompat.checkSelfPermission(getActivity(), storagePermissions[1]) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), mStoragePermissions[0]) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(getActivity(), mStoragePermissions[1]) != PackageManager.PERMISSION_GRANTED) {
 
-                // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), storagePermissions[0])
-                        || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), storagePermissions[0])) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), mStoragePermissions[0])
+                        || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), mStoragePermissions[1])) {
+                    // Should we show an explanation?
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("저장소 권한을 요청합니다.")
@@ -796,7 +571,7 @@ public class ReviewCreateFragment extends Fragment
                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestStoragePermissions();
+                            requestPermissions(mStoragePermissions, PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
                         }
                     });
                     AlertDialog dialog = builder.create();
@@ -808,7 +583,7 @@ public class ReviewCreateFragment extends Fragment
 //                }
                 else {
                     // No explanation needed, we can request the permission.
-                    requestStoragePermissions();
+                    requestPermissions(mStoragePermissions, PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
                 }
             }
             else {
@@ -818,29 +593,24 @@ public class ReviewCreateFragment extends Fragment
         }
     }
 
-    private void requestStoragePermissions() {
-        requestPermissions(storagePermissions, PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE: {
+            case PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG + "granted", "Storage Permission has been granted by user : " +
-                            "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
+//                    Log.i(TAG + "granted", "Storage Permission has been granted by user : " +
+//                            "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
                     createPickImageMenuBottomSheetDialog(1);
                 } else {
-                    Log.i(TAG + "denied", "Storage Permission has been denied by user : " +
-                            "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
+//                    Log.i(TAG + "denied", "Storage Permission has been denied by user : " +
+//                            "PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE : " + PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
                     Toast.makeText(getActivity(), "권한이 없으므로 취소 되었습니다.", Toast.LENGTH_SHORT).show();
                 }
-                return;
-            }
+                break;
         }
     }
 
@@ -859,9 +629,9 @@ public class ReviewCreateFragment extends Fragment
 //                        } catch (JSONException e) {
 //                            e.printStackTrace();
 //                        }
-                        String responseString = new String(response.data);
-                        Log.i(TAG, responseString.toString());
-                        getActivity().finish();
+//                        String responseString = new String(response.data);
+//                        Log.i(TAG, responseString.toString());
+                        getActivity().onBackPressed();
                     }
                 },
                 new Response.ErrorListener() {
@@ -891,15 +661,26 @@ public class ReviewCreateFragment extends Fragment
             }
 
             @Override
-            protected Map<String, DataPart> getByteData() throws AuthFailureError {
-//                return super.getByteData();
-                Map<String, DataPart> params = new HashMap<>();
-//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
-//                        getActivity(), mReviewCreateImage1ImageView.getDrawable()), "image/*"));
-//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
-//                        getActivity(), mReviewCreateImage2ImageView.getDrawable()), "image/*"));
-//                params.put("images", new DataPart("reviewImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
-//                        getActivity(), mReviewCreateImage3ImageView.getDrawable()), "image/*"));
+            protected Map<String, ArrayList<DataPart>> getByteDataArray() throws AuthFailureError {
+                Map<String, ArrayList<DataPart>> params = new HashMap<>();
+
+                ArrayList<DataPart> imageDataPart = new ArrayList<>();
+
+                if (isHasUploadImage1) {
+                    imageDataPart.add(new DataPart("reviewImage1.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+                            getActivity(), mReviewCreateImage1ImageView.getDrawable()), "image/*"));
+                }
+                if (isHasUploadImage2) {
+                    imageDataPart.add(new DataPart("reviewImage2.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+                            getActivity(), mReviewCreateImage2ImageView.getDrawable()), "image/*"));
+                }
+                if (isHasUploadImage3) {
+                    imageDataPart.add(new DataPart("reviewImage3.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+                            getActivity(), mReviewCreateImage3ImageView.getDrawable()), "image/*"));
+                }
+
+                params.put("images", imageDataPart);
+
                 return params;
             }
         };

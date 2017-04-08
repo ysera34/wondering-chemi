@@ -1,9 +1,11 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -69,6 +71,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Fragment> mProductDetailListFragments;
     private ArrayList<String> mProductDetailListFragmentTitles;
 
+    private ProductFragmentPagerAdapter mFragmentPagerAdapter;
+
 //    private FloatingActionButton mReviewFloatingActionButton;
 
     @Override
@@ -111,22 +115,29 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         mProductDetailTabLayout = (TabLayout) view.findViewById(R.id.product_detail_tab_layout);
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
 
-        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return mProductDetailListFragments.get(position);
-            }
+        mFragmentPagerAdapter = new ProductFragmentPagerAdapter(getChildFragmentManager());
+        mProductDetailViewPager.setAdapter(mFragmentPagerAdapter);
 
-            @Override
-            public int getCount() {
-                return mProductDetailListFragmentTitles.size();
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mProductDetailListFragmentTitles.get(position);
-            }
-        });
+//        mProductDetailViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+//            @Override
+//            public Fragment getItem(int position) {
+//                return mProductDetailListFragments.get(position);
+//            }
+//
+//            @Override
+//            public int getCount() {
+//                return mProductDetailListFragmentTitles.size();
+//            }
+//
+//            @Override
+//            public CharSequence getPageTitle(int position) {
+//                return mProductDetailListFragmentTitles.get(position);
+//            }
+//
+//            public void setFragmentTitles(int position, String title) {
+//                mProductDetailListFragmentTitles.set(position, title);
+//            }
+//        });
 //        mProductDetailViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 //            @Override
 //            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -290,4 +301,45 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 //        mReviewFloatingActionButton.animate().translationY(56)
 //                .setInterpolator(new AccelerateInterpolator(2));
 //    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void updateFragmentTitles(Product product) {
+        mFragmentPagerAdapter.setFragmentTitles(1, getString(R.string.product_detail_tab_title2) +
+                getString(R.string.product_detail_tab_title2_description, String.valueOf(product.getRatingCount())));
+        mFragmentPagerAdapter.notifyDataSetChanged();
+    }
+
+    private class ProductFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        public ProductFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mProductDetailListFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mProductDetailListFragmentTitles.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mProductDetailListFragmentTitles.get(position);
+        }
+
+        public void setFragmentTitles(int position, String title) {
+            mProductDetailListFragmentTitles.set(position, title);
+        }
+    }
+
 }

@@ -174,6 +174,14 @@ public class ProductActivity extends AppBaseActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_product, menu);
         return true;
@@ -237,6 +245,8 @@ public class ProductActivity extends AppBaseActivity
                             mFragmentManager.beginTransaction()
                                     .add(R.id.product_fragment_container, mFragment)
                                     .commit();
+                        } else {
+                            ((ProductFragment) mFragment).updateFragmentTitles(mProduct);
                         }
                     }
                 },

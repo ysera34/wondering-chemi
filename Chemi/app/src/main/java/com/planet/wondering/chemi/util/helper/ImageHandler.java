@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.util.helper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,10 @@ public class ImageHandler {
     public ImageHandler(Context context) {
         mContext = context;
         mAlbumName = mContext.getString(R.string.app_name);
+    }
+
+    public boolean hasCamera() {
+        return mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
     private File getAlbumStorageDir() {
@@ -227,4 +232,6 @@ public class ImageHandler {
 
         return imagePath;
     }
+
+
 }

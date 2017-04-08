@@ -240,10 +240,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mProductAdapter.notifyDataSetChanged();
 //            mProductTotalTextView.setText(highlightTotalText());
 
-            mProductIds.clear();
-            for (Product product : mProducts) {
-                mProductIds.add(product.getId());
-            }
+//            mProductIds.clear();
+//            for (Product product : mProducts) {
+//                mProductIds.add(product.getId());
+//            }
         }
     }
 

@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -90,6 +91,11 @@ public class MultipartRequest extends Request<NetworkResponse> {
                 dataParse(dos, data);
             }
 
+            Map<String, ArrayList<DataPart>> dataArray = getByteDataArray();
+            if (dataArray != null && dataArray.size() > 0) {
+                dataArrayParse(dos, dataArray);
+            }
+
             // close multipart form data after text and file data
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
@@ -107,6 +113,10 @@ public class MultipartRequest extends Request<NetworkResponse> {
      * @throws AuthFailureError
      */
     protected Map<String, DataPart> getByteData() throws AuthFailureError {
+        return null;
+    }
+
+    protected Map<String, ArrayList<DataPart>> getByteDataArray() throws AuthFailureError {
         return null;
     }
 
@@ -159,6 +169,12 @@ public class MultipartRequest extends Request<NetworkResponse> {
     private void dataParse(DataOutputStream dataOutputStream, Map<String, DataPart> data) throws IOException {
         for (Map.Entry<String, DataPart> entry : data.entrySet()) {
             buildDataPart(dataOutputStream, entry.getValue(), entry.getKey());
+        }
+    }
+
+    private void dataArrayParse(DataOutputStream dataOutputStream, Map<String, ArrayList<DataPart>> dataArray) throws IOException {
+        for (Map.Entry<String, ArrayList<DataPart>> entry : dataArray.entrySet()) {
+            buildDataArrayPart(dataOutputStream, entry.getValue(), entry.getKey());
         }
     }
 
@@ -218,6 +234,42 @@ public class MultipartRequest extends Request<NetworkResponse> {
         }
 
         dataOutputStream.writeBytes(lineEnd);
+    }
+
+    private void buildDataArrayPart(DataOutputStream dataOutputStream, ArrayList<DataPart> dataFiles, String inputName) throws IOException {
+
+//        ByteArrayInputStream fileInputStream;
+
+        for (int i = 0; i < dataFiles.size(); i++) {
+            DataPart dataFile = dataFiles.get(i);
+
+            dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+            dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" +
+                    inputName + "\"; filename=\"" + dataFile.getFileName() + "\"" + lineEnd);
+            if (dataFile.getType() != null && !dataFile.getType().trim().isEmpty()) {
+                dataOutputStream.writeBytes("Content-Type: " + dataFile.getType() + lineEnd);
+            }
+            dataOutputStream.writeBytes(lineEnd);
+
+            ByteArrayInputStream fileInputStream = new ByteArrayInputStream(dataFile.getContent());
+            int bytesAvailable = fileInputStream.available();
+
+            int maxBufferSize = 1024 * 1024;
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            byte[] buffer = new byte[bufferSize];
+
+            int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0) {
+                dataOutputStream.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            }
+
+            dataOutputStream.writeBytes(lineEnd);
+        }
+
     }
 
     /**

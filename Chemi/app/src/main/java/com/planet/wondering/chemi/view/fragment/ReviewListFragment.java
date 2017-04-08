@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.app.Activity.RESULT_OK;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -49,6 +52,8 @@ public class ReviewListFragment extends Fragment {
 
     private static final String ARG_PRODUCT = "product";
     private static final String ARG_PRODUCT_ID = "product_id";
+
+    private static final int REVIEW_CREATE_REQUEST_CODE = 8011;
 
     public static ReviewListFragment newInstance() {
 
@@ -79,6 +84,9 @@ public class ReviewListFragment extends Fragment {
         return fragment;
     }
 
+    private StringBuilder mUrlBuilder;
+    private Pager mPager;
+
     private int mProductId;
     private Product mProduct;
     private Review mReview;
@@ -95,6 +103,7 @@ public class ReviewListFragment extends Fragment {
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
 
         mReviews = new ArrayList<>();
+        mUrlBuilder = new StringBuilder();
     }
 
     @Nullable
@@ -119,8 +128,22 @@ public class ReviewListFragment extends Fragment {
 //                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
 //            }
 //        });
+        mReviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = ((LinearLayoutManager) mReviewRecyclerView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition();
+                if (lastItem == mReviewAdapter.getItemCount() - 1 && mPager != null
+                        && mPager.getTotal() > mReviewAdapter.getItemCount() - 1) {
+                    requestReviewList();
+                }
+            }
+        });
 
         updateUI();
+
+        requestReviewList();
 
         return view;
     }
@@ -134,7 +157,6 @@ public class ReviewListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        updateUI();
-        requestReviewList();
     }
 
     private void updateUI() {
@@ -148,15 +170,47 @@ public class ReviewListFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REVIEW_CREATE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    updateReviewList();
+                }
+                break;
+        }
+    }
+
+    private void updateReviewList() {
+
+        mPager = null;
+        mReviews.clear();
+        requestReviewList();
+    }
+
     public void requestReviewList() {
 
+        if (mPager == null) {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(PATH).append(mProduct.getId()).append(Config.Review.PATH);
+        } else {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(PATH).append(mProduct.getId()).append(Config.Review.PATH)
+                    .append("/?").append(mPager.getNextQuery());
+        }
+
+        Log.i(TAG, mUrlBuilder.toString());
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + PATH + mProduct.getId() + Config.Review.PATH,
+                Request.Method.GET, mUrlBuilder.toString(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 //                        Log.i(TAG, response.toString());
-                        mReviews = Parser.parseReviewList(response);
+//                        mReviews = Parser.parseReviewList(response);
+                        mReviews.addAll(Parser.parseReviewList(response));
+                        mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
                     }
                 },
@@ -269,7 +323,8 @@ public class ReviewListFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.list_item_review_header_review_create_layout:
-                    startActivity(ReviewActivity.newIntent(getActivity(), mProduct));
+                    getActivity().startActivityForResult(ReviewActivity.newIntent(getActivity(), mProduct),
+                            REVIEW_CREATE_REQUEST_CODE);
                     break;
             }
         }
@@ -355,6 +410,7 @@ public class ReviewListFragment extends Fragment {
 
         public void bindReview(Review review) {
             mReview = review;
+//            Log.i(TAG, mReview.toString());
 
             mUserNameTextView.setText(mReview.getUser().getName());
 
@@ -433,8 +489,8 @@ public class ReviewListFragment extends Fragment {
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                                 .crossFade()
-                                .override(70, 70)
-                                .centerCrop()
+                                .override(210, 210)
+//                                .centerCrop()
                                 .into(mImage3ImageView);
                     case 2:
                         Glide.with(getActivity())
@@ -442,8 +498,8 @@ public class ReviewListFragment extends Fragment {
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                                 .crossFade()
-                                .override(70, 70)
-                                .centerCrop()
+                                .override(210, 210)
+//                                .centerCrop()
                                 .into(mImage2ImageView);
                     case 1:
                         Glide.with(getActivity())
@@ -451,8 +507,8 @@ public class ReviewListFragment extends Fragment {
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                                 .crossFade()
-                                .override(70, 70)
-                                .centerCrop()
+                                .override(210, 210)
+//                                .centerCrop()
                                 .into(mImage1ImageView);
                         break;
                 }

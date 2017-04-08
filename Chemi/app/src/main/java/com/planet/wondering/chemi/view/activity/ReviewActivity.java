@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,6 +107,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
                     .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, mReviewContent))
                     .commit();
         } else {
+            setResult(Activity.RESULT_OK, new Intent());
             super.onBackPressed();
         }
     }
