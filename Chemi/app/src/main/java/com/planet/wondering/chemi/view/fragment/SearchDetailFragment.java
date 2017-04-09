@@ -28,6 +28,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.network.Parser;
@@ -59,6 +60,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     private TagCharacterAdapter mTagCharacterAdapter;
     private RelativeLayout mSearchClearLayout;
     private ImageButton mSearchClearImageButton;
+    private ImageButton mSearchImageButton;
 
     private TabLayout mSearchTabLayout;
     private ViewPager mSearchViewPager;
@@ -120,8 +122,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-                    startActivity(ProductListActivity.newIntent(
-                            getActivity(), textView.getText().toString()));
+                    if (textView.getText().length() == 0) {
+                        Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        startActivity(ProductListActivity.newIntent(
+                                getActivity(), textView.getText().toString()));
+                    }
                 }
                 return false;
             }
@@ -131,6 +137,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         mSearchClearLayout.setOnClickListener(this);
         mSearchClearImageButton = (ImageButton) view.findViewById(R.id.search_clear_image_button);
         mSearchClearImageButton.setOnClickListener(this);
+        mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
+        mSearchImageButton.setOnClickListener(this);
 
         mSearchTabLayout = (TabLayout) view.findViewById(R.id.search_tabLayout);
         mSearchViewPager = (ViewPager) view.findViewById(R.id.search_viewPager);
@@ -218,6 +226,14 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             case R.id.search_clear_image_layout:
             case R.id.search_clear_image_button:
                 mSearchAutoCompleteTextView.getText().clear();
+                break;
+            case R.id.search_image_button:
+                if (mSearchAutoCompleteTextView.getText().length() == 0) {
+                    Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(ProductListActivity.newIntent(
+                            getActivity(), mSearchAutoCompleteTextView.getText().toString()));
+                }
                 break;
         }
     }
