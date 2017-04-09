@@ -335,6 +335,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 //        requestChemical(chemical.getId(), true);
         mFragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+
+//                .remove(mFragmentManager.findFragmentById(R.id.dictionary_fragment_container))
                 .add(R.id.dictionary_fragment_container, ChemicalFragment.newInstance(chemical))
                 .addToBackStack(null)
                 .commit();

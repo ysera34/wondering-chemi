@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by yoon on 2017. 3. 17..
  */
-public class ChemicalFragment extends Fragment {
+public class ChemicalFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ChemicalFragment.class.getSimpleName();
 
@@ -48,6 +49,7 @@ public class ChemicalFragment extends Fragment {
 
     private Chemical mChemical;
 
+    private LinearLayout mChemicalHeaderInfoLayout;
     private TextView mChemicalDialogCircleTextView;
     private TextView mChemicalDialogReasonTextView;
     private TextView mChemicalDialogNameKoTextView;
@@ -78,6 +80,9 @@ public class ChemicalFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical, container, false);
 
+        mChemicalHeaderInfoLayout = (LinearLayout)
+                view.findViewById(R.id.chemical_header_info_layout);
+        mChemicalHeaderInfoLayout.setOnClickListener(this);
         mChemicalDialogCircleTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_circle_text_view);
         mChemicalDialogCircleTextView.setText(mChemical.getHazardValueString());
@@ -133,6 +138,15 @@ public class ChemicalFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.chemical_header_info_layout:
+//                Toast.makeText(getActivity(), "intercept click listener", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     private class HazardAdapter extends RecyclerView.Adapter<HazardHolder> {
