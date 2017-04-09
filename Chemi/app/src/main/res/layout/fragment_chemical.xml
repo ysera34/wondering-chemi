@@ -22,27 +22,33 @@
             <!--android:layout_height="wrap_content"/>-->
 
             <TextView
-                android:id="@+id/chemical_dialog_name_ko_text_view"
+                android:id="@+id/chemical_name_ko_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorFontNormal"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"/>
 
             <TextView
-                android:id="@+id/chemical_dialog_name_eng_text_view"
+                android:id="@+id/chemical_name_eng_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:textColor="@color/colorFontNormal"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"/>
 
             <TextView
-                android:id="@+id/chemical_dialog_hazard_bg_text_view"
+                android:id="@+id/chemical_hazard_bg_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
@@ -52,7 +58,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/chemical_dialog_purpose_text_view"
+                android:id="@+id/chemical_purpose_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -69,7 +75,7 @@
             android:background="@drawable/widget_solid_rectangle_chemical_dialog_ewg_text">
 
             <TextView
-                android:id="@+id/chemical_dialog_circle_text_view"
+                android:id="@+id/chemical_circle_text_view"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:textSize="13sp"
@@ -93,7 +99,7 @@
                 android:textColor="@color/colorFontToolbarSubtitle"/>
 
             <TextView
-                android:id="@+id/chemical_dialog_reason_text_view"
+                android:id="@+id/chemical_reason_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -108,13 +114,13 @@
             android:background="@drawable/widget_border_bottom">
 
             <ImageView
-                android:id="@+id/chemical_dialog_allergy_image_view"
+                android:id="@+id/chemical_allergy_image_view"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerInside"/>
 
             <TextView
-                android:id="@+id/chemical_dialog_allergy_text_view"
+                android:id="@+id/chemical_allergy_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -129,7 +135,7 @@
         android:layout_height="wrap_content">
         <!--android:layout_height="@dimen/chemical_dialog_hazard_info_height"-->
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/chemical_dialog_hazard_info_recycler_view"
+            android:id="@+id/chemical_hazard_info_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="300dp">
 

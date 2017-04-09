@@ -50,15 +50,15 @@ public class ChemicalFragment extends Fragment implements View.OnClickListener {
     private Chemical mChemical;
 
     private LinearLayout mChemicalHeaderInfoLayout;
-    private TextView mChemicalDialogCircleTextView;
-    private TextView mChemicalDialogReasonTextView;
-    private TextView mChemicalDialogNameKoTextView;
-    private TextView mChemicalDialogNameEngTextView;
-    private TextView mChemicalDialogHazardLineTextView;
-    private TextView mChemicalDialogPurposeTextView;
-    private ImageView mChemicalDialogAllergyImageView;
-    private TextView mChemicalDialogAllergyTextView;
-    private RecyclerView mChemicalDialogHazardInfoRecyclerView;
+    private TextView mChemicalCircleTextView;
+    private TextView mChemicalReasonTextView;
+    private TextView mChemicalNameKoTextView;
+    private TextView mChemicalNameEngTextView;
+    private TextView mChemicalHazardLineTextView;
+    private TextView mChemicalPurposeTextView;
+    private ImageView mChemicalAllergyImageView;
+    private TextView mChemicalAllergyTextView;
+    private RecyclerView mChemicalHazardInfoRecyclerView;
     private HazardAdapter mHazardAdapter;
     private ArrayList<Hazard> mHazards;
 
@@ -83,48 +83,50 @@ public class ChemicalFragment extends Fragment implements View.OnClickListener {
         mChemicalHeaderInfoLayout = (LinearLayout)
                 view.findViewById(R.id.chemical_header_info_layout);
         mChemicalHeaderInfoLayout.setOnClickListener(this);
-        mChemicalDialogCircleTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_circle_text_view);
-        mChemicalDialogCircleTextView.setText(mChemical.getHazardValueString());
-        mChemicalDialogCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());
+        mChemicalCircleTextView = (TextView)
+                view.findViewById(R.id.chemical_circle_text_view);
+        mChemicalCircleTextView.setText(mChemical.getHazardValueString());
+        mChemicalCircleTextView.setBackgroundResource(mChemical.getHazardIconResId());
 //        mChemicalDialogCircleHazardView = (CircleHazardView)
 //                view.findViewById(R.id.chemical_dialog_circle_hazard_view);
 //        mChemicalDialogCircleHazardView.setCircleColor(mChemical.getHazardColorResId());
 //        mChemicalDialogCircleHazardView.setHazardValueText(mChemical.getHazardValueString());
-        mChemicalDialogReasonTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_reason_text_view);
-        mChemicalDialogReasonTextView.setText(getString(mChemical.getHazardReasonStringResId()));
+        mChemicalReasonTextView = (TextView)
+                view.findViewById(R.id.chemical_reason_text_view);
+        mChemicalReasonTextView.setText(getString(mChemical.getHazardReasonStringResId()));
 
-        mChemicalDialogNameKoTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_name_ko_text_view);
-        mChemicalDialogNameKoTextView.setText(mChemical.getNameKo());
-        mChemicalDialogNameEngTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_name_eng_text_view);
-        mChemicalDialogNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
-        mChemicalDialogHazardLineTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_hazard_bg_text_view);
-        mChemicalDialogHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
-        mChemicalDialogPurposeTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_purpose_text_view);
+        mChemicalNameKoTextView = (TextView)
+                view.findViewById(R.id.chemical_name_ko_text_view);
+        mChemicalNameKoTextView.setSelected(true);
+        mChemicalNameKoTextView.setText(mChemical.getNameKo());
+        mChemicalNameEngTextView = (TextView)
+                view.findViewById(R.id.chemical_name_eng_text_view);
+        mChemicalNameEngTextView.setSelected(true);
+        mChemicalNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
+        mChemicalHazardLineTextView = (TextView)
+                view.findViewById(R.id.chemical_hazard_bg_text_view);
+        mChemicalHazardLineTextView.setBackgroundColor(getResources().getColor(mChemical.getHazardColorResId()));
+        mChemicalPurposeTextView = (TextView)
+                view.findViewById(R.id.chemical_purpose_text_view);
         if (mChemical.getPurpose().equals("null")) {
-            mChemicalDialogPurposeTextView.setVisibility(View.GONE);
+            mChemicalPurposeTextView.setVisibility(View.GONE);
         } else {
-            mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
+            mChemicalPurposeTextView.setText(mChemical.getPurpose());
         }
 //        mChemicalDialogPurposeTextView.setText(mChemical.getPurpose());
 
-        mChemicalDialogAllergyImageView = (ImageView)
-                view.findViewById(R.id.chemical_dialog_allergy_image_view);
-        mChemicalDialogAllergyImageView.setImageResource(mChemical.getAllergyIconResId());
-        mChemicalDialogAllergyTextView = (TextView)
-                view.findViewById(R.id.chemical_dialog_allergy_text_view);
-        mChemicalDialogAllergyTextView.setText(mChemical.getAllergyDescription());
+        mChemicalAllergyImageView = (ImageView)
+                view.findViewById(R.id.chemical_allergy_image_view);
+        mChemicalAllergyImageView.setImageResource(mChemical.getAllergyIconResId());
+        mChemicalAllergyTextView = (TextView)
+                view.findViewById(R.id.chemical_allergy_text_view);
+        mChemicalAllergyTextView.setText(mChemical.getAllergyDescription());
 
-        mChemicalDialogHazardInfoRecyclerView = (RecyclerView)
-                view.findViewById(R.id.chemical_dialog_hazard_info_recycler_view);
-        mChemicalDialogHazardInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mChemicalHazardInfoRecyclerView = (RecyclerView)
+                view.findViewById(R.id.chemical_hazard_info_recycler_view);
+        mChemicalHazardInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mHazardAdapter = new HazardAdapter(mHazards);
-        mChemicalDialogHazardInfoRecyclerView.setAdapter(mHazardAdapter);
+        mChemicalHazardInfoRecyclerView.setAdapter(mHazardAdapter);
 
 //        mChemicalCloseButtonTextView = (TextView)
 //                view.findViewById(R.id.chemical_close_button_text_view);

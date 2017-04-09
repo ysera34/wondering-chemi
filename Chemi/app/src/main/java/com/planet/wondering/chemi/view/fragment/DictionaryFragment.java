@@ -385,35 +385,40 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private class ChemicalCharacterAdapter extends ArrayAdapter<CTag> implements Filterable {
 
-        private ArrayList<CTag> mChemicalRequestResults = new ArrayList<>();
-        private ArrayList<CTag> mChemicalResults = new ArrayList<>();
+//        private ArrayList<CTag> mChemicalRequestResults = new ArrayList<>();
+//        private ArrayList<CTag> mChemicalResults = new ArrayList<>();
+
+        private ArrayList<CTag> mChemicalRequestResults;
+        private ArrayList<CTag> mChemicalResults;
 
         public ChemicalCharacterAdapter(Context context, int resource) {
             super(context, resource);
-//            mChemicalRequestResults = new ArrayList<>();
-//            mChemicalResults = new ArrayList<>();
+            mChemicalRequestResults = new ArrayList<>();
+            mChemicalResults = new ArrayList<>();
         }
 
         @Override
         public int getCount() {
-            synchronized (mChemicalResults) {
+//            synchronized (mChemicalResults) {
                 return mChemicalResults.size();
-            }
+//            }
         }
 
         @Nullable
         @Override
         public CTag getItem(int position) {
-            synchronized (mChemicalResults) {
-                try {
+//            synchronized (mChemicalResults) {
+//                try {
                     return mChemicalResults.get(position);
-                } catch (IndexOutOfBoundsException e) {
+//                } catch (IndexOutOfBoundsException e) {
 //                    e.printStackTrace();
-                    Log.e(TAG, "ChemicalCharacterAdapter : IndexOutOfBoundsException");
-                    return null;
-                }
-            }
+//                    Log.e(TAG, "ChemicalCharacterAdapter : IndexOutOfBoundsException");
+//                    return null;
+//                }
+//            }
         }
+
+
 
         @NonNull
         @Override
@@ -425,7 +430,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
-                    synchronized (filterResults) {
+//                    synchronized (filterResults) {
 //                        mChemicalRequestResults.clear();
 //                        if (mChemicalResults != null) {
 //                            mChemicalResults.clear();
@@ -489,7 +494,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                         filterResults.values = mChemicalResults;
                         filterResults.count = mChemicalResults.size();
                     }
-                    }
+//                    } end synchronized (filterResults)
                     return filterResults;
                 }
 
@@ -498,15 +503,15 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 //                    getActivity().runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
-                    synchronized (results) {
-                        mChemicalRequestResults = (ArrayList<CTag>) results.values;
+//                    synchronized (results) {
+//                        mChemicalRequestResults = (ArrayList<CTag>) results.values;
 
                             if (mChemicalRequestResults != null && results.count > 0) {
                                 notifyDataSetChanged();
                             } else {
                                 notifyDataSetInvalidated();
                             }
-                    }
+//                    }
 //                        }
 //                    });
                 }

@@ -59,7 +59,8 @@
                 android:hint="성분명을 입력해보세요."
                 android:textSize="15sp"
                 android:textColorHint="@color/colorFontHint"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorWhite"
+                android:ellipsize="end"/>
 
             <RelativeLayout
                 android:id="@+id/dictionary_search_clear_image_layout"
