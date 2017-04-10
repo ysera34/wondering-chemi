@@ -30,12 +30,12 @@ public class CategoryActivity extends BottomNavigationActivity {
         super.onCreate(savedInstanceState);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
             mFragment = CategoryFragment.newInstance();
             mFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
                     .commit();
         }
     }

@@ -94,7 +94,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                         .addSharedElement(mSearchButton, getString(R.string.search_edit_text))
                         .addSharedElement(mSearchImageButton, getString(R.string.search_image_button))
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.fragment_container, detailFragment)
+                        .replace(R.id.main_fragment_container, detailFragment)
                         .addToBackStack(null)
                         .commit();
                 break;

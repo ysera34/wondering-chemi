@@ -38,12 +38,12 @@ public class SearchActivity extends BottomNavigationActivity
         mBackPressCloseHandler = new BackPressCloseHandler(SearchActivity.this);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
             mFragment = SearchFragment.newInstance();
             mFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
 //                    .addToBackStack(null)
                     .commit();
         }
@@ -60,7 +60,7 @@ public class SearchActivity extends BottomNavigationActivity
     @Override
     public void onTagSelected(String tag) {
         mSearchDetailFragment = (SearchDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_container);
+                .findFragmentById(R.id.main_fragment_container);
         mSearchDetailFragment.updateSearchEditText(tag);
     }
 

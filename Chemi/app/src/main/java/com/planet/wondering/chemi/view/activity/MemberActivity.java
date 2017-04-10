@@ -86,7 +86,7 @@ public class MemberActivity extends BottomNavigationActivity
         mRequestId = getIntent().getByteExtra(EXTRA_REQUEST_ID, (byte) -1);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
     }
 
     @Override
@@ -106,14 +106,14 @@ public class MemberActivity extends BottomNavigationActivity
                 } else {
                     mFragment = MemberConfigSignInFragment.newInstance();
                     mFragmentManager.beginTransaction()
-                            .add(R.id.fragment_container, mFragment)
+                            .add(R.id.main_fragment_container, mFragment)
                             .commit();
                 }
             } else if (mRequestId == 4) {
                 mBottomNavigationLayout.setVisibility(View.GONE);
                 mFragmentManager.beginTransaction()
 //                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigFAQFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
             }
         }
@@ -125,14 +125,14 @@ public class MemberActivity extends BottomNavigationActivity
             case -1:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                         .commit();
                 break;
             case 1:
                 if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
                     mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                            .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                             .commit();
                 } else {
                     startActivity(MemberStartActivity.newIntent(getApplicationContext()));
@@ -143,51 +143,51 @@ public class MemberActivity extends BottomNavigationActivity
             case 2:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigNoticeFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigNoticeFragment.newInstance())
                         .commit();
                 break;
             case 3:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigRequestFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigRequestFragment.newInstance())
                         .commit();
                 break;
             case 4:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigFAQFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
                 break;
             case 5:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigTermsFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigTermsFragment.newInstance())
                         .commit();
                 break;
             case 6:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigPartnerFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigPartnerFragment.newInstance())
                         .commit();
                 break;
 
             case 11:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigChangeNameFragment.newInstance(mUser.getName()))
+                        .replace(R.id.main_fragment_container, MemberConfigChangeNameFragment.newInstance(mUser.getName()))
                         .commit();
                 break;
             case 12:
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberConfigChangePasswordFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigChangePasswordFragment.newInstance())
                         .commit();
                 break;
             case 13:
                 mBottomNavigationLayout.setVisibility(View.GONE);
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, MemberAskInfoFragment.newInstance(mUser))
+                        .replace(R.id.main_fragment_container, MemberAskInfoFragment.newInstance(mUser))
                         .commit();
                 break;
         }
@@ -195,7 +195,7 @@ public class MemberActivity extends BottomNavigationActivity
 
     @Override
     public void onDialogFinished(boolean isChose) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
         if (fragment instanceof MemberConfigProfileFragment) {
             ((MemberConfigProfileFragment) fragment).onDialogFinished(isChose);
         }
@@ -237,7 +237,7 @@ public class MemberActivity extends BottomNavigationActivity
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
         if (fragment instanceof MemberConfigSignInFragment) {
             finish();
@@ -245,35 +245,35 @@ public class MemberActivity extends BottomNavigationActivity
             if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, MemberFragment.newInstance(mUser))
+                        .replace(R.id.main_fragment_container, MemberFragment.newInstance(mUser))
                         .commit();
             } else {
 //                finish();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, MemberConfigSignInFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigSignInFragment.newInstance())
                         .commit();
             }
         } else if (fragment instanceof MemberConfigProfileFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigNoticeFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigRequestFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigFAQFragment) {
             if (mRequestId == -1) {
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                        .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                         .commit();
             } else if (mRequestId == 4){
                 finish();
@@ -282,28 +282,28 @@ public class MemberActivity extends BottomNavigationActivity
         } else if (fragment instanceof MemberConfigTermsFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigPartnerFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigFragment.newInstance())
+                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigChangeNameFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                    .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else if (fragment instanceof MemberConfigChangePasswordFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                    .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
             mBottomNavigationLayout.setVisibility(View.VISIBLE);
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                    .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else {
             super.onBackPressed();
@@ -331,14 +331,14 @@ public class MemberActivity extends BottomNavigationActivity
                         if (!isInfoValueUpdate) {
                             mFragment = MemberFragment.newInstance(mUser);
                             mFragmentManager.beginTransaction()
-                                    .add(R.id.fragment_container, mFragment)
+                                    .add(R.id.main_fragment_container, mFragment)
                                     .commit();
                         } else {
                             isInfoValueUpdate = false;
                             mBottomNavigationLayout.setVisibility(View.VISIBLE);
                             mFragmentManager.beginTransaction()
                                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                                    .replace(R.id.fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                                    .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                                     .commit();
                         }
                     }

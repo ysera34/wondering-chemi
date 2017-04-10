@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chemi</string>
+    <string name="app_name">Chemi5</string>
 
     <string name="bottom_navigation_title1">검색</string>
     <string name="bottom_navigation_title2">카테고리</string>
@@ -10,10 +10,11 @@
     <!-- toolbar menu-->
     <string name="menu_toolbar_product_action_faq">자주묻는질문</string>
     <string name="menu_toolbar_product_action_archive">제품보관</string>
-    <string name="menu_toolbar_product_action_share">공유</string>
+    <string name="menu_toolbar_product_action_share">제품공유</string>
+    <string name="menu_toolbar_content_action_like">컨텐츠좋아요</string>
+    <string name="menu_toolbar_content_action_archive">컨텐츠보관</string>
+    <string name="menu_toolbar_content_action_share">컨텐츠공유</string>
     <string name="menu_toolbar_member_action_config">사용자 설정</string>
-    <string name="menu_toolbar_member_action_config_confirm">설정 확인</string>
-    <string name="menu_toolbar_review_action_create_confirm">리뷰 작성 확인</string>
 
     <string name="search_guide_sentence">상품명, 브랜드명으로 검색해보세요</string>
     <string name="search_edit_text">search_edit_text</string>
@@ -183,9 +184,9 @@
     <string name="category_name_baby_body_wash">아이용 바디워시</string>
     <string name="category_name_etc">기타</string>
     <string name="administrator_support_email">help@chemi.io</string>
-    <string name="partner_email_title">partner_email_title</string>
-    <string name="partner_email_subject">partner_email_subject</string>
-    <string name="partner_email_description">partner_email_description</string>
+    <string name="partner_email_title">메일 보내기</string>
+    <string name="partner_email_subject">케미와 제휴를 맺고 싶습니다.</string>
+    <string name="partner_email_description">케미에 대한 관심에 감사드립니다.\n제안배경과 제안내용을 자유로운 형식으로 보내주세요.\n업체명, 담당자 명, 연락처를 남겨주셔야 회신을 받으실 수 있습니다.</string>
 
     <string-array name="category_name_array">
         <item>@string/category_name_hint_format</item>
@@ -196,5 +197,11 @@
         <item>@string/category_name_baby_tooth_paste</item>
         <item>@string/category_name_etc</item>
     </string-array>
+
+    <string name="comments_empty_message1">아직 등록된 댓글이 없어요.</string>
+    <string name="comments_empty_message2">제일 먼저 댓글을 남겨보세요.</string>
+    <string name="comments_hint_message">댓글을 입력해주세요.</string>
+    <string name="contents_like_promote_message">제일 먼저 좋아요를 눌러주세요!</string>
+    <string name="comments_count_format">댓글 %s개</string>
 
 </resources>

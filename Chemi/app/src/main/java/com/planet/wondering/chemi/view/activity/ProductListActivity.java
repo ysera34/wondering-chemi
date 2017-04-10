@@ -78,7 +78,7 @@ public class ProductListActivity extends BottomNavigationActivity {
         mTagName = getIntent().getStringExtra(EXTRA_TAG_NAME);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null && mCategoryId == -1) {
             mFragment = ProductListFragment.newInstance(mTagName);
@@ -87,7 +87,7 @@ public class ProductListActivity extends BottomNavigationActivity {
         }
             mFragmentManager.beginTransaction()
 //                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
                     .commit();
     }
 

@@ -35,12 +35,12 @@ public class DictionaryActivity extends BottomNavigationActivity
         super.onCreate(savedInstanceState);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
             mFragment = DictionaryFragment.newInstance();
             mFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
                     .commit();
         }
     }
@@ -52,7 +52,7 @@ public class DictionaryActivity extends BottomNavigationActivity
     }
 
     public void resizeFrameLayout(int resize) {
-        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.fragment_container);
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.main_fragment_container);
         ViewGroup.LayoutParams layoutParams1 = frameLayout.getLayoutParams();
         layoutParams1.height = frameLayout.getHeight() + resize;
         frameLayout.setLayoutParams(layoutParams1);
@@ -61,13 +61,13 @@ public class DictionaryActivity extends BottomNavigationActivity
     @Override
     public void onChemicalSelected(Chemical chemical) {
         DictionaryFragment fragment = (DictionaryFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_container);
+                .findFragmentById(R.id.main_fragment_container);
         fragment.updateSearchEditText(chemical);
     }
 
     @Override
     public void onDialogFinished(boolean isChose) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
         if (fragment instanceof DictionaryFragment) {
             ((DictionaryFragment) fragment).onDialogFinished(isChose);
         }

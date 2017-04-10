@@ -713,6 +713,7 @@ public class Parser {
                         JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
                         ReviewProduct reviewProduct = new ReviewProduct();
                         reviewProduct.setProductId(reviewJSONObject.getInt(USER_REVIEW_PRODUCT_ID));
+//                        reviewProduct.setProductName(reviewJSONObject.getString(USER_REVIEW_PRODUCT_NAME));
                         reviewProduct.setProductImagePath(reviewJSONObject.getString(USER_REVIEW_PRODUCT_IMAGE_PATH));
 
                         Object ratingObject = reviewJSONObject.get(USER_REVIEW_RATING);
@@ -727,7 +728,7 @@ public class Parser {
                         reviewProduct.setRatingValue(ratingFloat);
                         reviewProduct.setCreateDate(reviewJSONObject.getString(USER_REVIEW_DATE).substring(5, 10));
 //                        reviewProduct.setWriteDate(dateFormat.parse(reviewJSONObject.getString(USER_REVIEW_DATE)));
-                        Log.i(TAG, "Date" + reviewProduct.getCreateDate());
+//                        Log.i(TAG, "Date" + reviewProduct.getCreateDate());
                         user.getReviewProducts().add(reviewProduct);
                     }
                 }

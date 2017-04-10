@@ -19,6 +19,7 @@ public class Hazard implements Serializable {
     private byte mType;
     private int mIconResId;
     private boolean mAllergy;
+    private int mIndjfksdljf;
 
     public int getId() {
         return mId;

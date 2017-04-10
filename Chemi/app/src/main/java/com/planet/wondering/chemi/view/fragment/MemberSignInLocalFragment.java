@@ -284,6 +284,7 @@ public class MemberSignInLocalFragment extends Fragment
                             // sign in firebase user
                             signInFirebaseAccount(email, email);
 
+                            Toast.makeText(getActivity(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
                             startActivity(SearchActivity.newIntent(getActivity()));
                             getActivity().finish();
                         } else {

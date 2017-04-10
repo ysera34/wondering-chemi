@@ -56,13 +56,13 @@ public class ProductPagerActivity extends BottomNavigationActivity {
         mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
             mFragment = ProductPagerFragment.newInstance(mProductIds, mProductId);
             mFragmentManager.beginTransaction()
 //                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
                     .commit();
         }
 

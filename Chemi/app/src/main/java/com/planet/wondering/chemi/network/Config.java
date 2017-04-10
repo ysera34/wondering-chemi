@@ -94,6 +94,7 @@ public class Config {
             public static final String USER_CONTENT_TITLE = "title";
             public static final String USER_CONTENT_TITLE2 = "title2";
             public static final String USER_REVIEW_PRODUCT_ID = "productId";
+            public static final String USER_REVIEW_PRODUCT_NAME = "productName";
             public static final String USER_REVIEW_PRODUCT_IMAGE_PATH = "productImagePath";
             public static final String USER_REVIEW_RATING = "rated";
             public static final String USER_REVIEW_DATE = "dated";

@@ -48,13 +48,13 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         mProduct = (Product) getIntent().getSerializableExtra(EXTRA_PRODUCT);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
 //            mFragment = ReviewCreateFragment.newInstance();
             mFragment = ReviewCreateFragment.newInstance(mProduct);
             mFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
+                    .add(R.id.main_fragment_container, mFragment)
                     .commit();
         }
     }
@@ -73,7 +73,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
             mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
-                    .add(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
+                    .add(R.id.main_fragment_container, ReviewEditFragment.newInstance(reviewContent))
                     .addToBackStack(null)
                     .commit();
         } else {
@@ -85,7 +85,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //                    .commit();
 
             mFragmentManager.popBackStackImmediate();
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
             ((ReviewCreateFragment) fragment).updateContentTextView(mReviewContent);
 //            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
@@ -96,7 +96,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
         if (fragment instanceof ReviewEditFragment) {
 //            mFragmentManager.beginTransaction()
