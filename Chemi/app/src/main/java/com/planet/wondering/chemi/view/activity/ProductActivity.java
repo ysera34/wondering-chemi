@@ -171,6 +171,7 @@ public class ProductActivity extends AppBaseActivity
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -183,7 +184,13 @@ public class ProductActivity extends AppBaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_product, menu);
+        if (mProduct != null) {
+            if (!mProduct.isArchive()) {
+                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_false, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_true, menu);
+            }
+        }
         return true;
     }
 
@@ -257,7 +264,15 @@ public class ProductActivity extends AppBaseActivity
                         Log.e(TAG, error.toString());
                     }
                 }
-        );
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -275,6 +290,8 @@ public class ProductActivity extends AppBaseActivity
                     public void onResponse(JSONObject response) {
                         if (Parser.parseSimpleResult(response)) {
                             Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
+                            mProduct.setArchive(true);
+                            invalidateOptionsMenu();
                         } else {
                             Toast.makeText(getApplicationContext(), "보관함에 이미 있어요.", Toast.LENGTH_SHORT).show();
                         }

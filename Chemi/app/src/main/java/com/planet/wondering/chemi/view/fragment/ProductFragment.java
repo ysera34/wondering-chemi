@@ -259,7 +259,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.menu_toolbar_product, menu);
+//        inflater.inflate(R.menu.menu_toolbar_product_archive_false, menu);
 //    }
 //
 //    @Override
