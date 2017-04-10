@@ -182,6 +182,10 @@
     <string name="category_name_baby_tooth_paste">아이용 치약</string>
     <string name="category_name_baby_body_wash">아이용 바디워시</string>
     <string name="category_name_etc">기타</string>
+    <string name="administrator_support_email">help@chemi.io</string>
+    <string name="partner_email_title">partner_email_title</string>
+    <string name="partner_email_subject">partner_email_subject</string>
+    <string name="partner_email_description">partner_email_description</string>
 
     <string-array name="category_name_array">
         <item>@string/category_name_hint_format</item>

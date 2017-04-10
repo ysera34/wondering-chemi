@@ -61,6 +61,7 @@
         android:textColor="@color/colorFontBody"/>
 
     <TextView
+        android:id="@+id/partner_email_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -70,7 +71,8 @@
         android:paddingBottom="16dp"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
-        android:text="chemisupport@chemi.com"
+        android:clickable="true"
+        android:text="@string/administrator_support_email"
         android:textSize="16sp"
         android:textColor="@color/colorPrimary"
         android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>

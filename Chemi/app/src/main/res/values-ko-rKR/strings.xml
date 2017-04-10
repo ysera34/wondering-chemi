@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">케미5</string>
+    <string name="app_name">Chemi</string>
 
     <string name="bottom_navigation_title1">검색</string>
     <string name="bottom_navigation_title2">카테고리</string>
@@ -99,6 +99,7 @@
         <item>@string/confirm_validation_message_correct</item>
     </string-array>
 
+
     <string name="survey_year_format">%s년</string>
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
 
@@ -127,7 +128,7 @@
         <item>@string/review_rating_4.5_message</item>
         <item>@string/review_rating_5_message</item>
     </string-array>
-    
+
     <string name="bottom_sheet_menu_camera">카메라</string>
     <string name="bottom_sheet_menu_gallery">갤러리</string>
     <string name="bottom_sheet_menu_pick">이미지 다시 선택하기</string>
@@ -160,6 +161,8 @@
     <string name="search_chemical_result_title">검색결과 : </string>
     <string name="search_chemical_result_message">\"%1$s\"의 검색결과는 총 %2$s건 이예요.</string>
     <string name="partner_information_message">함께 만들어가는 케미!\n제휴를 원하시는 경우, 아래의 주소로 연락주세요</string>
+    <string name="login_button_title">로그인</string>
+    <string name="login_info_message">로그인 해야 사용하실 수 있어요.\n 로그인 하시겠어요?</string>
     <string name="logout_button_title">로그아웃</string>
     <string name="logout_info_message">로그아웃 하시겠어요?</string>
     <string name="withdraw_button_title">회원탈퇴</string>
@@ -179,6 +182,10 @@
     <string name="category_name_baby_tooth_paste">아이용 치약</string>
     <string name="category_name_baby_body_wash">아이용 바디워시</string>
     <string name="category_name_etc">기타</string>
+    <string name="administrator_support_email">help@chemi.io</string>
+    <string name="partner_email_title">partner_email_title</string>
+    <string name="partner_email_subject">partner_email_subject</string>
+    <string name="partner_email_description">partner_email_description</string>
 
     <string-array name="category_name_array">
         <item>@string/category_name_hint_format</item>
