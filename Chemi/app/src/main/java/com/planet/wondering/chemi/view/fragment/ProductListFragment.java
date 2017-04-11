@@ -141,8 +141,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
             mCategoryName = mCategoryNameArray[(int) mCategoryId];
         }
-
-
     }
 
     @Nullable
