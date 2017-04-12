@@ -475,6 +475,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));
             mProductNameTextView.setText(String.valueOf(mProduct.getName()));
+            mProductNameTextView.setSelected(true);
             mProductReviewRatingBar.setRating(mProduct.getRatingValue());
             mProductReviewRatingValueTextView.setText(String.valueOf(mProduct.getRatingValue()));
             mProductReviewRatingCountTextView.setText(getString(R.string.product_review_count, String.valueOf(mProduct.getRatingCount())));

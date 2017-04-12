@@ -32,6 +32,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Product;
@@ -117,6 +118,8 @@ public class ReviewCreateFragment extends Fragment
     }
 
     private RelativeLayout mReviewCreateConfirmLayout;
+    private ImageView mReviewCreateProductImageView;
+    private TextView mReviewCreateProductBrandTextView;
     private TextView mReviewCreateProductNameTextView;
     private TextView mReviewCreateMessageTextView;
     private RatingBar mReviewCreateRatingValueRatingBar;
@@ -155,6 +158,8 @@ public class ReviewCreateFragment extends Fragment
 
         mReviewCreateConfirmLayout = (RelativeLayout) view.findViewById(R.id.review_create_confirm_layout);
         mReviewCreateConfirmLayout.setOnClickListener(this);
+        mReviewCreateProductImageView = (ImageView) view.findViewById(R.id.review_create_product_image_view);
+        mReviewCreateProductBrandTextView = (TextView) view.findViewById(R.id.review_create_product_brand_text_view);
         mReviewCreateProductNameTextView = (TextView) view.findViewById(R.id.review_create_product_name_text_view);
         mReviewCreateMessageTextView = (TextView) view.findViewById(R.id.review_create_message_text_view);
         mReviewCreateRatingValueRatingBar = (RatingBar) view.findViewById(R.id.review_create_rating_value_rating_bar);
@@ -176,7 +181,16 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Glide.with(getActivity())
+                .load(mProduct.getImagePath())
+//                    .placeholder(R.drawable.unloaded_image_holder)
+//                    .error(R.drawable.unloaded_image_holder)
+                .crossFade()
+                .override(300, 200)
+                .into(mReviewCreateProductImageView);
+        mReviewCreateProductBrandTextView.setText(mProduct.getBrand());
         mReviewCreateProductNameTextView.setText(mProduct.getName());
+
         updateContentTextView("");
     }
 

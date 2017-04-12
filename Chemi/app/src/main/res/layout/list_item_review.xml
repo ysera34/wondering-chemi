@@ -18,6 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="7dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:textSize="14sp"
             android:textColor="@color/colorFontToolbarSubtitle"/>
 
@@ -44,9 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:theme="@style/RatingBarTheme"
-                style="@style/ProductListRatingBarStyle"
-                android:stepSize="0.5"
+                style="@style/MediumStarStarRatingBar"
+                android:isIndicator="true"
+                android:stepSize="0.01"
                 android:numStars="5"/>
 
             <TextView
