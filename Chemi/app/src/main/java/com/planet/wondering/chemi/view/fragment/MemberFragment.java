@@ -711,7 +711,6 @@ public class MemberFragment extends Fragment
             mArchiveReviewProductRatingBar.setRating(mReviewProduct.getRatingValue());
             mArchiveReviewProductDateTextView.setText(mReviewProduct.getCreateDate());
 //            mArchiveReviewProductDateTextView.setText(String.valueOf(mReviewProduct.getWriteDate()));
-
         }
     }
 

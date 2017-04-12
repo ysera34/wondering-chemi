@@ -98,10 +98,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
-    private static final byte LATEST_MODE = -1;
-    private static final byte SUGGESTION_MODE = 1;
-    private static final byte RESULT_MODE = 2;
-    private byte mCurrentMode;
+    private static final int LATEST_MODE = -1;
+    private static final int SUGGESTION_MODE = 1;
+    private static final int RESULT_MODE = 2;
+    private int mCurrentMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -416,8 +416,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 //                }
 //            }
         }
-
-
 
         @NonNull
         @Override

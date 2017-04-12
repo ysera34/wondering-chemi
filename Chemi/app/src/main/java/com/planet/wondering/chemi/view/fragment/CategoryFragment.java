@@ -74,7 +74,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        byte categoryId = -1;
+        int categoryId = -1;
         switch (v.getId()) {
             case R.id.category_baby_wet_tissue_image_view:
             case R.id.category_baby_wet_tissue_text_view:

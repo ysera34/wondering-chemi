@@ -67,7 +67,7 @@ public class MemberActivity extends BottomNavigationActivity
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, byte requestId) {
+    public static Intent newIntent(Context packageContext, int requestId) {
         Intent intent = new Intent(packageContext, MemberActivity.class);
         intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
@@ -75,7 +75,7 @@ public class MemberActivity extends BottomNavigationActivity
 
     private String mAccessToken;
     private User mUser;
-    private byte mRequestId;
+    private int mRequestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class MemberActivity extends BottomNavigationActivity
 
         mAccessToken = UserSharedPreferences.getStoredToken(getApplicationContext());
 
-        mRequestId = getIntent().getByteExtra(EXTRA_REQUEST_ID, (byte) -1);
+        mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);

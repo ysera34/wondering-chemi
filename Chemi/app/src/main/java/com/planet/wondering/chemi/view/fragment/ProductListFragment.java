@@ -69,15 +69,15 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProductListFragment newInstance(int productId) {
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_PRODUCT_ID, productId);
-
-        ProductListFragment fragment = new ProductListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static ProductListFragment newInstance(int productId) {
+//
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PRODUCT_ID, productId);
+//
+//        ProductListFragment fragment = new ProductListFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     public static ProductListFragment newInstance(ArrayList<Integer> productIds) {
 
@@ -89,10 +89,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProductListFragment newInstance(byte categoryId) {
+    public static ProductListFragment newInstance(int categoryId) {
 
         Bundle args = new Bundle();
-        args.putByte(ARG_CATEGORY_ID, categoryId);
+        args.putInt(ARG_CATEGORY_ID, categoryId);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -117,7 +117,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private String mTagName;
-    private byte mCategoryId;
+    private int mCategoryId;
     String[] mCategoryNameArray;
     private String mCategoryName;
     private TextView mProductTotalTextView;
@@ -131,7 +131,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTagName = getArguments().getString(ARG_TAG_NAME, null);
-        mCategoryId = getArguments().getByte(ARG_CATEGORY_ID, (byte) -1);
+        mCategoryId = getArguments().getInt(ARG_CATEGORY_ID, -1);
 
         mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
@@ -139,7 +139,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         if (mCategoryId > 0) {
             mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
-            mCategoryName = mCategoryNameArray[(int) mCategoryId];
+            mCategoryName = mCategoryNameArray[mCategoryId];
         }
     }
 
@@ -298,7 +298,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private void requestCategoryProductList(byte categoryId) {
+    private void requestCategoryProductList(int categoryId) {
 
         mProductListProgressBar.setVisibility(View.VISIBLE);
 

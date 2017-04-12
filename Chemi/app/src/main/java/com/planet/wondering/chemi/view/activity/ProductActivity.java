@@ -199,7 +199,7 @@ public class ProductActivity extends AppBaseActivity
         switch (item.getItemId()) {
             case R.id.action_faq:
 //                Toast.makeText(getApplicationContext(), "action_faq", Toast.LENGTH_SHORT).show();
-                startActivity(MemberActivity.newIntent(getApplicationContext(), (byte) 4));
+                startActivity(MemberActivity.newIntent(getApplicationContext(), 4));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.action_archive:

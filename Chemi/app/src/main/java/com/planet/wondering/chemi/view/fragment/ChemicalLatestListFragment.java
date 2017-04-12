@@ -67,20 +67,20 @@ public class ChemicalLatestListFragment extends Fragment {
         return fragment;
     }
 
-    public static ChemicalLatestListFragment newInstance(byte modeId) {
+    public static ChemicalLatestListFragment newInstance(int modeId) {
 
         Bundle args = new Bundle();
-        args.putByte(ARG_MODE_ID, modeId);
+        args.putInt(ARG_MODE_ID, modeId);
 
         ChemicalLatestListFragment fragment = new ChemicalLatestListFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static ChemicalLatestListFragment newInstance(byte modeId, Chemical chemical) {
+    public static ChemicalLatestListFragment newInstance(int modeId, Chemical chemical) {
 
         Bundle args = new Bundle();
-        args.putByte(ARG_MODE_ID, modeId);
+        args.putInt(ARG_MODE_ID, modeId);
         args.putSerializable(ARG_CHEMICAL, chemical);
 
         ChemicalLatestListFragment fragment = new ChemicalLatestListFragment();
@@ -101,10 +101,10 @@ public class ChemicalLatestListFragment extends Fragment {
     private StringBuilder mUrlBuilder;
     private Pager mPager;
 
-    private static final byte LATEST_MODE = -1;
-    private static final byte SUGGESTION_MODE = 1;
-    private static final byte RESULT_MODE = 2;
-    private byte mModeId;
+    private static final int LATEST_MODE = -1;
+    private static final int SUGGESTION_MODE = 1;
+    private static final int RESULT_MODE = 2;
+    private int mModeId;
 
     private RecyclerView mChemicalLatestRecyclerView;
     private ChemicalLatestAdapter mChemicalLatestAdapter;
@@ -117,7 +117,7 @@ public class ChemicalLatestListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mChemicals = new ArrayList<>();
-        mModeId = getArguments().getByte(ARG_MODE_ID, (byte) 0);
+        mModeId = getArguments().getInt(ARG_MODE_ID, 0);
 
         mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
 
@@ -312,7 +312,7 @@ public class ChemicalLatestListFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_chemical_latest_header_sub_title_text_view);
         }
 
-        public void bindHeader(byte modeId) {
+        public void bindHeader(int modeId) {
             switch (modeId) {
                 case LATEST_MODE:
                     mHeaderTitleTextView.setText(getString(R.string.search_chemical_latest_title));

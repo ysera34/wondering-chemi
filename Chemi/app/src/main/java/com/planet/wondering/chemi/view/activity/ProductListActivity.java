@@ -2,11 +2,9 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
@@ -34,11 +32,11 @@ public class ProductListActivity extends BottomNavigationActivity {
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, int productId) {
-        Intent intent = new Intent(packageContext, ProductListActivity.class);
-        intent.putExtra(EXTRA_PRODUCT_ID, productId);
-        return intent;
-    }
+//    public static Intent newIntent(Context packageContext, int productId) {
+//        Intent intent = new Intent(packageContext, ProductListActivity.class);
+//        intent.putExtra(EXTRA_PRODUCT_ID, productId);
+//        return intent;
+//    }
 
     public static Intent newIntent(Context packageContext, ArrayList<Integer> productIds) {
         Intent intent = new Intent(packageContext, ProductListActivity.class);
@@ -46,7 +44,7 @@ public class ProductListActivity extends BottomNavigationActivity {
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, byte categoryId) {
+    public static Intent newIntent(Context packageContext, int categoryId) {
         Intent intent = new Intent(packageContext, ProductListActivity.class);
         intent.putExtra(EXTRA_CATEGORY_ID, categoryId);
         return intent;
@@ -67,39 +65,16 @@ public class ProductListActivity extends BottomNavigationActivity {
 
     private int mProductId;
     private ArrayList<Integer> mProductIds;
-    private byte mCategoryId;
-    private short mShortCategoryId;
+    private int mCategoryId;
     private String mTagName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
+//        mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         mProductIds = getIntent().getIntegerArrayListExtra(EXTRA_PRODUCT_IDS);
-        Log.i(TAG, "mCategoryId " + String.valueOf(mCategoryId));
-        mCategoryId = getIntent().getByteExtra(EXTRA_CATEGORY_ID, (byte) -1);
-        Log.i(TAG, "mShortCategoryId " + String.valueOf(mShortCategoryId));
-        mShortCategoryId = getIntent().getShortExtra("short_category_id", (short) -1);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.i(TAG, "mCategoryId " + String.valueOf(mCategoryId));
-            Log.i(TAG, "mShortCategoryId " + String.valueOf(mShortCategoryId));
-
-            Log.i(TAG, "mCategoryId + 1 = " + String.valueOf(mCategoryId + 1));
-            Log.i(TAG, "mShortCategoryId + 1 = " + String.valueOf(mShortCategoryId + 1));
-
-            if (mCategoryId > 30) {
-                mCategoryId = -1;
-                Log.i(TAG, "mCategoryId " + String.valueOf(mCategoryId));
-            }
-
-            if (mShortCategoryId > 30) {
-                mShortCategoryId = -1;
-                Log.i(TAG, "mShortCategoryId " + String.valueOf(mShortCategoryId));
-            }
-        }
-        Log.i(TAG, "mCategoryId " + String.valueOf(mCategoryId));
-        Log.i(TAG, "mShortCategoryId " + String.valueOf(mShortCategoryId));
+        mCategoryId = getIntent().getIntExtra(EXTRA_CATEGORY_ID, -1);
         mTagName = getIntent().getStringExtra(EXTRA_TAG_NAME);
 
 
