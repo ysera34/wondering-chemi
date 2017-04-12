@@ -38,6 +38,7 @@ import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEWS
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_DATE;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_PRODUCT_ID;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_PRODUCT_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_PRODUCT_NAME;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_RATING;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_REVIEW_SIZE;
 import static com.planet.wondering.chemi.network.Config.COUNT;
@@ -713,7 +714,7 @@ public class Parser {
                         JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
                         ReviewProduct reviewProduct = new ReviewProduct();
                         reviewProduct.setProductId(reviewJSONObject.getInt(USER_REVIEW_PRODUCT_ID));
-//                        reviewProduct.setProductName(reviewJSONObject.getString(USER_REVIEW_PRODUCT_NAME));
+                        reviewProduct.setProductName(reviewJSONObject.getString(USER_REVIEW_PRODUCT_NAME));
                         reviewProduct.setProductImagePath(reviewJSONObject.getString(USER_REVIEW_PRODUCT_IMAGE_PATH));
 
                         Object ratingObject = reviewJSONObject.get(USER_REVIEW_RATING);

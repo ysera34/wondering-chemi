@@ -29,9 +29,11 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
@@ -43,6 +45,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 1. 19..
@@ -325,8 +328,14 @@ public class ReviewListFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.list_item_review_header_review_create_layout:
-                    getActivity().startActivityForResult(ReviewActivity.newIntent(getActivity(), mProduct),
-                            REVIEW_CREATE_REQUEST_CODE);
+                    if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                        getActivity().startActivityForResult(ReviewActivity.newIntent(getActivity(), mProduct),
+                                REVIEW_CREATE_REQUEST_CODE);
+                    } else {
+                        CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                                .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                        dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+                    }
                     break;
             }
         }

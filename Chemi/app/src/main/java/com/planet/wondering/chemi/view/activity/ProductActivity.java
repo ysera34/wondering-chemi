@@ -157,8 +157,8 @@ public class ProductActivity extends AppBaseActivity
 
     private void bindProduct(Product product) {
 
-        setTitle(mProduct.getName());
-        mProductToolbar.setSubtitle(mProduct.getBrand());
+        setTitle(mProduct.getBrand());
+        mProductToolbar.setSubtitle(mProduct.getName());
 
         Glide.with(getApplicationContext())
                 .load(mProduct.getImagePath())

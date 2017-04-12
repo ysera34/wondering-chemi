@@ -189,8 +189,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         });
 
         mDictionaryFragmentContainerFrameLayout = (FrameLayout) view.findViewById(R.id.dictionary_fragment_container);
-//        mFragmentManager = this.getChildFragmentManager();
-        mFragmentManager = getChildFragmentManager();
+        mFragmentManager = this.getChildFragmentManager();
+//        mFragmentManager = getChildFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
 
         if (mFragment == null) {
@@ -200,7 +200,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     .commit();
             mCurrentMode = LATEST_MODE;
         }
-
         return view;
     }
 

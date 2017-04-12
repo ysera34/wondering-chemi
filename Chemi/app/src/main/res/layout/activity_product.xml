@@ -59,26 +59,31 @@
                             android:id="@+id/product_detail_review_rating_bar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:theme="@style/RatingBarTheme"
-                            style="@style/ProductListRatingBarStyle"
+                            android:layout_marginEnd="6dp"
+                            style="@style/MediumStarStarRatingBar"
+                            android:isIndicator="true"
                             android:stepSize="0.01"
                             android:numStars="5"/>
+                        <!--style="?android:attr/ratingBarStyleSmall"-->
+                        <!--style="@style/ProductListRatingBarStyle"-->
 
                         <TextView
                             android:id="@+id/product_detail_review_rating_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:layout_gravity="center_vertical"
+                            android:layout_gravity="bottom"
+                            android:paddingTop="3dp"
                             android:textSize="12sp"
                             android:textColor="@color/colorAccent"/>
+                        <!--android:layout_marginStart="6dp"-->
 
                         <TextView
                             android:id="@+id/product_detail_review_rating_count_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:layout_gravity="center_vertical"
+                            android:layout_gravity="bottom"
+                            android:paddingTop="3dp"
                             android:textSize="12sp"
                             android:textColor="@color/colorFontNormal"/>
 
@@ -94,7 +99,7 @@
                 app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
                 app:titleTextColor="@color/colorFontToolbarTitle"
                 app:subtitleTextAppearance="@style/ProductToolbarTextAppearance.Subtitle"
-                app:subtitleTextColor="@color/colorFontToolbarSubtitle"
+                app:subtitleTextColor="@color/colorFontToolbarTitle"
                 style="@style/ProductToolbarStyle"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"

@@ -22,6 +22,7 @@ public class DictionaryActivity extends BottomNavigationActivity
         implements OnChemicalSelectedListener, OnDialogFinishedListener {
 
     private static final String TAG = DictionaryActivity.class.getSimpleName();
+
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
