@@ -6,6 +6,7 @@ package com.planet.wondering.chemi.common;
 
 public class Common {
 
-
+    public static final int REVIEW_CREATE_REQUEST_CODE = 1100;
+    public static final int REVIEW_READ_REQUEST_CODE = 1200;
 
 }

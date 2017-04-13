@@ -108,7 +108,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:text="평점"
             android:textSize="12sp"
             android:textColor="@color/colorFontBody"/>
@@ -143,14 +143,14 @@
         android:paddingEnd="16dp"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
-        android:orientation="vertical"
-        android:background="@drawable/widget_border_bottom">
+        android:orientation="vertical">
+        <!--android:background="@drawable/widget_border_bottom"-->
 
         <RelativeLayout
             android:id="@+id/review_create_review_header_layout"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginBottom="4dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -182,6 +182,8 @@
                 android:id="@+id/review_create_review_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:gravity="top"
                 android:clickable="true"
                 android:text="@string/review_create_review_hint"

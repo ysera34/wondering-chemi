@@ -55,7 +55,6 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");

@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
@@ -329,7 +330,8 @@ public class ReviewListFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.list_item_review_header_review_create_layout:
                     if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                        getActivity().startActivityForResult(ReviewActivity.newIntent(getActivity(), mProduct),
+                        getActivity().startActivityForResult(ReviewActivity.newIntent(
+                                getActivity(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
                                 REVIEW_CREATE_REQUEST_CODE);
                     } else {
                         CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
@@ -363,7 +365,7 @@ public class ReviewListFragment extends Fragment {
         }
     }
 
-    private class ReviewHolder extends RecyclerView.ViewHolder {
+    private class ReviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Review mReview;
 
@@ -393,6 +395,7 @@ public class ReviewListFragment extends Fragment {
 
         public ReviewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mUserNameTextView = (TextView) itemView.findViewById(R.id.list_item_review_user_name_text_view);
             mUserProfileImageView = (CircleImageView) itemView.findViewById(R.id.list_item_review_user_profile_image_view);
@@ -554,6 +557,11 @@ public class ReviewListFragment extends Fragment {
                         break;
                 }
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(ReviewActivity.newIntent(getActivity(), mReview, Common.REVIEW_READ_REQUEST_CODE));
         }
     }
 }

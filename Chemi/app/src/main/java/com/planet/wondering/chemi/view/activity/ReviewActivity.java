@@ -9,10 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.Product;
+import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
+import com.planet.wondering.chemi.view.fragment.ReviewReadFragment;
 
 /**
  * Created by yoon on 2017. 2. 23..
@@ -23,15 +26,25 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     private static final String TAG = ReviewActivity.class.getSimpleName();
 
     private static final String EXTRA_PRODUCT = "com.planet.wondering.chemi.product";
+    private static final String EXTRA_REVIEW = "com.planet.wondering.chemi.review";
+    private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ReviewActivity.class);
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, Product product) {
+    public static Intent newIntent(Context packageContext, Product product, int requestId) {
         Intent intent = new Intent(packageContext, ReviewActivity.class);
         intent.putExtra(EXTRA_PRODUCT, product);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
+        return intent;
+    }
+
+    public static Intent newIntent(Context packageContext, Review review, int requestId) {
+        Intent intent = new Intent(packageContext, ReviewActivity.class);
+        intent.putExtra(EXTRA_REVIEW, review);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
     }
 
@@ -39,6 +52,8 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     private Fragment mFragment;
 
     private Product mProduct;
+    private Review mReview;
+    private int mRequestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +61,19 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         mBottomNavigationLayout.setVisibility(View.GONE);
 
         mProduct = (Product) getIntent().getSerializableExtra(EXTRA_PRODUCT);
+        mReview = (Review) getIntent().getSerializableExtra(EXTRA_REVIEW);
+        mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
-        if (mFragment == null) {
-//            mFragment = ReviewCreateFragment.newInstance();
+        if (mRequestId == Common.REVIEW_CREATE_REQUEST_CODE) {
             mFragment = ReviewCreateFragment.newInstance(mProduct);
+            mFragmentManager.beginTransaction()
+                    .add(R.id.main_fragment_container, mFragment)
+                    .commit();
+        } else if (mRequestId == Common.REVIEW_READ_REQUEST_CODE) {
+            mFragment = ReviewReadFragment.newInstance();
             mFragmentManager.beginTransaction()
                     .add(R.id.main_fragment_container, mFragment)
                     .commit();
