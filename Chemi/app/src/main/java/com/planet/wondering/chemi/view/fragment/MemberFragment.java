@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.Content;
 import com.planet.wondering.chemi.model.archive.Product;
@@ -33,6 +34,7 @@ import com.planet.wondering.chemi.view.activity.CategoryActivity;
 import com.planet.wondering.chemi.view.activity.ContentListActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
+import com.planet.wondering.chemi.view.activity.ReviewActivity;
 
 import java.util.ArrayList;
 
@@ -678,7 +680,8 @@ public class MemberFragment extends Fragment
         }
     }
 
-    private class ArchiveReviewProductHolder extends RecyclerView.ViewHolder {
+    private class ArchiveReviewProductHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private ReviewProduct mReviewProduct;
 
@@ -689,6 +692,7 @@ public class MemberFragment extends Fragment
 
         public ArchiveReviewProductHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mArchiveReviewProductImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_archive_review_product_image_view);
@@ -711,6 +715,12 @@ public class MemberFragment extends Fragment
             mArchiveReviewProductRatingBar.setRating(mReviewProduct.getRatingValue());
             mArchiveReviewProductDateTextView.setText(mReviewProduct.getCreateDate());
 //            mArchiveReviewProductDateTextView.setText(String.valueOf(mReviewProduct.getWriteDate()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(ReviewActivity.newIntent(
+                    getActivity(), mReviewProduct.getReviewId(), Common.REVIEW_READ_REQUEST_CODE));
         }
     }
 

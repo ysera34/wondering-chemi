@@ -24,6 +24,7 @@
             android:textColor="@color/colorFontNormal"/>
 
         <RelativeLayout
+            android:visibility="invisible"
             android:id="@+id/review_read_more_menu_layout"
             android:layout_width="34dp"
             android:layout_height="match_parent"
@@ -70,7 +71,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/review_review_product_image_view"
+                        android:id="@+id/review_read_product_image_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="centerInside"/>
@@ -144,7 +145,7 @@
                         android:id="@+id/review_read_user_name_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="튼튼이맘"
+                        android:layout_marginBottom="4dp"
                         android:textSize="13sp"
                         android:textStyle="bold|italic"
                         android:textColor="@color/colorFontNormal"/>
@@ -236,6 +237,7 @@
                         android:id="@+id/review_child_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:gravity="center_vertical">
 
                         <TextView
@@ -283,17 +285,17 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/review_read_rating_message_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="12dp"
-                    android:text="만족해요"
                     android:textSize="13sp"
                     android:textStyle="bold|italic"
                     android:textColor="@color/colorAccent"/>
 
                 <RatingBar
-                    android:id="@+id/list_item_review_rating_bar"
+                    android:id="@+id/review_read_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
@@ -303,7 +305,7 @@
                     android:numStars="5"/>
 
                 <TextView
-                    android:id="@+id/list_item_review_date_text_view"
+                    android:id="@+id/review_read_date_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
@@ -312,16 +314,19 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/review_read_content_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
+                android:layout_marginBottom="24dp"
                 android:lineSpacingMultiplier="1.1"
                 android:text=""
                 android:textSize="14sp"
                 android:textColor="@color/colorFontNormal"/>
 
             <LinearLayout
+                android:id="@+id/review_read_images_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -336,7 +341,6 @@
                     android:background="@drawable/bg_review_camera"/>
 
                 <ImageView
-                    android:visibility="invisible"
                     android:id="@+id/review_read_review_image2_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -345,7 +349,6 @@
                     android:background="@drawable/bg_review_camera"/>
 
                 <ImageView
-                    android:visibility="invisible"
                     android:id="@+id/review_read_review_image3_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"

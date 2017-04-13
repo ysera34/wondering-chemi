@@ -76,6 +76,7 @@ import static com.planet.wondering.chemi.network.Config.Product.Key.WHOLE_CHEMIC
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
+import static com.planet.wondering.chemi.network.Config.Review.Key.AUTHOR;
 import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
@@ -554,6 +555,76 @@ public class Parser {
         return reviews;
     }
 
+    public static Review parseReview(JSONObject responseObject) {
+
+        Review review = new Review();
+
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject reviewJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                review.setId(reviewJSONObject.getInt(REVIEW_ID));
+                JSONObject userJSONObject = reviewJSONObject.getJSONObject(USER);
+                review.getUser().setId(userJSONObject.getInt(USER_ID));
+                review.getUser().setName(userJSONObject.getString(NAME));
+                review.getUser().setImagePath(userJSONObject.getString(IMAGE_PATH));
+                int gender = userJSONObject.getInt(GENDER);
+                if (gender == 0) {
+                    review.getUser().setGender(true);
+                } else if (gender == 1) {
+                    review.getUser().setGender(false);
+                }
+                review.getUser().setAge(userJSONObject.getString(AGE));
+                int hasDrySkin = userJSONObject.getInt(HAS_DRY_SKIN);
+                if (hasDrySkin == 1) {
+                    review.getUser().setHasDrySkin(true);
+                }
+                int hasOilySkin = userJSONObject.getInt(HAS_OILY_SKIN);
+                if (hasOilySkin == 1) {
+                    review.getUser().setHasOilySkin(true);
+                }
+                int hasAllergy = userJSONObject.getInt(HAS_ALLERGY);
+                if (hasAllergy == 1) {
+                    review.getUser().setHasAllergy(true);
+                }
+                int hasChild = userJSONObject.getInt(HAS_CHILD);
+                if (hasChild == 1) {
+                    review.getUser().setHasChild(true);
+                }
+                int childHasDrySkin = userJSONObject.getInt(CHILD_HAS_DRY_SKIN);
+                if (childHasDrySkin == 1) {
+                    review.getUser().setChildHasDrySkin(true);
+                }
+                int childHasAllergy = userJSONObject.getInt(CHILD_HAS_ALLERGY);
+                if (childHasAllergy == 1) {
+                    review.getUser().setChildHasAllergy(true);
+                }
+
+                Object ratingObject = reviewJSONObject.get(Config.Review.Key.RATING);
+                float ratingFloat = 0.0f;
+                if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
+                    ratingFloat = 0.0f;
+                } else if (ratingObject instanceof Integer) {
+                    ratingFloat = ((Integer) ratingObject).floatValue();
+                } else {
+                    ratingFloat = ((Double) ratingObject).floatValue();
+                }
+                review.setRatingValue(ratingFloat);
+                review.setContent(reviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
+                review.setDate(reviewJSONObject.getString(Config.Review.Key.DATE));
+                review.setAuthor(reviewJSONObject.getBoolean(AUTHOR));
+
+                JSONArray jsonArray = reviewJSONObject.getJSONArray(Config.Review.Key.IMAGE_PATHS);
+                for (int j = 0; j < jsonArray.length(); j++) {
+                    review.getImagePaths().add(jsonArray.getString(j));
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return review;
+    }
+
     public static User parseEmailConfirm(JSONObject responseObject) {
         Log.i(TAG, responseObject.toString());
         User user = new User();
@@ -713,6 +784,7 @@ public class Parser {
                     for (int i = 0; i < reviewSize; i++) {
                         JSONObject reviewJSONObject = (JSONObject) reviewJSONArray.get(i);
                         ReviewProduct reviewProduct = new ReviewProduct();
+                        reviewProduct.setReviewId(reviewJSONObject.getInt(USER_ARCHIVE_ID));
                         reviewProduct.setProductId(reviewJSONObject.getInt(USER_REVIEW_PRODUCT_ID));
                         reviewProduct.setProductName(reviewJSONObject.getString(USER_REVIEW_PRODUCT_NAME));
                         reviewProduct.setProductImagePath(reviewJSONObject.getString(USER_REVIEW_PRODUCT_IMAGE_PATH));

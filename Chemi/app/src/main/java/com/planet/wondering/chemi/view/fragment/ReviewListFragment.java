@@ -444,6 +444,12 @@ public class ReviewListFragment extends Fragment {
                         .into(mUserProfileImageView);
             }
 
+            if (mReview.getUser().isGender()) {
+                mParentIconTextView.setBackgroundResource(R.drawable.ic_mommy_gray);
+            } else {
+                mParentIconTextView.setBackgroundResource(R.drawable.ic_daddy_gray);
+            }
+
             mParentAgeTextView.setText(mReview.getUser().getAge());
 
             if (mReview.getUser().isHasDrySkin() && mReview.getUser().isHasOilySkin()) {
@@ -561,7 +567,8 @@ public class ReviewListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            startActivity(ReviewActivity.newIntent(getActivity(), mReview, Common.REVIEW_READ_REQUEST_CODE));
+//            startActivity(ReviewActivity.newIntent(getActivity(), mProduct, mReview, Common.REVIEW_READ_REQUEST_CODE));
+            startActivity(ReviewActivity.newIntent(getActivity(), mReview.getId(), Common.REVIEW_READ_REQUEST_CODE));
         }
     }
 }

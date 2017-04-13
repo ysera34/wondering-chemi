@@ -197,6 +197,7 @@ public class Config {
             public static final String DESCRIPTION = "description";
             public static final String IMAGE_PATHS = "imagePaths";
             public static final String DATE = "dated";
+            public static final String AUTHOR = "isAuthor";
         }
     }
 

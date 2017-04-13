@@ -6,16 +6,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewReadFragment;
+
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.planet.wondering.chemi.network.Config.Review.PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
 /**
  * Created by yoon on 2017. 2. 23..
@@ -27,10 +49,18 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     private static final String EXTRA_PRODUCT = "com.planet.wondering.chemi.product";
     private static final String EXTRA_REVIEW = "com.planet.wondering.chemi.review";
+    private static final String EXTRA_REVIEW_ID = "com.planet.wondering.chemi.review_id";
     private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ReviewActivity.class);
+        return intent;
+    }
+
+    public static Intent newIntent(Context packageContext, int reviewId, int requestId) {
+        Intent intent = new Intent(packageContext, ReviewActivity.class);
+        intent.putExtra(EXTRA_REVIEW_ID, reviewId);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
     }
 
@@ -41,8 +71,9 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, Review review, int requestId) {
+    public static Intent newIntent(Context packageContext, Product product, Review review, int requestId) {
         Intent intent = new Intent(packageContext, ReviewActivity.class);
+        intent.putExtra(EXTRA_PRODUCT, product);
         intent.putExtra(EXTRA_REVIEW, review);
         intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
@@ -51,6 +82,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
+    private int mReviewId;
     private Product mProduct;
     private Review mReview;
     private int mRequestId;
@@ -60,6 +92,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         super.onCreate(savedInstanceState);
         mBottomNavigationLayout.setVisibility(View.GONE);
 
+        mReviewId = getIntent().getIntExtra(EXTRA_REVIEW_ID, -1);
         mProduct = (Product) getIntent().getSerializableExtra(EXTRA_PRODUCT);
         mReview = (Review) getIntent().getSerializableExtra(EXTRA_REVIEW);
         mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
@@ -73,10 +106,19 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
                     .add(R.id.main_fragment_container, mFragment)
                     .commit();
         } else if (mRequestId == Common.REVIEW_READ_REQUEST_CODE) {
-            mFragment = ReviewReadFragment.newInstance();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.main_fragment_container, mFragment)
-                    .commit();
+            if (mReviewId == -1) {
+//                mFragment = ReviewReadFragment.newInstance(mProduct, mReview);
+//                mFragmentManager.beginTransaction()
+//                        .add(R.id.main_fragment_container, mFragment)
+//                        .commit();
+                requestReview(mReviewId);
+            } else {
+//                mFragment = ReviewReadFragment.newInstance(mReviewId);
+//                mFragmentManager.beginTransaction()
+//                        .add(R.id.main_fragment_container, mFragment)
+//                        .commit();
+                requestReview(mReviewId);
+            }
         }
     }
 
@@ -115,6 +157,45 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         }
     }
 
+    public void requestReview(int reviewId) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + PATH + File.separator + reviewId,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mReview = Parser.parseReview(response);
+                        mFragment = ReviewReadFragment.newInstance(mReview);
+                        mFragmentManager.beginTransaction()
+                                .add(R.id.main_fragment_container, mFragment)
+                                .commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(),
+                                "리뷰를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
     @Override
     public void onBackPressed() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
@@ -130,15 +211,5 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
             setResult(Activity.RESULT_OK, new Intent());
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        ReviewSharedPreferences preferences = new ReviewSharedPreferences();
-//        preferences.removeStoredRatingValue(getApplicationContext());
-//        preferences.removeStoredImage1Path(getApplicationContext());
-//        preferences.removeStoredImage2Path(getApplicationContext());
-//        preferences.removeStoredImage3Path(getApplicationContext());
     }
 }

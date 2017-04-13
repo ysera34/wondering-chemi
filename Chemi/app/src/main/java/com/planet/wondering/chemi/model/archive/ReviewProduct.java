@@ -9,12 +9,21 @@ import java.util.Date;
 
 public class ReviewProduct implements Serializable {
 
+    private int mReviewId;
     private int mProductId;
     private String mProductName;
     private String mProductImagePath;
     private float mRatingValue;
     private String mCreateDate;
     private Date mWriteDate;
+
+    public int getReviewId() {
+        return mReviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+        mReviewId = reviewId;
+    }
 
     public int getProductId() {
         return mProductId;

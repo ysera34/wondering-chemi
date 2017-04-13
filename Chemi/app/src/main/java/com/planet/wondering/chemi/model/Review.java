@@ -13,6 +13,7 @@ public class Review implements Serializable {
     private int mUserId;
     private int mProductId;
     private User mUser;
+    private boolean mAuthor;
     private float mRatingValue;
     private String content;
 //    private HashMap<Integer, String> mImagePathMap;
@@ -58,6 +59,14 @@ public class Review implements Serializable {
 
     public void setUser(User user) {
         mUser = user;
+    }
+
+    public boolean isAuthor() {
+        return mAuthor;
+    }
+
+    public void setAuthor(boolean author) {
+        mAuthor = author;
     }
 
     public float getRatingValue() {
