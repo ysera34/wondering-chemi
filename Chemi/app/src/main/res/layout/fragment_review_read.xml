@@ -24,17 +24,17 @@
             android:textColor="@color/colorFontNormal"/>
 
         <RelativeLayout
-            android:id="@+id/review_read_confirm_layout"
+            android:id="@+id/review_read_more_menu_layout"
             android:layout_width="34dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="14dp"
             android:gravity="center">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_confirm"/>
+                android:src="@drawable/ic_more_vert"/>
 
         </RelativeLayout>
     </RelativeLayout>
@@ -109,6 +109,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/review_read_user_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_search_product_height"
                 android:paddingTop="4dp"
@@ -126,9 +127,9 @@
                     android:gravity="center">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/review_review_user_image_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:id="@+id/review_read_user_image_view"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"/>
 
                 </LinearLayout>
 
@@ -139,33 +140,186 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/review_read_user_name_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="튼튼이맘"
+                        android:textSize="13sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/colorFontNormal"/>
+
+                    <LinearLayout
+                        android:id="@+id/review_parent_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/review_parent_icon_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/ic_mommy_gray"/>
+
+                        <TextView
+                            android:id="@+id/review_parent_age_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:layout_marginEnd="6dp"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                        <TextView
+                            android:id="@+id/review_parent_dry_skin_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="건성"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                        <TextView
+                            android:id="@+id/review_parent_oily_skin_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="지성"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                        <TextView
+                            android:id="@+id/review_parent_dry_oily_skin_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="건성/지성"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                        <TextView
+                            android:id="@+id/review_parent_allergy_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:text="알레르기"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/review_child_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/review_child_icon_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/ic_baby_gray"/>
+
+                        <TextView
+                            android:id="@+id/review_child_dry_skin_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="자녀 악건성"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                        <TextView
+                            android:id="@+id/review_child_allergy_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:text="자녀 알레르기"
+                            android:textSize="11sp"
+                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="@color/colorAccent"/>
-
-                </LinearLayout>
+                android:layout_height="50dp"
+                android:gravity="center_vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="만족해요"
+                    android:textSize="13sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/colorAccent"/>
+
+                <RatingBar
+                    android:id="@+id/list_item_review_rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    style="@style/MediumStarStarRatingBar"
+                    android:isIndicator="true"
+                    android:stepSize="0.01"
+                    android:numStars="5"/>
+
+                <TextView
+                    android:id="@+id/list_item_review_date_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorFontFrenchGray"/>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:lineSpacingMultiplier="1.1"
+                android:text=""
+                android:textSize="14sp"
+                android:textColor="@color/colorFontNormal"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -199,6 +353,18 @@
                     android:background="@drawable/bg_review_camera"/>
 
             </LinearLayout>
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/colorMainBackground"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/review_read_comment_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

@@ -203,5 +203,7 @@
     <string name="comments_hint_message">댓글을 입력해주세요.</string>
     <string name="contents_like_promote_message">제일 먼저 좋아요를 눌러주세요!</string>
     <string name="comments_count_format">댓글 %s개</string>
+    <string name="menu_more_review_read_action_update">수정하기</string>
+    <string name="menu_more_review_read_action_delete">지우기</string>
 
 </resources>
