@@ -179,12 +179,8 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         if (mReview.isAuthor()) {
             mReviewReadMoreMenuLayout.setVisibility(View.VISIBLE);
         }
-        if (mProduct != null) {
-            bindProduct();
-        } else {
-            Toast.makeText(getActivity(), "mProduct null", Toast.LENGTH_SHORT).show();
-        }
         if (mReview != null) {
+            bindProduct();
             bindReview();
         } else {
             Toast.makeText(getActivity(), "mReview null", Toast.LENGTH_SHORT).show();
@@ -229,14 +225,14 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
 
     private void bindProduct() {
         Glide.with(getActivity())
-                .load(mProduct.getImagePath())
+                .load(mReview.getProductImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                 .crossFade()
                 .override(300, 200)
                 .into(mReviewReadProductImageView);
-        mReviewReadProductBrandTextView.setText(mProduct.getBrand());
-        mReviewReadProductNameTextView.setText(mProduct.getName());
+        mReviewReadProductBrandTextView.setText(mReview.getProductBrand());
+        mReviewReadProductNameTextView.setText(mReview.getProductName());
     }
 
     private void bindReview() {

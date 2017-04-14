@@ -193,6 +193,10 @@ public class Config {
 
         public static final class Key {
             public static final String REVIEW_ID = "id";
+            public static final String PRODUCT_ID = "productId";
+            public static final String PRODUCT_NAME = "productName";
+            public static final String PRODUCT_BRAND = "productBrand";
+            public static final String PRODUCT_IMAGE_PATH = "productImagePath";
             public static final String RATING = "rated";
             public static final String DESCRIPTION = "description";
             public static final String IMAGE_PATHS = "imagePaths";

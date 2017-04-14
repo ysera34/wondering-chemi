@@ -12,6 +12,9 @@ public class Review implements Serializable {
     private int mId;
     private int mUserId;
     private int mProductId;
+    private String mProductImagePath;
+    private String mProductBrand;
+    private String mProductName;
     private User mUser;
     private boolean mAuthor;
     private float mRatingValue;
@@ -51,6 +54,30 @@ public class Review implements Serializable {
 
     public void setProductId(int productId) {
         mProductId = productId;
+    }
+
+    public String getProductImagePath() {
+        return mProductImagePath;
+    }
+
+    public void setProductImagePath(String productImagePath) {
+        mProductImagePath = productImagePath;
+    }
+
+    public String getProductBrand() {
+        return mProductBrand;
+    }
+
+    public void setProductBrand(String productBrand) {
+        mProductBrand = productBrand;
+    }
+
+    public String getProductName() {
+        return mProductName;
+    }
+
+    public void setProductName(String productName) {
+        mProductName = productName;
     }
 
     public User getUser() {

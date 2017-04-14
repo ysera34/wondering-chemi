@@ -64,7 +64,6 @@ import static com.planet.wondering.chemi.network.Config.Content.Key.IMAGE_PATHS;
 import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_COUNT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.MAIN_IMAGE_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.SUB_TITLE;
-import static com.planet.wondering.chemi.network.Config.Content.Key.THUMBNAIL_IMAGE_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.TITLE;
 import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_COUNT;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CLASS;
@@ -90,6 +89,9 @@ import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
 import static com.planet.wondering.chemi.network.Config.Review.Key.AUTHOR;
+import static com.planet.wondering.chemi.network.Config.Review.Key.PRODUCT_BRAND;
+import static com.planet.wondering.chemi.network.Config.Review.Key.PRODUCT_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Review.Key.PRODUCT_NAME;
 import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
@@ -577,6 +579,10 @@ public class Parser {
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 JSONObject reviewJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
                 review.setId(reviewJSONObject.getInt(REVIEW_ID));
+                review.setProductId(reviewJSONObject.getInt(Config.Review.Key.PRODUCT_ID));
+                review.setProductImagePath(reviewJSONObject.getString(PRODUCT_IMAGE_PATH));
+                review.setProductBrand(reviewJSONObject.getString(PRODUCT_BRAND));
+                review.setProductName(reviewJSONObject.getString(PRODUCT_NAME));
                 JSONObject userJSONObject = reviewJSONObject.getJSONObject(USER);
                 review.getUser().setId(userJSONObject.getInt(USER_ID));
                 review.getUser().setName(userJSONObject.getString(NAME));
@@ -654,7 +660,7 @@ public class Parser {
                         content.setCategoryId(contentJSONObject.getInt(CATEGORY));
                         content.setTitle(contentJSONObject.getString(TITLE));
                         content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
-                        content.setThumbnailImagePath(contentJSONObject.getString(THUMBNAIL_IMAGE_PATH));
+                        content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
                         content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
                         content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
                         content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
@@ -679,15 +685,15 @@ public class Parser {
                 content.setCategoryId(contentJSONObject.getInt(CATEGORY));
                 content.setTitle(contentJSONObject.getString(TITLE));
                 content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
-                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
+//                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
 
                 JSONArray jsonArray = contentJSONObject.getJSONArray(IMAGE_PATHS);
                 for (int j = 0; j < jsonArray.length(); j++) {
                     content.getContentImagePaths().add(jsonArray.getString(j));
                 }
                 content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
-                content.setLike(contentJSONObject.getBoolean(CONTENT_LIKE));
-                content.setArchive(contentJSONObject.getBoolean(CONTENT_KEEP));
+                content.setLike(contentJSONObject.getInt(CONTENT_LIKE) == 1);
+                content.setArchive(contentJSONObject.getInt(CONTENT_KEEP) == 1);
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
