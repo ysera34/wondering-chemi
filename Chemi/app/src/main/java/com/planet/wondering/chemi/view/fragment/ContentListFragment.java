@@ -5,17 +5,36 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ContentActivity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import static com.planet.wondering.chemi.network.Config.Content.QUERY_CATEGORY;
+import static com.planet.wondering.chemi.network.Config.Content.QUERY_PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 3. 28..
@@ -24,6 +43,8 @@ import java.util.ArrayList;
 public class ContentListFragment extends Fragment {
 
     private static final String TAG = ContentListFragment.class.getSimpleName();
+
+    private static final String ARG_CATEGORY_ID = "category_id";
 
     public static ContentListFragment newInstance() {
 
@@ -34,6 +55,17 @@ public class ContentListFragment extends Fragment {
         return fragment;
     }
 
+    public static ContentListFragment newInstance(int categoryId) {
+
+        Bundle args = new Bundle();
+        args.getInt(ARG_CATEGORY_ID, categoryId);
+
+        ContentListFragment fragment = new ContentListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private int mCategoryId;
     private ArrayList<Content> mContents;
 
     private RecyclerView mContentRecyclerView;
@@ -44,9 +76,9 @@ public class ContentListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContents = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mContents.add(new Content());
-        }
+
+        mCategoryId = getArguments().getInt(ARG_CATEGORY_ID, -1);
+//        Log.i(TAG, "mCategoryId : " + mCategoryId);
     }
 
     @Nullable
@@ -72,6 +104,7 @@ public class ContentListFragment extends Fragment {
         });
 
         updateUI();
+        requestContentList(mCategoryId);
         return view;
     }
 
@@ -85,8 +118,39 @@ public class ContentListFragment extends Fragment {
             mContentAdapter = new ContentAdapter(mContents);
             mContentRecyclerView.setAdapter(mContentAdapter);
         } else {
+            mContentAdapter.setContents(mContents);
             mContentAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void requestContentList(int categoryId) {
+
+//        Log.i(TAG, "url : " + URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mContents = Parser.parseContentList(response);
+                        updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     private class ContentAdapter extends RecyclerView.Adapter<ContentHolder> {
@@ -94,6 +158,10 @@ public class ContentListFragment extends Fragment {
         private ArrayList<Content> mContents;
 
         public ContentAdapter(ArrayList<Content> contents) {
+            mContents = contents;
+        }
+
+        public void setContents(ArrayList<Content> contents) {
             mContents = contents;
         }
 
@@ -121,13 +189,38 @@ public class ContentListFragment extends Fragment {
 
         private Content mContent;
 
+        private ImageView mContentImageView;
+        private TextView mContentTitleTextView;
+        private TextView mContentSubTitleTextView;
+        private TextView mContentLikeCountTextView;
+        private TextView mContentViewCountTextView;
+        private TextView mContentCommentCountTextView;
+
         public ContentHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+
+            mContentImageView = (ImageView) itemView.findViewById(R.id.list_item_content_image_view);
+            mContentTitleTextView = (TextView) itemView.findViewById(R.id.list_item_content_title_text_view);
+            mContentSubTitleTextView = (TextView) itemView.findViewById(R.id.list_item_content_sub_title_text_view);
+            mContentLikeCountTextView = (TextView) itemView.findViewById(R.id.list_item_content_like_count_text_view);
+            mContentViewCountTextView = (TextView) itemView.findViewById(R.id.list_item_content_view_count_text_view);
+            mContentCommentCountTextView = (TextView) itemView.findViewById(R.id.list_item_content_comment_count_text_view);
         }
 
         public void bindContent(Content content) {
             mContent = content;
+
+            Glide.with(getActivity())
+                    .load(mContent.getThumbnailImagePath())
+                    .crossFade()
+//                    .override()
+                    .into(mContentImageView);
+            mContentTitleTextView.setText(String.valueOf(mContent.getTitle()));
+            mContentSubTitleTextView.setText(String.valueOf(mContent.getSubTitle()));
+            mContentLikeCountTextView.setText(String.valueOf(mContent.getLikeCount()));
+            mContentViewCountTextView.setText(String.valueOf(mContent.getViewCount()));
+            mContentCommentCountTextView.setText(String.valueOf(mContent.getCommentCount()));
         }
 
         @Override

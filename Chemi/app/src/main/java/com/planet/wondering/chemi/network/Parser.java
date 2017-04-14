@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
+import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
@@ -54,6 +55,18 @@ import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEEN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_ORIGIN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_PRODUCT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.PURPOSE;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
+import static com.planet.wondering.chemi.network.Config.Content.Key.COMMENT_COUNT;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_ID;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_KEEP;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_LIKE;
+import static com.planet.wondering.chemi.network.Config.Content.Key.IMAGE_PATHS;
+import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_COUNT;
+import static com.planet.wondering.chemi.network.Config.Content.Key.MAIN_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.Key.SUB_TITLE;
+import static com.planet.wondering.chemi.network.Config.Content.Key.THUMBNAIL_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.Key.TITLE;
+import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_COUNT;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CLASS;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CODE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.DESCRIPTION;
@@ -625,8 +638,65 @@ public class Parser {
         return review;
     }
 
+    public static ArrayList<Content> parseContentList(JSONObject responseObject) {
+
+        ArrayList<Content> contents = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int contentSize = responseObject.getInt(COUNT);
+                if (contentSize > 0) {
+                    JSONArray contentJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < contentSize; i++) {
+                        JSONObject contentJSONObject = (JSONObject) contentJSONArray.get(i);
+                        Content content = new Content();
+                        content.setId(contentJSONObject.getInt(CONTENT_ID));
+                        content.setCategoryId(contentJSONObject.getInt(CATEGORY));
+                        content.setTitle(contentJSONObject.getString(TITLE));
+                        content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
+                        content.setThumbnailImagePath(contentJSONObject.getString(THUMBNAIL_IMAGE_PATH));
+                        content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
+                        content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
+                        content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
+                        contents.add(content);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return contents;
+    }
+
+    public static Content parseContent(JSONObject responseObject) {
+
+        Content content = new Content();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject contentJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                content.setId(contentJSONObject.getInt(CONTENT_ID));
+                content.setCategoryId(contentJSONObject.getInt(CATEGORY));
+                content.setTitle(contentJSONObject.getString(TITLE));
+                content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
+                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
+
+                JSONArray jsonArray = contentJSONObject.getJSONArray(IMAGE_PATHS);
+                for (int j = 0; j < jsonArray.length(); j++) {
+                    content.getContentImagePaths().add(jsonArray.getString(j));
+                }
+                content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
+                content.setLike(contentJSONObject.getBoolean(CONTENT_LIKE));
+                content.setArchive(contentJSONObject.getBoolean(CONTENT_KEEP));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return content;
+    }
+
     public static User parseEmailConfirm(JSONObject responseObject) {
-        Log.i(TAG, responseObject.toString());
+
         User user = new User();
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);

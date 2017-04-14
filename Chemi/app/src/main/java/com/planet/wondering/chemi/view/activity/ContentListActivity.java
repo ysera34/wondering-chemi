@@ -16,6 +16,7 @@ import com.planet.wondering.chemi.view.fragment.ContentPagerFragment;
 public class ContentListActivity extends BottomNavigationActivity {
 
     private static final String TAG = ContentListActivity.class.getSimpleName();
+
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 

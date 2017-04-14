@@ -6,26 +6,27 @@
     android:padding="16dp">
 
     <ImageView
+        android:id="@+id/list_item_content_image_view"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_marginBottom="10dp"
         android:scaleType="centerInside"/>
 
     <TextView
+        android:id="@+id/list_item_content_sub_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:text="안전하고 착한 천연 세제 만들기"
         android:textSize="15sp"
         android:textColor="@color/colorFontAluminum"/>
 
     <TextView
+        android:id="@+id/list_item_content_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:text="안전하고 착한 천연 세제 만들기"
         android:textSize="19sp"
         android:textColor="@color/colorFontToolbarSubtitle"/>
 
@@ -44,10 +45,10 @@
             android:scaleType="centerInside"/>
 
         <TextView
+            android:id="@+id/list_item_content_like_count_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="134"
             android:textSize="13sp"
             android:textColor="@color/colorFontAluminum"/>
 
@@ -60,10 +61,10 @@
             android:scaleType="centerInside"/>
 
         <TextView
+            android:id="@+id/list_item_content_view_count_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="134"
             android:textSize="13sp"
             android:textColor="@color/colorFontAluminum"/>
 
@@ -75,9 +76,9 @@
             android:scaleType="centerInside"/>
 
         <TextView
+            android:id="@+id/list_item_content_comment_count_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="134"
             android:textSize="13sp"
             android:textColor="@color/colorFontAluminum"/>
         

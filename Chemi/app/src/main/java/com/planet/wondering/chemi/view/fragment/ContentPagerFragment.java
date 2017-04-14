@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +60,12 @@ public class ContentPagerFragment extends Fragment {
 
         mContentViewPager.setOffscreenPageLimit(mContentFragments.size() - 1);
         mContentViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+
             @Override
             public Fragment getItem(int position) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("category_id", position + 1);
+                mContentFragments.get(position).setArguments(bundle);
                 return mContentFragments.get(position);
             }
 

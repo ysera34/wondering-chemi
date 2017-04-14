@@ -201,6 +201,29 @@ public class Config {
         }
     }
 
+    public static final class Content {
+        public static final String PATH = File.separator + "contents" + File.separator;
+        public static final String QUERY_PATH = File.separator + "contents?";
+        public static final String QUERY_CATEGORY = "&categoryid=";
+
+        public static final class Key {
+            public static final String CONTENT_ID = "id";
+            public static final String CATEGORY = "category";
+            public static final String TITLE = "title";
+            public static final String SUB_TITLE = "title2";
+            public static final String MAIN_IMAGE_PATH = "imagePath";
+            public static final String THUMBNAIL_IMAGE_PATH = "imagePath2";
+            public static final String IMAGE_PATHS = "imagePaths";
+            public static final String LIKE_COUNT = "liked";
+            public static final String VIEW_COUNT = "viewed";
+            public static final String COMMENT_COUNT = "commented";
+            public static final String CONTENT_LIKE = "isLiker";
+            public static final String CONTENT_KEEP = "isKeeper";
+            public static final String CREATE_DATE = "created";
+            public static final String MODIFY_DATE = "modified";
+        }
+    }
+
     public static String encodeUTF8(String string) {
         try {
             return URLEncoder.encode(string, "utf-8");
