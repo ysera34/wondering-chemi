@@ -62,6 +62,7 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.CTAG_PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Parser.parseCTagList;
 
 /**
  * Created by yoon on 2016. 12. 31..
@@ -384,9 +385,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private class ChemicalCharacterAdapter extends ArrayAdapter<CTag> implements Filterable {
 
-//        private ArrayList<CTag> mChemicalRequestResults = new ArrayList<>();
-//        private ArrayList<CTag> mChemicalResults = new ArrayList<>();
-
         private ArrayList<CTag> mChemicalRequestResults;
         private ArrayList<CTag> mChemicalResults;
 
@@ -398,23 +396,13 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         @Override
         public int getCount() {
-//            synchronized (mChemicalResults) {
-                return mChemicalResults.size();
-//            }
+            return mChemicalResults.size();
         }
 
         @Nullable
         @Override
         public CTag getItem(int position) {
-//            synchronized (mChemicalResults) {
-//                try {
-                    return mChemicalResults.get(position);
-//                } catch (IndexOutOfBoundsException e) {
-//                    e.printStackTrace();
-//                    Log.e(TAG, "ChemicalCharacterAdapter : IndexOutOfBoundsException");
-//                    return null;
-//                }
-//            }
+            return mChemicalResults.get(position);
         }
 
         @NonNull
@@ -426,27 +414,23 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-//                    synchronized (filterResults) {
-//                        mChemicalRequestResults.clear();
-//                        if (mChemicalResults != null) {
-//                            mChemicalResults.clear();
-//                        }
+                    return null;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, final FilterResults results) {
 
                     if (constraint != null) {
                         try {
                             mChemicalResults.clear();
-//                            String query = constraint.toString();
 
                             String currentTextUnSpaced = constraint.toString().replaceAll("\\s+", "");
                             int currentTextLength = currentTextUnSpaced.length();
 
                             if ((currentTextLength) < 1) {
                                 mChemicalRequestResults.clear();
+                                mChemicalResults.clear();
                                 mChemicalCharacter = '\u0000';
-                                filterResults.values = mChemicalRequestResults;
-                                filterResults.count = mChemicalRequestResults.size();
-                                return filterResults;
                             }
 
                             String currentTextDecomposed = decomposeKoreanSyllable(currentTextUnSpaced);
@@ -488,29 +472,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage());
                         }
-                        filterResults.values = mChemicalResults;
-                        filterResults.count = mChemicalResults.size();
+                        notifyDataSetChanged();
                     }
-//                    } end synchronized (filterResults)
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, final FilterResults results) {
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                    synchronized (results) {
-//                        mChemicalRequestResults = (ArrayList<CTag>) results.values;
-
-                            if (mChemicalRequestResults != null && results.count > 0) {
-                                notifyDataSetChanged();
-                            } else {
-                                notifyDataSetInvalidated();
-                            }
-//                    }
-//                        }
-//                    });
                 }
 
                 public char convertConsonantToStandAlone(char consonant) {
@@ -654,7 +617,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     in.close();
                     connection.disconnect();
                     JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                    return Parser.parseCTagList(jsonObject);
+                    return parseCTagList(jsonObject);
 
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
