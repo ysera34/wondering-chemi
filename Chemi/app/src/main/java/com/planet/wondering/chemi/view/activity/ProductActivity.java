@@ -197,12 +197,12 @@ public class ProductActivity extends AppBaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_faq:
+            case R.id.action_product_faq:
 //                Toast.makeText(getApplicationContext(), "action_faq", Toast.LENGTH_SHORT).show();
                 startActivity(MemberActivity.newIntent(getApplicationContext(), 4));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
-            case R.id.action_archive:
+            case R.id.action_product_archive:
                 if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
 //                    Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
                     requestArchiveProduct();
@@ -212,7 +212,7 @@ public class ProductActivity extends AppBaseActivity
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
-            case R.id.action_share:
+            case R.id.action_product_share:
                 Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
                 break;
         }

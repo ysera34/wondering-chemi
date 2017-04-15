@@ -212,7 +212,7 @@ public class ContentListFragment extends Fragment {
             mContent = content;
 
             Glide.with(getActivity())
-                    .load(mContent.getThumbnailImagePath())
+                    .load(mContent.getImagePath())
                     .crossFade()
 //                    .override()
                     .into(mContentImageView);
@@ -225,7 +225,8 @@ public class ContentListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            startActivity(ContentActivity.newIntent(getActivity()));
+//            startActivity(ContentActivity.newIntent(getActivity()));
+            startActivity(ContentActivity.newIntent(getActivity(), mContent.getId()));
         }
     }
 }

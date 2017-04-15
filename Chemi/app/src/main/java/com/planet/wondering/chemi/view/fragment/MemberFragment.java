@@ -290,15 +290,15 @@ public class MemberFragment extends Fragment
         mArchiveReviewProductTitleTextView.setText(
                 getString(R.string.member_profile_archive_review_product_title, mUser.getName()));
 
-        if (mArchiveProducts.size() <= 0) {
+//        if (mArchiveProducts.size() <= 0) {
             mArchiveProductMoreButtonTextView.setVisibility(View.GONE);
-        }
-        if (mArchiveContents.size() <= 0) {
+//        }
+//        if (mArchiveContents.size() <= 0) {
             mArchiveContentMoreButtonTextView.setVisibility(View.GONE);
-        }
-        if (mArchiveReviewProducts.size() <= 0) {
+//        }
+//        if (mArchiveReviewProducts.size() <= 0) {
             mArchiveReviewProductMoreButtonTextView.setVisibility(View.GONE);
-        }
+//        }
     }
 
     @Override
