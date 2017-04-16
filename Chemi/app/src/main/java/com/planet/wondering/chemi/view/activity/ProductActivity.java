@@ -134,6 +134,7 @@ public class ProductActivity extends AppBaseActivity
 
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
         setSupportActionBar(mProductToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
         mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);

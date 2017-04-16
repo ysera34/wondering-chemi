@@ -24,6 +24,15 @@ public class ContentFragment extends Fragment {
         return fragment;
     }
 
+    public static ContentFragment newInstance(String imagePath) {
+
+        Bundle args = new Bundle();
+
+        ContentFragment fragment = new ContentFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

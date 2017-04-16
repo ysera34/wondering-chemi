@@ -10,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -19,12 +17,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.view.fragment.ImageHorizontalFragment;
 
 import org.json.JSONObject;
 
@@ -42,9 +40,6 @@ public class ContentActivity extends AppBaseActivity {
 
     private static final String EXTRA_CONTENT_ID = "com.planet.wondering.chemi.content_id";
 
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
-
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ContentActivity.class);
         return intent;
@@ -56,12 +51,15 @@ public class ContentActivity extends AppBaseActivity {
         return intent;
     }
 
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
     private int mContentId;
     private Content mContent;
 
     private Toolbar mContentToolbar;
     private Menu mContentToolbarMenu;
-    private ImageView mContentImageView;
+//    private ImageView mContentImageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,19 +73,23 @@ public class ContentActivity extends AppBaseActivity {
         setSupportActionBar(mContentToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mContentImageView = (ImageView) findViewById(R.id.content_image_view);
-        mContentImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//        mFragmentManager = getSupportFragmentManager();
-//        mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
+//        mContentImageView = (ImageView) findViewById(R.id.content_image_view);
+
+        mFragmentManager = getSupportFragmentManager();
+        mFragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
 //
 //        if (mFragment == null) {
 //            mFragment = ContentFragment.newInstance();
 //            mFragmentManager.beginTransaction()
-//                    .add(R.id.pure_fragment_container, mFragment)
+//                    .add(R.id.content_fragment_container, mFragment)
 //                    .commit();
 //        }
+    }
 
-        requestContentList(mContentId);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestContent(mContentId);
     }
 
     @Override
@@ -115,7 +117,6 @@ public class ContentActivity extends AppBaseActivity {
                 mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
                 Log.i(TAG, "action_archive");
                 break;
-
             case R.id.action_content_share:
                 Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "action_share");
@@ -124,17 +125,26 @@ public class ContentActivity extends AppBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void bindContent(Content content) {
-        for (int i = 0; i < content.getContentImagePaths().size(); i++) {
-            Glide.with(getApplicationContext())
-                    .load(content.getContentImagePaths().get(i))
-                    .crossFade()
+//    public void bindContent(Content content) {
+//
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point point = new Point();
+//        display.getSize(point);
+//        int displayWidth = point.x;
+//        int displayHeight = point.y;
+//
+//        for (int i = 0; i < content.getContentImagePaths().size(); i++) {
+//            Glide.with(getApplicationContext())
+//                    .load(content.getContentImagePaths().get(i))
+//                    .load("https://unsplash.it/640/4999")
+//                    .asBitmap()
 //                    .diskCacheStrategy(ALL)
-                    .into(mContentImageView);
-        }
-    }
+//                    .override(displayWidth, displayHeight)
+//                    .into(mContentImageView);
+//        }
+//    }
 
-    private void requestContentList(int contentId) {
+    private void requestContent(int contentId) {
 
 //        Log.i(TAG, "url : " + URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId);
 
@@ -144,7 +154,13 @@ public class ContentActivity extends AppBaseActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         mContent = Parser.parseContent(response);
-                        bindContent(mContent);
+//                        bindContent(mContent);
+
+//                        mFragment = ImageVerticalFragment.newInstance(mContent.getContentImagePaths());
+                        mFragment = ImageHorizontalFragment.newInstance(mContent.getContentImagePaths());
+                        mFragmentManager.beginTransaction()
+                                .add(R.id.content_fragment_container, mFragment)
+                                .commit();
                     }
                 },
                 new Response.ErrorListener() {
