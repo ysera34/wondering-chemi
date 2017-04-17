@@ -134,7 +134,7 @@ public class ProductActivity extends AppBaseActivity
 
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
         setSupportActionBar(mProductToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mProductToolbar.setTitle(null);
 
         mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
         mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);
@@ -206,7 +206,7 @@ public class ProductActivity extends AppBaseActivity
             case R.id.action_product_archive:
                 if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
 //                    Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
-                    requestArchiveProduct();
+                    requestArchiveProduct(mProduct.isArchive());
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
                             .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
@@ -282,19 +282,30 @@ public class ProductActivity extends AppBaseActivity
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private void requestArchiveProduct() {
+    private void requestArchiveProduct(final boolean isArchive) {
+
+        int requestMethodId;
+        if (!isArchive) {
+            requestMethodId = Request.Method.POST;
+        } else {
+            requestMethodId = Request.Method.DELETE;
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + mProductId + KEEP_PATH,
+                requestMethodId, URL_HOST + PATH + mProductId + KEEP_PATH,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (Parser.parseSimpleResult(response)) {
-                            Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
-                            mProduct.setArchive(true);
+
+                            if (!isArchive) {
+                                Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
+                                mProduct.setArchive(true);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "보관함에세 삭제되었어요.", Toast.LENGTH_SHORT).show();
+                                mProduct.setArchive(false);
+                            }
                             invalidateOptionsMenu();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "보관함에 이미 있어요.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
