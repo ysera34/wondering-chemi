@@ -65,6 +65,7 @@
             android:focusableInTouchMode="true"
             android:inputType="textMultiLine"
             android:hint="@string/review_create_review_hint"
+            android:maxLength="1000"
             android:textColorHint="@color/colorFontFrenchGray"
             android:textSize="15sp"
             android:textColor="@color/colorFontNormal"
