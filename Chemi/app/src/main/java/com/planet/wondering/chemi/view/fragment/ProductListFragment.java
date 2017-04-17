@@ -1,22 +1,31 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +40,7 @@ import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.adapter.TagCharacterAdapter;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
@@ -115,7 +125,12 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 //    private Product mProduct;
     private Pager mPager;
 
+    private InputMethodManager mInputMethodManager;
     private AutoCompleteTextView mSearchAutoCompleteTextView;
+    private TagCharacterAdapter mTagCharacterAdapter;
+    private RelativeLayout mSearchClearLayout;
+    private ImageButton mSearchClearImageButton;
+    private ImageButton mSearchImageButton;
     private String mTagName;
     private int mCategoryId;
     String[] mCategoryNameArray;
@@ -141,6 +156,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
             mCategoryName = mCategoryNameArray[mCategoryId];
         }
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -154,9 +170,62 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mSearchAutoCompleteTextView.setText(mTagName);
         } else if (mCategoryId > 0) {
             mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+            mSearchAutoCompleteTextView.setCursorVisible(true);
+            mSearchAutoCompleteTextView.setThreshold(1);
+            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
+            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
+//            mTagCharacterAdapter = new SearchDetailFragment.TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
         }
+        mSearchAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 0) {
+                    mSearchClearImageButton.setVisibility(View.VISIBLE);
+                }
+                if (charSequence.length() == 0) {
+                    mSearchClearImageButton.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mSearchAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (textView.getText().length() == 0) {
+                        Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    } else {
+//                        Toast.makeText(getActivity(), textView.getText().toString(), Toast.LENGTH_SHORT).show();
+                        updateProductList();
+                    }
+                }
+                return false;
+            }
+        });
 
         mSearchAutoCompleteTextView.setOnClickListener(this);
+        mSearchClearLayout = (RelativeLayout) view.findViewById(R.id.search_clear_image_layout);
+        mSearchClearLayout.setOnClickListener(this);
+        mSearchClearImageButton = (ImageButton) view.findViewById(R.id.search_clear_image_button);
+        mSearchClearImageButton.setOnClickListener(this);
+        mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
+        mSearchImageButton.setOnClickListener(this);
+
+        mSearchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateProductList();
+            }
+        });
 
 //        mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
 //        mProductSortButtonTextView = (TextView) view.findViewById(R.id.product_sort_button_text_view);
@@ -226,6 +295,18 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
                 }
                 break;
+            case R.id.search_clear_image_layout:
+            case R.id.search_clear_image_button:
+                mSearchAutoCompleteTextView.getText().clear();
+                break;
+            case R.id.search_image_button:
+                if (mSearchAutoCompleteTextView.getText().length() == 0) {
+                    Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+//                    Toast.makeText(getActivity(), mSearchAutoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
+                    updateProductList();
+                }
+                break;
         }
     }
 
@@ -243,6 +324,15 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 //                mProductIds.add(product.getId());
 //            }
         }
+    }
+
+    private void updateProductList() {
+
+        mPager = null;
+        mProducts.clear();
+        requestTagCategoryProductList(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
+        mSearchAutoCompleteTextView.dismissDropDown();
+        mInputMethodManager.hideSoftInputFromWindow(mSearchAutoCompleteTextView.getWindowToken(), 0);
     }
 
     private void requestTagProductList(String query) {
@@ -335,6 +425,51 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                        progressDialog.dismiss();
+                        mProductListProgressBar.setVisibility(View.GONE);
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestTagCategoryProductList(String query, int categoryId) {
+
+        mProductListProgressBar.setVisibility(View.VISIBLE);
+
+        if (mPager == null) {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
+                    .append(QUERY_TAG).append(encodeUTF8(query)).append(QUERY_CATEGORY).append(categoryId);
+        } else {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
+                    .append(QUERY_TAG).append(encodeUTF8(query)).append(QUERY_CATEGORY).append(categoryId);
+        }
+
+        Log.i(TAG, mUrlBuilder.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, mUrlBuilder.toString(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mProductListProgressBar.setVisibility(View.GONE);
+                        mProducts.addAll(Parser.parseProductList(response));
+                        mPager = Parser.parseListPaginationQuery(response);
+                        updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
                         mProductListProgressBar.setVisibility(View.GONE);
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(),

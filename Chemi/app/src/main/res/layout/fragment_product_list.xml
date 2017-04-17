@@ -69,6 +69,13 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/search_view_bottom_anchor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+
     <!--<RelativeLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
@@ -101,6 +108,14 @@
 
     <!--</RelativeLayout>-->
 
+        <!--android:visibility="gone"-->
+    <ProgressBar
+        android:id="@+id/product_list_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.ProgressBar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -113,13 +128,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <ProgressBar
-            android:visibility="gone"
-            android:id="@+id/product_list_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyle"/>
     </LinearLayout>
 
 </LinearLayout>
