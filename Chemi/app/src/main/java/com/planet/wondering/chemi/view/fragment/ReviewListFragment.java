@@ -163,6 +163,7 @@ public class ReviewListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        updateUI();
+        updateReviewList();
     }
 
     private void updateUI() {

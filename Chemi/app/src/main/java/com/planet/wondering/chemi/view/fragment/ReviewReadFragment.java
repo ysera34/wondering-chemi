@@ -1,13 +1,16 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +24,32 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.planet.wondering.chemi.network.Config.Product.PATH;
+import static com.planet.wondering.chemi.network.Config.Review.REVIEW_PATH;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
 /**
  * Created by yoon on 2017. 4. 12..
@@ -195,11 +218,26 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.popup_menu_action_update:
                 mPopupWindow.dismiss();
-                Toast.makeText(getActivity(), "popup_menu_action_update", Toast.LENGTH_SHORT).show();
+                mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.popup_menu_action_delete:
                 mPopupWindow.dismiss();
-                Toast.makeText(getActivity(), "popup_menu_action_delete", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("리뷰를 정말 지우시겠어요?");
+                builder.setPositiveButton("지우기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestDeleteReview(mReview);
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
         }
     }
@@ -380,6 +418,56 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                             .into(mImage3ImageView);
                     break;
             }
+        }
+    }
+
+    private void requestDeleteReview(Review review) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE, URL_HOST + PATH + review.getProductId() + REVIEW_PATH + review.getId(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getActivity(),
+                                "리뷰가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        getActivity().onBackPressed();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                "리뷰를 삭제하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    OnMenuSelectedListener mMenuSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mMenuSelectedListener = (OnMenuSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implements OnReviewEditListener");
         }
     }
 

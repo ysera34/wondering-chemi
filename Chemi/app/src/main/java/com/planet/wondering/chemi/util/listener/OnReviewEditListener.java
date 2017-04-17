@@ -6,5 +6,5 @@ package com.planet.wondering.chemi.util.listener;
 
 public interface OnReviewEditListener {
 
-    void onReviewEdit(String reviewContent, boolean isEdit);
+    void onReviewEdit(String reviewContent, boolean isEdit, int requestId);
 }

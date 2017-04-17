@@ -25,6 +25,7 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
     private static final String TAG = ReviewEditFragment.class.getSimpleName();
 
     private static final String ARG_REVIEW_CONTENT = "review_content";
+    private static final String ARG_REVIEW_REQUEST_ID = "review_request_id";
 
     public static ReviewEditFragment newInstance() {
 
@@ -45,7 +46,19 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
         return fragment;
     }
 
+    public static ReviewEditFragment newInstance(String reviewContent, int requestId) {
+
+        Bundle args = new Bundle();
+        args.putString(ARG_REVIEW_CONTENT, reviewContent);
+        args.putInt(ARG_REVIEW_REQUEST_ID, requestId);
+
+        ReviewEditFragment fragment = new ReviewEditFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private String mReviewContent;
+    private int mRequestId;
 
     private RelativeLayout mReviewEditConfirmLayout;
     private InputMethodManager mInputMethodManager;
@@ -58,6 +71,7 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
+        mRequestId = getArguments().getInt(ARG_REVIEW_REQUEST_ID, -1);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
@@ -89,11 +103,11 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_edit_confirm_layout:
-                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false);
+                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
                 break;
             case R.id.review_edit_review_edit_complete_button:
-                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false);
+                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
                 break;
         }

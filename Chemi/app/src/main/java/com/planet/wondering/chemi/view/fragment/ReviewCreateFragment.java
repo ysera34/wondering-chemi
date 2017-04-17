@@ -244,9 +244,9 @@ public class ReviewCreateFragment extends Fragment
             case R.id.review_create_review_text_view:
                 String reviewContent = mReviewCreateReviewTextView.getText().toString();
                 if (reviewContent.equals(mReviewHint)) {
-                    mReviewEditListener.onReviewEdit("", true);
+                    mReviewEditListener.onReviewEdit("", true, 1);
                 } else {
-                    mReviewEditListener.onReviewEdit(reviewContent, true);
+                    mReviewEditListener.onReviewEdit(reviewContent, true, 1);
                 }
                 break;
             case R.id.review_create_review_image1_image_view:

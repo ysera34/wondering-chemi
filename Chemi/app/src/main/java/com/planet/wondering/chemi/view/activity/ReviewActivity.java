@@ -23,10 +23,12 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewEditFragment;
 import com.planet.wondering.chemi.view.fragment.ReviewReadFragment;
+import com.planet.wondering.chemi.view.fragment.ReviewUpdateFragment;
 
 import org.json.JSONObject;
 
@@ -43,7 +45,8 @@ import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
  * Created by yoon on 2017. 2. 23..
  */
 
-public class ReviewActivity extends BottomNavigationActivity implements OnReviewEditListener {
+public class ReviewActivity extends BottomNavigationActivity
+        implements OnReviewEditListener, OnMenuSelectedListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
 
@@ -131,12 +134,12 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     private String mReviewContent;
 
     @Override
-    public void onReviewEdit(String reviewContent, boolean isEdit) {
+    public void onReviewEdit(String reviewContent, boolean isEdit, int requestId) {
         if (isEdit) {
             mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
-                    .add(R.id.main_fragment_container, ReviewEditFragment.newInstance(reviewContent))
+                    .add(R.id.main_fragment_container, ReviewEditFragment.newInstance(reviewContent, requestId))
                     .addToBackStack(null)
                     .commit();
         } else {
@@ -149,11 +152,26 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
             mFragmentManager.popBackStackImmediate();
             Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
-            ((ReviewCreateFragment) fragment).updateContentTextView(mReviewContent);
+            if (requestId == 1) {
+                ((ReviewCreateFragment) fragment).updateContentTextView(mReviewContent);
+            } else if (requestId == 2){
+                ((ReviewUpdateFragment) fragment).updateContentTextView(mReviewContent);
+            }
 //            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(reviewContent))
 //                    .addToBackStack(null)
 //                    .commit();
+        }
+    }
+
+    @Override
+    public void onMenuSelected(int layoutIndex) {
+        switch (layoutIndex) {
+            case 4:
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, ReviewUpdateFragment.newInstance(mReview))
+                        .commit();
+                break;
         }
     }
 

@@ -190,6 +190,7 @@ public class Config {
 
     public static final class Review {
         public static final String PATH = File.separator + "reviews";
+        public static final String REVIEW_PATH = File.separator + "reviews" + File.separator;
 
         public static final class Key {
             public static final String REVIEW_ID = "id";
