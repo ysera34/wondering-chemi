@@ -149,7 +149,7 @@ public class ReviewListFragment extends Fragment {
 
         updateUI();
 
-        requestReviewList();
+//        requestReviewList();
 
         return view;
     }

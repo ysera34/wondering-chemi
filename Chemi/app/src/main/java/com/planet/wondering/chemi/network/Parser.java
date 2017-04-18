@@ -644,6 +644,22 @@ public class Parser {
         return review;
     }
 
+    public static String parseUpdateReviewImagePath(JSONObject responseObject) {
+
+        String imagePath = null;
+
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject imagePathJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                imagePath = imagePathJSONObject.getString(IMAGE_PATH);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return imagePath;
+    }
+
     public static ArrayList<Content> parseContentList(JSONObject responseObject) {
 
         ArrayList<Content> contents = new ArrayList<>();

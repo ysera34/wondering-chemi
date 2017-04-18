@@ -210,7 +210,6 @@
             android:background="@drawable/bg_review_camera"/>
 
         <ImageView
-            android:visibility="invisible"
             android:id="@+id/review_update_review_image2_image_view"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -219,7 +218,6 @@
             android:background="@drawable/bg_review_camera"/>
 
         <ImageView
-            android:visibility="invisible"
             android:id="@+id/review_update_review_image3_image_view"
             android:layout_width="100dp"
             android:layout_height="100dp"

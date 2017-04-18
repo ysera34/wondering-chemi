@@ -370,7 +370,6 @@ public class ReviewCreateFragment extends Fragment
                     mReviewCreateImage2ImageView.setImageDrawable(mReviewCreateImage3ImageView.getDrawable());
                     mReviewCreateImage3ImageView.setImageBitmap(null);
                     isHasUploadImage3 = false;
-
                 } else if (isHasUploadImage2) {
                     mReviewCreateImage1ImageView.setImageDrawable(mReviewCreateImage2ImageView.getDrawable());
                     mReviewCreateImage2ImageView.setImageBitmap(null);

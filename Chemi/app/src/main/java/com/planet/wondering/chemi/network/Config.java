@@ -191,6 +191,7 @@ public class Config {
     public static final class Review {
         public static final String PATH = File.separator + "reviews";
         public static final String REVIEW_PATH = File.separator + "reviews" + File.separator;
+        public static final String REVIEW_IMAGE_PATH = File.separator + "image";
 
         public static final class Key {
             public static final String REVIEW_ID = "id";
@@ -200,6 +201,7 @@ public class Config {
             public static final String PRODUCT_IMAGE_PATH = "productImagePath";
             public static final String RATING = "rated";
             public static final String DESCRIPTION = "description";
+            public static final String IMAGE_PATH = "imagePath";
             public static final String IMAGE_PATHS = "imagePaths";
             public static final String DATE = "dated";
             public static final String AUTHOR = "isAuthor";
