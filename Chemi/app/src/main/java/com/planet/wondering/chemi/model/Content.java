@@ -10,6 +10,7 @@ public class Content {
 
     private int mId;
     private int mCategoryId;
+    private int mViewType;
     private String mTitle;
     private String mSubTitle;
     private String mImagePath;
@@ -39,6 +40,14 @@ public class Content {
 
     public void setCategoryId(int categoryId) {
         mCategoryId = categoryId;
+    }
+
+    public int getViewType() {
+        return mViewType;
+    }
+
+    public void setViewType(int viewType) {
+        mViewType = viewType;
     }
 
     public String getTitle() {

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
+import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Pager;
@@ -55,8 +56,12 @@ import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEEN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_ORIGIN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_PRODUCT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.PURPOSE;
+import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_COUNT;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.COMMENT_ID;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.WRITE_DATE;
+import static com.planet.wondering.chemi.network.Config.Comment.PARENT_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
-import static com.planet.wondering.chemi.network.Config.Content.Key.COMMENT_COUNT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_ID;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_KEEP;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_LIKE;
@@ -66,6 +71,7 @@ import static com.planet.wondering.chemi.network.Config.Content.Key.MAIN_IMAGE_P
 import static com.planet.wondering.chemi.network.Config.Content.Key.SUB_TITLE;
 import static com.planet.wondering.chemi.network.Config.Content.Key.TITLE;
 import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_COUNT;
+import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CLASS;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CODE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.DESCRIPTION;
@@ -249,20 +255,6 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return tags;
-    }
-
-    public static int parseTotalCount(JSONObject responseObject) {
-
-        int total = 0;
-        try {
-            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
-            if (responseMessage.equals(RESPONSE_SUCCESS)) {
-                total = responseObject.getInt(TOTAL);
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return total;
     }
 
     public static ArrayList<Product> parseProductList(JSONObject responseObject) {
@@ -674,12 +666,12 @@ public class Parser {
                         Content content = new Content();
                         content.setId(contentJSONObject.getInt(CONTENT_ID));
                         content.setCategoryId(contentJSONObject.getInt(CATEGORY));
+                        content.setViewType(contentJSONObject.getInt(VIEW_TYPE));
                         content.setTitle(contentJSONObject.getString(TITLE));
                         content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
                         content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
                         content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
                         content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
-                        content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                         contents.add(content);
                     }
                 }
@@ -715,6 +707,50 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return content;
+    }
+
+    public static ArrayList<Comment> parseCommentList(JSONObject responseObject) {
+
+        ArrayList<Comment> comments = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject jsonObject = responseObject.getJSONObject(RESPONSE_DATA);
+                int commentSize = jsonObject.getInt(COMMENT_COUNT);
+                if (commentSize > 0) {
+                    JSONArray commentJSONArray = jsonObject.getJSONArray(PARENT_COMMENT);
+                    for (int i = 0; i < commentJSONArray.length(); i++) {
+                        JSONObject commentJSONObject = (JSONObject) commentJSONArray.get(i);
+                        Comment parentComment = new Comment();
+                        parentComment.setId(commentJSONObject.getInt(COMMENT_ID));
+                        parentComment.setUserId(commentJSONObject.getInt(Config.Comment.Key.USER_ID));
+                        parentComment.setUserName(commentJSONObject.getString(USER_NAME));
+                        parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
+                        parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
+                        parentComment.setDate(commentJSONObject.getString(WRITE_DATE));
+//                        JSONArray childCommentJSONArray = commentJSONObject.getJSONArray(CHILD_COMMENT);
+//                        int childCommentSize = childCommentJSONArray.length();
+//                        if (childCommentSize > 0) {
+//                            for (int j = 0; j < childCommentSize; j++) {
+//                                JSONObject childCommentJSONObject = (JSONObject) commentJSONArray.get(i);
+//                                Comment childComment = new Comment();
+//                                childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
+//                                childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
+//                                childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
+//                                childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
+//                                childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
+//                                childComment.setDate(childCommentJSONObject.getString(WRITE_DATE));
+//                                parentComment.getChildComments().add(childComment);
+//                            }
+//                        }
+                        comments.add(parentComment);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return comments;
     }
 
     public static User parseEmailConfirm(JSONObject responseObject) {

@@ -1,7 +1,10 @@
 package com.planet.wondering.chemi.model;
 
+import android.os.Parcel;
+
 import com.bignerdranch.expandablerecyclerview.model.Parent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +12,7 @@ import java.util.List;
  * Created by yoon on 2017. 4. 19..
  */
 
-public class Comment implements Parent<Comment> {
+public class Comment implements Parent<Comment>, Serializable {
 
     private int mId;
     private int mUserId;
@@ -79,15 +82,6 @@ public class Comment implements Parent<Comment> {
         mChildComments = childComments;
     }
 
-    public int getChildCommentCount() {
-
-        int commentSize = 0;
-        if (mChildComments == null) {
-            commentSize = mChildComments.size();
-        }
-        return commentSize;
-    }
-
     @Override
     public List<Comment> getChildList() {
         return mChildComments;
@@ -96,5 +90,67 @@ public class Comment implements Parent<Comment> {
     @Override
     public boolean isInitiallyExpanded() {
         return false;
+    }
+
+    protected Comment(Parcel in) {
+        mId = in.readInt();
+        mUserId = in.readInt();
+        mUserName = in.readString();
+        mUserImagePath = in.readString();
+        mDescription = in.readString();
+        mDate = in.readString();
+        if (in.readByte() == 0x01) {
+            mChildComments = new ArrayList<Comment>();
+            in.readList(mChildComments, Comment.class.getClassLoader());
+        } else {
+            mChildComments = null;
+        }
+    }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeInt(mId);
+//        dest.writeInt(mUserId);
+//        dest.writeString(mUserName);
+//        dest.writeString(mUserImagePath);
+//        dest.writeString(mDescription);
+//        dest.writeString(mDate);
+//        if (mChildComments == null) {
+//            dest.writeByte((byte) (0x00));
+//        } else {
+//            dest.writeByte((byte) (0x01));
+//            dest.writeList(mChildComments);
+//        }
+//    }
+//
+//    @SuppressWarnings("unused")
+//    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+//        @Override
+//        public Comment createFromParcel(Parcel in) {
+//            return new Comment(in);
+//        }
+//
+//        @Override
+//        public Comment[] newArray(int size) {
+//            return new Comment[size];
+//        }
+//    };
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "mId=" + mId +
+                ", mUserId=" + mUserId +
+                ", mUserName='" + mUserName + '\'' +
+                ", mUserImagePath='" + mUserImagePath + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mDate='" + mDate + '\'' +
+                ", mChildComments=" + mChildComments.toString() +
+                '}';
     }
 }

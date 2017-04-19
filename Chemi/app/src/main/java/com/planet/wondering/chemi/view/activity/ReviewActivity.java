@@ -183,6 +183,8 @@ public class ReviewActivity extends BottomNavigationActivity
                     @Override
                     public void onResponse(JSONObject response) {
                         mReview = Parser.parseReview(response);
+//                        mReview.setComments(Parser.parseCommentList(response));
+//                        mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragmentManager.beginTransaction()
                                 .add(R.id.main_fragment_container, mFragment)

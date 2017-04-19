@@ -22,7 +22,6 @@ public class Review implements Serializable {
     private String mDate;
     private ArrayList<String> mImagePaths;
 
-
     public Review() {
         mUser = new User();
         mImagePaths = new ArrayList<>();

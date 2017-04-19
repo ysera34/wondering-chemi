@@ -196,7 +196,7 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         mCommentFragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
 
         if (mCommentFragment == null) {
-            mCommentFragment = CommentFragment.newInstance();
+            mCommentFragment = CommentFragment.newInstance(mReview.getId());
             mChildFragmentManager.beginTransaction()
                     .add(R.id.comment_fragment_container, mCommentFragment)
                     .commit();
