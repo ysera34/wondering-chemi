@@ -362,12 +362,12 @@
                 android:layout_height="10dp"
                 android:background="@color/colorMainBackground"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/review_read_comment_recycler_view"
+            <FrameLayout
+                android:id="@+id/comment_fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            </android.support.v7.widget.RecyclerView>
+            </FrameLayout>
 
         </LinearLayout>
 

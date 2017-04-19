@@ -8,8 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,8 +140,8 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
     private ImageView mImage2ImageView;
     private ImageView mImage3ImageView;
 
-    private RecyclerView mReviewReadCommentRecyclerView;
-    private CommentAdapter mCommentAdapter;
+    private FragmentManager mChildFragmentManager;
+    private Fragment mCommentFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -192,7 +192,16 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         mImage2ImageView = (ImageView) view.findViewById(R.id.review_read_review_image2_image_view);
         mImage3ImageView = (ImageView) view.findViewById(R.id.review_read_review_image3_image_view);
 
-        mReviewReadCommentRecyclerView = (RecyclerView) view.findViewById(R.id.review_read_comment_recycler_view);
+        mChildFragmentManager = getChildFragmentManager();
+        mCommentFragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
+
+        if (mCommentFragment == null) {
+            mCommentFragment = CommentFragment.newInstance();
+            mChildFragmentManager.beginTransaction()
+                    .add(R.id.comment_fragment_container, mCommentFragment)
+                    .commit();
+        }
+
         return view;
     }
 
@@ -469,8 +478,5 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
             throw new ClassCastException(context.toString()
                     + " must implements OnReviewEditListener");
         }
-    }
-
-    private class CommentAdapter {
     }
 }
