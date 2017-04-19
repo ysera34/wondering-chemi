@@ -25,6 +25,7 @@ import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
@@ -53,7 +54,9 @@ public class CommentFragment extends Fragment {
     private static final String TAG = CommentFragment.class.getSimpleName();
 
     private static final String ARG_REVIEW_ID = "review_id";
-    private static final String ARG_COMMENTS = "comments";
+    private static final String ARG_CONTENT_ID = "content_id";
+    private static final String ARG_RELEVANT_ID = "relevant_id";
+    private static final String ARG_COMMENT_TYPE = "comment_type";
 
     public static CommentFragment newInstance() {
 
@@ -64,53 +67,33 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
-    public static CommentFragment newInstance(int reviewId) {
+    public static CommentFragment newInstance(int relevantId, int commentType) {
 
         Bundle args = new Bundle();
-        args.putInt(ARG_REVIEW_ID, reviewId);
+        args.putInt(ARG_RELEVANT_ID, relevantId);
+        args.putInt(ARG_COMMENT_TYPE, commentType);
 
         CommentFragment fragment = new CommentFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-//    public static CommentFragment newInstance(ArrayList<Comment> comments) {
-//
-//        Bundle args = new Bundle();
-//        args.putParcelableArrayList(ARG_COMMENTS, comments);
-//
-//        CommentFragment fragment = new CommentFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     private RecyclerView mCommentRecyclerView;
     private CommentAdapter mCommentAdapter;
     private ArrayList<Comment> mComments;
 
     private int mReviewId;
+    private int mContentId;
+    private int mRelevantId;
+    private int mCommentType;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mComments = new ArrayList<>();
-//        mComments = getArguments().getParcelableArrayList(ARG_COMMENTS);
-        mReviewId = getArguments().getInt(ARG_REVIEW_ID, -1);
-
-//        ArrayList<Comment> childComments = new ArrayList<>();
-//        for (int i = 0; i < 4; i++) {
-//            Comment comment = new Comment();
-//            comment.setDescription("child comment test " + i);
-//            childComments.add(comment);
-//        }
-//        for (int i = 0; i < 5; i++) {
-//            Comment parentComment = new Comment();
-//            parentComment.setDescription("parent comment test " + i);
-//            parentComment.setChildComments(childComments);
-//            mComments.add(parentComment);
-//        }
-
+        mRelevantId = getArguments().getInt(ARG_RELEVANT_ID, -1);
+        mCommentType = getArguments().getInt(ARG_COMMENT_TYPE, -1);
     }
 
     @Nullable
@@ -138,9 +121,7 @@ public class CommentFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (mReviewId != -1) {
-            requestComment(mReviewId);
-        }
+        requestComment(mRelevantId, mCommentType);
     }
 
     private void updateUI() {
@@ -154,18 +135,22 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    public void requestComment(int reviewId) {
+    public void requestComment(final int relevantId, final int commentType) {
+        /* 1 : review comment, 2 : content comment */
+
+        String url = null;
+        if (commentType == 1) {
+            url = URL_HOST + PATH + File.separator + relevantId;
+        } else if (commentType == 2) {
+            url = URL_HOST + Config.Content.PATH + File.separator + relevantId;
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + PATH + File.separator + reviewId,
+                Request.Method.GET, url,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        mComments = Parser.parseCommentList(response);
-                        Log.i(TAG, "size " + mComments.size());
-                        for (Comment c : mComments) {
-                            Log.i(TAG, c.toString());
-                        }
+                        mComments = Parser.parseCommentList(response, commentType);
                         updateUI();
                     }
                 },
@@ -174,7 +159,7 @@ public class CommentFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(),
-                                "리뷰를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                                "댓글를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
                     }
                 }
         )

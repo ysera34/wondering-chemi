@@ -56,6 +56,7 @@ import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEEN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_ORIGIN;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.NAMEKO_PRODUCT;
 import static com.planet.wondering.chemi.network.Config.Chemical.Key.PURPOSE;
+import static com.planet.wondering.chemi.network.Config.Comment.CHILD_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_COUNT;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.COMMENT_ID;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
@@ -709,7 +710,8 @@ public class Parser {
         return content;
     }
 
-    public static ArrayList<Comment> parseCommentList(JSONObject responseObject) {
+    public static ArrayList<Comment> parseCommentList(JSONObject responseObject, int commentType) {
+        /* 1 : review comment, 2 : content comment */
 
         ArrayList<Comment> comments = new ArrayList<>();
         try {
@@ -728,21 +730,23 @@ public class Parser {
                         parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                         parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
                         parentComment.setDate(commentJSONObject.getString(WRITE_DATE));
-//                        JSONArray childCommentJSONArray = commentJSONObject.getJSONArray(CHILD_COMMENT);
-//                        int childCommentSize = childCommentJSONArray.length();
-//                        if (childCommentSize > 0) {
-//                            for (int j = 0; j < childCommentSize; j++) {
-//                                JSONObject childCommentJSONObject = (JSONObject) commentJSONArray.get(i);
-//                                Comment childComment = new Comment();
-//                                childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
-//                                childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
-//                                childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
-//                                childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
-//                                childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
-//                                childComment.setDate(childCommentJSONObject.getString(WRITE_DATE));
-//                                parentComment.getChildComments().add(childComment);
-//                            }
-//                        }
+                        if (commentType == 2) {
+                            JSONArray childCommentJSONArray = commentJSONObject.getJSONArray(CHILD_COMMENT);
+                            int childCommentSize = childCommentJSONArray.length();
+                            if (childCommentSize > 0) {
+                                for (int j = 0; j < childCommentSize; j++) {
+                                    JSONObject childCommentJSONObject = (JSONObject) commentJSONArray.get(i);
+                                    Comment childComment = new Comment();
+                                    childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
+                                    childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
+                                    childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
+                                    childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
+                                    childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
+                                    childComment.setDate(childCommentJSONObject.getString(WRITE_DATE));
+                                    parentComment.getChildComments().add(childComment);
+                                }
+                            }
+                        }
                         comments.add(parentComment);
                     }
                 }
