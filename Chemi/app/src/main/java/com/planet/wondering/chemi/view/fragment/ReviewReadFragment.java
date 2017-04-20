@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -32,9 +34,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 
@@ -45,9 +49,12 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.REVIEW_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
@@ -111,6 +118,8 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
     private RelativeLayout mReviewReadMoreMenuLayout;
     private PopupWindow mPopupWindow;
 
+    private NestedScrollView mReviewReadNestedScrollView;
+
     private ImageView mReviewReadProductImageView;
     private TextView mReviewReadProductBrandTextView;
     private TextView mReviewReadProductNameTextView;
@@ -143,6 +152,9 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
     private FragmentManager mChildFragmentManager;
     private Fragment mCommentFragment;
 
+    private EditText mCommentCreateEditText;
+    private TextView mCommentSubmitTextView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +174,8 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_review_read, container, false);
         mReviewReadMoreMenuLayout = (RelativeLayout) view.findViewById(R.id.review_read_more_menu_layout);
         mReviewReadMoreMenuLayout.setOnClickListener(this);
+
+        mReviewReadNestedScrollView = (NestedScrollView) view.findViewById(R.id.review_read_nested_scroll_view);
 
         mReviewReadProductImageView = (ImageView) view.findViewById(R.id.review_read_product_image_view);
         mReviewReadProductBrandTextView = (TextView) view.findViewById(R.id.review_read_product_brand_text_view);
@@ -202,6 +216,10 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                     .commit();
         }
 
+        mCommentCreateEditText = (EditText) view.findViewById(R.id.review_read_comment_edit_text);
+        mCommentSubmitTextView = (TextView) view.findViewById(R.id.review_read_comment_submit_text_view);
+        mCommentSubmitTextView.setOnClickListener(this);
+
         return view;
     }
 
@@ -217,12 +235,14 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         } else {
             Toast.makeText(getActivity(), "mReview null", Toast.LENGTH_SHORT).show();
         }
+        validationEditText();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_read_more_menu_layout:
+                mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
                 displayPopupWindow(mReviewReadMoreMenuLayout);
                 break;
             case R.id.popup_menu_action_update:
@@ -248,7 +268,49 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
+            case R.id.review_read_comment_submit_text_view:
+                if (isValidatedCreateComment) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                    builder1.setMessage("댓글을 등록하시겠어요?");
+                    builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
+                            requestCreateReviewComment(mReview);
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                } else {
+                    Toast.makeText(getActivity(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    private boolean isValidatedCreateComment = false;
+
+    private void validationEditText() {
+        mCommentCreateEditText.addTextChangedListener(new TextValidator(mCommentCreateEditText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (text.length() > 0) {
+                    mCommentSubmitTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
+                    mCommentSubmitTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
+                    isValidatedCreateComment = true;
+                } else {
+                    mCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                    mCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+                    isValidatedCreateComment = false;
+                }
+            }
+        });
     }
 
     private void displayPopupWindow(View anchorView) {
@@ -465,6 +527,68 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestCreateReviewComment(Review review) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put(DESCRIPTION, mCommentCreateEditText.getText().toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + REVIEW_PATH + review.getId() + COMMENT_PATH, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getActivity(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
+
+                        // initialize
+                        mCommentCreateEditText.getText().clear();
+                        mCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+                        mCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
+                        isValidatedCreateComment = false;
+                        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
+                        if (fragment instanceof CommentFragment) {
+                            ((CommentFragment) fragment).updateCommentList();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                "리뷰의 댓글을 등록하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    public void commentSelected(Comment comment) {
+        String userNameString = "@" + comment.getUserName() + " ";
+        mCommentCreateEditText.setText(String.valueOf(userNameString));
+        mCommentCreateEditText.setSelection(userNameString.length());
+//        mCommentCreateEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mCommentCreateEditText.requestFocus();
+        mInputMethodManager.showSoftInput(mCommentCreateEditText, InputMethodManager.SHOW_IMPLICIT);
+        mReviewReadNestedScrollView.smoothScrollTo(0, (int) comment.getPositionY() + 300);
+        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
+        if (fragment instanceof CommentFragment) {
+
+        }
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

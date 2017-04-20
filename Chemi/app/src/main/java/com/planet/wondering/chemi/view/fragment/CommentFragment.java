@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.network.AppSingleton;
@@ -29,6 +31,7 @@ import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
 
 import org.json.JSONObject;
 
@@ -103,6 +106,7 @@ public class CommentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         mCommentRecyclerView = (RecyclerView) view.findViewById(R.id.comment_recycler_view);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mCommentRecyclerView.setNestedScrollingEnabled(false);
         SeparatorDecoration decoration =
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mCommentRecyclerView.addItemDecoration(decoration);
@@ -121,7 +125,7 @@ public class CommentFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        requestComment(mRelevantId, mCommentType);
+        updateCommentList();
     }
 
     private void updateUI() {
@@ -133,6 +137,10 @@ public class CommentFragment extends Fragment {
             mCommentAdapter.setParentList(mComments, true);
             mCommentAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void updateCommentList() {
+        requestComment(mRelevantId, mCommentType);
     }
 
     public void requestComment(final int relevantId, final int commentType) {
@@ -301,7 +309,7 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private class ParentCommentHolder extends ParentViewHolder {
+    private class ParentCommentHolder extends ParentViewHolder implements View.OnClickListener {
 
         private Comment mParentComment;
 
@@ -312,11 +320,13 @@ public class CommentFragment extends Fragment {
 
         public ParentCommentHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mUserImageView = (CircleImageView)
                     itemView.findViewById(R.id.list_item_comment_parent_user_image_image_view);
             mUserNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_comment_parent_user_name_text_view);
+            mUserNameTextView.setOnClickListener(this);
             mDateTextView = (TextView)
                     itemView.findViewById(R.id.list_item_comment_parent_date_text_view);
             mDescriptionTextView = (TextView)
@@ -325,13 +335,52 @@ public class CommentFragment extends Fragment {
 
         public void bindParentComment(Comment comment) {
             mParentComment = comment;
-//            Glide.with(getActivity())
-//                    .load(mParentComment.getUserImagePath())
-//                    .crossFade()
-//                    .into(mUserImageView);
+            Glide.with(getActivity())
+                    .load(mParentComment.getUserImagePath())
+                    .crossFade()
+                    .into(mUserImageView);
             mUserNameTextView.setText(String.valueOf(mParentComment.getUserName()));
             mDateTextView.setText(String.valueOf(mParentComment.getDate()));
             mDescriptionTextView.setText(String.valueOf(mParentComment.getDescription()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            /* 1 : review comment, 2 : content comment */
+            super.onClick(v);
+            if (v.getId() == R.id.list_item_comment_parent_user_name_text_view) {
+                if (mCommentType == 1) {
+                    Toast.makeText(getActivity(), "review " + mParentComment.getUserName(), Toast.LENGTH_SHORT).show();
+                } else if (mCommentType == 2) {
+                    int clickedPosition = -1;
+                    for (Comment comment : mComments) {
+                        if (comment.getId() == mParentComment.getId()) {
+                            clickedPosition = mComments.indexOf(mParentComment);
+                        }
+                    }
+                    float y = mCommentRecyclerView.getChildAt(clickedPosition).getY();
+                    mParentComment.setPositionY(y);
+
+                    mSelectedListener.onCommentSelected(mParentComment);
+                }
+            } else {
+                if (mCommentType == 1) {
+                    Toast.makeText(getActivity(), "review " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
+                } else if (mCommentType == 2) {
+                    Toast.makeText(getActivity(), "content " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+
+
+            switch (v.getId()) {
+                case R.id.list_item_comment_parent_user_name_text_view:
+
+
+
+                    break;
+            }
         }
     }
 
@@ -359,15 +408,27 @@ public class CommentFragment extends Fragment {
 
         public void bindChildComment(Comment comment) {
             mChildComment = comment;
-//            Glide.with(getActivity())
-//                    .load(mChildComment.getUserImagePath())
-//                    .crossFade()
-//                    .into(mUserImageView);
+            Glide.with(getActivity())
+                    .load(mChildComment.getUserImagePath())
+                    .crossFade()
+                    .into(mUserImageView);
             mUserNameTextView.setText(String.valueOf(mChildComment.getUserName()));
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
             mDescriptionTextView.setText(String.valueOf(mChildComment.getDescription()));
         }
     }
 
+    OnCommentSelectedListener mSelectedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mSelectedListener = (OnCommentSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnChemicalSelectedListener");
+        }
+    }
 
 }

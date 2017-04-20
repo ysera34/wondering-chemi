@@ -43,6 +43,8 @@ import java.util.regex.Pattern;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
+import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
+import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
 import static com.planet.wondering.chemi.network.Config.User.LOGIN_PARAMS;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
@@ -265,8 +267,8 @@ public class MemberSignInLocalFragment extends Fragment
 
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL, email);
-        params.put("password", password);
-        params.put("platform", "0");
+        params.put(PASSWORD, password);
+        params.put(PLATFORM, "0");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + LOGIN_PARAMS, new JSONObject(params),

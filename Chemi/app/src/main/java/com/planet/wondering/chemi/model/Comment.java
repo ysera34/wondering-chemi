@@ -21,6 +21,16 @@ public class Comment implements Parent<Comment>, Serializable {
     private String mDescription;
     private String mDate;
     private ArrayList<Comment> mChildComments;
+    //
+    private float mPositionY;
+
+    public float getPositionY() {
+        return mPositionY;
+    }
+
+    public void setPositionY(float positionY) {
+        mPositionY = positionY;
+    }
 
     public Comment() {
         mChildComments = new ArrayList<>();

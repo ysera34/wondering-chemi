@@ -232,9 +232,10 @@ public class Config {
     }
 
     public static final class Comment {
-        public static final String COMMENT_COUNT = "commented";
         public static final String PARENT_COMMENT = "comments";
         public static final String CHILD_COMMENT = "comments2";
+        public static final String COMMENT_COUNT = "commented";
+        public static final String COMMENT_PATH = File.separator + PARENT_COMMENT;
 
         public static final class Key {
             public static final String COMMENT_ID = "id";

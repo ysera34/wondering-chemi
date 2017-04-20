@@ -109,16 +109,10 @@
     <!--</RelativeLayout>-->
 
         <!--android:visibility="gone"-->
-    <ProgressBar
-        android:id="@+id/product_list_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        style="@style/Widget.AppCompat.ProgressBar" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
@@ -129,5 +123,12 @@
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/product_list_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.ProgressBar" />
 
 </LinearLayout>

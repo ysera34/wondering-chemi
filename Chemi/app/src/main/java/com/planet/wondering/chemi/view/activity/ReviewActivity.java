@@ -18,11 +18,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.Common;
+import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
@@ -46,7 +48,7 @@ import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
  */
 
 public class ReviewActivity extends BottomNavigationActivity
-        implements OnReviewEditListener, OnMenuSelectedListener {
+        implements OnReviewEditListener, OnMenuSelectedListener, OnCommentSelectedListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
 
@@ -172,6 +174,14 @@ public class ReviewActivity extends BottomNavigationActivity
                         .replace(R.id.main_fragment_container, ReviewUpdateFragment.newInstance(mReview))
                         .commit();
                 break;
+        }
+    }
+
+    @Override
+    public void onCommentSelected(Comment comment) {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        if (fragment instanceof ReviewReadFragment) {
+            ((ReviewReadFragment) fragment).commentSelected(comment);
         }
     }
 
