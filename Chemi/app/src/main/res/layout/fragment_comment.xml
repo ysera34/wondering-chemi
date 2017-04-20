@@ -4,6 +4,62 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="댓글 "
+            android:textSize="16sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <TextView
+            android:id="@+id/comment_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+    </LinearLayout>
+        <!--android:visibility="gone"-->
+    <LinearLayout
+        android:id="@+id/comment_empty_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_comments"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:lineSpacingMultiplier="1.2"
+            android:text="아직 등록된 댓글이 없어요.\n제일 먼저 댓글을 남겨보세요."
+            android:textSize="15sp"
+            android:textColor="@color/colorFontHint"/>
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comment_recycler_view"
         android:layout_width="match_parent"

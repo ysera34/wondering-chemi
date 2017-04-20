@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,8 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
+    private TextView mCommentCountTextView;
+    private LinearLayout mCommentEmptyLayout;
     private RecyclerView mCommentRecyclerView;
     private CommentAdapter mCommentAdapter;
     private ArrayList<Comment> mComments;
@@ -104,6 +107,8 @@ public class CommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
+        mCommentCountTextView = (TextView) view.findViewById(R.id.comment_count_text_view);
+        mCommentEmptyLayout = (LinearLayout) view.findViewById(R.id.comment_empty_layout);
         mCommentRecyclerView = (RecyclerView) view.findViewById(R.id.comment_recycler_view);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mCommentRecyclerView.setNestedScrollingEnabled(false);
@@ -134,8 +139,17 @@ public class CommentFragment extends Fragment {
             mCommentAdapter = new CommentAdapter(mComments);
             mCommentRecyclerView.setAdapter(mCommentAdapter);
         } else {
-            mCommentAdapter.setParentList(mComments, true);
-            mCommentAdapter.notifyDataSetChanged();
+            mCommentCountTextView.setText(String.valueOf(mComments.size()));
+            if (mComments.size() == 0) {
+                mCommentEmptyLayout.setVisibility(View.VISIBLE);
+                mCommentRecyclerView.setVisibility(View.GONE);
+            } else {
+                mCommentEmptyLayout.setVisibility(View.GONE);
+                mCommentRecyclerView.setVisibility(View.VISIBLE);
+                mCommentAdapter.setParentList(mComments, true);
+                mCommentAdapter.notifyDataSetChanged();
+            }
+
         }
     }
 
@@ -208,6 +222,9 @@ public class CommentFragment extends Fragment {
         public ParentCommentHolder onCreateParentViewHolder(@NonNull ViewGroup parentViewGroup, int viewType) {
             View view = null;
 //            switch (viewType) {
+//                case VIEW_TYPE_EMPTY:
+//                    view = mLayoutInflater.inflate(R.layout.list_item_comment_empty, parentViewGroup, false);
+//                    break;
 //                case VIEW_TYPE_ITEM_PARENT:
                     view = mLayoutInflater.inflate(R.layout.list_item_comment_parent, parentViewGroup, false);
 //                    break;
@@ -239,73 +256,17 @@ public class CommentFragment extends Fragment {
             childViewHolder.bindChildComment(child);
         }
 
-//        @Override
-//        public boolean isParentViewType(int viewType) {
-//            return viewType == VIEW_TYPE_HEADER || viewType == VIEW_TYPE_ITEM_PARENT;
-//        }
-
-        //        @Override
-//        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-//            View view;
-//            switch (viewType) {
-//                case VIEW_TYPE_HEADER:
-//                    view = layoutInflater.inflate(R.layout.list_item_comment_header, parent, false);
-//                    return new HeaderCommentHolder(view);
-//                case VIEW_TYPE_ITEM_PARENT:
-//                    view = layoutInflater.inflate(R.layout.list_item_comment_parent, parent, false);
-//                    return new ParentCommentHolder(view);
-//                case VIEW_TYPE_ITEM_CHILD:
-//                    view = layoutInflater.inflate(R.layout.list_item_comment_child, parent, false);
-//                    return new ChildCommentHolder(view);
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//            if (holder instanceof HeaderCommentHolder) {
-//                ((HeaderCommentHolder) holder).bindHeaderComment(mComments.size());
-//            }
-//            if (holder instanceof ParentCommentHolder) {
-//                ((ParentCommentHolder) holder).bindParentComment(mComments.);
-//            }
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            int totalCommentCount = 0;
-//            for (Comment c : mComments) {
-//                totalCommentCount += c.getChildCommentCount();
-//            }
-//            return totalCommentCount + 1;
-//        }
-//
-//        @Override
-//        public int getItemViewType(int position) {
-//            if (position == 0) {
-//                return VIEW_TYPE_HEADER;
-//            }
-//
-//        }
     }
 
-    private static final int VIEW_TYPE_HEADER = -1;
-    private static final int VIEW_TYPE_ITEM_PARENT = 1;
-    private static final int VIEW_TYPE_ITEM_CHILD = 2;
+    private static final int VIEW_TYPE_HEADER = -221;
+    private static final int VIEW_TYPE_EMPTY = 220;
+    private static final int VIEW_TYPE_ITEM_PARENT = 221;
+    private static final int VIEW_TYPE_ITEM_CHILD = 222;
 
-    private class HeaderCommentHolder extends RecyclerView.ViewHolder {
+    private class EmptyCommentHolder extends ParentViewHolder {
 
-        private TextView mCommentCountTextView;
-
-        public HeaderCommentHolder(View itemView) {
+        public EmptyCommentHolder(View itemView) {
             super(itemView);
-            mCommentCountTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_comment_header_comment_count_text_view);
-        }
-
-        public void bindHeaderComment(int count) {
-            mCommentCountTextView.setText(String.valueOf(count));
         }
     }
 
@@ -371,13 +332,8 @@ public class CommentFragment extends Fragment {
                 }
             }
 
-
-
-
             switch (v.getId()) {
                 case R.id.list_item_comment_parent_user_name_text_view:
-
-
 
                     break;
             }

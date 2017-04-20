@@ -13,10 +13,10 @@
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal">
         
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/list_item_comment_parent_user_image_image_view"
-                android:layout_width="40dp"
-                android:layout_height="40dp"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/list_item_comment_parent_user_image_image_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
 
     </LinearLayout>
 
@@ -55,6 +55,7 @@
             android:id="@+id/list_item_comment_parent_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:textSize="15sp"
             android:textColor="@color/colorFontToolbarSubtitle"/>
 

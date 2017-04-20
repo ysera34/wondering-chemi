@@ -541,7 +541,6 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
 
-                        // initialize
                         mCommentCreateEditText.getText().clear();
                         mCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                         mCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
