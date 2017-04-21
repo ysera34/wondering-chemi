@@ -1,7 +1,5 @@
 package com.planet.wondering.chemi.model;
 
-import android.os.Parcel;
-
 import com.bignerdranch.expandablerecyclerview.model.Parent;
 
 import java.io.Serializable;
@@ -102,20 +100,20 @@ public class Comment implements Parent<Comment>, Serializable {
         return false;
     }
 
-    protected Comment(Parcel in) {
-        mId = in.readInt();
-        mUserId = in.readInt();
-        mUserName = in.readString();
-        mUserImagePath = in.readString();
-        mDescription = in.readString();
-        mDate = in.readString();
-        if (in.readByte() == 0x01) {
-            mChildComments = new ArrayList<Comment>();
-            in.readList(mChildComments, Comment.class.getClassLoader());
-        } else {
-            mChildComments = null;
-        }
-    }
+//    protected Comment(Parcel in) {
+//        mId = in.readInt();
+//        mUserId = in.readInt();
+//        mUserName = in.readString();
+//        mUserImagePath = in.readString();
+//        mDescription = in.readString();
+//        mDate = in.readString();
+//        if (in.readByte() == 0x01) {
+//            mChildComments = new ArrayList<Comment>();
+//            in.readList(mChildComments, Comment.class.getClassLoader());
+//        } else {
+//            mChildComments = null;
+//        }
+//    }
 
 //    @Override
 //    public int describeContents() {

@@ -44,6 +44,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Review.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -158,13 +160,12 @@ public class CommentFragment extends Fragment {
     }
 
     public void requestComment(final int relevantId, final int commentType) {
-        /* 1 : review comment, 2 : content comment */
 
         String url = null;
-        if (commentType == 1) {
+        if (commentType == REVIEW_COMMENT_TYPE) {
             url = URL_HOST + PATH + File.separator + relevantId;
-        } else if (commentType == 2) {
-            url = URL_HOST + Config.Content.PATH + File.separator + relevantId;
+        } else if (commentType == CONTENT_COMMENT_TYPE) {
+            url = URL_HOST + Config.Content.PATH + relevantId;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -308,27 +309,28 @@ public class CommentFragment extends Fragment {
         @Override
         public void onClick(View v) {
             /* 1 : review comment, 2 : content comment */
-            super.onClick(v);
+
             if (v.getId() == R.id.list_item_comment_parent_user_name_text_view) {
-                if (mCommentType == 1) {
+                if (mCommentType == REVIEW_COMMENT_TYPE) {
                     Toast.makeText(getActivity(), "review " + mParentComment.getUserName(), Toast.LENGTH_SHORT).show();
-                } else if (mCommentType == 2) {
-                    int clickedPosition = -1;
-                    for (Comment comment : mComments) {
-                        if (comment.getId() == mParentComment.getId()) {
-                            clickedPosition = mComments.indexOf(mParentComment);
-                        }
-                    }
-                    float y = mCommentRecyclerView.getChildAt(clickedPosition).getY();
-                    mParentComment.setPositionY(y);
+                } else if (mCommentType == CONTENT_COMMENT_TYPE) {
+//                    int clickedPosition = -1;
+//                    for (Comment comment : mComments) {
+//                        if (comment.getId() == mParentComment.getId()) {
+//                            clickedPosition = mComments.indexOf(mParentComment);
+//                        }
+//                    }
+//                    float y = mCommentRecyclerView.getChildAt(clickedPosition).getY();
+//                    mParentComment.setPositionY(y);
 
                     mSelectedListener.onCommentSelected(mParentComment);
                 }
             } else {
-                if (mCommentType == 1) {
+                if (mCommentType == REVIEW_COMMENT_TYPE) {
                     Toast.makeText(getActivity(), "review " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
-                } else if (mCommentType == 2) {
+                } else if (mCommentType == CONTENT_COMMENT_TYPE) {
                     Toast.makeText(getActivity(), "content " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
+                    super.onClick(v);
                 }
             }
 
@@ -383,7 +385,7 @@ public class CommentFragment extends Fragment {
             mSelectedListener = (OnCommentSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnChemicalSelectedListener");
+                    + " must implement OnCommentSelectedListener");
         }
     }
 

@@ -205,5 +205,6 @@
     <string name="comments_count_format">댓글 %s개</string>
     <string name="menu_more_review_read_action_update">수정하기</string>
     <string name="menu_more_review_read_action_delete">지우기</string>
+    <string name="content_indicator_format">%1$s / %2$s</string>
 
 </resources>

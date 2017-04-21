@@ -49,6 +49,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
@@ -207,12 +208,12 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         mImage3ImageView = (ImageView) view.findViewById(R.id.review_read_review_image3_image_view);
 
         mChildFragmentManager = getChildFragmentManager();
-        mCommentFragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
+        mCommentFragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
 
         if (mCommentFragment == null) {
-            mCommentFragment = CommentFragment.newInstance(mReview.getId(), 1);
+            mCommentFragment = CommentFragment.newInstance(mReview.getId(), REVIEW_COMMENT_TYPE);
             mChildFragmentManager.beginTransaction()
-                    .add(R.id.comment_fragment_container, mCommentFragment)
+                    .add(R.id.review_comment_fragment_container, mCommentFragment)
                     .commit();
         }
 
@@ -545,7 +546,7 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                         mCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                         mCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                         isValidatedCreateComment = false;
-                        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
+                        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
                         if (fragment instanceof CommentFragment) {
                             ((CommentFragment) fragment).updateCommentList();
                         }
@@ -577,17 +578,7 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
     }
 
     public void commentSelected(Comment comment) {
-        String userNameString = "@" + comment.getUserName() + " ";
-        mCommentCreateEditText.setText(String.valueOf(userNameString));
-        mCommentCreateEditText.setSelection(userNameString.length());
-//        mCommentCreateEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
-        mCommentCreateEditText.requestFocus();
-        mInputMethodManager.showSoftInput(mCommentCreateEditText, InputMethodManager.SHOW_IMPLICIT);
-        mReviewReadNestedScrollView.smoothScrollTo(0, (int) comment.getPositionY() + 300);
-        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.comment_fragment_container);
-        if (fragment instanceof CommentFragment) {
 
-        }
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

@@ -1,12 +1,13 @@
 package com.planet.wondering.chemi.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by yoon on 2017. 3. 28..
  */
 
-public class Content {
+public class Content implements Serializable {
 
     private int mId;
     private int mCategoryId;

@@ -141,4 +141,13 @@
         <item name="android:thumb">@null</item>
     </style>
 
+    <style name="ContentIndicatorWhiteTextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowColor">@color/colorFontBody</item>
+    </style>
+
 </resources>

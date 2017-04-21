@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_ID;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_IMAGE_PATH;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_KEPT;
@@ -673,6 +674,7 @@ public class Parser {
                         content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
                         content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
                         content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
+                        content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                         contents.add(content);
                     }
                 }
@@ -692,6 +694,7 @@ public class Parser {
                 JSONObject contentJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
                 content.setId(contentJSONObject.getInt(CONTENT_ID));
                 content.setCategoryId(contentJSONObject.getInt(CATEGORY));
+                content.setViewType(contentJSONObject.getInt(VIEW_TYPE));
                 content.setTitle(contentJSONObject.getString(TITLE));
                 content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
 //                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
@@ -700,6 +703,7 @@ public class Parser {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     content.getContentImagePaths().add(jsonArray.getString(j));
                 }
+                content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                 content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
                 content.setLike(contentJSONObject.getInt(CONTENT_LIKE) == 1);
                 content.setArchive(contentJSONObject.getInt(CONTENT_KEEP) == 1);
@@ -730,12 +734,11 @@ public class Parser {
                         parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                         parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
                         parentComment.setDate(commentJSONObject.getString(WRITE_DATE));
-                        if (commentType == 2) {
+                        if (commentType == CONTENT_COMMENT_TYPE) {
                             JSONArray childCommentJSONArray = commentJSONObject.getJSONArray(CHILD_COMMENT);
-                            int childCommentSize = childCommentJSONArray.length();
-                            if (childCommentSize > 0) {
-                                for (int j = 0; j < childCommentSize; j++) {
-                                    JSONObject childCommentJSONObject = (JSONObject) commentJSONArray.get(i);
+                            if (childCommentJSONArray.length() > 0) {
+                                for (int j = 0; j < childCommentJSONArray.length(); j++) {
+                                    JSONObject childCommentJSONObject = (JSONObject) childCommentJSONArray.get(j);
                                     Comment childComment = new Comment();
                                     childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
                                     childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
