@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.view.activity.ContentActivity;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,7 @@ public class ContentHorizontalFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mContent = (Content) getArguments().getSerializable(ARG_CONTENT);
@@ -89,8 +91,13 @@ public class ContentHorizontalFragment extends Fragment {
             public void onPageSelected(int position) {
                 if (position == mContent.getContentImagePaths().size()) {
                     mContentIndicatorTextView.setVisibility(View.GONE);
+                    ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
+                    ((ContentActivity) getActivity()).showCommentEditText();
                 } else {
                     mContentIndicatorTextView.setVisibility(View.VISIBLE);
+                    ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
+
+                    ((ContentActivity) getActivity()).hideCommentEditText();
                 }
                 mContentIndicatorTextView.setText(getString(R.string.content_indicator_format,
                         String.valueOf(position + 1), String.valueOf(mContent.getContentImagePaths().size())));
@@ -108,6 +115,7 @@ public class ContentHorizontalFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((ContentActivity) getActivity()).hideCommentEditText();
         mContentIndicatorTextView.setText(getString(R.string.content_indicator_format,
                 String.valueOf(1), String.valueOf(mContent.getContentImagePaths().size())));
     }
@@ -132,4 +140,9 @@ public class ContentHorizontalFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
+    }
 }

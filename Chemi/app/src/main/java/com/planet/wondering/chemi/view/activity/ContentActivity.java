@@ -10,8 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +48,8 @@ import static com.planet.wondering.chemi.network.Config.URL_HOST;
  * Created by yoon on 2017. 3. 31..
  */
 
-public class ContentActivity extends AppBaseActivity implements OnCommentSelectedListener {
+public class ContentActivity extends AppBaseActivity
+        implements View.OnClickListener, OnCommentSelectedListener {
 
     private static final String TAG = ContentActivity.class.getSimpleName();
 
@@ -70,6 +77,7 @@ public class ContentActivity extends AppBaseActivity implements OnCommentSelecte
     private Toolbar mContentToolbar;
     private Menu mContentToolbarMenu;
 
+    private RelativeLayout mContentCommentEditLayout;
     private EditText mContentCommentEditText;
     private TextView mContentCommentSubmitTextView;
 
@@ -87,8 +95,10 @@ public class ContentActivity extends AppBaseActivity implements OnCommentSelecte
         setSupportActionBar(mContentToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        mContentCommentEditLayout = (RelativeLayout) findViewById(R.id.content_comment_edit_layout);
         mContentCommentEditText = (EditText) findViewById(R.id.content_comment_edit_text);
         mContentCommentSubmitTextView = (TextView) findViewById(R.id.content_comment_submit_text_view);
+        mContentCommentSubmitTextView.setOnClickListener(this);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
@@ -106,6 +116,14 @@ public class ContentActivity extends AppBaseActivity implements OnCommentSelecte
     protected void onResume() {
         super.onResume();
         requestContent(mContentId);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.content_comment_submit_text_view:
+                break;
+        }
     }
 
     @Override
@@ -188,6 +206,29 @@ public class ContentActivity extends AppBaseActivity implements OnCommentSelecte
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    public void showCommentEditText() {
+        mContentCommentEditLayout.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
+    }
+
+    public void hideCommentEditText() {
+        mContentCommentEditLayout.animate().translationY(mContentCommentEditLayout.getHeight())
+                .setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    public void setStatusBarTranslucent(boolean makeTranslucent) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 144);
+        if (makeTranslucent) {
+            params.setMargins(0, 72, 0, 0);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+//            params.setMargins(0, 0, 0, 0);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        mContentToolbar.setLayoutParams(params);
     }
 
     @Override

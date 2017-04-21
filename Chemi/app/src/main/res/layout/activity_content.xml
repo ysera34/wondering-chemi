@@ -6,8 +6,8 @@
     <FrameLayout
         android:id="@+id/content_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/content_comment_layout">
+        android:layout_height="match_parent">
+        <!--android:layout_above="@+id/content_comment_edit_layout"-->
 
     </FrameLayout>
 
@@ -15,12 +15,13 @@
         android:id="@+id/content_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        android:layout_alignParentTop="true"
         android:background="@android:color/transparent">
 
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:id="@+id/content_comment_layout"
+        android:id="@+id/content_comment_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
