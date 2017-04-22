@@ -61,7 +61,6 @@ import static com.planet.wondering.chemi.network.Config.Comment.CHILD_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_COUNT;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.COMMENT_ID;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
-import static com.planet.wondering.chemi.network.Config.Comment.Key.WRITE_DATE;
 import static com.planet.wondering.chemi.network.Config.Comment.PARENT_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_ID;
@@ -547,7 +546,7 @@ public class Parser {
                         review.setRatingValue(ratingFloat);
 
                         review.setContent(reviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
-                        review.setDate(reviewJSONObject.getString(Config.Review.Key.DATE));
+                        review.setDate(reviewJSONObject.getString(Config.Review.Key.CREATE_DATE));
 
                         JSONArray jsonArray = reviewJSONObject.getJSONArray(Config.Review.Key.IMAGE_PATHS);
                         for (int j = 0; j < jsonArray.length(); j++) {
@@ -624,7 +623,7 @@ public class Parser {
                 }
                 review.setRatingValue(ratingFloat);
                 review.setContent(reviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
-                review.setDate(reviewJSONObject.getString(Config.Review.Key.DATE));
+                review.setDate(reviewJSONObject.getString(Config.Review.Key.CREATE_DATE));
                 review.setAuthor(reviewJSONObject.getBoolean(AUTHOR));
 
                 JSONArray jsonArray = reviewJSONObject.getJSONArray(Config.Review.Key.IMAGE_PATHS);
@@ -733,7 +732,7 @@ public class Parser {
                         parentComment.setUserName(commentJSONObject.getString(USER_NAME));
                         parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                         parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
-                        parentComment.setDate(commentJSONObject.getString(WRITE_DATE));
+                        parentComment.setDate(commentJSONObject.getString(Config.Content.Key.CREATE_DATE));
                         if (commentType == CONTENT_COMMENT_TYPE) {
                             JSONArray childCommentJSONArray = commentJSONObject.getJSONArray(CHILD_COMMENT);
                             if (childCommentJSONArray.length() > 0) {
@@ -745,7 +744,7 @@ public class Parser {
                                     childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
                                     childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                                     childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
-                                    childComment.setDate(childCommentJSONObject.getString(WRITE_DATE));
+                                    childComment.setDate(childCommentJSONObject.getString(Config.Content.Key.CREATE_DATE));
                                     parentComment.getChildComments().add(childComment);
                                 }
                             }

@@ -43,9 +43,9 @@ public class ContentPagerFragment extends Fragment {
         mContentFragments = new ArrayList<>();
         mContentFragmentTitles = new ArrayList<>();
 
-        addFragment(ContentListFragment.newInstance(), "케미데스크");
         addFragment(ContentListFragment.newInstance(), "케미 PICK");
         addFragment(ContentListFragment.newInstance(), "케미라이프");
+        addFragment(ContentListFragment.newInstance(), "케미데스크");
     }
 
     @Nullable

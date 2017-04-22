@@ -205,6 +205,8 @@ public class Config {
             public static final String IMAGE_PATHS = "imagePaths";
             public static final String DATE = "dated";
             public static final String AUTHOR = "isAuthor";
+            public static final String CREATE_DATE = "created";
+            public static final String MODIFY_DATE = "modified";
         }
     }
 

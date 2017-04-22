@@ -1,6 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,6 +85,7 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
+    private LinearLayout mCommentCountLayout;
     private TextView mCommentCountTextView;
     private LinearLayout mCommentEmptyLayout;
     private RecyclerView mCommentRecyclerView;
@@ -109,11 +111,18 @@ public class CommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
+        mCommentCountLayout = (LinearLayout) view.findViewById(R.id.comment_count_layout);
         mCommentCountTextView = (TextView) view.findViewById(R.id.comment_count_text_view);
         mCommentEmptyLayout = (LinearLayout) view.findViewById(R.id.comment_empty_layout);
         mCommentRecyclerView = (RecyclerView) view.findViewById(R.id.comment_recycler_view);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mCommentRecyclerView.setNestedScrollingEnabled(false);
+        if (mCommentType == REVIEW_COMMENT_TYPE) {
+            mCommentRecyclerView.setNestedScrollingEnabled(false);
+        } else if (mCommentType == CONTENT_COMMENT_TYPE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mCommentCountLayout.setElevation(7f);
+            }
+        }
         SeparatorDecoration decoration =
                 new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
         mCommentRecyclerView.addItemDecoration(decoration);
