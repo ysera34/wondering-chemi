@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="16dp"
+              android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/colorAlabaster">
+
+        <TextView
+            android:id="@+id/list_item_notification_child_description_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2"
+            android:text="케미의 성분별 안전도 등급은 EWG Skin Deep 홈페
+이지에 따르며, 알레르기 주의성분은 식품의약품안전처에서 제공하는 정보들을 바탕으로 하고 있습니다. 케미의 성분별 안전도 등급은 EWG Skin Deep 홈페이지에 따르며, 알레르기 주의성분은 식품의약품안전처에서 제공하는 정보들을 바탕으로 하고 있습니다."
+            android:textSize="14sp"
+            android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        <LinearLayout
+            android:id="@+id/list_item_notification_child_image_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

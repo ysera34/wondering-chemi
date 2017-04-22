@@ -1,4 +1,4 @@
-package com.planet.wondering.chemi.model;
+package com.planet.wondering.chemi.model.config;
 
 /**
  * Created by yoon on 2017. 4. 2..

@@ -12,8 +12,9 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
-import com.planet.wondering.chemi.model.UserConfig;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
+import com.planet.wondering.chemi.model.config.Notice;
+import com.planet.wondering.chemi.model.config.UserConfig;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
@@ -79,6 +80,10 @@ import static com.planet.wondering.chemi.network.Config.Hazard.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.HAZARD_ID;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.SOURCE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.TYPE;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_CREATE;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_ID;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_MODIFY;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_TITLE;
 import static com.planet.wondering.chemi.network.Config.PAGE;
 import static com.planet.wondering.chemi.network.Config.PAGE_NEXT;
 import static com.planet.wondering.chemi.network.Config.PAGE_PREV;
@@ -976,5 +981,31 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return userConfig;
+    }
+
+    public static ArrayList<Notice> parseNoticeList(JSONObject responseObject) {
+
+        ArrayList<Notice> notices = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int noticesSize = responseObject.getInt(COUNT);
+                if (noticesSize > 0) {
+                    JSONArray noticeJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < noticesSize; i++) {
+                        JSONObject noticeJSONObject = (JSONObject) noticeJSONArray.get(i);
+                        Notice notice = new Notice();
+                        notice.setId(noticeJSONObject.getInt(NOTICE_ID));
+                        notice.setTitle(noticeJSONObject.getString(NOTICE_TITLE));
+                        notice.setCreateDate(noticeJSONObject.getString(NOTICE_CREATE));
+                        notice.setModifyDate(noticeJSONObject.getString(NOTICE_MODIFY));
+                        notices.add(notice);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return notices;
     }
 }

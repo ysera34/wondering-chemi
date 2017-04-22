@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MemberConfigTermsFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = MemberConfigTermsFragment.class.getSimpleName();
+    private static final String TAG = MemberConfigTermsFragment.class.getSimpleName();
 
     public static MemberConfigTermsFragment newInstance() {
 
@@ -93,6 +93,7 @@ public class MemberConfigTermsFragment extends Fragment implements View.OnClickL
         switch (v.getId()) {
             case R.id.member_config_terms_back_layout:
                 getActivity().onBackPressed();
+                break;
         }
     }
 

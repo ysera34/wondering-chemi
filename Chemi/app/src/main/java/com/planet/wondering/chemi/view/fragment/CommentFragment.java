@@ -222,11 +222,6 @@ public class CommentFragment extends Fragment {
             mLayoutInflater = LayoutInflater.from(getActivity());
         }
 
-        @Override
-        public void setParentList(@NonNull List<Comment> parentList, boolean preserveExpansionState) {
-            super.setParentList(parentList, preserveExpansionState);
-        }
-
         @NonNull
         @Override
         public ParentCommentHolder onCreateParentViewHolder(@NonNull ViewGroup parentViewGroup, int viewType) {

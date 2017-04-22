@@ -249,6 +249,19 @@ public class Config {
         }
     }
 
+    public static final class Notice {
+        public static final String NOTICE_PATH = File.separator + "notices" + File.separator;
+
+        public static final class Key {
+            public static final String NOTICE_ID = "id";
+            public static final String NOTICE_TITLE = "title";
+            public static final String NOTICE_DESCRIPTION = "description";
+            public static final String NOTICE_CREATE = "created";
+            public static final String NOTICE_MODIFY = "modified";
+            public static final String NOTICE_IMAGEPATHS = "imagePaths";
+        }
+    }
+
     public static String encodeUTF8(String string) {
         try {
             return URLEncoder.encode(string, "utf-8");
