@@ -14,6 +14,7 @@ import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.model.config.Notice;
+import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
@@ -81,6 +82,7 @@ import static com.planet.wondering.chemi.network.Config.Hazard.Key.HAZARD_ID;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.SOURCE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.TYPE;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_CREATE;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_ID;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_MODIFY;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_TITLE;
@@ -1007,5 +1009,20 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return notices;
+    }
+
+    public static NoticeBody parserNotice(JSONObject responseObject) {
+
+        NoticeBody noticeBody = new NoticeBody();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject noticeBodyJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                noticeBody.setDescription(noticeBodyJSONObject.getString(NOTICE_DESCRIPTION));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return noticeBody;
     }
 }

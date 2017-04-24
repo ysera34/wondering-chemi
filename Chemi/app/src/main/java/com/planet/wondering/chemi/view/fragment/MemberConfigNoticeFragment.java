@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -140,6 +141,35 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
+    private void requestNotice(final Notice notice) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + NOTICE_PATH + notice.getId(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        NoticeBody noticeBody = Parser.parserNotice(response);
+                        notice.getChildList().add(noticeBody);
+                        updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(),
+                                "공지사항을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
     private class NoticeAdapter extends ExpandableRecyclerAdapter<Notice, NoticeBody, ParentNoticeHolder, ChildNoticeHolder> {
 
         private LayoutInflater mLayoutInflater;
@@ -176,6 +206,9 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
 
     private class ParentNoticeHolder extends ParentViewHolder {
 
+        private static final float INITIAL_POSITION = 0.0f;
+        private static final float ROTATED_POSITION = 180.0f;
+
         private Notice mParentNotice;
 
         private TextView mTitleTextView;
@@ -184,6 +217,7 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
 
         public ParentNoticeHolder(@NonNull View itemView) {
             super(itemView);
+
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_notification_parent_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_notification_parent_date_text_view);
@@ -194,6 +228,45 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
             mParentNotice = notice;
             mTitleTextView.setText(String.valueOf(mParentNotice.getTitle()));
             mDateTextView.setText(String.valueOf(mParentNotice.getCreateDate()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mParentNotice.getChildList() != null && mParentNotice.getChildList().size() == 0) {
+                requestNotice(mParentNotice);
+            }
+            super.onClick(v);
+        }
+
+        @Override
+        public void setExpanded(boolean expanded) {
+            super.setExpanded(expanded);
+            if (expanded) {
+                mDownArrowImageView.setRotation(ROTATED_POSITION);
+            } else {
+                mDownArrowImageView.setRotation(INITIAL_POSITION);
+            }
+        }
+
+        @Override
+        public void onExpansionToggled(boolean expanded) {
+            super.onExpansionToggled(expanded);
+            RotateAnimation rotateAnimation;
+            if (expanded) { // rotate clockwise
+                rotateAnimation = new RotateAnimation(ROTATED_POSITION,
+                        INITIAL_POSITION,
+                        RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                        RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+            } else { // rotate counterclockwise
+                rotateAnimation = new RotateAnimation(-1 * ROTATED_POSITION,
+                        INITIAL_POSITION,
+                        RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                        RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+            }
+
+            rotateAnimation.setDuration(200);
+            rotateAnimation.setFillAfter(true);
+            mDownArrowImageView.startAnimation(rotateAnimation);
         }
     }
 
