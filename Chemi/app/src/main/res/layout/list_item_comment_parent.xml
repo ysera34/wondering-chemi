@@ -3,14 +3,14 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:minHeight="80dp"
-              android:background="@color/colorWhite">
+              android:minHeight="70dp"
+              android:background="@drawable/selector_ripple_list_item_border_gray">
     
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="17dp"
         android:gravity="center_horizontal">
         
         <de.hdodenhof.circleimageview.CircleImageView
@@ -24,7 +24,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -55,7 +57,7 @@
             android:id="@+id/list_item_comment_parent_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:lineSpacingMultiplier="0.9"
             android:textSize="15sp"
             android:textColor="@color/colorFontToolbarSubtitle"/>
 

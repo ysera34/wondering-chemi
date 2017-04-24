@@ -3,24 +3,23 @@ package com.planet.wondering.chemi.model.config;
 import java.util.ArrayList;
 
 /**
- * Created by yoon on 2017. 4. 22..
+ * Created by yoon on 2017. 4. 24..
  */
 
-public class NoticeBody {
+public class FAQBody {
 
-    private String mDescription;
+    private String mAnswer;
     private ArrayList<String> mImagePaths;
 
-    public NoticeBody() {
-
+    public FAQBody() {
     }
 
-    public String getDescription() {
-        return mDescription;
+    public String getAnswer() {
+        return mAnswer;
     }
 
-    public void setDescription(String description) {
-        mDescription = description;
+    public void setAnswer(String answer) {
+        mAnswer = answer;
     }
 
     public ArrayList<String> getImagePaths() {

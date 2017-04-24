@@ -262,6 +262,19 @@ public class Config {
         }
     }
 
+    public static final class FAQ {
+        public static final String FAQ_PATH = File.separator + "faqs" + File.separator;
+
+        public static final class Key {
+            public static final String FAQ_ID = "id";
+            public static final String FAQ_QUESTION = "question";
+            public static final String FAQ_ANSWER = "answer";
+            public static final String FAQ_IMAGEPATHS = "imagePaths";
+            public static final String FAQ_CREATE = "created";
+            public static final String FAQ_MODIFY = "modified";
+        }
+    }
+
     public static String encodeUTF8(String string) {
         try {
             return URLEncoder.encode(string, "utf-8");

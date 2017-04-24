@@ -14,7 +14,7 @@
         android:background="@color/colorBlackHaze">
 
         <TextView
-            android:id="@+id/list_item_notification_child_description_text_view"
+            android:id="@+id/list_item_faq_child_answer_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingMultiplier="1.2"
@@ -22,17 +22,40 @@
             android:textColor="@color/colorFontToolbarSubtitle"/>
 
         <LinearLayout
-            android:id="@+id/list_item_notification_child_image_layout"
+            android:id="@+id/list_item_faq_child_image_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp">
 
             <ImageView
+                android:id="@+id/list_item_faq_child_image1_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="업데이트"
+                android:textSize="14sp"
+                android:textColor="@color/colorFontToolbarSubtitle"/>
+
+            <TextView
+                android:id="@+id/list_item_faq_child_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:textSize="14sp"
+                android:textColor="@color/colorFontToolbarSubtitle"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

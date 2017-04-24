@@ -13,6 +13,8 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
+import com.planet.wondering.chemi.model.config.FAQ;
+import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
@@ -75,6 +77,12 @@ import static com.planet.wondering.chemi.network.Config.Content.Key.SUB_TITLE;
 import static com.planet.wondering.chemi.network.Config.Content.Key.TITLE;
 import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_COUNT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.VIEW_TYPE;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_ANSWER;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_CREATE;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_ID;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_IMAGEPATHS;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_MODIFY;
+import static com.planet.wondering.chemi.network.Config.FAQ.Key.FAQ_QUESTION;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CLASS;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.CODE;
 import static com.planet.wondering.chemi.network.Config.Hazard.Key.DESCRIPTION;
@@ -84,6 +92,7 @@ import static com.planet.wondering.chemi.network.Config.Hazard.Key.TYPE;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_CREATE;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_ID;
+import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_IMAGEPATHS;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_MODIFY;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_TITLE;
 import static com.planet.wondering.chemi.network.Config.PAGE;
@@ -1019,10 +1028,67 @@ public class Parser {
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 JSONObject noticeBodyJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
                 noticeBody.setDescription(noticeBodyJSONObject.getString(NOTICE_DESCRIPTION));
+
+                JSONArray imagePathJSONArray = noticeBodyJSONObject.getJSONArray(NOTICE_IMAGEPATHS);
+                if (imagePathJSONArray.length() > 0) {
+                    noticeBody.setImagePaths(new ArrayList<String>());
+                    for (int i = 0; i < imagePathJSONArray.length(); i++) {
+                        noticeBody.getImagePaths().add(imagePathJSONArray.getString(i));
+                    }
+                }
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
         return noticeBody;
+    }
+
+    public static ArrayList<FAQ> parseFAQList(JSONObject responseObject) {
+
+        ArrayList<FAQ> faqs = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int faqsSize = responseObject.getInt(COUNT);
+                if (faqsSize > 0) {
+                    JSONArray faqJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < faqsSize; i++) {
+                        JSONObject faqJSONObject = (JSONObject) faqJSONArray.get(i);
+                        FAQ faq = new FAQ();
+                        faq.setId(faqJSONObject.getInt(FAQ_ID));
+                        faq.setQuestion(faqJSONObject.getString(FAQ_QUESTION));
+                        faq.setCreateDate(faqJSONObject.getString(FAQ_CREATE));
+                        faq.setModifyDate(faqJSONObject.getString(FAQ_MODIFY));
+                        faqs.add(faq);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return faqs;
+    }
+
+    public static FAQBody parserFAQ(JSONObject responseObject) {
+
+        FAQBody faqBody = new FAQBody();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject faqBodyJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                faqBody.setAnswer(faqBodyJSONObject.getString(FAQ_ANSWER));
+
+                JSONArray imagePathJSONArray = faqBodyJSONObject.getJSONArray(FAQ_IMAGEPATHS);
+                if (imagePathJSONArray.length() > 0) {
+                    faqBody.setImagePaths(new ArrayList<String>());
+                    for (int i = 0; i < imagePathJSONArray.length(); i++) {
+                        faqBody.getImagePaths().add(imagePathJSONArray.getString(i));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return faqBody;
     }
 }

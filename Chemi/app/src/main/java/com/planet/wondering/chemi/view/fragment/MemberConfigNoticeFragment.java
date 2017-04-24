@@ -29,6 +29,8 @@ import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 
 import org.json.JSONObject;
 
@@ -78,6 +80,17 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
         mBackLayout.setOnClickListener(this);
         mNoticeRecyclerView = (RecyclerView) view.findViewById(R.id.member_config_notice_recycler_view);
         mNoticeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mNoticeRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+            @Override
+            public void onShowView() {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+            }
+
+            @Override
+            public void onHideView() {
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
 
         updateUI();
         return view;
@@ -287,6 +300,5 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
             mDescriptionTextView.setText(String.valueOf(mNoticeBody.getDescription()));
         }
     }
-
 
 }
