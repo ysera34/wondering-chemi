@@ -97,7 +97,7 @@ public class Comment implements Parent<Comment>, Serializable {
 
     @Override
     public boolean isInitiallyExpanded() {
-        return false;
+        return true;
     }
 
     @Override

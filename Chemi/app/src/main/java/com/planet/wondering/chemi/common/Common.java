@@ -14,5 +14,6 @@ public class Common {
 
     public static final int VERTICAL_CONTENT_VIEW_TYPE = 1;
     public static final int HORIZONTAL_CONTENT_VIEW_TYPE = 2;
+    public static final int COLLAPSING_CONTENT_VIEW_TYPE = 3;
 
 }

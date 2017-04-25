@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,7 @@ import com.planet.wondering.chemi.model.Content;
 import java.util.ArrayList;
 
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 
 /**
  * Created by yoon on 2017. 3. 31..
@@ -53,6 +54,8 @@ public class ContentVerticalFragment extends Fragment {
 
     private Content mContent;
 
+    private NestedScrollView mContentVerticalNestedScrollView;
+
     private ArrayList<String> mContentImagePaths;
     private RecyclerView mContentImageRecyclerView;
     private ContentImageAdapter mContentImageAdapter;
@@ -72,11 +75,8 @@ public class ContentVerticalFragment extends Fragment {
         mContent = (Content) getArguments().getSerializable(ARG_CONTENT);
         mContentImagePaths = new ArrayList<>();
 
-        if (mContent == null ) {
+        if (mContent != null ) {
             mContentImagePaths = mContent.getContentImagePaths();
-        }
-        for (String s : mContentImagePaths) {
-            Log.i(TAG, s);
         }
     }
 
@@ -85,6 +85,7 @@ public class ContentVerticalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_vertical, container, false);
+        mContentVerticalNestedScrollView = (NestedScrollView) view.findViewById(R.id.content_vertical_nested_scroll_view);
         mContentImageRecyclerView = (RecyclerView) view.findViewById(R.id.content_image_recycler_view);
         mContentImageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mContentImageRecyclerView.setNestedScrollingEnabled(false);
@@ -96,7 +97,8 @@ public class ContentVerticalFragment extends Fragment {
         mCommentFragment = mChildFragmentManager.findFragmentById(R.id.content_comment_fragment_container);
 
         if (mCommentFragment == null) {
-            mCommentFragment = CommentFragment.newInstance(mContent.getId(), CONTENT_COMMENT_TYPE);
+            mCommentFragment = CommentFragment.newInstance(
+                    mContent.getId(), CONTENT_COMMENT_TYPE, VERTICAL_CONTENT_VIEW_TYPE);
             mChildFragmentManager.beginTransaction()
                     .add(R.id.content_comment_fragment_container, mCommentFragment)
                     .commit();
@@ -126,6 +128,22 @@ public class ContentVerticalFragment extends Fragment {
         } else {
             mContentImageAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void updateCommentList(boolean isAddComment) {
+        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.content_comment_fragment_container);
+        if (fragment instanceof CommentFragment) {
+            ((CommentFragment) fragment).updateCommentList(isAddComment);
+        }
+    }
+
+    public void commentNestedScroll() {
+        mContentVerticalNestedScrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mContentVerticalNestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
+            }
+        }, 200);
     }
 
     private class ContentImageAdapter extends RecyclerView.Adapter<ContentImageHolder> {

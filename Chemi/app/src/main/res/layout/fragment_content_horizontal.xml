@@ -17,8 +17,8 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/content_image_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="@drawable/dim_effect_shape">
+            android:layout_height="wrap_content">
+            <!--android:foreground="@drawable/dim_effect_shape"-->
 
         </android.support.v4.view.ViewPager>
 
@@ -34,43 +34,43 @@
         android:text="@string/content_indicator_format"
         android:textAppearance="@style/ContentIndicatorWhiteTextAppearance"/>
 
-    <LinearLayout
-        android:id="@+id/content_horizontal_guide_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:gravity="center">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/content_horizontal_guide_layout"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:orientation="vertical"-->
+        <!--android:gravity="center">-->
 
-        <ImageView
-            android:id="@+id/content_horizontal_guide_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/survey_baby"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/content_horizontal_guide_image_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:src="@drawable/survey_baby"/>-->
 
-        <TextView
-            android:id="@+id/content_horizontal_guide_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="좌우로 밀어봅니다"
-            android:textAppearance="@style/ContentIndicatorWhiteTextAppearance"/>
+        <!--<TextView-->
+            <!--android:id="@+id/content_horizontal_guide_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:paddingStart="16dp"-->
+            <!--android:paddingEnd="16dp"-->
+            <!--android:text="좌우로 밀어봅니다"-->
+            <!--android:textAppearance="@style/ContentIndicatorWhiteTextAppearance"/>-->
 
-        <TextView
-            android:id="@+id/content_horizontal_guide_confirm_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:clickable="true"
-            android:text="확인"
-            android:textAppearance="@style/ContentIndicatorWhiteTextAppearance"
-            android:background="@drawable/widget_border_oval_rectangle_white"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/content_horizontal_guide_confirm_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="4dp"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:paddingStart="12dp"-->
+            <!--android:paddingEnd="12dp"-->
+            <!--android:clickable="true"-->
+            <!--android:text="확인"-->
+            <!--android:textAppearance="@style/ContentIndicatorWhiteTextAppearance"-->
+            <!--android:background="@drawable/widget_border_oval_rectangle_white"/>-->
+    <!--</LinearLayout>-->
 </RelativeLayout>

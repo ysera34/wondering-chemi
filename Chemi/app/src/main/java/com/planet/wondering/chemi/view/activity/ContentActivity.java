@@ -38,7 +38,10 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ContentHorizontalFragment;
 import com.planet.wondering.chemi.view.fragment.ContentVerticalFragment;
 
@@ -51,18 +54,21 @@ import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_T
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Content.Key.KEEPER_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 3. 31..
  */
 
-public class ContentActivity extends AppBaseActivity
-        implements View.OnClickListener, OnCommentSelectedListener {
+public class ContentActivity extends AppBaseActivity implements View.OnClickListener,
+        OnCommentSelectedListener, OnDialogFinishedListener, OnCommentNestedScrollListener {
 
     private static final String TAG = ContentActivity.class.getSimpleName();
 
@@ -165,18 +171,18 @@ public class ContentActivity extends AppBaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        if (mContent != null) {
-//            if (!mContent.isArchive()) {
-//
-//            }
-//        }
         mContentToolbarMenu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar_content, menu);
         if (mContent != null) {
             if (!mContent.isLike()) {
-
+                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_false));
             } else {
-
+                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_true));
+            }
+            if (!mContent.isArchive()) {
+                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_false));
+            } else {
+                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
             }
         }
 
@@ -187,14 +193,24 @@ public class ContentActivity extends AppBaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_content_like:
-                Toast.makeText(getApplicationContext(), "action_like", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "action_like");
-                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_true));
+                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                    requestLikeContent(mContent.isLike());
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
+                }
+//                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_true));
                 break;
             case R.id.action_content_archive:
-                Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
-                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
-                Log.i(TAG, "action_archive");
+                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                    requestArchiveContent(mContent.isArchive());
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
+                }
+//                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
                 break;
             case R.id.action_content_share:
                 Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
@@ -226,6 +242,7 @@ public class ContentActivity extends AppBaseActivity
                         mFragmentManager.beginTransaction()
                                 .add(R.id.content_fragment_container, mFragment)
                                 .commit();
+                        invalidateOptionsMenu();
                     }
                 },
                 new Response.ErrorListener() {
@@ -258,6 +275,7 @@ public class ContentActivity extends AppBaseActivity
                         Toast.makeText(getApplicationContext(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
 
                         mContentCommentEditText.getText().clear();
+                        mContentCommentEditText.clearFocus();
                         mContentCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                         mContentCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                         isValidatedCreateComment = false;
@@ -265,10 +283,13 @@ public class ContentActivity extends AppBaseActivity
                         Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
                         switch (mContent.getViewType()) {
                             case VERTICAL_CONTENT_VIEW_TYPE:
+                                if (fragment instanceof ContentVerticalFragment) {
+                                    ((ContentVerticalFragment) fragment).updateCommentList(true);
+                                }
                                 break;
                             case HORIZONTAL_CONTENT_VIEW_TYPE:
                                 if (fragment instanceof ContentHorizontalFragment) {
-                                    ((ContentHorizontalFragment) fragment).updateCommentList();
+                                    ((ContentHorizontalFragment) fragment).updateCommentList(true);
                                 }
                                 break;
                         }
@@ -298,6 +319,111 @@ public class ContentActivity extends AppBaseActivity
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
+
+    private void requestLikeContent(final boolean isLike) {
+
+        int requestMethodId;
+        if (!isLike) {
+            requestMethodId = Request.Method.POST;
+        } else {
+            requestMethodId = Request.Method.DELETE;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                requestMethodId, URL_HOST + PATH + mContent.getId() + LIKE_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+
+                            if (!isLike) {
+                                Toast.makeText(getApplicationContext(), "\"좋아요\"하였습니다.", Toast.LENGTH_SHORT).show();
+                                mContent.setLike(true);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "\"좋아요\"취소하였습니다.", Toast.LENGTH_SHORT).show();
+                                mContent.setLike(false);
+                            }
+                            invalidateOptionsMenu();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(),
+                                "컨텐츠 좋아요하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestArchiveContent(final boolean isArchive) {
+
+        int requestMethodId;
+        if (!isArchive) {
+            requestMethodId = Request.Method.POST;
+        } else {
+            requestMethodId = Request.Method.DELETE;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                requestMethodId, URL_HOST + PATH + mContent.getId() + KEEPER_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+
+                            if (!isArchive) {
+                                Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
+                                mContent.setArchive(true);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "보관함에세 삭제되었어요.", Toast.LENGTH_SHORT).show();
+                                mContent.setArchive(false);
+                            }
+                            invalidateOptionsMenu();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(),
+                                "컨텐츠 보관 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
 //    mContentFragmentContainer
     public void showCommentEditText() {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -373,5 +499,23 @@ public class ContentActivity extends AppBaseActivity
 //        if (fragment instanceof CommentFragment) {
 //
 //        }
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose) {
+        if (isChose) {
+            startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+    }
+
+    @Override
+    public void onCommentNestedScroll() {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+        if (fragment instanceof ContentHorizontalFragment) {
+            ((ContentHorizontalFragment) fragment).commentNestedScroll();
+        } else if (fragment instanceof ContentVerticalFragment) {
+            ((ContentVerticalFragment) fragment).commentNestedScroll();
+        }
     }
 }

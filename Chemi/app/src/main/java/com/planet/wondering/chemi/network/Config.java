@@ -228,6 +228,8 @@ public class Config {
             public static final String VIEW_COUNT = "viewed";
             public static final String CONTENT_LIKE = "isLiker";
             public static final String CONTENT_KEEP = "isKeeper";
+            public static final String LIKE_PATH = File.separator + "likers";
+            public static final String KEEPER_PATH = File.separator + "keepers";
             public static final String CREATE_DATE = "created";
             public static final String MODIFY_DATE = "modified";
         }

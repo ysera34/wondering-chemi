@@ -1,6 +1,5 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +21,7 @@ import com.planet.wondering.chemi.view.activity.ContentActivity;
 import java.util.ArrayList;
 
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
 
 /**
  * Created by yoon on 2017. 4. 20..
@@ -75,10 +74,11 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
                 mContentImageFragments.add(
                         ContentImageFragment.newInstance(mContent.getContentImagePaths().get(i)));
             }
-            mContentImageFragments.add(CommentFragment.newInstance(mContent.getId(), CONTENT_COMMENT_TYPE));
+            mContentImageFragments.add(CommentFragment.newInstance(
+                    mContent.getId(), CONTENT_COMMENT_TYPE, HORIZONTAL_CONTENT_VIEW_TYPE));
         }
 
-        mShakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_left_right);
+//        mShakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_left_right);
     }
 
     @Nullable
@@ -86,10 +86,10 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_horizontal, container, false);
-        mContentHorizontalGuideLayout = (LinearLayout) view.findViewById(R.id.content_horizontal_guide_layout);
-        view.findViewById(R.id.content_horizontal_guide_image_view).setAnimation(mShakeAnimation);
-        view.findViewById(R.id.content_horizontal_guide_text_view).setAnimation(mShakeAnimation);
-        view.findViewById(R.id.content_horizontal_guide_confirm_text_view).setOnClickListener(this);
+//        mContentHorizontalGuideLayout = (LinearLayout) view.findViewById(R.id.content_horizontal_guide_layout);
+//        view.findViewById(R.id.content_horizontal_guide_image_view).setAnimation(mShakeAnimation);
+//        view.findViewById(R.id.content_horizontal_guide_text_view).setAnimation(mShakeAnimation);
+//        view.findViewById(R.id.content_horizontal_guide_confirm_text_view).setOnClickListener(this);
 
         mContentImageViewPager = (ViewPager) view.findViewById(R.id.content_image_view_pager);
 
@@ -110,7 +110,7 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
                     mContentIndicatorTextView.setVisibility(View.GONE);
                     ((ContentActivity) getActivity()).showCommentEditText();
                     ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
-                    updateCommentList();
+                    updateCommentList(false);
                 } else {
                     mContentIndicatorTextView.setVisibility(View.VISIBLE);
                     ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
@@ -140,18 +140,24 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.content_horizontal_guide_confirm_text_view:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    mContentImageViewPager.getForeground().setAlpha(0);
-                    mShakeAnimation.cancel();
-                    mContentHorizontalGuideLayout.setVisibility(View.GONE);
-                }
-                break;
+//            case R.id.content_horizontal_guide_confirm_text_view:
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    mContentImageViewPager.getForeground().setAlpha(0);
+//                    mShakeAnimation.cancel();
+//                    mContentHorizontalGuideLayout.setVisibility(View.GONE);
+//                }
+//                break;
         }
     }
 
-    public void updateCommentList() {
-        ((CommentFragment) mContentImageFragments.get(mContent.getContentImagePaths().size())).updateCommentList();
+    public void updateCommentList(boolean isAddComment) {
+        ((CommentFragment) mContentImageFragments.get(mContent.getContentImagePaths().size()))
+                .updateCommentList(isAddComment);
+    }
+
+    public void commentNestedScroll() {
+        ((CommentFragment) mContentImageFragments.get(mContent.getContentImagePaths().size()))
+                .commentNestedScroll();
     }
 
     private class ContentImageAdapter extends FragmentStatePagerAdapter {

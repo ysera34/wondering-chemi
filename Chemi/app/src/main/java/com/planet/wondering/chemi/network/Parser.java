@@ -715,8 +715,8 @@ public class Parser {
 //                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
 
                 JSONArray jsonArray = contentJSONObject.getJSONArray(IMAGE_PATHS);
-                for (int j = 0; j < jsonArray.length(); j++) {
-                    content.getContentImagePaths().add(jsonArray.getString(j));
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    content.getContentImagePaths().add(jsonArray.getString(i));
                 }
                 content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                 content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));

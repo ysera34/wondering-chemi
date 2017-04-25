@@ -191,6 +191,12 @@ public class CommentFragment extends Fragment {
         requestComment(mRelevantId, mCommentType, isAddComment);
     }
 
+    public void commentNestedScroll() {
+        if (mContentViewType == HORIZONTAL_CONTENT_VIEW_TYPE) {
+            mCommentRecyclerView.smoothScrollToPosition(mCommentRecyclerView.getAdapter().getItemCount());
+        }
+    }
+
     public void requestComment(final int relevantId, final int commentType, final boolean isAddComment) {
 
         String url = null;

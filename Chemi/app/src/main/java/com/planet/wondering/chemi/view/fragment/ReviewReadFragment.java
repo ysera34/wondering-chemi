@@ -564,6 +564,7 @@ public class ReviewReadFragment extends Fragment
                         Toast.makeText(getActivity(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
 
                         mCommentCreateEditText.getText().clear();
+                        mCommentCreateEditText.clearFocus();
                         mCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                         mCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
                         isValidatedCreateComment = false;
@@ -603,12 +604,25 @@ public class ReviewReadFragment extends Fragment
     }
 
     public void commentNestedScroll() {
-        mReviewReadNestedScrollView.post(new Runnable() {
+        mReviewReadNestedScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mReviewReadNestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
             }
-        });
+        }, 200);
+//        final Handler handler = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {Thread.sleep(100);} catch (InterruptedException e) {Log.e(TAG, e.getMessage());}
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mReviewReadNestedScrollView.fullScroll(View.FOCUS_DOWN);
+//                    }
+//                });
+//            }
+//        }).start();
     }
 
     OnMenuSelectedListener mMenuSelectedListener;
