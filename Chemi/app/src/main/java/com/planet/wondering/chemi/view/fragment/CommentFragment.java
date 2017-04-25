@@ -1,7 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,8 +30,8 @@ import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
 
 import org.json.JSONObject;
@@ -46,7 +45,9 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Review.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -64,6 +65,7 @@ public class CommentFragment extends Fragment {
     private static final String ARG_CONTENT_ID = "content_id";
     private static final String ARG_RELEVANT_ID = "relevant_id";
     private static final String ARG_COMMENT_TYPE = "comment_type";
+    private static final String ARG_CONTENT_VIEW_TYPE = "content_view_type";
 
     public static CommentFragment newInstance() {
 
@@ -85,6 +87,18 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
+    public static CommentFragment newInstance(int relevantId, int commentType, int viewType) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_RELEVANT_ID, relevantId);
+        args.putInt(ARG_COMMENT_TYPE, commentType);
+        args.putInt(ARG_CONTENT_VIEW_TYPE, viewType);
+
+        CommentFragment fragment = new CommentFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private LinearLayout mCommentCountLayout;
     private TextView mCommentCountTextView;
     private LinearLayout mCommentEmptyLayout;
@@ -96,6 +110,7 @@ public class CommentFragment extends Fragment {
     private int mContentId;
     private int mRelevantId;
     private int mCommentType;
+    private int mContentViewType;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +119,7 @@ public class CommentFragment extends Fragment {
         mComments = new ArrayList<>();
         mRelevantId = getArguments().getInt(ARG_RELEVANT_ID, -1);
         mCommentType = getArguments().getInt(ARG_COMMENT_TYPE, -1);
+        mContentViewType = getArguments().getInt(ARG_CONTENT_VIEW_TYPE, -1);
     }
 
     @Nullable
@@ -119,13 +135,19 @@ public class CommentFragment extends Fragment {
         if (mCommentType == REVIEW_COMMENT_TYPE) {
             mCommentRecyclerView.setNestedScrollingEnabled(false);
         } else if (mCommentType == CONTENT_COMMENT_TYPE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mCommentCountLayout.setElevation(7f);
+            if (mContentViewType == VERTICAL_CONTENT_VIEW_TYPE) {
+                mCommentRecyclerView.setNestedScrollingEnabled(false);
+            } else if (mContentViewType == HORIZONTAL_CONTENT_VIEW_TYPE) {
+
             }
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                mCommentCountLayout.setElevation(7f);
+//            }
         }
-        SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-        mCommentRecyclerView.addItemDecoration(decoration);
+//        SeparatorDecoration decoration =
+//                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+//        mCommentRecyclerView.addItemDecoration(decoration);
 
         updateUI();
 
@@ -141,7 +163,7 @@ public class CommentFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        updateCommentList();
+        updateCommentList(false);
     }
 
     private void updateUI() {
@@ -158,17 +180,18 @@ public class CommentFragment extends Fragment {
                 mCommentEmptyLayout.setVisibility(View.GONE);
                 mCommentRecyclerView.setVisibility(View.VISIBLE);
                 mCommentAdapter.setParentList(mComments, true);
-                mCommentAdapter.notifyDataSetChanged();
+//                mCommentAdapter.notifyDataSetChanged();
+
             }
 
         }
     }
 
-    public void updateCommentList() {
-        requestComment(mRelevantId, mCommentType);
+    public void updateCommentList(boolean isAddComment) {
+        requestComment(mRelevantId, mCommentType, isAddComment);
     }
 
-    public void requestComment(final int relevantId, final int commentType) {
+    public void requestComment(final int relevantId, final int commentType, final boolean isAddComment) {
 
         String url = null;
         if (commentType == REVIEW_COMMENT_TYPE) {
@@ -184,6 +207,9 @@ public class CommentFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         mComments = Parser.parseCommentList(response, commentType);
                         updateUI();
+                        if (isAddComment) {
+                            mCommentNestedScrollListener.onCommentNestedScroll();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -301,10 +327,16 @@ public class CommentFragment extends Fragment {
 
         public void bindParentComment(Comment comment) {
             mParentComment = comment;
-            Glide.with(getActivity())
-                    .load(mParentComment.getUserImagePath())
-                    .crossFade()
-                    .into(mUserImageView);
+
+            if (mParentComment.getUserImagePath() != null) {
+                Glide.with(getActivity())
+                        .load(mParentComment.getUserImagePath())
+                        .crossFade()
+                        .into(mUserImageView);
+            } else if (mParentComment.getUserImagePath() == null ||
+                    mParentComment.getUserImagePath().equals("null")) {
+                mUserImageView.setImageResource(R.drawable.ic_user);
+            }
             mUserNameTextView.setText(String.valueOf(mParentComment.getUserName()));
             mDateTextView.setText(String.valueOf(mParentComment.getDate()));
             mDescriptionTextView.setText(String.valueOf(mParentComment.getDescription()));
@@ -370,10 +402,16 @@ public class CommentFragment extends Fragment {
 
         public void bindChildComment(Comment comment) {
             mChildComment = comment;
+
+            if (mChildComment.getUserImagePath() != null) {
             Glide.with(getActivity())
                     .load(mChildComment.getUserImagePath())
                     .crossFade()
                     .into(mUserImageView);
+            } else if (mChildComment.getUserImagePath() == null ||
+                    mChildComment.getUserImagePath().equals("null")){
+                mUserImageView.setImageResource(R.drawable.ic_user);
+            }
             mUserNameTextView.setText(String.valueOf(mChildComment.getUserName()));
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
             mDescriptionTextView.setText(String.valueOf(mChildComment.getDescription()));
@@ -381,12 +419,14 @@ public class CommentFragment extends Fragment {
     }
 
     OnCommentSelectedListener mSelectedListener;
+    OnCommentNestedScrollListener mCommentNestedScrollListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             mSelectedListener = (OnCommentSelectedListener) context;
+            mCommentNestedScrollListener = (OnCommentNestedScrollListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnCommentSelectedListener");

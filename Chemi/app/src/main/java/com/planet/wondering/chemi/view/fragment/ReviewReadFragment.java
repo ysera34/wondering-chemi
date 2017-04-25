@@ -41,6 +41,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
@@ -58,12 +59,14 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 4. 12..
  */
 
-public class ReviewReadFragment extends Fragment implements View.OnClickListener {
+public class ReviewReadFragment extends Fragment
+        implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = ReviewReadFragment.class.getSimpleName();
 
@@ -218,6 +221,7 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
         }
 
         mCommentCreateEditText = (EditText) view.findViewById(R.id.review_read_comment_edit_text);
+        mCommentCreateEditText.setOnFocusChangeListener(this);
         mCommentSubmitTextView = (TextView) view.findViewById(R.id.review_read_comment_submit_text_view);
         mCommentSubmitTextView.setOnClickListener(this);
 
@@ -237,6 +241,23 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
             Toast.makeText(getActivity(), "mReview null", Toast.LENGTH_SHORT).show();
         }
         validationEditText();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.review_read_comment_edit_text:
+                if (hasFocus) {
+                    if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+
+                    } else {
+                        CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                                .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                        dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -548,7 +569,7 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
                         isValidatedCreateComment = false;
                         Fragment fragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
                         if (fragment instanceof CommentFragment) {
-                            ((CommentFragment) fragment).updateCommentList();
+                            ((CommentFragment) fragment).updateCommentList(true);
                         }
                     }
                 },
@@ -579,6 +600,15 @@ public class ReviewReadFragment extends Fragment implements View.OnClickListener
 
     public void commentSelected(Comment comment) {
 
+    }
+
+    public void commentNestedScroll() {
+        mReviewReadNestedScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mReviewReadNestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
     OnMenuSelectedListener mMenuSelectedListener;

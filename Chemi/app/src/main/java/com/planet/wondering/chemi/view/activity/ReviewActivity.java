@@ -24,7 +24,9 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
 import com.planet.wondering.chemi.view.fragment.ReviewCreateFragment;
@@ -48,7 +50,8 @@ import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
  */
 
 public class ReviewActivity extends BottomNavigationActivity
-        implements OnReviewEditListener, OnMenuSelectedListener, OnCommentSelectedListener {
+        implements OnReviewEditListener, OnMenuSelectedListener,
+        OnCommentSelectedListener, OnDialogFinishedListener, OnCommentNestedScrollListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
 
@@ -183,6 +186,23 @@ public class ReviewActivity extends BottomNavigationActivity
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentSelected(comment);
         }
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose) {
+        if (isChose) {
+            startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+    }
+
+    @Override
+    public void onCommentNestedScroll() {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        if (fragment instanceof ReviewReadFragment) {
+            ((ReviewReadFragment) fragment).commentNestedScroll();
+        }
+
     }
 
     public void requestReview(int reviewId) {
