@@ -1,10 +1,13 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,10 +29,11 @@ import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.network.AppSingleton;
-import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
@@ -44,12 +48,19 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
+import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
+import static com.planet.wondering.chemi.network.Config.Comment.AUTHOR_PATH;
+import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Review.PATH;
+import static com.planet.wondering.chemi.network.Config.Review.REVIEW_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
@@ -111,6 +122,8 @@ public class CommentFragment extends Fragment {
     private int mRelevantId;
     private int mCommentType;
     private int mContentViewType;
+
+    private BottomSheetDialog mMenuBottomSheetDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -203,7 +216,7 @@ public class CommentFragment extends Fragment {
         if (commentType == REVIEW_COMMENT_TYPE) {
             url = URL_HOST + PATH + File.separator + relevantId;
         } else if (commentType == CONTENT_COMMENT_TYPE) {
-            url = URL_HOST + Config.Content.PATH + relevantId;
+            url = URL_HOST + CONTENT_PATH + relevantId;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -307,7 +320,8 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private class ParentCommentHolder extends ParentViewHolder implements View.OnClickListener {
+    private class ParentCommentHolder extends ParentViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
 
         private Comment mParentComment;
 
@@ -319,6 +333,7 @@ public class CommentFragment extends Fragment {
         public ParentCommentHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
             mUserImageView = (CircleImageView)
                     itemView.findViewById(R.id.list_item_comment_parent_user_image_image_view);
@@ -382,9 +397,16 @@ public class CommentFragment extends Fragment {
                     break;
             }
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            requestConfirmCommentAuthor(mRelevantId, mParentComment.getId(), mCommentType, PARENT_COMMENT_TYPE);
+            return true;
+        }
     }
 
-    private class ChildCommentHolder extends ChildViewHolder {
+    private class ChildCommentHolder extends ChildViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
 
         private Comment mChildComment;
 
@@ -395,6 +417,8 @@ public class CommentFragment extends Fragment {
 
         public ChildCommentHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
             mUserImageView = (CircleImageView)
                     itemView.findViewById(R.id.list_item_comment_child_user_image_image_view);
@@ -422,6 +446,18 @@ public class CommentFragment extends Fragment {
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
             mDescriptionTextView.setText(String.valueOf(mChildComment.getDescription()));
         }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "child onClick", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Toast.makeText(getActivity(), "child onLongClick", Toast.LENGTH_SHORT).show();
+            requestConfirmCommentAuthor(mRelevantId, mChildComment.getId(), mCommentType, CHILD_COMMENT_TYPE);
+            return true;
+        }
     }
 
     OnCommentSelectedListener mSelectedListener;
@@ -437,6 +473,156 @@ public class CommentFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnCommentSelectedListener");
         }
+    }
+
+    private void editCommentBottomSheetDialog(final int relevantId, final int commentId,
+                                              final int commentType, final int commentClass) {
+        if (dismissMenuBottomSheetDialog()) {
+            return;
+        }
+        ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_edit));
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_delete));
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bottom_sheet_menu_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        BottomSheetMenuAdapter bottomSheetMenuAdapter = new BottomSheetMenuAdapter(bottomSheetMenus);
+        recyclerView.setAdapter(bottomSheetMenuAdapter);
+        bottomSheetMenuAdapter.setItemClickListener(new BottomSheetMenuAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
+                dismissMenuBottomSheetDialog();
+                if (position == 0) {
+                    Toast.makeText(getActivity(), "edit", Toast.LENGTH_SHORT).show();
+                } else if (position == 1) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                    builder1.setMessage("댓글을 삭제하시겠어요?");
+                    builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestDeleteComment(relevantId, commentId, commentType);
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                }
+            }
+        });
+        mMenuBottomSheetDialog = new BottomSheetDialog(getActivity());
+        mMenuBottomSheetDialog.setContentView(view);
+        mMenuBottomSheetDialog.show();
+    }
+
+    private boolean dismissMenuBottomSheetDialog() {
+        if (mMenuBottomSheetDialog != null && mMenuBottomSheetDialog.isShowing()) {
+            mMenuBottomSheetDialog.dismiss();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isCommentAuthor = false;
+
+    private void requestConfirmCommentAuthor(final int relevantId, final int commentId,
+                                             final int commentType, final int commentClass) {
+
+        String url = null;
+        if (commentType == REVIEW_COMMENT_TYPE) {
+            url = URL_HOST + PATH + COMMENT_PATH + File.separator + commentId + AUTHOR_PATH;
+        } else if (commentType == CONTENT_COMMENT_TYPE) {
+            url = URL_HOST + COMMENT_PATH + File.separator + commentId + AUTHOR_PATH;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        isCommentAuthor = Parser.parseCommentAuthor(response);
+
+                        if (isCommentAuthor) {
+                            if (commentClass == PARENT_COMMENT_TYPE) {
+                                editCommentBottomSheetDialog(relevantId, commentId, commentType, commentClass);
+                            } else if (commentClass == CHILD_COMMENT_TYPE) {
+                                editCommentBottomSheetDialog(relevantId, commentId, commentType, commentClass);
+                            }
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "작성하신 댓글이 아니어서 수정이나 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestDeleteComment(int relevantId, int commentId, final int commentType) {
+
+        String url = null;
+        if (commentType == REVIEW_COMMENT_TYPE) {
+            url = URL_HOST + REVIEW_PATH + relevantId + COMMENT_PATH + File.separator + commentId;
+        } else if (commentType == CONTENT_COMMENT_TYPE) {
+            url = URL_HOST + CONTENT_PATH + relevantId + COMMENT_PATH + File.separator + commentId;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE, url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mComments = Parser.parseCommentList(response, commentType);
+                        updateUI();
+                        Toast.makeText(getActivity(), "댓글이 삭제되었어요.", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
 }

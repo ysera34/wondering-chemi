@@ -30,8 +30,8 @@
         android:background="@color/colorWhite">
 
         <RelativeLayout
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
             android:layout_marginTop="6dp">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/member_config_profile_user_image_view"
@@ -64,7 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:textStyle="bold|italic"
             android:textColor="@color/colorFontNormal"/>
 
         <TextView

@@ -64,6 +64,7 @@ import static com.planet.wondering.chemi.network.Config.Chemical.Key.PURPOSE;
 import static com.planet.wondering.chemi.network.Config.Comment.CHILD_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_COUNT;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.COMMENT_ID;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.IS_AUTHOR;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
 import static com.planet.wondering.chemi.network.Config.Comment.PARENT_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
@@ -773,6 +774,23 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return comments;
+    }
+
+    public static boolean parseCommentAuthor(JSONObject responseObject) {
+
+        boolean isAuthor = false;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject jsonObject = responseObject.getJSONObject(RESPONSE_DATA);
+//                isAuthor = (jsonObject.getInt(IS_AUTHOR) == 1);
+                isAuthor = jsonObject.getBoolean(IS_AUTHOR);
+                Log.i(TAG, "parseCommentAuthor isAuthor : " + isAuthor);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return isAuthor;
     }
 
     public static User parseEmailConfirm(JSONObject responseObject) {

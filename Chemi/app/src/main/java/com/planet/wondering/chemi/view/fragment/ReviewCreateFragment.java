@@ -327,8 +327,8 @@ public class ReviewCreateFragment extends Fragment
             return;
         }
         ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
-        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_pick));
-        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_delete));
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_image_pick));
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_image_delete));
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);

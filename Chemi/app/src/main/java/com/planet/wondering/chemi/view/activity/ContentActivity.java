@@ -54,9 +54,9 @@ import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_T
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Content.CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.KEEPER_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_PATH;
-import static com.planet.wondering.chemi.network.Config.Content.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -132,12 +132,12 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //                    .add(R.id.content_fragment_container, mFragment)
 //                    .commit();
 //        }
+        requestContent(mContentId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        requestContent(mContentId);
     }
 
     @Override
@@ -222,10 +222,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
     private void requestContent(int contentId) {
 
-//        Log.i(TAG, "url : " + URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId);
+        Log.i(TAG, "url : " + URL_HOST + CONTENT_PATH + contentId);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + PATH + contentId,
+                Request.Method.GET, URL_HOST + CONTENT_PATH + contentId,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -276,7 +276,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         params.put(DESCRIPTION, mContentCommentEditText.getText().toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + content.getId() + COMMENT_PATH, new JSONObject(params),
+                Request.Method.POST, URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -338,7 +338,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                requestMethodId, URL_HOST + PATH + mContent.getId() + LIKE_PATH,
+                requestMethodId, URL_HOST + CONTENT_PATH + mContent.getId() + LIKE_PATH,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -390,7 +390,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                requestMethodId, URL_HOST + PATH + mContent.getId() + KEEPER_PATH,
+                requestMethodId, URL_HOST + CONTENT_PATH + mContent.getId() + KEEPER_PATH,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

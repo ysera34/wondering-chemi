@@ -11,6 +11,8 @@ public class Common {
 
     public static final int REVIEW_COMMENT_TYPE = 5100;
     public static final int CONTENT_COMMENT_TYPE = 5200;
+    public static final int PARENT_COMMENT_TYPE = 5001;
+    public static final int CHILD_COMMENT_TYPE = 5002;
 
     public static final int VERTICAL_CONTENT_VIEW_TYPE = 1;
     public static final int HORIZONTAL_CONTENT_VIEW_TYPE = 2;

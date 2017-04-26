@@ -211,7 +211,7 @@ public class Config {
     }
 
     public static final class Content {
-        public static final String PATH = File.separator + "contents" + File.separator;
+        public static final String CONTENT_PATH = File.separator + "contents" + File.separator;
         public static final String QUERY_PATH = File.separator + "contents?";
         public static final String QUERY_CATEGORY = "&categoryid=";
 
@@ -240,6 +240,7 @@ public class Config {
         public static final String CHILD_COMMENT = "comments2";
         public static final String COMMENT_COUNT = "commented";
         public static final String COMMENT_PATH = File.separator + PARENT_COMMENT;
+        public static final String AUTHOR_PATH = File.separator + "isauthor";
 
         public static final class Key {
             public static final String COMMENT_ID = "id";
@@ -248,6 +249,7 @@ public class Config {
             public static final String USER_IMAGE_PATH = "userImagePath";
             public static final String DESCRIPTION = "description";
             public static final String WRITE_DATE = "dated";
+            public static final String IS_AUTHOR = "isAuthor";
         }
     }
 
