@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -496,9 +497,12 @@ public class CommentFragment extends Fragment {
                 dismissMenuBottomSheetDialog();
                 if (position == 0) {
                     Toast.makeText(getActivity(), "edit", Toast.LENGTH_SHORT).show();
+                    BottomSheetDialogFragment editCommentFragment = CommentEditBottomSheetDialogFragment.newInstance();
+                    editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+
                 } else if (position == 1) {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                    builder1.setMessage("댓글을 삭제하시겠어요?");
+                    builder1.setMessage("댓글을 정말 삭제하시겠어요?");
                     builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

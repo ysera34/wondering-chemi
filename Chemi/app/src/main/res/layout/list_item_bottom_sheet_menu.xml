@@ -5,7 +5,8 @@
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
               android:padding="16dp"
-              android:background="@drawable/selector_ripple_list_item_gray">
+              android:background="@drawable/selector_ripple_list_item_border_gray">
+    <!--android:background="@drawable/selector_ripple_list_item_gray"-->
     <!--android:background="@color/colorWhite"-->
 
     <ImageView
