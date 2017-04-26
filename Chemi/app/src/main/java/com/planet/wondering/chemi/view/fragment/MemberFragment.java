@@ -31,6 +31,7 @@ import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.CategoryActivity;
+import com.planet.wondering.chemi.view.activity.ContentActivity;
 import com.planet.wondering.chemi.view.activity.ContentListActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
@@ -157,7 +158,10 @@ public class MemberFragment extends Fragment
         });
 
         mMemberProfileCircleImageView = (CircleImageView) view.findViewById(R.id.member_profile_circle_image_view);
+        mMemberProfileCircleImageView.setOnClickListener(this);
         mMemberNameTextView = (TextView) view.findViewById(R.id.member_profile_name_text_view);
+
+        mMemberNameTextView.setOnClickListener(this);
 //        mMemberConfigImageView = (ImageView) view.findViewById(R.id.member_config_image_view);
 //        mMemberConfigImageView.setOnTouchListener(this);
 
@@ -311,10 +315,10 @@ public class MemberFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.member_config_image_view:
-//                Toast.makeText(getActivity(), "member_config_image_view", Toast.LENGTH_SHORT).show();
-//                mMenuSelectedListener.onMenuSelected();
-//                break;
+            case R.id.member_profile_circle_image_view:
+            case R.id.member_profile_name_text_view:
+                mMenuSelectedListener.onMenuSelected(1);
+                break;
             case R.id.archive_product_more_button_text_view:
 //                more to ArchiveActivity.ArchiveFragment.ArchiveProduct Tab;
                 break;
@@ -584,7 +588,8 @@ public class MemberFragment extends Fragment
         }
     }
 
-    private class ArchiveContentHolder extends RecyclerView.ViewHolder {
+    private class ArchiveContentHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private Content mContent;
 
@@ -594,6 +599,7 @@ public class MemberFragment extends Fragment
 
         public ArchiveContentHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mArchiveContentImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_archive_content_image_view);
@@ -611,6 +617,11 @@ public class MemberFragment extends Fragment
                     .into(mArchiveContentImageView);
             mArchiveContentTitleTextView.setText(mContent.getTitle());
             mArchiveContentSubTitleTextView.setText(mContent.getSubTitle());
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(ContentActivity.newIntent(getActivity(), mContent.getContentId()));
         }
     }
 

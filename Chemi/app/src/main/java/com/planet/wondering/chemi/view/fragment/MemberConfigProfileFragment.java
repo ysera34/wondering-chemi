@@ -121,6 +121,7 @@ public class MemberConfigProfileFragment extends Fragment
 
     private BottomSheetDialog mMenuBottomSheetDialog;
 
+    private TextView mProfileNameTextView;
     private LinearLayout mProfileInfoLayout;
     private TextView mPromoteTextView;
 
@@ -212,6 +213,7 @@ public class MemberConfigProfileFragment extends Fragment
             mConfigProfileLayouts[i].setOnClickListener(this);
         }
 
+        mProfileNameTextView = (TextView) view.findViewById(R.id.member_config_profile_name_text_view);
         mProfileInfoLayout = (LinearLayout) view.findViewById(R.id.member_config_profile_info_layout);
         mPromoteTextView = (TextView) view.findViewById(R.id.member_config_profile_info_promote_text_view);
         mRevokeTargetImageView = (ImageView) view.findViewById(R.id.member_config_profile_revoke_target_image_view);
@@ -250,6 +252,8 @@ public class MemberConfigProfileFragment extends Fragment
                     .crossFade()
                     .into(mUserCircleImageView);
         }
+
+        mProfileNameTextView.setText(String.valueOf(mUser.getName()));
 
         if (mUser.isHasExtraInfo()) {
             mPromoteTextView.setVisibility(View.GONE);

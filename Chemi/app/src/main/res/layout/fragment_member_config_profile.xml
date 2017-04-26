@@ -25,7 +25,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="145dp"
         android:gravity="center"
         android:background="@color/colorWhite">
 
@@ -58,6 +58,14 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/member_config_profile_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorFontNormal"/>
 
         <TextView
             android:id="@+id/member_config_profile_info_promote_text_view"

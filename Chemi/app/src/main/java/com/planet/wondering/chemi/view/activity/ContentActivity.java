@@ -253,7 +253,15 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
                     }
                 }
-        );
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
