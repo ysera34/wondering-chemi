@@ -57,6 +57,7 @@ import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.AUTHOR_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Content.CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Review.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.REVIEW_PATH;
@@ -121,6 +122,7 @@ public class CommentFragment extends Fragment {
     private int mReviewId;
     private int mContentId;
     private int mRelevantId;
+    private int mCommentId;
     private int mCommentType;
     private int mContentViewType;
 
@@ -401,7 +403,8 @@ public class CommentFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            requestConfirmCommentAuthor(mRelevantId, mParentComment.getId(), mCommentType, PARENT_COMMENT_TYPE);
+            requestConfirmCommentAuthor(mRelevantId, mParentComment.getId(), mParentComment.getDescription(),
+                    mCommentType, PARENT_COMMENT_TYPE);
             return true;
         }
     }
@@ -456,7 +459,8 @@ public class CommentFragment extends Fragment {
         @Override
         public boolean onLongClick(View v) {
             Toast.makeText(getActivity(), "child onLongClick", Toast.LENGTH_SHORT).show();
-            requestConfirmCommentAuthor(mRelevantId, mChildComment.getId(), mCommentType, CHILD_COMMENT_TYPE);
+            requestConfirmCommentAuthor(mRelevantId, mChildComment.getId(), mChildComment.getDescription(),
+                    mCommentType, CHILD_COMMENT_TYPE);
             return true;
         }
     }
@@ -476,7 +480,7 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private void editCommentBottomSheetDialog(final int relevantId, final int commentId,
+    private void editCommentBottomSheetDialog(final int relevantId, final int commentId, final String commentDescription,
                                               final int commentType, final int commentClass) {
         if (dismissMenuBottomSheetDialog()) {
             return;
@@ -496,9 +500,10 @@ public class CommentFragment extends Fragment {
             public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
                 dismissMenuBottomSheetDialog();
                 if (position == 0) {
-                    Toast.makeText(getActivity(), "edit", Toast.LENGTH_SHORT).show();
-                    BottomSheetDialogFragment editCommentFragment = CommentEditBottomSheetDialogFragment.newInstance();
+                    BottomSheetDialogFragment editCommentFragment =
+                            CommentEditBottomSheetDialogFragment.newInstance(commentDescription);
                     editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+                    mCommentId = commentId;
 
                 } else if (position == 1) {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
@@ -533,9 +538,16 @@ public class CommentFragment extends Fragment {
         return false;
     }
 
+
+
+    public void commentEditDialogFinished(String description) {
+        Toast.makeText(getActivity(), String.valueOf(description), Toast.LENGTH_SHORT).show();
+        requestEditComment(mRelevantId, mCommentId, description, mCommentType);
+    }
+
     private boolean isCommentAuthor = false;
 
-    private void requestConfirmCommentAuthor(final int relevantId, final int commentId,
+    private void requestConfirmCommentAuthor(final int relevantId, final int commentId, final String commentDescription,
                                              final int commentType, final int commentClass) {
 
         String url = null;
@@ -554,14 +566,62 @@ public class CommentFragment extends Fragment {
 
                         if (isCommentAuthor) {
                             if (commentClass == PARENT_COMMENT_TYPE) {
-                                editCommentBottomSheetDialog(relevantId, commentId, commentType, commentClass);
+                                editCommentBottomSheetDialog(relevantId, commentId, commentDescription,
+                                        commentType, commentClass);
                             } else if (commentClass == CHILD_COMMENT_TYPE) {
-                                editCommentBottomSheetDialog(relevantId, commentId, commentType, commentClass);
+                                editCommentBottomSheetDialog(relevantId, commentId, commentDescription,
+                                        commentType, commentClass);
                             }
                         } else {
                             Toast.makeText(getActivity(),
                                     "작성하신 댓글이 아니어서 수정이나 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestEditComment(int relevantId, int commentId, String commentDescription,
+                                    final int commentType) {
+
+        String url = null;
+        if (commentType == REVIEW_COMMENT_TYPE) {
+            url = URL_HOST + REVIEW_PATH + relevantId + COMMENT_PATH + File.separator + commentId;
+        } else if (commentType == CONTENT_COMMENT_TYPE) {
+            url = URL_HOST + CONTENT_PATH + relevantId + COMMENT_PATH + File.separator + commentId;
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put(DESCRIPTION, commentDescription);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, url, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mComments = Parser.parseCommentList(response, commentType);
+                        updateUI();
+                        Toast.makeText(getActivity(), "댓글이 수정되었어요.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {

@@ -625,6 +625,13 @@ public class ReviewReadFragment extends Fragment
 //        }).start();
     }
 
+    public void commentEditDialogFinished(String description) {
+        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
+        if (fragment instanceof CommentFragment) {
+            ((CommentFragment) fragment).commentEditDialogFinished(description);
+        }
+    }
+
     OnMenuSelectedListener mMenuSelectedListener;
 
     @Override

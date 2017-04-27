@@ -38,6 +38,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
@@ -68,7 +69,8 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.L
  */
 
 public class ContentActivity extends AppBaseActivity implements View.OnClickListener,
-        OnCommentSelectedListener, OnDialogFinishedListener, OnCommentNestedScrollListener {
+        OnCommentSelectedListener, OnDialogFinishedListener,
+        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener {
 
     private static final String TAG = ContentActivity.class.getSimpleName();
 
@@ -524,6 +526,16 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             ((ContentHorizontalFragment) fragment).commentNestedScroll();
         } else if (fragment instanceof ContentVerticalFragment) {
             ((ContentVerticalFragment) fragment).commentNestedScroll();
+        }
+    }
+
+    @Override
+    public void onCommentEditDialogFinished(String description) {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+        if (fragment instanceof ContentHorizontalFragment) {
+            ((ContentHorizontalFragment) fragment).commentEditDialogFinished(description);
+        } else if (fragment instanceof ContentVerticalFragment) {
+            ((ContentVerticalFragment) fragment).commentEditDialogFinished(description);
         }
     }
 }

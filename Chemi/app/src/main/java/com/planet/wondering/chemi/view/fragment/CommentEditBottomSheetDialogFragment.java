@@ -1,6 +1,8 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,19 +10,31 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
 
 /**
  * Created by yoon on 2017. 4. 26..
  */
 
-public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragment
+        implements View.OnClickListener {
 
     private static final String TAG = CommentEditBottomSheetDialogFragment.class.getSimpleName();
+
+    private static final String ARG_COMMENT_DESCRIPTION = "comment_description";
 
     public static CommentEditBottomSheetDialogFragment newInstance() {
 
@@ -31,18 +45,30 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
         return fragment;
     }
 
+    public static CommentEditBottomSheetDialogFragment newInstance(String description) {
+
+        Bundle args = new Bundle();
+        args.putString(ARG_COMMENT_DESCRIPTION, description);
+
+        CommentEditBottomSheetDialogFragment fragment = new CommentEditBottomSheetDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private String mCommentDescription;
+
+    private InputMethodManager mInputMethodManager;
+    private RelativeLayout mCommentConfirmLayout;
+    private EditText mCommentEditText;
+    private Button mEditCompleteButton;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCommentDescription = getArguments().getString(ARG_COMMENT_DESCRIPTION, null);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater,
-//                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_comment_edit, container, false);
-//        return view;
-//    }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback
             = new BottomSheetBehavior.BottomSheetCallback() {
@@ -63,6 +89,14 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         View view = View.inflate(getContext(), R.layout.fragment_comment_edit, null);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mCommentConfirmLayout = (RelativeLayout) view.findViewById(R.id.comment_edit_confirm_layout);
+        mCommentConfirmLayout.setOnClickListener(this);
+        mCommentEditText = (EditText) view.findViewById(R.id.comment_edit_comment_edit_text);
+        mCommentEditText.setText(String.valueOf(mCommentDescription));
+        mCommentEditText.setSelection(mCommentDescription.length());
+        mEditCompleteButton = (Button) view.findViewById(R.id.comment_edit_comment_edit_complete_button);
+        mEditCompleteButton.setOnClickListener(this);
         dialog.setContentView(view);
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -94,5 +128,123 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         params.height = screenHeight - statusBarHeight;
         parent.setLayoutParams(params);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+                    if (event.getAction() != KeyEvent.ACTION_DOWN) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage("댓글 수정을 취소하시겠어요?");
+                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dismiss();
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                        return true;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+
+    private boolean isCompletedCommentEdit = false;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.comment_edit_confirm_layout:
+            case R.id.comment_edit_comment_edit_complete_button:
+                if (!mCommentDescription.equals(mCommentEditText.getText().toString().trim())) {
+                    isCompletedCommentEdit = true;
+
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                    builder1.setMessage("댓글을 정말 수정하시겠어요?");
+                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            if (isCompletedCommentEdit) {
+                                mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+                                        mCommentEditText.getText().toString());
+                            }
+                            dismiss();
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                } else {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                    builder1.setMessage("변경사항이 없어요.\n댓글 수정을 취소하시겠어요?");
+                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dismiss();
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                }
+
+                break;
+
+        }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+//        super.onCancel(dialog);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (isCompletedCommentEdit) {
+
+        } else {
+            Toast.makeText(getActivity(), "댓글 수정이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    OnCommentEditDialogFinishedListener mCommentEditDialogFinishedListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCommentEditDialogFinishedListener = (OnCommentEditDialogFinishedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implements OnReviewEditListener");
+        }
     }
 }

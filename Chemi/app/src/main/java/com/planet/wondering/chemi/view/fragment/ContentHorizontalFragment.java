@@ -160,6 +160,11 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
                 .commentNestedScroll();
     }
 
+    public void commentEditDialogFinished(String description) {
+        ((CommentFragment) mContentImageFragments.get(mContent.getContentImagePaths().size()))
+                .commentEditDialogFinished(description);
+    }
+
     private class ContentImageAdapter extends FragmentStatePagerAdapter {
 
         private ArrayList<Fragment> mContentImageFragments;

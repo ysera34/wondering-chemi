@@ -146,6 +146,13 @@ public class ContentVerticalFragment extends Fragment {
         }, 200);
     }
 
+    public void commentEditDialogFinished(String description) {
+        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.content_comment_fragment_container);
+        if (fragment instanceof CommentFragment) {
+            ((CommentFragment) fragment).commentEditDialogFinished(description);
+        }
+    }
+
     private class ContentImageAdapter extends RecyclerView.Adapter<ContentImageHolder> {
 
         private ArrayList<String> mContentImagePaths;
