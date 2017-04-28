@@ -366,7 +366,7 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            editCommentBottomSheetDialog(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_TYPE);
+            requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_TYPE);
         }
     }
 
@@ -413,7 +413,7 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            editCommentBottomSheetDialog(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_TYPE);
+            requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_TYPE);
         }
     }
 
@@ -432,8 +432,7 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private void editCommentBottomSheetDialog(final int relevantId, final Comment comment,
-                                              final int commentType, final int commentClass) {
+    private void editCommentBottomSheetDialog(final Comment comment, final boolean isCommentAuthor) {
         if (dismissMenuBottomSheetDialog()) {
             return;
         }
@@ -441,8 +440,10 @@ public class CommentFragment extends Fragment {
         if (mCommentType == CONTENT_COMMENT_TYPE) {
             bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_comment));
         }
-        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_edit));
-        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_delete));
+        if (isCommentAuthor) {
+            bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_edit));
+            bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_delete));
+        }
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.layout_bottom_sheet_menu_recycler_view, null);
@@ -460,17 +461,55 @@ public class CommentFragment extends Fragment {
                             mSelectedListener.onCommentSelected(comment);
                             break;
                         case 1: /* comment edit */
+                            BottomSheetDialogFragment editCommentFragment =
+                                    CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
+                            editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+                            mCommentId = comment.getId();
+                            break;
                         case 2: /* comment delete */
-                            requestConfirmCommentAuthor(mRelevantId, comment,
-                                    mCommentType, PARENT_COMMENT_TYPE, position);
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage("댓글을 정말 삭제하시겠어요?");
+                            builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
+                                }
+                            });
+                            builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            AlertDialog dialog1 = builder1.create();
+                            dialog1.show();
                             break;
                     }
                 } else if (mCommentType == REVIEW_COMMENT_TYPE) {
                     switch (position) {
                         case 0: /* comment edit */
+                            BottomSheetDialogFragment editCommentFragment =
+                                    CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
+                            editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+                            mCommentId = comment.getId();
+                            break;
                         case 1: /* comment delete */
-                            requestConfirmCommentAuthor(mRelevantId, comment,
-                                    mCommentType, CHILD_COMMENT_TYPE, position);
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage("댓글을 정말 삭제하시겠어요?");
+                            builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
+                                }
+                            });
+                            builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            AlertDialog dialog1 = builder1.create();
+                            dialog1.show();
                             break;
                     }
                 }
@@ -495,8 +534,8 @@ public class CommentFragment extends Fragment {
 
     private boolean isCommentAuthor = false;
 
-    private void requestConfirmCommentAuthor(final int relevantId, final Comment comment, final int commentType,
-                                             final int commentClass, final int menuPosition) {
+    private void requestConfirmCommentAuthor(final int relevantId, final Comment comment,
+                                             final int commentType, final int commentClass) {
 
         String url = null;
         if (mCommentType == REVIEW_COMMENT_TYPE) {
@@ -511,67 +550,13 @@ public class CommentFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         isCommentAuthor = Parser.parseCommentAuthor(response);
+                        editCommentBottomSheetDialog(comment, isCommentAuthor);
 
-                        if (isCommentAuthor) {
-                            if (mCommentType == CONTENT_COMMENT_TYPE) {
-                                switch (menuPosition) {
-                                    case 0: /* comment comment */
-                                        break;
-                                    case 1: /* comment edit */
-                                        BottomSheetDialogFragment editCommentFragment =
-                                                CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
-                                        editCommentFragment.show(getChildFragmentManager(), "comment_edit");
-                                        break;
-                                    case 2: /* comment delete */
-                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                                        builder1.setMessage("댓글을 정말 삭제하시겠어요?");
-                                        builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
-                                            }
-                                        });
-                                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        });
-                                        AlertDialog dialog1 = builder1.create();
-                                        dialog1.show();
-                                        break;
-                                }
-                            } else if (mCommentType == REVIEW_COMMENT_TYPE) {
-                                switch (menuPosition) {
-                                    case 0: /* comment edit */
-                                        BottomSheetDialogFragment editCommentFragment =
-                                                CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
-                                        editCommentFragment.show(getChildFragmentManager(), "comment_edit");
-                                        break;
-                                    case 1: /* comment delete */
-                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                                        builder1.setMessage("댓글을 정말 삭제하시겠어요?");
-                                        builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
-                                            }
-                                        });
-                                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        });
-                                        AlertDialog dialog1 = builder1.create();
-                                        dialog1.show();
-                                        break;
-                                }
-                            }
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    "작성하신 댓글이 아니어서 수정이나 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
+//                        if (isCommentAuthor) {
+//                        } else {
+//                            Toast.makeText(getActivity(),
+//                                    "작성하신 댓글이 아니어서 수정이나 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 },
                 new Response.ErrorListener() {
