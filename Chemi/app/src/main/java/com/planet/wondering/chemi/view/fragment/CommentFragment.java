@@ -324,7 +324,7 @@ public class CommentFragment extends Fragment {
     }
 
     private class ParentCommentHolder extends ParentViewHolder
-            implements View.OnClickListener, View.OnLongClickListener {
+            implements View.OnClickListener {
 
         private Comment mParentComment;
 
@@ -336,13 +336,11 @@ public class CommentFragment extends Fragment {
         public ParentCommentHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
 
             mUserImageView = (CircleImageView)
                     itemView.findViewById(R.id.list_item_comment_parent_user_image_image_view);
             mUserNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_comment_parent_user_name_text_view);
-            mUserNameTextView.setOnClickListener(this);
             mDateTextView = (TextView)
                     itemView.findViewById(R.id.list_item_comment_parent_date_text_view);
             mDescriptionTextView = (TextView)
@@ -368,49 +366,12 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            /* 1 : review comment, 2 : content comment */
-
-            if (v.getId() == R.id.list_item_comment_parent_user_name_text_view) {
-                if (mCommentType == REVIEW_COMMENT_TYPE) {
-                    Toast.makeText(getActivity(), "review " + mParentComment.getUserName(), Toast.LENGTH_SHORT).show();
-                } else if (mCommentType == CONTENT_COMMENT_TYPE) {
-//                    int clickedPosition = -1;
-//                    for (Comment comment : mComments) {
-//                        if (comment.getId() == mParentComment.getId()) {
-//                            clickedPosition = mComments.indexOf(mParentComment);
-//                        }
-//                    }
-//                    float y = mCommentRecyclerView.getChildAt(clickedPosition).getY();
-//                    mParentComment.setPositionY(y);
-
-                    mSelectedListener.onCommentSelected(mParentComment);
-                }
-            } else {
-                if (mCommentType == REVIEW_COMMENT_TYPE) {
-                    Toast.makeText(getActivity(), "review " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
-                } else if (mCommentType == CONTENT_COMMENT_TYPE) {
-                    Toast.makeText(getActivity(), "content " + mParentComment.getDescription(), Toast.LENGTH_SHORT).show();
-                    super.onClick(v);
-                }
-            }
-
-            switch (v.getId()) {
-                case R.id.list_item_comment_parent_user_name_text_view:
-
-                    break;
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            requestConfirmCommentAuthor(mRelevantId, mParentComment.getId(), mParentComment.getDescription(),
-                    mCommentType, PARENT_COMMENT_TYPE);
-            return true;
+            editCommentBottomSheetDialog(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_TYPE);
         }
     }
 
     private class ChildCommentHolder extends ChildViewHolder
-            implements View.OnClickListener, View.OnLongClickListener {
+            implements View.OnClickListener {
 
         private Comment mChildComment;
 
@@ -422,7 +383,6 @@ public class CommentFragment extends Fragment {
         public ChildCommentHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
 
             mUserImageView = (CircleImageView)
                     itemView.findViewById(R.id.list_item_comment_child_user_image_image_view);
@@ -453,15 +413,7 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "child onClick", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            Toast.makeText(getActivity(), "child onLongClick", Toast.LENGTH_SHORT).show();
-            requestConfirmCommentAuthor(mRelevantId, mChildComment.getId(), mChildComment.getDescription(),
-                    mCommentType, CHILD_COMMENT_TYPE);
-            return true;
+            editCommentBottomSheetDialog(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_TYPE);
         }
     }
 
@@ -480,12 +432,15 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private void editCommentBottomSheetDialog(final int relevantId, final int commentId, final String commentDescription,
+    private void editCommentBottomSheetDialog(final int relevantId, final Comment comment,
                                               final int commentType, final int commentClass) {
         if (dismissMenuBottomSheetDialog()) {
             return;
         }
         ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
+        if (mCommentType == CONTENT_COMMENT_TYPE) {
+            bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_comment));
+        }
         bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_edit));
         bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_comment_delete));
 
@@ -499,29 +454,25 @@ public class CommentFragment extends Fragment {
             @Override
             public void onItemClick(BottomSheetMenuAdapter.MenuItemHolder itemHolder, int position) {
                 dismissMenuBottomSheetDialog();
-                if (position == 0) {
-                    BottomSheetDialogFragment editCommentFragment =
-                            CommentEditBottomSheetDialogFragment.newInstance(commentDescription);
-                    editCommentFragment.show(getChildFragmentManager(), "comment_edit");
-                    mCommentId = commentId;
-
-                } else if (position == 1) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                    builder1.setMessage("댓글을 정말 삭제하시겠어요?");
-                    builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestDeleteComment(relevantId, commentId, commentType);
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
+                if (mCommentType == CONTENT_COMMENT_TYPE) {
+                    switch (position) {
+                        case 0: /* comment comment */
+                            mSelectedListener.onCommentSelected(comment);
+                            break;
+                        case 1: /* comment edit */
+                        case 2: /* comment delete */
+                            requestConfirmCommentAuthor(mRelevantId, comment,
+                                    mCommentType, PARENT_COMMENT_TYPE, position);
+                            break;
+                    }
+                } else if (mCommentType == REVIEW_COMMENT_TYPE) {
+                    switch (position) {
+                        case 0: /* comment edit */
+                        case 1: /* comment delete */
+                            requestConfirmCommentAuthor(mRelevantId, comment,
+                                    mCommentType, CHILD_COMMENT_TYPE, position);
+                            break;
+                    }
                 }
             }
         });
@@ -538,23 +489,20 @@ public class CommentFragment extends Fragment {
         return false;
     }
 
-
-
     public void commentEditDialogFinished(String description) {
-        Toast.makeText(getActivity(), String.valueOf(description), Toast.LENGTH_SHORT).show();
         requestEditComment(mRelevantId, mCommentId, description, mCommentType);
     }
 
     private boolean isCommentAuthor = false;
 
-    private void requestConfirmCommentAuthor(final int relevantId, final int commentId, final String commentDescription,
-                                             final int commentType, final int commentClass) {
+    private void requestConfirmCommentAuthor(final int relevantId, final Comment comment, final int commentType,
+                                             final int commentClass, final int menuPosition) {
 
         String url = null;
-        if (commentType == REVIEW_COMMENT_TYPE) {
-            url = URL_HOST + PATH + COMMENT_PATH + File.separator + commentId + AUTHOR_PATH;
-        } else if (commentType == CONTENT_COMMENT_TYPE) {
-            url = URL_HOST + COMMENT_PATH + File.separator + commentId + AUTHOR_PATH;
+        if (mCommentType == REVIEW_COMMENT_TYPE) {
+            url = URL_HOST + PATH + COMMENT_PATH + File.separator + comment.getId() + AUTHOR_PATH;
+        } else if (mCommentType == CONTENT_COMMENT_TYPE) {
+            url = URL_HOST + COMMENT_PATH + File.separator + comment.getId() + AUTHOR_PATH;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -565,12 +513,60 @@ public class CommentFragment extends Fragment {
                         isCommentAuthor = Parser.parseCommentAuthor(response);
 
                         if (isCommentAuthor) {
-                            if (commentClass == PARENT_COMMENT_TYPE) {
-                                editCommentBottomSheetDialog(relevantId, commentId, commentDescription,
-                                        commentType, commentClass);
-                            } else if (commentClass == CHILD_COMMENT_TYPE) {
-                                editCommentBottomSheetDialog(relevantId, commentId, commentDescription,
-                                        commentType, commentClass);
+                            if (mCommentType == CONTENT_COMMENT_TYPE) {
+                                switch (menuPosition) {
+                                    case 0: /* comment comment */
+                                        break;
+                                    case 1: /* comment edit */
+                                        BottomSheetDialogFragment editCommentFragment =
+                                                CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
+                                        editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+                                        break;
+                                    case 2: /* comment delete */
+                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                                        builder1.setMessage("댓글을 정말 삭제하시겠어요?");
+                                        builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
+                                            }
+                                        });
+                                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                        AlertDialog dialog1 = builder1.create();
+                                        dialog1.show();
+                                        break;
+                                }
+                            } else if (mCommentType == REVIEW_COMMENT_TYPE) {
+                                switch (menuPosition) {
+                                    case 0: /* comment edit */
+                                        BottomSheetDialogFragment editCommentFragment =
+                                                CommentEditBottomSheetDialogFragment.newInstance(comment.getDescription());
+                                        editCommentFragment.show(getChildFragmentManager(), "comment_edit");
+                                        break;
+                                    case 1: /* comment delete */
+                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                                        builder1.setMessage("댓글을 정말 삭제하시겠어요?");
+                                        builder1.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                requestDeleteComment(mRelevantId, comment.getId(), mCommentType);
+                                            }
+                                        });
+                                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                        AlertDialog dialog1 = builder1.create();
+                                        dialog1.show();
+                                        break;
+                                }
                             }
                         } else {
                             Toast.makeText(getActivity(),

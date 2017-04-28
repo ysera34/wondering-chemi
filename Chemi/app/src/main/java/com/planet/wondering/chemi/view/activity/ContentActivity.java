@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,6 +102,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
     private RelativeLayout mContentCommentEditLayout;
     private EditText mContentCommentEditText;
+    private TextView mContentCommentUserNameTextView;
     private TextView mContentCommentSubmitTextView;
 
     @Override
@@ -120,13 +122,13 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentFragmentContainer = (FrameLayout) findViewById(R.id.content_fragment_container);
         mContentCommentEditLayout = (RelativeLayout) findViewById(R.id.content_comment_edit_layout);
         mContentCommentEditText = (EditText) findViewById(R.id.content_comment_edit_text);
+        mContentCommentUserNameTextView = (TextView) findViewById(R.id.content_comment_user_name_text_view);
         mContentCommentSubmitTextView = (TextView) findViewById(R.id.content_comment_submit_text_view);
         mContentCommentSubmitTextView.setOnClickListener(this);
         validationEditText();
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
-
 
 //        if (mFragment == null) {
 //            mFragment = ContentVerticalFragment.newInstance();
@@ -498,10 +500,48 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
     @Override
     public void onCommentSelected(Comment comment) {
-        String userNameString = "@" + comment.getUserName() + " ";
-        mContentCommentEditText.setText(String.valueOf(userNameString));
-        mContentCommentEditText.setSelection(userNameString.length());
-//        mCommentCreateEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        final String userNameString = "@" + comment.getUserName();
+//        SpannableString spannableString = new SpannableString(String.valueOf(userNameString));
+//        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
+//                0, userNameString.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        mContentCommentEditText.setText(spannableString);
+//        mContentCommentEditText.setSelection(userNameString.length());
+
+        mContentCommentUserNameTextView.setVisibility(View.VISIBLE);
+        mContentCommentUserNameTextView.setText(String.valueOf(userNameString));
+
+        float[] widths = new float[userNameString.length()];
+        mContentCommentUserNameTextView.getPaint().getTextWidths(userNameString, widths);
+
+        float textWidth = 0;
+        for (float w : widths) {
+            textWidth += w;
+        }
+//        Log.i(TAG, "textWidth : " + textWidth);
+//        Log.i(TAG, "getPaddingStart " + mContentCommentUserNameTextView.getPaddingStart());
+//        Log.i(TAG, "getPaddingEnd " + mContentCommentUserNameTextView.getPaddingEnd());
+//        Log.i(TAG, "getMeasuredWidth " + mContentCommentUserNameTextView.getMeasuredWidth());
+
+        int nameTextViewWidth = mContentCommentUserNameTextView.getPaddingStart() +
+                mContentCommentUserNameTextView.getPaddingEnd() + (int) textWidth;
+//        Log.i(TAG, "nameTextViewWidth : " + nameTextViewWidth);
+
+        float[] widths1 = new float[1];
+        mContentCommentEditText.getPaint().getTextWidths(" ", widths1);
+//        Log.i(TAG, "white space width" + widths1[0]);
+
+        int whiteSpaceLength = (int) Math.floor(nameTextViewWidth / widths1[0]);
+//        Log.i(TAG, "whiteSpaceLength : " + whiteSpaceLength);
+
+        StringBuilder whiteSpaceBuilder = new StringBuilder();
+        for (int i = 0; i < whiteSpaceLength - 2; i++) {
+            whiteSpaceBuilder.append("\u0020");
+        }
+
+        mContentCommentEditText.setText(whiteSpaceBuilder.toString());
+        mContentCommentEditText.setSelection(whiteSpaceLength - 2);
+        final int prefixLength = mContentCommentEditText.getText().length();
+
         mContentCommentEditText.requestFocus();
         mInputMethodManager.showSoftInput(mContentCommentEditText, InputMethodManager.SHOW_IMPLICIT);
 //        mReviewReadNestedScrollView.smoothScrollTo(0, (int) comment.getPositionY() + 300);
@@ -509,6 +549,44 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //        if (fragment instanceof CommentFragment) {
 //
 //        }
+
+        // cancel comment comment
+        mContentCommentEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    if (mContentCommentEditText.getText().length() < prefixLength) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+                        builder1.setMessage("대댓글 작성을 취소하시겠어요?");
+                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+                                mContentCommentEditText.getText().clear();
+                                mContentCommentEditText.clearFocus();
+                                mContentCommentUserNameTextView.setVisibility(View.GONE);
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                    }
+                }
+                return false;
+            }
+        });
+        // soft back button handle
+
+        // key back space button handle
+
+        //
+
+
     }
 
     @Override
