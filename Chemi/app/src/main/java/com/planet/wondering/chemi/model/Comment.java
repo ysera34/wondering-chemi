@@ -18,6 +18,7 @@ public class Comment implements Parent<Comment>, Serializable {
     private String mUserImagePath;
     private String mDescription;
     private String mDate;
+    private int mParentId;
     private ArrayList<Comment> mChildComments;
     //
     private float mPositionY;
@@ -80,6 +81,14 @@ public class Comment implements Parent<Comment>, Serializable {
 
     public void setDate(String date) {
         mDate = date;
+    }
+
+    public int getParentId() {
+        return mParentId;
+    }
+
+    public void setParentId(int parentId) {
+        mParentId = parentId;
     }
 
     public ArrayList<Comment> getChildComments() {

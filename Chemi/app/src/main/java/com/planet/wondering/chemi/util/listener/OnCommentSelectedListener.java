@@ -8,5 +8,5 @@ import com.planet.wondering.chemi.model.Comment;
 
 public interface OnCommentSelectedListener {
 
-    void onCommentSelected(Comment comment);
+    void onCommentSelected(Comment comment, int commentClass);
 }

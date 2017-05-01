@@ -49,10 +49,13 @@ import com.planet.wondering.chemi.view.fragment.ContentVerticalFragment;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
+import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
@@ -155,7 +158,25 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
-                            requestCreateContentComment(mContent);
+                            requestCreateContentComment(mContent, false);
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                } else if (isValidatedCreateCommentComment) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+                    builder1.setMessage("답글을 등록하시겠어요?");
+                    builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+                            requestCreateContentComment(mContent, true);
                         }
                     });
                     builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -167,7 +188,11 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     AlertDialog dialog1 = builder1.create();
                     dialog1.show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                    if (!isCommentSelected) {
+                        Toast.makeText(getApplicationContext(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "답글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }
@@ -274,37 +299,73 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private void requestCreateContentComment(Content content) {
+    private void requestCreateContentComment(Content content, boolean isCommentComment) {
 
+        String url = null;
         Map<String, String> params = new HashMap<>();
-        params.put(DESCRIPTION, mContentCommentEditText.getText().toString());
+        if (!isCommentComment) {
+            url = URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH;
+            params.put(DESCRIPTION, mContentCommentEditText.getText().toString().trim());
+        } else {
+            if (mCommentClass == PARENT_COMMENT_CLASS) {
+                url = URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH + File.separator + mComment.getId() + COMMENT_PATH;
+            } else if (mCommentClass == CHILD_COMMENT_CLASS) {
+                url = URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH + File.separator + mComment.getParentId() + COMMENT_PATH;
+            }
+            params.put(DESCRIPTION, mContentCommentEditText.getText().toString().trim()
+                    + mContentCommentUserNameTextView.getText().toString());
+        }
+
+        Log.i(TAG, "url " + url);
+
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH, new JSONObject(params),
+                Request.Method.POST, url, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
+                        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+                        if (isValidatedCreateComment) {
+                            Toast.makeText(getApplicationContext(), "댓글이 등록되었어요", Toast.LENGTH_SHORT).show();
+                            isValidatedCreateComment = false;
+
+                            switch (mContent.getViewType()) {
+                                case VERTICAL_CONTENT_VIEW_TYPE:
+                                    if (fragment instanceof ContentVerticalFragment) {
+                                        ((ContentVerticalFragment) fragment).updateCommentList(true);
+                                    }
+                                    break;
+                                case HORIZONTAL_CONTENT_VIEW_TYPE:
+                                    if (fragment instanceof ContentHorizontalFragment) {
+                                        ((ContentHorizontalFragment) fragment).updateCommentList(true);
+                                    }
+                                    break;
+                            }
+                        } else if (isValidatedCreateCommentComment) {
+                            Toast.makeText(getApplicationContext(), "답글이 등록되었어요", Toast.LENGTH_SHORT).show();
+                            isCommentSelected = false;
+                            isValidatedCreateCommentComment = false;
+                            mContentCommentEditText.setOnKeyListener(null);
+                            mContentCommentUserNameTextView.setVisibility(View.GONE);
+
+                            switch (mContent.getViewType()) {
+                                case VERTICAL_CONTENT_VIEW_TYPE:
+                                    if (fragment instanceof ContentVerticalFragment) {
+                                        ((ContentVerticalFragment) fragment).updateCommentList(false);
+                                    }
+                                    break;
+                                case HORIZONTAL_CONTENT_VIEW_TYPE:
+                                    if (fragment instanceof ContentHorizontalFragment) {
+                                        ((ContentHorizontalFragment) fragment).updateCommentList(false);
+                                    }
+                                    break;
+                            }
+                        }
 
                         mContentCommentEditText.getText().clear();
-                        mContentCommentEditText.clearFocus();
+//                        mContentCommentEditText.clearFocus();
                         mContentCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                         mContentCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
-                        isValidatedCreateComment = false;
-
-                        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
-                        switch (mContent.getViewType()) {
-                            case VERTICAL_CONTENT_VIEW_TYPE:
-                                if (fragment instanceof ContentVerticalFragment) {
-                                    ((ContentVerticalFragment) fragment).updateCommentList(true);
-                                }
-                                break;
-                            case HORIZONTAL_CONTENT_VIEW_TYPE:
-                                if (fragment instanceof ContentHorizontalFragment) {
-                                    ((ContentHorizontalFragment) fragment).updateCommentList(true);
-                                }
-                                break;
-                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -479,27 +540,43 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentToolbar.setLayoutParams(params);
     }
 
+    private boolean isCommentSelected = false;
     private boolean isValidatedCreateComment = false;
+    private boolean isValidatedCreateCommentComment = false;
+    private Comment mComment;
+    private int mCommentClass;
 
     private void validationEditText() {
         mContentCommentEditText.addTextChangedListener(new TextValidator(mContentCommentEditText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (text.length() > 0) {
+                if (text.trim().length() > 0) {
                     mContentCommentSubmitTextView.setTextColor(getResources().getColorStateList(R.color.color_selector_button_white_primary));
                     mContentCommentSubmitTextView.setBackgroundResource(R.drawable.selector_opaque_primary);
-                    isValidatedCreateComment = true;
+                    if (isCommentSelected) {
+                        isValidatedCreateCommentComment = true;
+                    } else {
+                        isValidatedCreateComment = true;
+                    }
                 } else {
                     mContentCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
                     mContentCommentSubmitTextView.setBackgroundResource(R.drawable.widget_solid_oval_rectangle_iron);
-                    isValidatedCreateComment = false;
+                    if (isCommentSelected) {
+                        isValidatedCreateCommentComment = false;
+                    } else {
+                        isValidatedCreateComment = false;
+                    }
                 }
             }
         });
     }
 
     @Override
-    public void onCommentSelected(Comment comment) {
+    public void onCommentSelected(Comment comment, int commentClass) {
+        isCommentSelected = true;
+        mComment = comment;
+        mCommentClass = commentClass;
+
         final String userNameString = "@" + comment.getUserName();
 //        SpannableString spannableString = new SpannableString(String.valueOf(userNameString));
 //        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
@@ -527,7 +604,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //        Log.i(TAG, "nameTextViewWidth : " + nameTextViewWidth);
 
         float[] widths1 = new float[1];
-        mContentCommentEditText.getPaint().getTextWidths(" ", widths1);
+        mContentCommentEditText.getPaint().getTextWidths("\u0020", widths1);
 //        Log.i(TAG, "white space width" + widths1[0]);
 
         int whiteSpaceLength = (int) Math.floor(nameTextViewWidth / widths1[0]);
@@ -540,53 +617,63 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
         mContentCommentEditText.setText(whiteSpaceBuilder.toString());
         mContentCommentEditText.setSelection(whiteSpaceLength - 2);
-        final int prefixLength = mContentCommentEditText.getText().length();
 
-        mContentCommentEditText.requestFocus();
-        mInputMethodManager.showSoftInput(mContentCommentEditText, InputMethodManager.SHOW_IMPLICIT);
+//        mContentCommentEditText.requestFocus();
+
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
+        if (fragment instanceof ContentVerticalFragment) {
+            ((ContentVerticalFragment) fragment).focusSelectedComment(comment.getPositionY());
+        }
+
+        mContentCommentEditText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mInputMethodManager.showSoftInput(mContentCommentEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 200);
+
+        // scroll handle
 //        mReviewReadNestedScrollView.smoothScrollTo(0, (int) comment.getPositionY() + 300);
-//        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
-//        if (fragment instanceof CommentFragment) {
-//
-//        }
 
-        // cancel comment comment
+
+        final int prefixLength = mContentCommentEditText.getText().length();
         mContentCommentEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     if (mContentCommentEditText.getText().length() < prefixLength) {
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
-                        builder1.setMessage("대댓글 작성을 취소하시겠어요?");
-                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
-                                mContentCommentEditText.getText().clear();
-                                mContentCommentEditText.clearFocus();
-                                mContentCommentUserNameTextView.setVisibility(View.GONE);
-                            }
-                        });
-                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        AlertDialog dialog1 = builder1.create();
-                        dialog1.show();
+                        showDialogCancelComment();
                     }
                 }
                 return false;
             }
         });
-        // soft back button handle
 
-        // key back space button handle
+    }
 
-        //
+    private void showDialogCancelComment() {
 
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+        builder1.setMessage("답글 작성을 취소하시겠어요?");
+        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+                mContentCommentEditText.getText().clear();
+//                mContentCommentEditText.clearFocus();
+                mContentCommentEditText.setOnKeyListener(null);
+                mContentCommentUserNameTextView.setVisibility(View.GONE);
+                isCommentSelected = false;
+            }
+        });
+        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        AlertDialog dialog1 = builder1.create();
+        dialog1.show();
     }
 
     @Override
@@ -614,6 +701,15 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             ((ContentHorizontalFragment) fragment).commentEditDialogFinished(description);
         } else if (fragment instanceof ContentVerticalFragment) {
             ((ContentVerticalFragment) fragment).commentEditDialogFinished(description);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isCommentSelected) {
+            showDialogCancelComment();
+        } else {
+            super.onBackPressed();
         }
     }
 }

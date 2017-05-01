@@ -182,7 +182,7 @@ public class ReviewActivity extends BottomNavigationActivity
     }
 
     @Override
-    public void onCommentSelected(Comment comment) {
+    public void onCommentSelected(Comment comment, int commentClass) {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentSelected(comment);

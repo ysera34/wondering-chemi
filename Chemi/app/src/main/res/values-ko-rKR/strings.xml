@@ -105,15 +105,15 @@
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>
 
     <string name="review_rating_0_message">최악이에요!</string>
-    <string name="review_rating_0.5_message">다시 사고 싶지 않아요.</string>
-    <string name="review_rating_1_message">전혀 좋지 않아요.</string>
-    <string name="review_rating_1.5_message">별로 좋지 않아요.</string>
-    <string name="review_rating_2_message">좋은지 잘 모르겠어요.</string>
-    <string name="review_rating_2.5_message">보통이에요.</string>
-    <string name="review_rating_3_message">그냥 쓸 만해요.</string>
-    <string name="review_rating_3.5_message">그럭저럭 좋아요.</string>
-    <string name="review_rating_4_message">만족스러워요.</string>
-    <string name="review_rating_4.5_message">또 살 거예요.</string>
+    <string name="review_rating_0.5_message">다시 사고 싶지 않아요</string>
+    <string name="review_rating_1_message">전혀 좋지 않아요</string>
+    <string name="review_rating_1.5_message">별로 좋지 않아요</string>
+    <string name="review_rating_2_message">좋은지 잘 모르겠어요</string>
+    <string name="review_rating_2.5_message">보통이에요</string>
+    <string name="review_rating_3_message">그냥 쓸 만해요</string>
+    <string name="review_rating_3.5_message">그럭저럭 좋아요</string>
+    <string name="review_rating_4_message">만족스러워요</string>
+    <string name="review_rating_4.5_message">또 살 거예요</string>
     <string name="review_rating_5_message">최고예요!</string>
 
     <string-array name="review_rating_message_array">

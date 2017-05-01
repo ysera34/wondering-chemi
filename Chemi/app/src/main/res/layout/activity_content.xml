@@ -27,9 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:padding="4dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:background="@color/colorFontFrenchGray">
+        <!--android:focusable="true"-->
+        <!--android:focusableInTouchMode="true"-->
 
         <!--<LinearLayout-->
             <!--android:id="@+id/content_comment_edit_text_layout"-->
@@ -43,7 +43,6 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:padding="8dp"-->
-            <!--android:text="djklsfjas"-->
             <!--android:textSize="15sp"-->
             <!--android:textColor="@color/colorPrimary"-->
             <!--android:background="@color/colorWhite"/>-->
@@ -62,7 +61,6 @@
             <!--android:maxLength="100"-->
             <!--android:background="@color/colorWhite"-->
             <!--android:hint="댓글을 입력해주세요 (최대 100자예요)"-->
-            <!--android:text="jfalsdjflaksdjflasjdfalsjdfalskjdfdajklfalsdfjalsfjdlasjdflasjkdflakjsdflasjfdljajskldfjasldfja"-->
             <!--android:textColorHint="@color/colorFontFrenchGray"-->
             <!--android:textSize="15sp"-->
             <!--android:textColor="@color/colorFontNormal"/>-->

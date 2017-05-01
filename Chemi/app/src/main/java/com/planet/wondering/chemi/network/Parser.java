@@ -757,10 +757,14 @@ public class Parser {
                                     JSONObject childCommentJSONObject = (JSONObject) childCommentJSONArray.get(j);
                                     Comment childComment = new Comment();
                                     childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
+                                    childComment.setParentId(parentComment.getId());
                                     childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
                                     childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
                                     childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
-                                    childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
+
+                                    String childDescription = childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION);
+
+                                    childComment.setDescription(childDescription);
                                     childComment.setDate(childCommentJSONObject.getString(Config.Content.Key.CREATE_DATE));
                                     parentComment.getChildComments().add(childComment);
                                 }
@@ -785,7 +789,7 @@ public class Parser {
                 JSONObject jsonObject = responseObject.getJSONObject(RESPONSE_DATA);
 //                isAuthor = (jsonObject.getInt(IS_AUTHOR) == 1);
                 isAuthor = jsonObject.getBoolean(IS_AUTHOR);
-                Log.i(TAG, "parseCommentAuthor isAuthor : " + isAuthor);
+//                Log.i(TAG, "parseCommentAuthor isAuthor : " + isAuthor);
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());

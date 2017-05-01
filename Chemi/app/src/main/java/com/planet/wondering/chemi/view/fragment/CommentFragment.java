@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,10 +51,10 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
-import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_TYPE;
+import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.AUTHOR_PATH;
@@ -156,7 +158,6 @@ public class CommentFragment extends Fragment {
             } else if (mContentViewType == HORIZONTAL_CONTENT_VIEW_TYPE) {
 
             }
-
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                mCommentCountLayout.setElevation(7f);
 //            }
@@ -197,9 +198,7 @@ public class CommentFragment extends Fragment {
                 mCommentRecyclerView.setVisibility(View.VISIBLE);
                 mCommentAdapter.setParentList(mComments, true);
 //                mCommentAdapter.notifyDataSetChanged();
-
             }
-
         }
     }
 
@@ -366,7 +365,9 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_TYPE);
+            Log.i(TAG, String.valueOf(v.getY()));
+            mParentComment.setPositionY(v.getY());
+            requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
         }
     }
 
@@ -408,12 +409,38 @@ public class CommentFragment extends Fragment {
             }
             mUserNameTextView.setText(String.valueOf(mChildComment.getUserName()));
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
-            mDescriptionTextView.setText(String.valueOf(mChildComment.getDescription()));
+
+            String[] strings = String.valueOf(mChildComment.getDescription()).split("@");
+            if (strings.length > 1) {
+                mDescriptionTextView.setText(highlightUserNameText());
+            } else {
+                mDescriptionTextView.setText(String.valueOf(mChildComment.getDescription()));
+            }
         }
 
         @Override
         public void onClick(View v) {
-            requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_TYPE);
+            Log.i(TAG, String.valueOf(v.getY()));
+            mChildComment.setPositionY(v.getY());
+            requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
+        }
+
+        private SpannableString highlightUserNameText() {
+
+            int startIndex = 0;
+            int endIndex = String.valueOf(mChildComment.getDescription()).split("@")[1].length() + 1;
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("@")
+                    .append(String.valueOf(mChildComment.getDescription()).split("@")[1]).append(" ")
+                    .append(String.valueOf(mChildComment.getDescription()).split("@")[0]);
+
+            SpannableString spannableString = new SpannableString(sb.toString());
+
+            spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
+                    startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            return spannableString;
         }
     }
 
@@ -432,7 +459,8 @@ public class CommentFragment extends Fragment {
         }
     }
 
-    private void editCommentBottomSheetDialog(final Comment comment, final boolean isCommentAuthor) {
+    private void editCommentBottomSheetDialog(final Comment comment, final boolean isCommentAuthor,
+                                              final int commentClass) {
         if (dismissMenuBottomSheetDialog()) {
             return;
         }
@@ -458,7 +486,7 @@ public class CommentFragment extends Fragment {
                 if (mCommentType == CONTENT_COMMENT_TYPE) {
                     switch (position) {
                         case 0: /* comment comment */
-                            mSelectedListener.onCommentSelected(comment);
+                            mSelectedListener.onCommentSelected(comment, commentClass);
                             break;
                         case 1: /* comment edit */
                             BottomSheetDialogFragment editCommentFragment =
@@ -550,13 +578,14 @@ public class CommentFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         isCommentAuthor = Parser.parseCommentAuthor(response);
-                        editCommentBottomSheetDialog(comment, isCommentAuthor);
 
-//                        if (isCommentAuthor) {
-//                        } else {
-//                            Toast.makeText(getActivity(),
-//                                    "작성하신 댓글이 아니어서 수정이나 삭제하실 수 없습니다.", Toast.LENGTH_SHORT).show();
-//                        }
+                        if (mCommentType == REVIEW_COMMENT_TYPE) {
+                            if (isCommentAuthor) {
+                                editCommentBottomSheetDialog(comment, isCommentAuthor, commentClass);
+                            }
+                        } else if (mCommentType == CONTENT_COMMENT_TYPE) {
+                            editCommentBottomSheetDialog(comment, isCommentAuthor, commentClass);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

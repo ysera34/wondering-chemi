@@ -172,47 +172,52 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
         switch (v.getId()) {
             case R.id.comment_edit_confirm_layout:
             case R.id.comment_edit_comment_edit_complete_button:
-                if (!mCommentDescription.equals(mCommentEditText.getText().toString().trim())) {
-                    isCompletedCommentEdit = true;
+                if (mCommentEditText.getText().toString().trim().length() > 0) {
 
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                    builder1.setMessage("댓글을 정말 수정하시겠어요?");
-                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    if (!mCommentDescription.equals(mCommentEditText.getText().toString().trim())) {
+                        isCompletedCommentEdit = true;
 
-                            if (isCompletedCommentEdit) {
-                                mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
-                                        mCommentEditText.getText().toString());
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage("댓글을 정말 수정하시겠어요?");
+                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (isCompletedCommentEdit) {
+                                    mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+                                            mCommentEditText.getText().toString());
+                                }
+                                dismiss();
                             }
-                            dismiss();
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                    } else {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage("변경사항이 없어요.\n댓글 수정을 취소하시겠어요?");
+                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dismiss();
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                    }
                 } else {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                    builder1.setMessage("변경사항이 없어요.\n댓글 수정을 취소하시겠어요?");
-                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dismiss();
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
+                    Toast.makeText(getActivity(), "취소 하시려면 뒤로가기 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
