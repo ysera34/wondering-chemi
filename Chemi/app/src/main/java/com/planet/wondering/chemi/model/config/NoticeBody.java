@@ -12,7 +12,6 @@ public class NoticeBody {
     private ArrayList<String> mImagePaths;
 
     public NoticeBody() {
-
     }
 
     public String getDescription() {

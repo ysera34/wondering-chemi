@@ -160,6 +160,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onResponse(JSONObject response) {
                         FAQBody faqBody = Parser.parserFAQ(response);
+                        faqBody.setUpdateDate(faq.getModifyDate());
                         faq.getChildList().add(faqBody);
                         updateUI();
                     }
@@ -293,6 +294,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         private TextView mAnswerTextView;
         private LinearLayout mImageLayout;
         private ImageView mImage1ImageView;
+        private TextView mUpdateDateTextView;
 
         public ChildFAQHolder(@NonNull View itemView) {
             super(itemView);
@@ -302,6 +304,8 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     itemView.findViewById(R.id.list_item_faq_child_image_layout);
             mImage1ImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_faq_child_image1_image_view);
+            mUpdateDateTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_faq_child_date_text_view);
         }
 
         public void bindChildFAQ(FAQBody faqBody) {
@@ -315,6 +319,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                         .crossFade()
                         .into(mImage1ImageView);
             }
+            mUpdateDateTextView.setText(String.valueOf(mFAQBody.getUpdateDate()));
         }
     }
 

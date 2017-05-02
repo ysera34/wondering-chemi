@@ -10,6 +10,7 @@ public class FAQBody {
 
     private String mAnswer;
     private ArrayList<String> mImagePaths;
+    private String mUpdateDate;
 
     public FAQBody() {
     }
@@ -28,5 +29,13 @@ public class FAQBody {
 
     public void setImagePaths(ArrayList<String> imagePaths) {
         mImagePaths = imagePaths;
+    }
+
+    public String getUpdateDate() {
+        return mUpdateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        mUpdateDate = updateDate;
     }
 }
