@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chemi5</string>
+    <string name="app_name">케미</string>
 
     <string name="bottom_navigation_title1">검색</string>
     <string name="bottom_navigation_title2">카테고리</string>
