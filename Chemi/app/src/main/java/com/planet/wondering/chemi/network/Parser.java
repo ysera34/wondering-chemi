@@ -65,6 +65,7 @@ import static com.planet.wondering.chemi.network.Config.Comment.CHILD_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_COUNT;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.COMMENT_ID;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.IS_AUTHOR;
+import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_GENDER;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
 import static com.planet.wondering.chemi.network.Config.Comment.PARENT_COMMENT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
@@ -747,6 +748,7 @@ public class Parser {
                         parentComment.setId(commentJSONObject.getInt(COMMENT_ID));
                         parentComment.setUserId(commentJSONObject.getInt(Config.Comment.Key.USER_ID));
                         parentComment.setUserName(commentJSONObject.getString(USER_NAME));
+                        parentComment.setUserGender(commentJSONObject.getInt(USER_GENDER));
                         parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                         parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
                         parentComment.setDate(commentJSONObject.getString(Config.Content.Key.CREATE_DATE));
@@ -760,6 +762,7 @@ public class Parser {
                                     childComment.setParentId(parentComment.getId());
                                     childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
                                     childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
+                                    childComment.setUserGender(childCommentJSONObject.getInt(USER_GENDER));
                                     childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                                     childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
                                     childComment.setDate(childCommentJSONObject.getString(Config.Content.Key.CREATE_DATE));

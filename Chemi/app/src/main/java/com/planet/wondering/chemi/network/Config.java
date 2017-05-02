@@ -246,6 +246,7 @@ public class Config {
             public static final String COMMENT_ID = "id";
             public static final String USER_ID = "userId";
             public static final String USER_NAME = "userName";
+            public static final String USER_GENDER = "userGender";
             public static final String USER_IMAGE_PATH = "userImagePath";
             public static final String DESCRIPTION = "description";
             public static final String WRITE_DATE = "dated";

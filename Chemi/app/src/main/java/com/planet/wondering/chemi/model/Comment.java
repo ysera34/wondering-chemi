@@ -15,6 +15,7 @@ public class Comment implements Parent<Comment>, Serializable {
     private int mId;
     private int mUserId;
     private String mUserName;
+    private int mUserGender;
     private String mUserImagePath;
     private String mDescription;
     private String mDate;
@@ -57,6 +58,14 @@ public class Comment implements Parent<Comment>, Serializable {
 
     public void setUserName(String userName) {
         mUserName = userName;
+    }
+
+    public int getUserGender() {
+        return mUserGender;
+    }
+
+    public void setUserGender(int userGender) {
+        mUserGender = userGender;
     }
 
     public String getUserImagePath() {

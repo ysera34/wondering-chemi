@@ -349,14 +349,28 @@ public class CommentFragment extends Fragment {
         public void bindParentComment(Comment comment) {
             mParentComment = comment;
 
-            if (mParentComment.getUserImagePath() != null) {
+            if (!mParentComment.getUserImagePath().equals("null")) {
                 Glide.with(getActivity())
                         .load(mParentComment.getUserImagePath())
                         .crossFade()
                         .into(mUserImageView);
-            } else if (mParentComment.getUserImagePath() == null ||
-                    mParentComment.getUserImagePath().equals("null")) {
-                mUserImageView.setImageResource(R.drawable.ic_user);
+            } else {
+//                if (mParentComment.getUserImagePath() == null ||
+//                        mParentComment.getUserImagePath().equals("null"))
+//                if (mParentComment.getId() == 27) {
+//                    Log.i(TAG, mParentComment.getUserImagePath());
+//                }
+                switch (mParentComment.getUserGender()) {
+                    case -1:
+                        mUserImageView.setImageResource(R.drawable.ic_user);
+                        break;
+                    case 0:
+                        mUserImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                        break;
+                    case 1:
+                        mUserImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                        break;
+                }
             }
             mUserNameTextView.setText(String.valueOf(mParentComment.getUserName()));
             mDateTextView.setText(String.valueOf(mParentComment.getDate()));
@@ -405,14 +419,25 @@ public class CommentFragment extends Fragment {
         public void bindChildComment(Comment comment) {
             mChildComment = comment;
 
-            if (mChildComment.getUserImagePath() != null) {
+            if (!mChildComment.getUserImagePath().equals("null")) {
             Glide.with(getActivity())
                     .load(mChildComment.getUserImagePath())
                     .crossFade()
                     .into(mUserImageView);
-            } else if (mChildComment.getUserImagePath() == null ||
-                    mChildComment.getUserImagePath().equals("null")){
-                mUserImageView.setImageResource(R.drawable.ic_user);
+            } else {
+//                if (mChildComment.getUserImagePath() == null ||
+//                        mChildComment.getUserImagePath().equals("null"))
+                switch (mChildComment.getUserGender()) {
+                    case -1:
+                        mUserImageView.setImageResource(R.drawable.ic_user);
+                        break;
+                    case 0:
+                        mUserImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                        break;
+                    case 1:
+                        mUserImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                        break;
+                }
             }
             mUserNameTextView.setText(String.valueOf(mChildComment.getUserName()));
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
