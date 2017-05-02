@@ -365,9 +365,16 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, String.valueOf(v.getY()));
-            mParentComment.setPositionY(v.getY());
-            requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
+            if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                Log.i(TAG, String.valueOf(v.getY()));
+                mParentComment.setPositionY(v.getY());
+                requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
+            } else {
+                Toast.makeText(getActivity(), "로그인 하시면 답글을 작성하실 수 있어요.", Toast.LENGTH_SHORT).show();
+//                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+//                        .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+//                dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+            }
         }
     }
 
@@ -420,9 +427,16 @@ public class CommentFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, String.valueOf(v.getY()));
-            mChildComment.setPositionY(v.getY());
-            requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
+            if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                Log.i(TAG, String.valueOf(v.getY()));
+                mChildComment.setPositionY(v.getY());
+                requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
+            } else {
+                Toast.makeText(getActivity(), "로그인 하시면 답글을 작성하실 수 있어요.", Toast.LENGTH_SHORT).show();
+//                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+//                        .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+//                dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+            }
         }
 
         private SpannableString highlightUserNameText() {

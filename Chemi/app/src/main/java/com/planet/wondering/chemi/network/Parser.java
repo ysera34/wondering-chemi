@@ -761,10 +761,7 @@ public class Parser {
                                     childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
                                     childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
                                     childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
-
-                                    String childDescription = childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION);
-
-                                    childComment.setDescription(childDescription);
+                                    childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
                                     childComment.setDate(childCommentJSONObject.getString(Config.Content.Key.CREATE_DATE));
                                     parentComment.getChildComments().add(childComment);
                                 }

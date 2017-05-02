@@ -5,7 +5,7 @@
     android:layout_height="@dimen/list_item_tag_height"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:background="@color/colorWhite">
+    android:background="@drawable/selector_ripple_list_item_border_gray">
 
     <TextView
         android:id="@+id/list_item_tag_popular_rating_number_text_view"

@@ -207,8 +207,11 @@ public class ReviewReadFragment extends Fragment
 
         mImagesLayout = (LinearLayout) view.findViewById(R.id.review_read_images_layout);
         mImage1ImageView = (ImageView) view.findViewById(R.id.review_read_review_image1_image_view);
+        mImage1ImageView.setOnClickListener(this);
         mImage2ImageView = (ImageView) view.findViewById(R.id.review_read_review_image2_image_view);
+        mImage2ImageView.setOnClickListener(this);
         mImage3ImageView = (ImageView) view.findViewById(R.id.review_read_review_image3_image_view);
+        mImage3ImageView.setOnClickListener(this);
 
         mChildFragmentManager = getChildFragmentManager();
         mCommentFragment = mChildFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
@@ -312,6 +315,18 @@ public class ReviewReadFragment extends Fragment
                 } else {
                     Toast.makeText(getActivity(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.review_read_review_image1_image_view:
+                ReviewImageDialogFragment dialogFragment1 = ReviewImageDialogFragment.newInstance(mReview.getImagePaths(), 1);
+                dialogFragment1.show(getFragmentManager(), "review_image_fragment");
+                break;
+            case R.id.review_read_review_image2_image_view:
+                ReviewImageDialogFragment dialogFragment2 = ReviewImageDialogFragment.newInstance(mReview.getImagePaths(), 2);
+                dialogFragment2.show(getFragmentManager(), "review_image_fragment");
+                break;
+            case R.id.review_read_review_image3_image_view:
+                ReviewImageDialogFragment dialogFragment3 = ReviewImageDialogFragment.newInstance(mReview.getImagePaths(), 3);
+                dialogFragment3.show(getFragmentManager(), "review_image_fragment");
                 break;
         }
     }
