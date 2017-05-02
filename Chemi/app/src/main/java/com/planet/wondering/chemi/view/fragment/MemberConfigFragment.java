@@ -190,16 +190,16 @@ public class MemberConfigFragment extends Fragment
         switch (buttonView.getId()) {
             case R.id.member_config_push_notification_switch:
                 if (isChecked) {
-                    Toast.makeText(getActivity(), "push true", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "푸쉬 알림 설정을 하셨어요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "push false", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "푸쉬 알림 설정을 해제하셨어요.", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.member_config_email_switch:
                 if (isChecked) {
-                    Toast.makeText(getActivity(), "email true", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "이메일 수신 설정을 하셨어요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "email false", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "이메일 수신 설정을 해제하셨어요.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

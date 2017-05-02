@@ -110,7 +110,8 @@ public class MemberActivity extends BottomNavigationActivity
                             .commit();
                 }
             } else if (mRequestId == 4) {
-                mBottomNavigationLayout.setVisibility(View.GONE);
+//                mBottomNavigationLayout.setVisibility(View.GONE);
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
 //                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
@@ -159,6 +160,8 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 5:
+//                mBottomNavigationLayout.setVisibility(View.GONE);
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigTermsFragment.newInstance())
@@ -280,6 +283,8 @@ public class MemberActivity extends BottomNavigationActivity
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         } else if (fragment instanceof MemberConfigTermsFragment) {
+//            mBottomNavigationLayout.setVisibility(View.VISIBLE);
+            showBottomNavigationView();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
