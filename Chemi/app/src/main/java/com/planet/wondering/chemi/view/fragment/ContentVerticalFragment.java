@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,8 +61,10 @@ public class ContentVerticalFragment extends Fragment {
     private RecyclerView mContentImageRecyclerView;
     private ContentImageAdapter mContentImageAdapter;
 
+    private LinearLayout mContentCountLayout;
     private TextView mContentLikeCountTextView;
     private TextView mContentCommentCountTextView;
+    private TextView mDividerTextView;
 
     private FragmentManager mChildFragmentManager;
     private Fragment mCommentFragment;
@@ -92,8 +94,10 @@ public class ContentVerticalFragment extends Fragment {
         mContentImageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mContentImageRecyclerView.setNestedScrollingEnabled(false);
 
+        mContentCountLayout = (LinearLayout) view.findViewById(R.id.content_count_layout);
         mContentLikeCountTextView = (TextView) view.findViewById(R.id.content_like_count_text_view);
         mContentCommentCountTextView = (TextView) view.findViewById(R.id.content_comment_count_text_view);
+        mDividerTextView = (TextView) view.findViewById(R.id.content_comment_divider_text_view);
 
         mChildFragmentManager = getChildFragmentManager();
         mCommentFragment = mChildFragmentManager.findFragmentById(R.id.content_comment_fragment_container);
@@ -148,15 +152,16 @@ public class ContentVerticalFragment extends Fragment {
         }, 200);
     }
 
-    public void focusSelectedComment(final float positionY) {
-        Log.i(TAG, "focusSelectedComment");
+    public void focusSelectedComment(float positionY) {
+        final int scrollPositionY = mContentImageRecyclerView.getMeasuredHeight()
+                + mContentCountLayout.getMeasuredHeight() + mDividerTextView.getMeasuredHeight() + (int) positionY;
         mContentVerticalNestedScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mContentVerticalNestedScrollView.scrollTo(0, (int) positionY);
+                mContentVerticalNestedScrollView.scrollTo(0, scrollPositionY);
 
             }
-        }, 200);
+        }, 300);
     }
 
     public void commentEditDialogFinished(String description) {
@@ -212,5 +217,4 @@ public class ContentVerticalFragment extends Fragment {
                     .into(mContentImageImageView);
         }
     }
-
 }

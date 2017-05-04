@@ -380,7 +380,6 @@ public class CommentFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                Log.i(TAG, String.valueOf(v.getY()));
                 mParentComment.setPositionY(v.getY());
                 requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
             } else {
@@ -453,7 +452,6 @@ public class CommentFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                Log.i(TAG, String.valueOf(v.getY()));
                 mChildComment.setPositionY(v.getY());
                 requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
             } else {

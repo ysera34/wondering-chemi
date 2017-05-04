@@ -630,20 +630,17 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentCommentEditText.setSelection(whiteSpaceLength - 2);
 
 
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
-        if (fragment instanceof ContentVerticalFragment) {
-            ((ContentVerticalFragment) fragment).focusSelectedComment(comment.getPositionY());
-        }
-
+        final float commentPositionY = comment.getPositionY();
         mContentCommentEditText.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mInputMethodManager.showSoftInput(mContentCommentEditText, InputMethodManager.SHOW_IMPLICIT);
+                Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+                if (fragment instanceof ContentVerticalFragment) {
+                    ((ContentVerticalFragment) fragment).focusSelectedComment(commentPositionY);
+                }
             }
-        }, 200);
-
-        // scroll handle
-//        mReviewReadNestedScrollView.smoothScrollTo(0, (int) comment.getPositionY() + 300);
+        }, 100);
 
 
         final int prefixLength = mContentCommentEditText.getText().length();

@@ -31,6 +31,7 @@
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
+                android:id="@+id/content_count_layout"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:gravity="center_vertical|end"
@@ -68,6 +69,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/content_comment_divider_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/colorWhiteBackground"/>
