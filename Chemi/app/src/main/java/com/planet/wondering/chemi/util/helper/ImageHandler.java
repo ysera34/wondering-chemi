@@ -9,8 +9,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -140,7 +142,14 @@ public class ImageHandler {
         try {
             file = setUpImageFile();
             mCurrentImageAbsolutePath = file.getAbsolutePath();
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                String authorities = mContext.getPackageName() + ".fileprovider";
+                Uri imageUri = FileProvider.getUriForFile(mContext, authorities, file);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            } else {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            }
         } catch (IOException e) {
             e.printStackTrace();
             file = null;
