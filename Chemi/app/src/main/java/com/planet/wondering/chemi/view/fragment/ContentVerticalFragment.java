@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,7 @@ public class ContentVerticalFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_vertical, container, false);
         mContentVerticalNestedScrollView = (NestedScrollView) view.findViewById(R.id.content_vertical_nested_scroll_view);
+//        mContentVerticalNestedScrollView.getParent().requestChildFocus(mContentVerticalNestedScrollView, mContentVerticalNestedScrollView);
         mContentImageRecyclerView = (RecyclerView) view.findViewById(R.id.content_image_recycler_view);
         mContentImageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mContentImageRecyclerView.setNestedScrollingEnabled(false);
@@ -147,10 +149,11 @@ public class ContentVerticalFragment extends Fragment {
     }
 
     public void focusSelectedComment(final float positionY) {
+        Log.i(TAG, "focusSelectedComment");
         mContentVerticalNestedScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mContentVerticalNestedScrollView.smoothScrollTo(0, 0);
+                mContentVerticalNestedScrollView.scrollTo(0, (int) positionY);
 
             }
         }, 200);

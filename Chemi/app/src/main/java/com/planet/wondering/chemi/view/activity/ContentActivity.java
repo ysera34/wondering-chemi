@@ -625,10 +625,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             whiteSpaceBuilder.append("\u0020");
         }
 
+        mContentCommentEditText.requestFocus();
         mContentCommentEditText.setText(whiteSpaceBuilder.toString());
         mContentCommentEditText.setSelection(whiteSpaceLength - 2);
 
-//        mContentCommentEditText.requestFocus();
 
         Fragment fragment = mFragmentManager.findFragmentById(R.id.review_comment_fragment_container);
         if (fragment instanceof ContentVerticalFragment) {
@@ -670,7 +670,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             public void onClick(DialogInterface dialog, int which) {
                 mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
                 mContentCommentEditText.getText().clear();
-//                mContentCommentEditText.clearFocus();
+                mContentCommentEditText.clearFocus();
                 mContentCommentEditText.setOnKeyListener(null);
                 mContentCommentUserNameTextView.setVisibility(View.GONE);
                 isCommentSelected = false;

@@ -11,6 +11,8 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
@@ -55,6 +57,7 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
         return fragment;
     }
 
+    private String mUserName;
     private String mCommentDescription;
 
     private InputMethodManager mInputMethodManager;
@@ -93,8 +96,15 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
         mCommentConfirmLayout = (RelativeLayout) view.findViewById(R.id.comment_edit_confirm_layout);
         mCommentConfirmLayout.setOnClickListener(this);
         mCommentEditText = (EditText) view.findViewById(R.id.comment_edit_comment_edit_text);
-        mCommentEditText.setText(String.valueOf(mCommentDescription));
-        mCommentEditText.setSelection(mCommentDescription.length());
+
+        String[] strings = String.valueOf(mCommentDescription).split("@");
+        if (strings.length > 1) {
+            mCommentEditText.setText(highlightUserNameText());
+        } else {
+            mCommentEditText.setText(String.valueOf(mCommentDescription));
+        }
+
+        mCommentEditText.setSelection(mCommentEditText.getText().length());
         mEditCompleteButton = (Button) view.findViewById(R.id.comment_edit_comment_edit_complete_button);
         mEditCompleteButton.setOnClickListener(this);
         dialog.setContentView(view);
@@ -184,9 +194,15 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
                             public void onClick(DialogInterface dialog, int which) {
 
                                 if (isCompletedCommentEdit) {
-                                    mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
-                                            mCommentEditText.getText().toString());
+                                    if (mUserName == null) {
+                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+                                                mCommentEditText.getText().toString());
+                                    } else {
+                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+                                                mCommentEditText.getText().toString().substring(mUserName.length(), mCommentEditText.getText().length()) + mUserName);
+                                    }
                                 }
+                                mInputMethodManager.hideSoftInputFromWindow(mCommentEditText.getWindowToken(), 0);
                                 dismiss();
                             }
                         });
@@ -251,5 +267,24 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
             throw new ClassCastException(context.toString()
                     + " must implements OnReviewEditListener");
         }
+    }
+
+    private SpannableString highlightUserNameText() {
+
+        int startIndex = 0;
+        int endIndex = String.valueOf(mCommentDescription).split("@")[1].length() + 1;
+        mUserName = "@" + String.valueOf(mCommentDescription).split("@")[1];
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("@")
+                .append(String.valueOf(mCommentDescription).split("@")[1]).append(" ")
+                .append(String.valueOf(mCommentDescription).split("@")[0]);
+
+        SpannableString spannableString = new SpannableString(sb.toString());
+
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
+                startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
     }
 }
