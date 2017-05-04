@@ -514,8 +514,10 @@ public class ReviewListFragment extends Fragment {
                                 .override(210, 210)
 //                                .centerCrop()
                                 .into(mImage1ImageView);
-                        mImage2ImageView.setVisibility(View.GONE);
-                        mImage3ImageView.setVisibility(View.GONE);
+//                        mImage2ImageView.setVisibility(View.GONE);
+//                        mImage3ImageView.setVisibility(View.GONE);
+                        mImage2ImageView.setImageResource(R.drawable.widget_solid_rectangle_white);
+                        mImage3ImageView.setImageResource(R.drawable.widget_solid_rectangle_white);
                         break;
                     case 2:
                         Glide.with(getActivity())
@@ -534,7 +536,7 @@ public class ReviewListFragment extends Fragment {
                                 .override(210, 210)
 //                                .centerCrop()
                                 .into(mImage2ImageView);
-                        mImage3ImageView.setVisibility(View.GONE);
+                        mImage3ImageView.setImageResource(R.drawable.widget_solid_rectangle_white);
                         break;
                     case 3:
                         Glide.with(getActivity())
