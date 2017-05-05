@@ -189,7 +189,15 @@ public class CommentFragment extends Fragment {
             mCommentAdapter = new CommentAdapter(mComments);
             mCommentRecyclerView.setAdapter(mCommentAdapter);
         } else {
-            mCommentCountTextView.setText(String.valueOf(mComments.size()));
+            if (mCommentType == REVIEW_COMMENT_TYPE) {
+                mCommentCountTextView.setText(String.valueOf(mComments.size()));
+            } else if (mCommentType == CONTENT_COMMENT_TYPE) {
+                int childItemCount = 0;
+                for (Comment c : mComments) {
+                    childItemCount += c.getChildList().size();
+                }
+                mCommentCountTextView.setText(String.valueOf(mComments.size() + childItemCount));
+            }
             if (mComments.size() == 0) {
                 mCommentEmptyLayout.setVisibility(View.VISIBLE);
                 mCommentRecyclerView.setVisibility(View.GONE);
