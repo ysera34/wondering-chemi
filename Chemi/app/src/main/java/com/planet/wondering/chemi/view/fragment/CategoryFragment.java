@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
 import java.util.ArrayList;
@@ -54,6 +56,17 @@ public class CategoryFragment extends Fragment {
 
         mCategoryRecyclerView = (RecyclerView) view.findViewById(R.id.category_recycler_view);
         mCategoryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+        mCategoryRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+            @Override
+            public void onShowView() {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+            }
+
+            @Override
+            public void onHideView() {
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
 
         mCategoryAdapter = new CategoryAdapter(mCategoryItems);
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
@@ -99,6 +112,7 @@ public class CategoryFragment extends Fragment {
 
         private ImageView mCategoryImageImageView;
         private TextView mCategoryNameTextView;
+        private TextView mCategoryGroupNameTextView;
 
         public CategoryHolder(View itemView) {
             super(itemView);
@@ -106,6 +120,7 @@ public class CategoryFragment extends Fragment {
 
             mCategoryImageImageView = (ImageView) itemView.findViewById(R.id.list_item_category_image_image_view);
             mCategoryNameTextView = (TextView) itemView.findViewById(R.id.list_item_category_name_text_view);
+            mCategoryGroupNameTextView = (TextView) itemView.findViewById(R.id.list_item_category_group_name_text_view);
         }
 
         public void bindCategory(CategoryItem categoryItem) {
@@ -113,6 +128,12 @@ public class CategoryFragment extends Fragment {
 
             mCategoryImageImageView.setImageResource(mCategoryItem.getCategoryImageResId());
             mCategoryNameTextView.setText(getString(mCategoryItem.getCategoryNameResId()));
+
+            if (mCategoryItem.getCategoryId() <= 6) {
+                mCategoryGroupNameTextView.setText(String.valueOf("아이용"));
+            } else {
+                mCategoryGroupNameTextView.setText(String.valueOf("일반용"));
+            }
         }
 
         @Override
@@ -160,18 +181,24 @@ public class CategoryFragment extends Fragment {
 
     public ArrayList<CategoryItem> getCategoryItems() {
 
-        int[] categoryIds = new int[]{1, 2, 4, 5, 3, 6,};
+        int[] categoryIds = new int[]{1, 2, 4, 5, 3, 6, 7, 8, 9, 10, 11, 12};
 
         int[] categoryImageResIds = new int[]{
                 R.drawable.ic_category_baby_wet_tissue, R.drawable.ic_category_baby_hair_wash,
                 R.drawable.ic_category_baby_lotion, R.drawable.ic_category_baby_tooth_paste,
-                R.drawable.ic_category_baby_body_wash, R.drawable.ic_category_adult_etc,};
+                R.drawable.ic_category_baby_body_wash, R.drawable.ic_category_baby_etc,
+                R.drawable.ic_category_adult_wet_tissue, R.drawable.ic_category_adult_hair_wash,
+                R.drawable.ic_category_adult_body_wash, R.drawable.ic_category_adult_tooth_paste,
+                R.drawable.ic_category_adult_pregnant_goods, R.drawable.ic_category_adult_etc,};
         int[] categoryNameResIds = new int[]{
                 R.string.category_name_baby_wet_tissue, R.string.category_name_baby_hair,
                 R.string.category_name_baby_lotion, R.string.category_name_baby_tooth_paste,
-                R.string.category_name_baby_body_wash, R.string.category_name_etc,};
+                R.string.category_name_baby_body_wash, R.string.category_name_baby_etc,
+                R.string.category_name_adult_wet_tissue, R.string.category_name_adult_hair,
+                R.string.category_name_adult_body_wash, R.string.category_name_adult_tooth_paste,
+                R.string.category_name_adult_pregnant_goods, R.string.category_name_adult_etc};
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 12; i++) {
             mCategoryItems.add(new CategoryItem(categoryIds[i], categoryImageResIds[i], categoryNameResIds[i]));
         }
         return mCategoryItems;

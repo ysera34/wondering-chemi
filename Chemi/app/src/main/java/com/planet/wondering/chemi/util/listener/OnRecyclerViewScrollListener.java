@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.util.listener;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by yoon on 2017. 1. 18..
@@ -21,8 +22,15 @@ public abstract class OnRecyclerViewScrollListener extends RecyclerView.OnScroll
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        int firstVisibleItem = ((LinearLayoutManager)
-                recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        int firstVisibleItem = -1;
+
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            firstVisibleItem = ((LinearLayoutManager)
+                    recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        } else if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            firstVisibleItem = ((StaggeredGridLayoutManager)
+                    recyclerView.getLayoutManager()).findFirstVisibleItemPositions(new int[2])[0];
+        }
 
         if (firstVisibleItem == 0) {
             if (!mControlsVisible) {
