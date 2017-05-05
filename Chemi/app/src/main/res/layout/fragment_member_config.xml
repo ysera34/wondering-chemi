@@ -41,7 +41,7 @@
             android:layout_centerVertical="true"
             android:text="프로필 설정"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_profile_arrow_image_view"
@@ -68,7 +68,7 @@
             android:layout_centerVertical="true"
             android:text="공지사항"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_notice_arrow_image_view"
@@ -95,7 +95,7 @@
             android:layout_centerVertical="true"
             android:text="제품 분석 요청"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_request_product_arrow_image_view"
@@ -122,7 +122,7 @@
             android:layout_centerVertical="true"
             android:text="자주 묻는 질문"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_faq_arrow_image_view"
@@ -150,7 +150,7 @@
             android:layout_centerVertical="true"
             android:text="버전정보"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <TextView
             android:id="@+id/member_config_version_text_view"
@@ -178,7 +178,7 @@
             android:layout_centerVertical="true"
             android:text="푸쉬 알림 설정"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <Switch
             android:id="@+id/member_config_push_notification_switch"
@@ -203,7 +203,7 @@
             android:layout_centerVertical="true"
             android:text="이메일 수신 설정"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <Switch
             android:id="@+id/member_config_email_switch"
@@ -229,7 +229,7 @@
             android:layout_centerVertical="true"
             android:text="이용약관 및 개인정보 취급방침"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_privacy_image_view"
@@ -256,7 +256,7 @@
             android:layout_centerVertical="true"
             android:text="제휴 문의"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_collaboration_image_view"

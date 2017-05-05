@@ -9,7 +9,7 @@
         android:id="@+id/category_header_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/colorWhite"
+        android:background="@color/colorPrimary"
         android:elevation="4dp">
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_marginStart="18dp"
             android:text="카테고리"
             android:textSize="16sp"
-            android:textColor="@color/colorFontNormal"/>
+            android:textColor="@color/colorWhite"/>
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

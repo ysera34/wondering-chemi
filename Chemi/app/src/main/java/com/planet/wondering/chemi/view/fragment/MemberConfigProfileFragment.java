@@ -473,9 +473,9 @@ public class MemberConfigProfileFragment extends Fragment
                     @Override
                     public void onResponse(NetworkResponse response) {
 
-                        Log.i(TAG, "onResponse NetworkResponse : " + response.toString());
+//                        Log.i(TAG, "onResponse NetworkResponse : " + response.toString());
                         String responseString = new String(response.data);
-                        Log.i(TAG, "responseString " + responseString);
+//                        Log.i(TAG, "responseString " + responseString);
                         try {
                             JSONObject responseJSONObject = new JSONObject(responseString);
                             if (responseJSONObject.getString(RESPONSE_MESSAGE).equals(RESPONSE_SUCCESS)) {
@@ -561,6 +561,7 @@ public class MemberConfigProfileFragment extends Fragment
                 createUserImageMenuBottomSheetDialog();
             }
         }
+        createUserImageMenuBottomSheetDialog();
     }
 
     @Override

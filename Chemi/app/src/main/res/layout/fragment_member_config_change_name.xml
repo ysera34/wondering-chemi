@@ -50,7 +50,7 @@
             android:layout_marginBottom="25dp"
             android:text="닉네임 변경"
             android:textSize="@dimen/user_info_edit_text_title_text_size"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorDoveGray"/>
 
         <EditText
             android:id="@+id/member_config_change_name_edit_text"
@@ -62,7 +62,7 @@
             android:inputType="textAutoComplete"
             android:imeOptions="actionDone"
             android:textSize="@dimen/user_info_edit_text_hint_text_size"
-            android:textColor="@color/colorFontToolbarSubtitle"
+            android:textColor="@color/colorArmadillo"
             android:textColorHint="@color/colorFontIron"
             android:background="@drawable/selector_edit_text_under_line_accent"/>
 

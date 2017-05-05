@@ -211,9 +211,9 @@ public class MemberActivity extends BottomNavigationActivity
 
     @Override
     public void onUserImagePathUpdate(String userImagePath) {
-        Log.d(TAG, userImagePath);
+//        Log.d(TAG, userImagePath);
         mUser.setImagePath(userImagePath);
-        Log.d(TAG, mUser.toString());
+//        Log.d(TAG, mUser.toString());
     }
 
     private boolean isInfoValueUpdate = false;

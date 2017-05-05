@@ -27,7 +27,7 @@
         android:gravity="center"
         android:layout_marginBottom="10dp"
         android:textSize="19sp"
-        android:textColor="@color/colorFontToolbarSubtitle"/>
+        android:textColor="@color/colorArmadillo"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -22,7 +22,7 @@
             android:layout_height="40dp"
             android:layout_marginBottom="16dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_white"
+            android:src="@drawable/logo_white_kr"
             android:scaleType="centerInside"/>
 
         <RelativeLayout

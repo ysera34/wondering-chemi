@@ -49,7 +49,7 @@
             android:gravity="top"
             android:text="아임키즈 찰랑찰랑 2NI1 샴푸 아임키즈 찰랑"
             android:textSize="13sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
     </LinearLayout>
 

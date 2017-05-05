@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
@@ -455,12 +454,12 @@ public class ReviewCreateFragment extends Fragment
     }
 
     private void checkStoragePermission(int imagePosition) {
-        String state = Environment.getExternalStorageState();
-        if (!Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            dismissMenuBottomSheetDialog();
-            Toast.makeText(getActivity(), "SD 카드가 없으므로 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        String state = Environment.getExternalStorageState();
+//        if (!Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+//            dismissMenuBottomSheetDialog();
+//            Toast.makeText(getActivity(), "SD 카드가 없으므로 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(getActivity(), mStoragePermissions[0]) != PackageManager.PERMISSION_GRANTED
@@ -496,6 +495,7 @@ public class ReviewCreateFragment extends Fragment
                 createPickImageMenuBottomSheetDialog(imagePosition);
             }
         }
+        createPickImageMenuBottomSheetDialog(imagePosition);
     }
 
     @Override

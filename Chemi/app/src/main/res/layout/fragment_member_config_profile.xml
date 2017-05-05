@@ -212,7 +212,7 @@
             android:layout_centerVertical="true"
             android:text="닉네임"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_profile_name_arrow_image_view"
@@ -240,7 +240,7 @@
             android:layout_centerVertical="true"
             android:text="비밀번호 변경"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_profile_change_password_arrow_image_view"
@@ -268,7 +268,7 @@
             android:layout_centerVertical="true"
             android:text="부가정보 변경"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_profile_change_survey_arrow_image_view"
@@ -296,7 +296,7 @@
             android:layout_centerVertical="true"
             android:text="로그아웃"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
     </RelativeLayout>
 
@@ -316,7 +316,7 @@
             android:layout_centerVertical="true"
             android:text="연동해제"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
         <ImageView
             android:id="@+id/member_config_profile_revoke_target_image_view"
@@ -344,7 +344,7 @@
             android:layout_centerVertical="true"
             android:text="회원탈퇴"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
     </RelativeLayout>
 

@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:textSize="18sp"
-                        android:textColor="@color/colorFontToolbarSubtitle"/>
+                        android:textColor="@color/colorArmadillo"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -233,7 +233,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
                         android:textSize="16sp"
-                        android:textColor="@color/colorFontToolbarSubtitle"/>
+                        android:textColor="@color/colorArmadillo"/>
 
                     <TextView
                         android:id="@+id/archive_product_more_button_text_view"
@@ -283,7 +283,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
                         android:textSize="16sp"
-                        android:textColor="@color/colorFontToolbarSubtitle"/>
+                        android:textColor="@color/colorArmadillo"/>
 
                     <TextView
                         android:id="@+id/archive_content_more_button_text_view"
@@ -334,7 +334,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="18dp"
                         android:textSize="16sp"
-                        android:textColor="@color/colorFontToolbarSubtitle"/>
+                        android:textColor="@color/colorArmadillo"/>
 
                     <TextView
                         android:id="@+id/archive_review_product_more_button_text_view"

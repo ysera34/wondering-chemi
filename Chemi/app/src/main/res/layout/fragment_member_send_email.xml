@@ -18,7 +18,7 @@
         android:layout_marginTop="16dp"
         android:text="전송 완료!"
         android:textSize="24sp"
-        android:textColor="@color/colorFontBody"/>
+        android:textColor="@color/colorDoveGray"/>
 
     <TextView
         android:id="@+id/member_send_email_email_text_view"

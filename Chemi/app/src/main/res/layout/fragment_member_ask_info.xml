@@ -62,7 +62,7 @@
         android:paddingBottom="14dp"
         android:text="@string/member_start_info_info_message"
         android:textSize="15sp"
-        android:textColor="@color/colorFontBody"
+        android:textColor="@color/colorDoveGray"
         android:background="@android:color/transparent"/>
 
     <LinearLayout
@@ -104,7 +104,7 @@
             android:layout_marginBottom="8dp"
             android:text="출생년도"
             android:textSize="@dimen/user_info_edit_text_title_text_size"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorDoveGray"/>
 
         <EditText
             android:id="@+id/member_ask_info_birth_year_edit_text"
@@ -117,7 +117,7 @@
             android:inputType="numberDecimal"
             android:imeOptions="actionDone"
             android:textSize="@dimen/user_info_edit_text_hint_text_size"
-            android:textColor="@color/colorFontBody"
+            android:textColor="@color/colorDoveGray"
             android:background="@drawable/selector_edit_text_under_line_primary"/>
 
         <TextView
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:text="성별"
             android:textSize="12sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorDoveGray"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -185,7 +185,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="이용자 본인 피부고민"
                 android:textSize="12sp"
-                android:textColor="@color/colorFontBody"/>
+                android:textColor="@color/colorDoveGray"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -278,7 +278,7 @@
             android:layout_height="wrap_content"
             android:text="자녀 유무"
             android:textSize="12sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorDoveGray"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -330,7 +330,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="자녀 피부고민"
                 android:textSize="12sp"
-                android:textColor="@color/colorFontBody"/>
+                android:textColor="@color/colorDoveGray"/>
 
             <TextView
                 android:layout_width="wrap_content"

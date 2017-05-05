@@ -48,7 +48,7 @@
                 android:layout_marginEnd="12sp"
                 android:textSize="14sp"
                 android:textStyle="bold|italic"
-                android:textColor="@color/colorFontToolbarSubtitle"/>
+                android:textColor="@color/colorArmadillo"/>
 
             <TextView
                 android:id="@+id/list_item_comment_child_date_text_view"
@@ -66,7 +66,7 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingMultiplier="0.9"
             android:textSize="14sp"
-            android:textColor="@color/colorFontToolbarSubtitle"/>
+            android:textColor="@color/colorArmadillo"/>
 
     </LinearLayout>
 

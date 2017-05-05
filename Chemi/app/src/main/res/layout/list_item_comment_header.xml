@@ -12,7 +12,7 @@
         android:layout_marginStart="20dp"
         android:text="댓글 "
         android:textSize="16sp"
-        android:textColor="@color/colorFontToolbarSubtitle"/>
+        android:textColor="@color/colorArmadillo"/>
 
     <TextView
         android:id="@+id/list_item_comment_header_comment_count_text_view"
@@ -27,6 +27,6 @@
         android:layout_height="wrap_content"
         android:text="개"
         android:textSize="16sp"
-        android:textColor="@color/colorFontToolbarSubtitle"/>
+        android:textColor="@color/colorArmadillo"/>
 
 </LinearLayout>

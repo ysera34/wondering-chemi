@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical|start"
         android:textSize="14sp"
-        android:textColor="@color/colorFontBody"/>
+        android:textColor="@color/colorDoveGray"/>
 
     <RelativeLayout
         android:layout_width="42dp"

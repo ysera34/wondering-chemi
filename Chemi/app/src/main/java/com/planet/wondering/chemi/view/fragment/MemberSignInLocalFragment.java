@@ -105,8 +105,8 @@ public class MemberSignInLocalFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_member_sign_in_local, container, false);
-        View view = inflater.inflate(R.layout.fragment_member_sign_in_local_transparent, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_sign_in_local, container, false);
+//        View view = inflater.inflate(R.layout.fragment_member_sign_in_local_transparent, container, false);
         mMemberSignInCancelLayout = (RelativeLayout) view.findViewById(R.id.member_sign_in_cancel_layout);
         mMemberSignInCancelLayout.setOnClickListener(this);
 

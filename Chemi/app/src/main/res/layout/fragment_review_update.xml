@@ -111,7 +111,7 @@
             android:layout_marginBottom="8dp"
             android:text="평점"
             android:textSize="12sp"
-            android:textColor="@color/colorFontBody"/>
+            android:textColor="@color/colorDoveGray"/>
 
         <TextView
             android:id="@+id/review_update_message_text_view"
@@ -159,7 +159,7 @@
                 android:layout_centerVertical="true"
                 android:text="리뷰"
                 android:textSize="12sp"
-                android:textColor="@color/colorFontBody"/>
+                android:textColor="@color/colorDoveGray"/>
 
             <TextView
                 android:id="@+id/review_update_review_text_length_text_view"
@@ -187,7 +187,7 @@
                 android:gravity="top"
                 android:clickable="true"
                 android:text="@string/review_create_review_hint"
-                android:textColor="@color/colorFontBody"
+                android:textColor="@color/colorDoveGray"
                 android:textSize="15sp"
                 android:background="@color/colorWhite"/>
 

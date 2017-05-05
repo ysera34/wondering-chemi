@@ -58,7 +58,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/partner_information_message"
         android:textSize="14sp"
-        android:textColor="@color/colorFontBody"/>
+        android:textColor="@color/colorDoveGray"/>
 
     <TextView
         android:id="@+id/partner_email_text_view"

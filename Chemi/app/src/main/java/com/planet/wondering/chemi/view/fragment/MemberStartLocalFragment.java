@@ -642,7 +642,7 @@ public class MemberStartLocalFragment extends Fragment
                 getString(R.string.member_start_local_agree_info));
         int startIndex = 8;
         int endIndex = 24;
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorFontToolbarSubtitle)),
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorArmadillo)),
                 startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return spannableString;

@@ -38,7 +38,7 @@
                 android:gravity="center"
                 android:padding="3dp"
                 android:textSize="13sp"
-                android:textColor="@color/colorFontBody"
+                android:textColor="@color/colorDoveGray"
                 android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
             <TextView
@@ -50,7 +50,7 @@
                 android:gravity="center"
                 android:padding="3dp"
                 android:textSize="13sp"
-                android:textColor="@color/colorFontBody"
+                android:textColor="@color/colorDoveGray"
                 android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
         </RelativeLayout>

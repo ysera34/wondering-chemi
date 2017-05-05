@@ -177,7 +177,7 @@
                             android:paddingBottom="3dp"
                             android:layout_marginEnd="6dp"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                         <TextView
@@ -191,7 +191,7 @@
                             android:layout_marginEnd="6dp"
                             android:text="건성"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                         <TextView
@@ -205,7 +205,7 @@
                             android:layout_marginEnd="6dp"
                             android:text="지성"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                         <TextView
@@ -219,7 +219,7 @@
                             android:layout_marginEnd="6dp"
                             android:text="건성/지성"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                         <TextView
@@ -232,7 +232,7 @@
                             android:paddingBottom="3dp"
                             android:text="알레르기"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                     </LinearLayout>
@@ -262,7 +262,7 @@
                             android:layout_marginEnd="6dp"
                             android:text="자녀 악건성"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                         <TextView
@@ -275,7 +275,7 @@
                             android:paddingBottom="3dp"
                             android:text="자녀 알레르기"
                             android:textSize="11sp"
-                            android:textColor="@color/colorFontToolbarSubtitle"
+                            android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                     </LinearLayout>

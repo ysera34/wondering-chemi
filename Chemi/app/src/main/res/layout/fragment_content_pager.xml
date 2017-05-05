@@ -9,7 +9,7 @@
         android:id="@+id/content_header_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/colorWhite"
+        android:background="@color/colorPrimary"
         android:elevation="4dp">
 
         <TextView
@@ -18,9 +18,9 @@
             android:gravity="center_vertical"
             android:layout_alignParentStart="true"
             android:layout_marginStart="18dp"
-            android:text="컨텐츠 이름 들어갈 예정"
+            android:text="케미스토리"
             android:textSize="16sp"
-            android:textColor="@color/colorFontNormal"/>
+            android:textColor="@color/colorWhite"/>
     </RelativeLayout>
 
     <android.support.design.widget.TabLayout

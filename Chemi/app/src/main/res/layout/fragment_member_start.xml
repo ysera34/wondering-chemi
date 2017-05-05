@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@color/colorTransparentBackground1">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -12,20 +12,20 @@
             android:layout_marginTop="130dp"
             android:gravity="center_horizontal">
 
-            <ImageView
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="12dp"
-                android:src="@drawable/logo_white"
-                android:scaleType="centerInside"/>
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/logo_white_kr"
+            android:scaleType="centerInside"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/member_start_app_info"
-                android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/member_start_app_info"
+            android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -35,36 +35,36 @@
             android:paddingEnd="47dp"
             android:layout_alignParentBottom="true">
 
-            <RelativeLayout
-                android:id="@+id/member_start_naver_layout"
-                android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/member_start_local_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:clickable="true"
+            android:background="@drawable/selector_bg_member_start_button_layout">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="28dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_email_primary"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/member_start_local_text_view"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:clickable="true"
-                android:background="@drawable/selector_bg_member_start_button_layout">
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/member_start_local"
+                android:textSize="15sp"
+                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+        </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="28dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_naver"
-                    android:scaleType="centerInside"/>
-
-                <TextView
-                    android:id="@+id/member_start_naver_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/member_start_naver"
-                    android:textSize="16sp"
-                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
-            </RelativeLayout>
-
-            <LinearLayout
+        <LinearLayout
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -81,7 +81,7 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+        <RelativeLayout
                 android:id="@+id/member_start_google_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,11 +106,11 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="@string/member_start_google"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textAppearance="@style/MemberStartGrayTextAppearance"/>
             </RelativeLayout>
 
-            <LinearLayout
+        <LinearLayout
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -127,36 +127,36 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/member_start_local_layout"
-                android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/member_start_naver_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:clickable="true"
+            android:background="@drawable/selector_bg_member_start_button_layout">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="28dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_naver"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/member_start_naver_text_view"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:clickable="true"
-                android:background="@drawable/selector_bg_member_start_button_layout">
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/member_start_naver"
+                android:textSize="15sp"
+                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+        </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="28dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_email_primary"
-                    android:scaleType="centerInside"/>
-
-                <TextView
-                    android:id="@+id/member_start_local_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/member_start_local"
-                    android:textSize="16sp"
-                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
-            </RelativeLayout>
-
-            <RelativeLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
@@ -172,8 +172,8 @@
                     android:clickable="true"
                     android:text="@string/member_start_browse"
                     android:textSize="12sp"
-                    android:textColor="@color/color_selector_dove_gray_primary"
-                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+                    android:textColor="@color/color_selector_white_armadillo"
+                    android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
 
                 <TextView
                     android:id="@+id/member_start_already_user_text_view"
@@ -184,8 +184,8 @@
                     android:clickable="true"
                     android:text="@string/member_start_already_user"
                     android:textSize="12sp"
-                    android:textColor="@color/color_selector_dove_gray_primary"
-                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+                    android:textColor="@color/color_selector_white_armadillo"
+                    android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
 
             </RelativeLayout>
 
