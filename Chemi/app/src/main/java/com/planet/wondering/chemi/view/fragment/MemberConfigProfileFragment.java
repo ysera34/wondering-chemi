@@ -405,6 +405,7 @@ public class MemberConfigProfileFragment extends Fragment
     private void createUserImageMenuBottomSheetDialog() {
 
         ArrayList<BottomSheetMenu> bottomSheetMenus = new ArrayList<>();
+        bottomSheetMenus.add(new BottomSheetMenu(0, R.string.bottom_sheet_menu_default_image));
         bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_camera, R.string.bottom_sheet_menu_camera));
         bottomSheetMenus.add(new BottomSheetMenu(R.drawable.ic_gallery, R.string.bottom_sheet_menu_gallery));
 
@@ -420,12 +421,25 @@ public class MemberConfigProfileFragment extends Fragment
                 dismissMenuBottomSheetDialog();
                 mImageHandler = new ImageHandler(getActivity());
                 if (position == 0) {
+                    switch (mUser.getGender()) {
+                        case 0:
+                            mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                            break;
+                        case 1:
+                            mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                            break;
+                        default:
+                            mUserCircleImageView.setImageResource(R.drawable.ic_user);
+                            break;
+                    }
+                    requestUserImage(true);
+                } else if (position == 1) {
                     if (mImageHandler.hasCamera()) {
                         startActivityForResult(mImageHandler.dispatchTakePictureIntent(), CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
                     } else {
                         Toast.makeText(getActivity(), "카메라를 사용할 수 없어요.", Toast.LENGTH_SHORT).show();
                     }
-                } else if (position == 1) {
+                } else if (position == 2) {
                     startActivityForResult(mImageHandler.pickGalleryPictureIntent(), GALLERY_IMAGE_REQUEST_CODE);
                 }
             }
@@ -451,13 +465,13 @@ public class MemberConfigProfileFragment extends Fragment
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     mImageHandler.handleCameraImage(mUserCircleImageView);
-                    requestUserImage();
+                    requestUserImage(false);
                 }
                 break;
             case GALLERY_IMAGE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     mImageHandler.handleGalleryImage(data, mUserCircleImageView);
-                    requestUserImage();
+                    requestUserImage(false);
                 }
                 break;
 
@@ -465,7 +479,7 @@ public class MemberConfigProfileFragment extends Fragment
         mImageHandler = null;
     }
 
-    private void requestUserImage() {
+    private void requestUserImage(final boolean isDefaultImage) {
 
         MultipartRequest multipartRequest = new MultipartRequest(
                 Request.Method.PUT, URL_HOST + PATH + IMAGE_PATH,
@@ -510,8 +524,12 @@ public class MemberConfigProfileFragment extends Fragment
             protected Map<String, DataPart> getByteData() throws AuthFailureError {
 //                return super.getByteData();
                 Map<String, DataPart> params = new HashMap<>();
-                params.put("image", new DataPart("userImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
-                        getActivity(), mUserCircleImageView.getDrawable()), "image/*"));
+                if (isDefaultImage) {
+
+                } else {
+                    params.put("image", new DataPart("userImage.jpg", MultipartRequestHelper.getFileDataFromDrawable(
+                            getActivity(), mUserCircleImageView.getDrawable()), "image/*"));
+                }
                 return params;
             }
         };
@@ -560,8 +578,9 @@ public class MemberConfigProfileFragment extends Fragment
                 // already have permission
                 createUserImageMenuBottomSheetDialog();
             }
+        } else {
+            createUserImageMenuBottomSheetDialog();
         }
-        createUserImageMenuBottomSheetDialog();
     }
 
     @Override

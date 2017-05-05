@@ -62,6 +62,7 @@ import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Content.CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.KEEPER_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.QUERY_ADD_COUNT;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -265,7 +266,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         Log.i(TAG, "url : " + URL_HOST + CONTENT_PATH + contentId);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + CONTENT_PATH + contentId,
+                Request.Method.GET, URL_HOST + CONTENT_PATH + contentId + QUERY_ADD_COUNT,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

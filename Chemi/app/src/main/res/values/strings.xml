@@ -130,6 +130,7 @@
         <item>@string/review_rating_5_message</item>
     </string-array>
 
+    <string name="bottom_sheet_menu_default_image">기본이미지</string>
     <string name="bottom_sheet_menu_camera">카메라</string>
     <string name="bottom_sheet_menu_gallery">갤러리</string>
     <string name="bottom_sheet_menu_image_pick">이미지 다시 선택하기</string>

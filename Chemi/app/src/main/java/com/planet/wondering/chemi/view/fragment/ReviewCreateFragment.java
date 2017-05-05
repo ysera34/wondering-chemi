@@ -489,13 +489,13 @@ public class ReviewCreateFragment extends Fragment
                     // No explanation needed, we can request the permission.
                     requestPermissions(mStoragePermissions, PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE);
                 }
-            }
-            else {
+            } else {
                 // already have permission
                 createPickImageMenuBottomSheetDialog(imagePosition);
             }
+        } else {
+            createPickImageMenuBottomSheetDialog(imagePosition);
         }
-        createPickImageMenuBottomSheetDialog(imagePosition);
     }
 
     @Override

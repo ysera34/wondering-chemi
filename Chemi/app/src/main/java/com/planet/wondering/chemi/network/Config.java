@@ -213,6 +213,7 @@ public class Config {
     public static final class Content {
         public static final String CONTENT_PATH = File.separator + "contents" + File.separator;
         public static final String QUERY_PATH = File.separator + "contents?";
+        public static final String QUERY_ADD_COUNT = "?iscounted=1";
         public static final String QUERY_CATEGORY = "&categoryid=";
 
         public static final class Key {
