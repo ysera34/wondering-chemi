@@ -105,6 +105,8 @@ public class Config {
     public static final class Tag {
         public static final String PATH = File.separator + "tags?";
         public static final String CTAG_PATH = File.separator + "chemicalnames?";
+        public static final String BRAND_PATH = File.separator + "brandnames?";
+        public static final String PRODUCT_PATH = File.separator + "productnames?";
 
         public static final class Key {
             public static final String CHARACTER_QUERY = "character=";
@@ -118,6 +120,8 @@ public class Config {
             public static final String TAG_CHEMICAL_ID = "chemicalid";
             public static final String TAG_IS_CORRECT = "isCorrect";
             public static final String TAG_ALTERNATIVE_NAME = "alternativeName";
+            public static final String TAG_BRAND_NAME = "brandname";
+            public static final String TAG_PRODUCT_NAME = "productname";
         }
     }
 

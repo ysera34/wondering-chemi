@@ -26,10 +26,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import static android.util.Log.i;
+import static com.planet.wondering.chemi.common.Common.BRAND_TAG_CHARACTER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_TAG_CHARACTER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_CATEGORY;
+import static com.planet.wondering.chemi.network.Config.Tag.BRAND_PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
 import static com.planet.wondering.chemi.network.Config.Tag.PATH;
+import static com.planet.wondering.chemi.network.Config.Tag.PRODUCT_PATH;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
@@ -293,13 +296,22 @@ public class TagCharacterAdapter extends ArrayAdapter<String>
         protected ArrayList<String> doInBackground(String... params) {
             try {
                 String url = null;
-                if (mRequestId == 1) {
-                    url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
-                } else if (mRequestId == 2) {
-                    url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8")
-                            + QUERY_CATEGORY + mCategoryId;
+                switch (mRequestId) {
+                    case 1:
+                        url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
+                        break;
+                    case 2:
+                        url = URL_HOST + PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8")
+                                + QUERY_CATEGORY + mCategoryId;
+                        break;
+                    case BRAND_TAG_CHARACTER_REQUEST_CODE:
+                        url = URL_HOST + BRAND_PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
+                        break;
+                    case PRODUCT_TAG_CHARACTER_REQUEST_CODE:
+                        url = URL_HOST + PRODUCT_PATH + CHARACTER_QUERY + URLEncoder.encode(params[0], "UTF-8");
+                        break;
                 }
-                i("url", url);
+                Log.i("url", url);
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
 
@@ -314,12 +326,22 @@ public class TagCharacterAdapter extends ArrayAdapter<String>
                 in.close();
                 connection.disconnect();
                 JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                return Parser.parseTagStringList(jsonObject);
+
+                switch (mRequestId) {
+                    case 1:
+                    case 2:
+                        return Parser.parseTagStringList(jsonObject);
+                    case BRAND_TAG_CHARACTER_REQUEST_CODE:
+                        return Parser.parseBrandTagStringList(jsonObject);
+                    case PRODUCT_TAG_CHARACTER_REQUEST_CODE:
+                        return Parser.parseProductTagStringList(jsonObject);
+                }
 
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 return null;
             }
+            return null;
         }
     }
 

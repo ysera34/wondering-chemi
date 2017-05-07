@@ -126,6 +126,7 @@ import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_IS_CORRECT;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_PRODUCT_NAME;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_RANK_DELTA;
 import static com.planet.wondering.chemi.network.Config.User.Key.AGE;
@@ -274,6 +275,49 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return tags;
+    }
+
+    public static ArrayList<String> parseBrandTagStringList(JSONObject responseObject) {
+
+        ArrayList<String> tagStrings = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                if (tagSize > 0) {
+                    JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+//                        tagStrings.add(tagJSONObject.getString(TAG_BRAND_NAME));
+                        tagStrings.add(tagJSONObject.getString(TAG_PRODUCT_NAME));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return tagStrings;
+    }
+
+    public static ArrayList<String> parseProductTagStringList(JSONObject responseObject) {
+
+        ArrayList<String> tagStrings = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int tagSize = responseObject.getInt(TAG_COUNT);
+                if (tagSize > 0) {
+                    JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < tagSize; i++) {
+                        JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
+                        tagStrings.add(tagJSONObject.getString(TAG_PRODUCT_NAME));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return tagStrings;
     }
 
     public static ArrayList<Product> parseProductList(JSONObject responseObject) {

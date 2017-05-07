@@ -9,6 +9,11 @@ public class Common {
     public static final int REVIEW_CREATE_REQUEST_CODE = 1100;
     public static final int REVIEW_READ_REQUEST_CODE = 1200;
 
+    public static final int PRODUCT_BRAND_TAG_CHARACTER_REQUEST_CODE = 2100;
+    public static final int CATEGORY_TAG_CHARACTER_REQUEST_CODE = 2200;
+    public static final int BRAND_TAG_CHARACTER_REQUEST_CODE = 2300;
+    public static final int PRODUCT_TAG_CHARACTER_REQUEST_CODE = 2400;
+
     public static final int REVIEW_COMMENT_TYPE = 5100;
     public static final int CONTENT_COMMENT_TYPE = 5200;
     public static final int PARENT_COMMENT_CLASS = 5001;
