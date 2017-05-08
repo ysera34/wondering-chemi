@@ -584,6 +584,13 @@ public class MemberStartLocalFragment extends Fragment
                         }
                         UserSharedPreferences.setStoreToken(getActivity(), mUser.getToken());
                         Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
+
+                        if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
+                            UserSharedPreferences.removeStoredUserName(getActivity());
+                        }
+                        UserSharedPreferences.setStoreUserName(getActivity(), mUser.getName());
+                        Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getActivity()));
+
                         ((MemberStartActivity) getActivity()).replaceFragment(null);
                     }
                 },

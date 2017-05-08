@@ -230,7 +230,8 @@ public class Config {
             public static final String THUMBNAIL_IMAGE_PATH = "imagePath2";
             public static final String IMAGE_PATHS = "imagePaths";
             public static final String LIKE_COUNT = "liked";
-            public static final String VIEW_COUNT = "viewed";
+            public static final String
+                    VIEW_COUNT = "viewed";
             public static final String CONTENT_LIKE = "isLiker";
             public static final String CONTENT_KEEP = "isKeeper";
             public static final String LIKE_PATH = File.separator + "likers";

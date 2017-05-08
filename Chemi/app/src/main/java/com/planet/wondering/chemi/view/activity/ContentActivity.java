@@ -31,6 +31,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
+import com.kakao.util.helper.log.Logger;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Comment;
@@ -54,6 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
+import static com.planet.wondering.chemi.common.Common.CONTENT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
@@ -254,8 +260,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
                 break;
             case R.id.action_content_share:
-                Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "action_share");
+                requestShareContentToKakao();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -506,6 +511,36 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestShareContentToKakao() {
+
+        String prefixTitle = "";
+        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+            prefixTitle = getString(R.string.share_user_name_format,
+                    UserSharedPreferences.getStoredUserName(getApplicationContext()));
+        }
+
+        Map<String, String> templateArgs = new HashMap<>();
+        templateArgs.put("${thumbnail_imagePath}", mContent.getImagePath());
+        templateArgs.put("${title}", prefixTitle + getString(R.string.share_content_title_format, mContent.getTitle()));
+        templateArgs.put("${sub_title}", getString(R.string.share_content_sub_title_format));
+        templateArgs.put("${comment_count}", String.valueOf(mContent.getCommentCount()));
+        templateArgs.put("${like_count}", String.valueOf(mContent.getLikeCount()));
+        templateArgs.put("${view_count}", String.valueOf(mContent.getViewCount()));
+        KakaoLinkService.getInstance().sendCustom(this, CONTENT_SHARE_TEMPLATE_CODE,
+                templateArgs, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Logger.e(errorResult.toString());
+                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+            }
+        });
+
     }
 
 //    mContentFragmentContainer

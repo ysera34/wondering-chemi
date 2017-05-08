@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 public class UserSharedPreferences {
 
     private static final String PREF_TOKEN = "com.planet.wondering.chemi.user.token";
+    private static final String PREF_USERNAME = "com.planet.wondering.chemi.user.name";
     private static final String PREF_GET_PUSH = "com.planet.wondering.chemi.user.get_push";
     private static final String PREF_GET_EMAIL = "com.planet.wondering.chemi.user.get_email";
 
@@ -29,6 +30,25 @@ public class UserSharedPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .remove(PREF_TOKEN)
+                .apply();
+    }
+
+    public static String getStoredUserName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_USERNAME, null);
+    }
+
+    public static void setStoreUserName(Context context, String token) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREF_USERNAME, token)
+                .apply();
+    }
+
+    public static void removeStoredUserName(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_USERNAME)
                 .apply();
     }
 

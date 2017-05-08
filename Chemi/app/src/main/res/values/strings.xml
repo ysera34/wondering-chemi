@@ -3,7 +3,7 @@
 
     <string name="bottom_navigation_title1">검색</string>
     <string name="bottom_navigation_title2">카테고리</string>
-    <string name="bottom_navigation_title3">컨텐츠</string>
+    <string name="bottom_navigation_title3">스토리</string>
     <string name="bottom_navigation_title4">성분사전</string>
     <string name="bottom_navigation_title5">사용자</string>
 
@@ -225,4 +225,10 @@
     <string name="content_indicator_format">%1$s / %2$s</string>
     <string name="review_image_indicator_format">%1$s / %2$s</string>
 
+    <string name="share_user_name_format">%s님이 </string>
+    <string name="share_product_title_format">케미에서 [%1$s] %2$s을 함께 보고 싶어합니다!</string>
+    <string name="share_product_description_format">브랜드 : %1$s\n제품명 : %2$s</string>
+
+    <string name="share_content_title_format">케미에서 [%s]을 함께 보고 싶어합니다!</string>
+    <string name="share_content_sub_title_format">지금 확인해서 더욱 건강하고 안전한 소비를 경험하세요!</string>
 </resources>

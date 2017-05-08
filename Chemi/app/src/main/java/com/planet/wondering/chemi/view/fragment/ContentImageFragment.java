@@ -66,7 +66,6 @@ public class ContentImageFragment extends Fragment {
         Glide.with(getActivity())
                 .load(mContentPartialImagePath)
                 .crossFade()
-                .placeholder(R.drawable.smile)
                 .into(mContentPartialImageView);
     }
 }

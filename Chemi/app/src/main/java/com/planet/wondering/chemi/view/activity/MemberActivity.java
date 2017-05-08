@@ -148,6 +148,7 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 3:
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigRequestFragment.newInstance())
@@ -187,7 +188,8 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 13:
-                mBottomNavigationLayout.setVisibility(View.GONE);
+//                mBottomNavigationLayout.setVisibility(View.GONE);
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberAskInfoFragment.newInstance(mUser))
@@ -268,6 +270,7 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigRequestFragment) {
+            showBottomNavigationView();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
@@ -305,7 +308,8 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
-            mBottomNavigationLayout.setVisibility(View.VISIBLE);
+//            mBottomNavigationLayout.setVisibility(View.VISIBLE);
+            showBottomNavigationView();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))

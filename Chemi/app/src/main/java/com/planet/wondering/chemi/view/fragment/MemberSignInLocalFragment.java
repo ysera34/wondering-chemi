@@ -283,6 +283,12 @@ public class MemberSignInLocalFragment extends Fragment
                             UserSharedPreferences.setStoreToken(getActivity(), Parser.parseSignInUserToken(response));
                             Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
 
+//                            if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
+//                                UserSharedPreferences.removeStoredUserName(getActivity());
+//                            }
+//                            UserSharedPreferences.setStoreUserName(getActivity(), user.getName());
+//                            Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getActivity()));
+
                             // sign in firebase user
                             signInFirebaseAccount(email, email);
 

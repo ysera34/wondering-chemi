@@ -520,6 +520,12 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                                 UserSharedPreferences.setStoreToken(getApplicationContext(), user.getToken());
                                 Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
 
+                                if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+                                    UserSharedPreferences.removeStoredUserName(getApplicationContext());
+                                }
+                                UserSharedPreferences.setStoreUserName(getApplicationContext(), user.getName());
+                                Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
+
                                 if (platformId == 1) {
                                     firebaseAuthGoogle(googleSignInAccount);
                                 } else if (platformId == 2) {
@@ -624,6 +630,12 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                         }
                         UserSharedPreferences.setStoreToken(getApplicationContext(), mUser.getToken());
                         Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+                        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+                            UserSharedPreferences.removeStoredUserName(getApplicationContext());
+                        }
+                        UserSharedPreferences.setStoreUserName(getApplicationContext(), mUser.getName());
+                        Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)

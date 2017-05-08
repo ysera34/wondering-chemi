@@ -23,4 +23,7 @@ public class Common {
     public static final int HORIZONTAL_CONTENT_VIEW_TYPE = 2;
     public static final int COLLAPSING_CONTENT_VIEW_TYPE = 3;
 
+    public static final String CONTENT_SHARE_TEMPLATE_CODE = "3827";
+    public static final String PRODUCT_SHARE_TEMPLATE_CODE = "3828";
+
 }

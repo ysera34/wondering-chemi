@@ -121,6 +121,7 @@ import static com.planet.wondering.chemi.network.Config.Review.Key.REVIEW_ID;
 import static com.planet.wondering.chemi.network.Config.TOTAL;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.RANKED_TIME;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_ALTERNATIVE_NAME;
+import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_BRAND_NAME;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_CHEMICAL_ID;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_COUNT;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.TAG_DESCRIPTION;
@@ -288,8 +289,7 @@ public class Parser {
                     JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                     for (int i = 0; i < tagSize; i++) {
                         JSONObject tagJSONObject = tagJSONArray.getJSONObject(i);
-//                        tagStrings.add(tagJSONObject.getString(TAG_BRAND_NAME));
-                        tagStrings.add(tagJSONObject.getString(TAG_PRODUCT_NAME));
+                        tagStrings.add(tagJSONObject.getString(TAG_BRAND_NAME));
                     }
                 }
             }
@@ -758,14 +758,14 @@ public class Parser {
                 content.setViewType(contentJSONObject.getInt(VIEW_TYPE));
                 content.setTitle(contentJSONObject.getString(TITLE));
                 content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
-//                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
-
+                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
                 JSONArray jsonArray = contentJSONObject.getJSONArray(IMAGE_PATHS);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     content.getContentImagePaths().add(jsonArray.getString(i));
                 }
                 content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                 content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
+                content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
                 content.setLike(contentJSONObject.getInt(CONTENT_LIKE) == 1);
                 content.setArchive(contentJSONObject.getInt(CONTENT_KEEP) == 1);
             }

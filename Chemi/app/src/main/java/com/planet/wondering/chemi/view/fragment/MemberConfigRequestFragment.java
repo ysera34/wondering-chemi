@@ -1,15 +1,19 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +44,9 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
         return fragment;
     }
 
+    private InputMethodManager mInputMethodManager;
+    private NestedScrollView mConfigRequestNestedScrollView;
+
     private LinearLayout mBackLayout;
     private AutoCompleteTextView mBrandAutoCompleteTextView;
     private ImageView mBrandClearImageView;
@@ -55,6 +62,9 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -62,6 +72,8 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_config_request, container, false);
+        mConfigRequestNestedScrollView = (NestedScrollView)
+                view.findViewById(R.id.member_config_request_nested_scroll_view);
         mBackLayout = (LinearLayout) view.findViewById(R.id.member_config_request_back_layout);
         mBackLayout.setOnClickListener(this);
         mBrandAutoCompleteTextView = (AutoCompleteTextView)

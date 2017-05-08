@@ -60,5 +60,6 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile group: 'com.kakao.sdk', name: 'kakaolink', version: '1.2.2'
 }
 apply plugin: 'com.google.gms.google-services'

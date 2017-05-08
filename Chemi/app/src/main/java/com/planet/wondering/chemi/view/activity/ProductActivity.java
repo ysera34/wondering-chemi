@@ -28,6 +28,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
+import com.kakao.util.helper.log.Logger;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Product;
@@ -45,6 +50,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
@@ -214,7 +220,7 @@ public class ProductActivity extends AppBaseActivity
                 }
                 break;
             case R.id.action_product_share:
-                Toast.makeText(getApplicationContext(), "action_share", Toast.LENGTH_SHORT).show();
+                requestShareProductToKakao();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -332,6 +338,36 @@ public class ProductActivity extends AppBaseActivity
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestShareProductToKakao() {
+
+        String prefixTitle = "";
+        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+            prefixTitle = getString(R.string.share_user_name_format,
+                    UserSharedPreferences.getStoredUserName(getApplicationContext()));
+        }
+
+        Map<String, String> templateArgs = new HashMap<>();
+        templateArgs.put("${imagePath}", mProduct.getImagePath());
+        templateArgs.put("${title}", prefixTitle + getString(R.string.share_product_title_format,
+                mProduct.getBrand(), mProduct.getName()));
+        templateArgs.put("${description}", getString(R.string.share_product_description_format,
+                mProduct.getBrand(), mProduct.getName()));
+
+        KakaoLinkService.getInstance().sendCustom(this, PRODUCT_SHARE_TEMPLATE_CODE,
+                templateArgs, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Logger.e(errorResult.toString());
+                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+            }
+        });
+
     }
 
     @Override
