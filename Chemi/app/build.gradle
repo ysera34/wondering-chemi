@@ -11,12 +11,20 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+//    signingConfigs {
+//        config {
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//        }
+//    }
     signingConfigs {
         config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias 'ChemiAndroidKey'
+            keyPassword 'chemireleasekey'
+            storeFile file('/Users/yoon/AndroidStudioProjects/WonderingPlanet/Reference/keystores/ChemiAndroidKey.jks')
+            storePassword 'chemiandroid'
         }
     }
     compileSdkVersion 25
@@ -60,6 +68,6 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
-    compile group: 'com.kakao.sdk', name: 'kakaolink', version: '1.2.2'
+    compile 'com.kakao.sdk:kakaolink:1.2.2'
 }
 apply plugin: 'com.google.gms.google-services'

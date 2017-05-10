@@ -145,7 +145,7 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
 
     private void startMainActivity() {
         UserSharedPreferences.setStoredIntroSlide(getApplicationContext(), true);
-        Intent intent = new Intent(IntroActivity.this, SearchActivity.class);
+        Intent intent = new Intent(IntroActivity.this, MemberStartActivity.class);
         startActivity(intent);
         finish();
     }

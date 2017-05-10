@@ -1,7 +1,9 @@
 package com.planet.wondering.chemi.view.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -9,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,11 +31,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.kakao.kakaolink.internal.KakaoTalkLinkProtocol;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
-import com.kakao.util.helper.log.Logger;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Product;
@@ -50,6 +53,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
@@ -359,8 +363,27 @@ public class ProductActivity extends AppBaseActivity
                 templateArgs, new ResponseCallback<KakaoLinkResponse>() {
             @Override
             public void onFailure(ErrorResult errorResult) {
-                Logger.e(errorResult.toString());
-                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+//                Logger.e(errorResult.toString());
+//                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+
+                if (errorResult.getException().toString().split(":")[0].equals(KAKAOTALK_NOT_INSTALLED.toString())) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ProductActivity.this);
+                    builder1.setMessage(getString(com.kakao.kakaolink.R.string.com_kakao_alert_install_kakaotalk));
+                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(KakaoTalkLinkProtocol.TALK_MARKET_URL_PREFIX)));
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                }
             }
 
             @Override

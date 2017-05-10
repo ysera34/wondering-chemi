@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,11 +32,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.kakao.kakaolink.internal.KakaoTalkLinkProtocol;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
-import com.kakao.util.helper.log.Logger;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Comment;
@@ -58,6 +59,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
 import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.CONTENT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
@@ -532,8 +534,27 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                 templateArgs, new ResponseCallback<KakaoLinkResponse>() {
             @Override
             public void onFailure(ErrorResult errorResult) {
-                Logger.e(errorResult.toString());
-                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+//                Logger.e(errorResult.toString());
+//                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+
+                if (errorResult.getException().toString().split(":")[0].equals(KAKAOTALK_NOT_INSTALLED.toString())) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+                    builder1.setMessage(getString(com.kakao.kakaolink.R.string.com_kakao_alert_install_kakaotalk));
+                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(KakaoTalkLinkProtocol.TALK_MARKET_URL_PREFIX)));
+                        }
+                    });
+                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog dialog1 = builder1.create();
+                    dialog1.show();
+                }
             }
 
             @Override

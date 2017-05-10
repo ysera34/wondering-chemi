@@ -28,7 +28,6 @@ public class SplashActivity extends AppBaseActivity {
 //            @Override
 //            public void run() {
 
-
         if (UserSharedPreferences.getStoredIntroSlide(getApplicationContext())) {
             Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
             startActivity(intent);
