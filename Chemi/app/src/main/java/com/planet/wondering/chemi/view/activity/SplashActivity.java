@@ -3,10 +3,9 @@ package com.planet.wondering.chemi.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.AppBaseActivity;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 
 /**
  * Created by yoon on 2017. 1. 5..
@@ -20,7 +19,6 @@ public class SplashActivity extends AppBaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate Start");
         super.onCreate(savedInstanceState);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -29,11 +27,18 @@ public class SplashActivity extends AppBaseActivity {
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-//                Log.i(TAG, "onCreate postDelayed");
-                Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                startActivity(intent);
-                finish();
+
+
+        if (UserSharedPreferences.getStoredIntroSlide(getApplicationContext())) {
+            Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(SplashActivity.this, IntroActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 //            }
 //        }, SPLASH_TIME_OUT);
     }

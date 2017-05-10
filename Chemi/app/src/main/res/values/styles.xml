@@ -27,6 +27,13 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="NoStatusTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/colorWhiteBackground</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!--<style name="BottomNavigationViewTextStyle">-->
         <!--<item name="android:textSize">9sp</item>-->
         <!--<item name="android:paddingTop">4dp</item>-->

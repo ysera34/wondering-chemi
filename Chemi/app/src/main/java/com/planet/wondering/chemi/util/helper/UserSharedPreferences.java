@@ -13,6 +13,7 @@ public class UserSharedPreferences {
     private static final String PREF_USERNAME = "com.planet.wondering.chemi.user.name";
     private static final String PREF_GET_PUSH = "com.planet.wondering.chemi.user.get_push";
     private static final String PREF_GET_EMAIL = "com.planet.wondering.chemi.user.get_email";
+    private static final String PREF_INTRO_SLIDE = "com.planet.wondering.chemi.user.intro_slide";
 
     public static String getStoredToken(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -38,10 +39,10 @@ public class UserSharedPreferences {
                 .getString(PREF_USERNAME, null);
     }
 
-    public static void setStoreUserName(Context context, String token) {
+    public static void setStoreUserName(Context context, String userName) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(PREF_USERNAME, token)
+                .putString(PREF_USERNAME, userName)
                 .apply();
     }
 
@@ -87,6 +88,25 @@ public class UserSharedPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .remove(PREF_GET_EMAIL)
+                .apply();
+    }
+
+    public static boolean getStoredIntroSlide(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(PREF_INTRO_SLIDE, false);
+    }
+
+    public static void setStoredIntroSlide(Context context, boolean isIntroSlide) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_INTRO_SLIDE, isIntroSlide)
+                .apply();
+    }
+
+    public static void removeStoredIntroSlide(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(PREF_INTRO_SLIDE)
                 .apply();
     }
 }

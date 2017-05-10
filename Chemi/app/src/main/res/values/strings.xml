@@ -231,4 +231,28 @@
 
     <string name="share_content_title_format">케미에서 [%s]을 함께 보고 싶어합니다!</string>
     <string name="share_content_sub_title_format">지금 확인해서 더욱 건강하고 안전한 소비를 경험하세요!</string>
+
+    <string name="intro_slide_11">유아용\u00B7가정용 화학제품</string>
+    <string name="intro_slide_12">안전성 알리미 : 케미</string>
+    <string name="intro_slide_21">우리 가족이 쓰는 화학 제품의</string>
+    <string name="intro_slide_22">안전성 정보를 한눈에</string>
+    <string name="intro_slide_31">나와 내 아이의 체질에 맞춘</string>
+    <string name="intro_slide_32">생생한 리뷰</string>
+    <string name="intro_slide_41">알기 쉽게 풀어내는</string>
+    <string name="intro_slide_42">생활 속 화학제품 이야기</string>
+    <string name="intro_slide_51">복잡하고 어려운 성분 정보를</string>
+    <string name="intro_slide_52">성분사전으로 쉽고 꼼꼼하게</string>
+
+    <string-array name="intro_slide_message_array">
+        <item>@string/intro_slide_11</item>
+        <item>@string/intro_slide_12</item>
+        <item>@string/intro_slide_21</item>
+        <item>@string/intro_slide_22</item>
+        <item>@string/intro_slide_31</item>
+        <item>@string/intro_slide_32</item>
+        <item>@string/intro_slide_41</item>
+        <item>@string/intro_slide_42</item>
+        <item>@string/intro_slide_51</item>
+        <item>@string/intro_slide_52</item>
+    </string-array>
 </resources>

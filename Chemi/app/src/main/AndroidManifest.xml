@@ -26,12 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-        <!--android:name=".BottomNavigationActivity"-->
-        <!--android:theme="@style/AppTheme.NoActionBar"-->
-        <!--android:screenOrientation="portrait">-->
-        <!---->
-        <!--</activity>-->
+        <activity
+            android:name=".view.activity.IntroActivity"
+            android:theme="@style/NoStatusTheme"
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity
             android:name=".view.activity.MemberStartActivity"
             android:theme="@style/AppTheme.NoActionBar"
