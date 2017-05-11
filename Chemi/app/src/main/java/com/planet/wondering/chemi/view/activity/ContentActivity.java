@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.activity;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,7 +39,6 @@ import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.network.AppSingleton;
@@ -57,6 +57,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
@@ -130,6 +131,9 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentToolbar = (Toolbar) findViewById(R.id.content_toolbar);
         setSupportActionBar(mContentToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_primary);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mContentFragmentContainer = (FrameLayout) findViewById(R.id.content_fragment_container);
         mContentCommentEditLayout = (RelativeLayout) findViewById(R.id.content_comment_edit_layout);
@@ -530,6 +534,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         templateArgs.put("${comment_count}", String.valueOf(mContent.getCommentCount()));
         templateArgs.put("${like_count}", String.valueOf(mContent.getLikeCount()));
         templateArgs.put("${view_count}", String.valueOf(mContent.getViewCount()));
+        templateArgs.put("${content_id}", String.valueOf(mContent.getId()));
+
         KakaoLinkService.getInstance().sendCustom(this, CONTENT_SHARE_TEMPLATE_CODE,
                 templateArgs, new ResponseCallback<KakaoLinkResponse>() {
             @Override
@@ -773,6 +779,29 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         if (isCommentSelected) {
             showDialogCancelComment();
         } else {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(10);
+            ActivityManager.RunningTaskInfo taskInfo = runningTaskInfos.get(0);
+            if (taskInfo.numActivities == 1) {
+                startActivity(ContentListActivity.newIntent(getApplicationContext()));
+            }
+
+//            Iterator<ActivityManager.RunningTaskInfo> iterator = runningTaskInfos.iterator();
+//
+//            while (iterator.hasNext()) {
+//                ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo) iterator.next();
+//                int id = runningTaskInfo.id;
+//                CharSequence desc = runningTaskInfo.description;
+//                int numOfActivities = runningTaskInfo.numActivities;
+//                String topActivity = runningTaskInfo.topActivity.getShortClassName();
+//                String activityName = runningTaskInfo.
+//                Log.i("id", String.valueOf(id));
+//                Log.i("desc", String.valueOf(desc));
+//                Log.i("numOfActivities", String.valueOf(numOfActivities));
+//                Log.i("topActivity", String.valueOf(topActivity));
+//
+//            }
+
             super.onBackPressed();
         }
     }

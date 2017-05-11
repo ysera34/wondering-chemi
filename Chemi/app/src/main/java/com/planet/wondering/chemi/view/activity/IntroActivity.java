@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.fragment.IntroPageFragment;
 

@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.activity;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,7 +38,6 @@ import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
@@ -51,6 +51,7 @@ import com.planet.wondering.chemi.view.fragment.ProductFragment;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
@@ -358,6 +359,7 @@ public class ProductActivity extends AppBaseActivity
                 mProduct.getBrand(), mProduct.getName()));
         templateArgs.put("${description}", getString(R.string.share_product_description_format,
                 mProduct.getBrand(), mProduct.getName()));
+        templateArgs.put("${product_id}", String.valueOf(mProduct.getId()));
 
         KakaoLinkService.getInstance().sendCustom(this, PRODUCT_SHARE_TEMPLATE_CODE,
                 templateArgs, new ResponseCallback<KakaoLinkResponse>() {
@@ -428,5 +430,16 @@ public class ProductActivity extends AppBaseActivity
     public void hideBottomNavigationView() {
         mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    @Override
+    public void onBackPressed() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(10);
+        ActivityManager.RunningTaskInfo taskInfo = runningTaskInfos.get(0);
+        if (taskInfo.numActivities == 1) {
+            startActivity(CategoryActivity.newIntent(getApplicationContext()));
+        }
+        super.onBackPressed();
     }
 }

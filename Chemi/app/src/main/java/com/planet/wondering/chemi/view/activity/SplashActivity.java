@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.planet.wondering.chemi.common.AppBaseActivity;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 
 /**

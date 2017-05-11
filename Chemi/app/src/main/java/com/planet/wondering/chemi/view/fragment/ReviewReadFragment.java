@@ -119,6 +119,7 @@ public class ReviewReadFragment extends Fragment
     private Review mReview;
 
     private InputMethodManager mInputMethodManager;
+    private LinearLayout mReviewReadBackLayout;
     private RelativeLayout mReviewReadMoreMenuLayout;
     private PopupWindow mPopupWindow;
 
@@ -176,6 +177,8 @@ public class ReviewReadFragment extends Fragment
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_read, container, false);
+        mReviewReadBackLayout = (LinearLayout) view.findViewById(R.id.review_read_back_layout);
+        mReviewReadBackLayout.setOnClickListener(this);
         mReviewReadMoreMenuLayout = (RelativeLayout) view.findViewById(R.id.review_read_more_menu_layout);
         mReviewReadMoreMenuLayout.setOnClickListener(this);
 
@@ -266,6 +269,9 @@ public class ReviewReadFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.review_read_back_layout:
+                getActivity().onBackPressed();
+                break;
             case R.id.review_read_more_menu_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
                 displayPopupWindow(mReviewReadMoreMenuLayout);
