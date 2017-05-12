@@ -110,8 +110,8 @@ public class MemberActivity extends BottomNavigationActivity
                             .commit();
                 }
             } else if (mRequestId == 4) {
-//                mBottomNavigationLayout.setVisibility(View.GONE);
-                hideBottomNavigationView();
+                mBottomNavigationLayout.setVisibility(View.GONE);
+//                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
 //                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
@@ -142,6 +142,7 @@ public class MemberActivity extends BottomNavigationActivity
 
                 break;
             case 2:
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigNoticeFragment.newInstance())
@@ -155,6 +156,7 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
                 break;
             case 4:
+                hideBottomNavigationView();
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
@@ -265,6 +267,7 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigNoticeFragment) {
+            showBottomNavigationView();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
@@ -276,6 +279,7 @@ public class MemberActivity extends BottomNavigationActivity
                     .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigFAQFragment) {
+            showBottomNavigationView();
             if (mRequestId == -1) {
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)

@@ -31,8 +31,6 @@ import com.planet.wondering.chemi.model.config.FAQ;
 import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 
 import org.json.JSONObject;
 
@@ -63,6 +61,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
     private LinearLayout mBackLayout;
     private FAQAdapter mFAQAdapter;
     private RecyclerView mFAQRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
     private ArrayList<FAQ> mFAQs;
 
     @Override
@@ -79,18 +78,19 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         mBackLayout = (LinearLayout) view.findViewById(R.id.member_config_faq_back_layout);
         mBackLayout.setOnClickListener(this);
         mFAQRecyclerView = (RecyclerView) view.findViewById(R.id.member_config_faq_recycler_view);
-        mFAQRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mFAQRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-            @Override
-            public void onShowView() {
-                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-            }
-
-            @Override
-            public void onHideView() {
-                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-            }
-        });
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mFAQRecyclerView.setLayoutManager(mLinearLayoutManager);
+//        mFAQRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+//            @Override
+//            public void onShowView() {
+//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+//            }
+//
+//            @Override
+//            public void onHideView() {
+//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//            }
+//        });
 
         updateUI();
         return view;
@@ -257,6 +257,15 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         public void onClick(View v) {
             if (mParentFAQ.getChildList() != null && mParentFAQ.getChildList().size() == 0) {
                 requestFAQ(mParentFAQ);
+
+                final int scrollPositionY = mBackLayout.getMeasuredHeight() + (int) v.getY();
+                mFAQRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFAQRecyclerView.scrollTo(0, scrollPositionY);
+                    }
+                }, 300);
+
             }
             super.onClick(v);
         }

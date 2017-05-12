@@ -595,7 +595,7 @@ public class MemberFragment extends Fragment
 
         private ImageView mArchiveContentImageView;
         private TextView mArchiveContentTitleTextView;
-        private TextView mArchiveContentSubTitleTextView;
+//        private TextView mArchiveContentSubTitleTextView;
 
         public ArchiveContentHolder(View itemView) {
             super(itemView);
@@ -605,8 +605,8 @@ public class MemberFragment extends Fragment
                     itemView.findViewById(R.id.list_item_archive_content_image_view);
             mArchiveContentTitleTextView = (TextView)
                     itemView.findViewById(R.id.list_item_archive_content_title_text_view);
-            mArchiveContentSubTitleTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_archive_content_sub_title_text_view);
+//            mArchiveContentSubTitleTextView = (TextView)
+//                    itemView.findViewById(R.id.list_item_archive_content_sub_title_text_view);
         }
 
         public void bindContent(Content content) {
@@ -616,7 +616,7 @@ public class MemberFragment extends Fragment
                     .crossFade()
                     .into(mArchiveContentImageView);
             mArchiveContentTitleTextView.setText(mContent.getTitle());
-            mArchiveContentSubTitleTextView.setText(mContent.getSubTitle());
+//            mArchiveContentSubTitleTextView.setText(mContent.getSubTitle());
         }
 
         @Override

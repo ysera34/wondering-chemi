@@ -300,26 +300,32 @@ public class ReviewReadFragment extends Fragment
                 dialog.show();
                 break;
             case R.id.review_read_comment_submit_text_view:
-                if (isValidatedCreateComment) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                    builder1.setMessage("댓글을 등록하시겠어요?");
-                    builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
-                            requestCreateReviewComment(mReview);
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                    if (isValidatedCreateComment) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage("댓글을 등록하시겠어요?");
+                        builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
+                                requestCreateReviewComment(mReview);
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                    } else {
+                        Toast.makeText(getActivity(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getActivity(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
             case R.id.review_read_review_image1_image_view:
