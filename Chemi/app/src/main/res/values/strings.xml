@@ -70,7 +70,7 @@
 
     <string name="email_validation_message_wrong_pattern">올바르지 않은 이메일 형식 이에요.</string>
     <string name="email_validation_message_already_user">이미 사용하고 있는 이메일 이에요.</string>
-    <string name="email_validation_message_auth">멋진 이메일 이네요! 아래 버튼을 눌르시면, 중복 확인 후 메일을 발송해드릴께요.</string>
+    <string name="email_validation_message_auth">멋진 이메일 이네요! 아래 버튼을 누르시면, 중복 확인 후 메일을 발송해드릴께요.</string>
     <string name="email_submit_message_correct">중복 확인 후 이메일이 발송 되었어요. 메일함으로 이동해서 인증을 부탁드려요!</string>
     <string name="email_submit_message_incorrect">이미 가입된 이메일 입니다. 메일을 다시 입력해주세요.</string>
     <string name="email_validation_message_correct">멋진 이메일 이네요! 메일 인증이 완료 되었어요.</string>

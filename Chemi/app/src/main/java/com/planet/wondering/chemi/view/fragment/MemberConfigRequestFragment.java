@@ -57,6 +57,7 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1200;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 2200;
+    private static final int EMAIL_SEND_REQUEST_CODE = 3200;
     private static final int PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 9201;
     private String[] mStoragePermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -208,6 +209,14 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mInputMethodManager.hideSoftInputFromWindow(mBrandAutoCompleteTextView.getWindowToken(), 0);
+        mInputMethodManager.hideSoftInputFromWindow(mProductAutoCompleteTextView.getWindowToken(), 0);
+        mInputMethodManager.hideSoftInputFromWindow(mDetailsEditText.getWindowToken(), 0);
     }
 
     @Override
@@ -420,6 +429,12 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
                     isHasUploadImage3 = true;
                 }
                 break;
+            case EMAIL_SEND_REQUEST_CODE:
+                Log.i("result code", String.valueOf(resultCode));
+                if (resultCode == RESULT_OK) {
+                    getActivity().onBackPressed();
+                }
+                break;
         }
     }
 
@@ -518,6 +533,6 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
 //        emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
 
         emailIntent = Intent.createChooser(emailIntent, getString(R.string.request_product_title));
-        startActivity(emailIntent);
+        startActivityForResult(emailIntent, EMAIL_SEND_REQUEST_CODE);
     }
 }

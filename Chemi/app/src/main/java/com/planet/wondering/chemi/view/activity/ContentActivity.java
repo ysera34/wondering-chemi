@@ -159,6 +159,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+        mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
     }
 
     @Override
