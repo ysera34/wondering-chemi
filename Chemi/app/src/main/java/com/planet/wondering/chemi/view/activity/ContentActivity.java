@@ -131,8 +131,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentToolbar = (Toolbar) findViewById(R.id.content_toolbar);
         setSupportActionBar(mContentToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_primary);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_primary);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mContentFragmentContainer = (FrameLayout) findViewById(R.id.content_fragment_container);

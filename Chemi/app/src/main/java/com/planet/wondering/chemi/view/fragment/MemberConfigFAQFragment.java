@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,7 +161,11 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onResponse(JSONObject response) {
                         FAQBody faqBody = Parser.parserFAQ(response);
-                        faqBody.setUpdateDate(faq.getModifyDate());
+                        if (faq.getModifyDate().equals("null")) {
+                            faqBody.setUpdateDate(faq.getCreateDate());
+                        } else {
+                            faqBody.setUpdateDate(faq.getModifyDate());
+                        }
                         faq.getChildList().add(faqBody);
                         updateUI();
                     }
@@ -244,7 +249,8 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                 numberStr = String.valueOf(questionNumber);
             }
             mSequenceTextView.setText(String.valueOf(numberStr));
-            mQuestionTextView.setText(String.valueOf(mParentFAQ.getQuestion()));
+//            mQuestionTextView.setText(String.valueOf(mParentFAQ.getQuestion()));
+            mQuestionTextView.setText(Html.fromHtml(String.valueOf(mParentFAQ.getQuestion())));
         }
 
         @Override
@@ -310,7 +316,8 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
 
         public void bindChildFAQ(FAQBody faqBody) {
             mFAQBody = faqBody;
-            mAnswerTextView.setText(String.valueOf(mFAQBody.getAnswer()));
+//            mAnswerTextView.setText(String.valueOf(mFAQBody.getAnswer()));
+            mAnswerTextView.setText(Html.fromHtml(String.valueOf(mFAQBody.getAnswer())));
             if (mFAQBody.getImagePaths() == null || mFAQBody.getImagePaths().size() == 0) {
                 mImageLayout.setVisibility(View.GONE);
             } else {

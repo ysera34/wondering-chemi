@@ -177,6 +177,23 @@ public class ImageHandler {
         }
     }
 
+    public String handleGalleryImage1(Intent intent, ImageView imageView) {
+
+        mCurrentImageAbsolutePath = getRealPathFromURI(intent.getData());
+        imageView.setImageBitmap(setPicture(imageView));
+        return mCurrentImageAbsolutePath;
+    }
+
+    public String handleCameraImage1(ImageView imageView) {
+
+        if (mCurrentImageAbsolutePath != null) {
+            imageView.setImageBitmap(setPicture(imageView));
+            galleryAddPicture();
+            return mCurrentImageAbsolutePath;
+        }
+        return null;
+    }
+
     public void handleGalleryImage(Intent intent, ImageView imageView) {
 
         mCurrentImageAbsolutePath = getRealPathFromURI(intent.getData());
@@ -227,7 +244,7 @@ public class ImageHandler {
         return rotatedBitmap;
     }
 
-    private String getRealPathFromURI(Uri uri) {
+    public String getRealPathFromURI(Uri uri) {
 
         String imagePath;
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -241,6 +258,4 @@ public class ImageHandler {
 
         return imagePath;
     }
-
-
 }
