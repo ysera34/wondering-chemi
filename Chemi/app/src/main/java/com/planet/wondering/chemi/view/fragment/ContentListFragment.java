@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
@@ -71,6 +72,9 @@ public class ContentListFragment extends Fragment {
     private RecyclerView mContentRecyclerView;
     private ContentAdapter mContentAdapter;
 
+    private StringBuilder mUrlBuilder;
+    private Pager mPager;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,8 @@ public class ContentListFragment extends Fragment {
 
         mCategoryId = getArguments().getInt(ARG_CATEGORY_ID, -1);
 //        Log.i(TAG, "mCategoryId : " + mCategoryId);
+
+        mUrlBuilder = new StringBuilder();
     }
 
     @Nullable
@@ -100,6 +106,18 @@ public class ContentListFragment extends Fragment {
             @Override
             public void onHideView() {
                 ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+            }
+        });
+        mContentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = ((LinearLayoutManager) mContentRecyclerView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition();
+                if (lastItem == mContentAdapter.getItemCount() - 1
+                        && mPager.getTotal() > mContentAdapter.getItemCount()) {
+                    requestContentList(mCategoryId);
+                }
             }
         });
 
@@ -125,14 +143,25 @@ public class ContentListFragment extends Fragment {
 
     private void requestContentList(int categoryId) {
 
-//        Log.i(TAG, "url : " + URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId);
+        if (mPager == null) {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
+                    .append(QUERY_CATEGORY).append(categoryId);
+        } else {
+            mUrlBuilder.delete(0, mUrlBuilder.length());
+            mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
+                    .append(QUERY_CATEGORY).append(categoryId);
+        }
+        Log.i(TAG, "url : " + mUrlBuilder.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + QUERY_PATH + QUERY_CATEGORY + categoryId,
+                Request.Method.GET, mUrlBuilder.toString(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        mContents = Parser.parseContentList(response);
+//                        mContents = Parser.parseContentList(response);
+                        mContents.addAll(Parser.parseContentList(response));
+                        mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
                     }
                 },
