@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -576,6 +577,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         private ImageView mProductImageView;
         private TextView mProductBrandTextView;
         private TextView mProductNameTextView;
+        private LinearLayout mProductReviewRatingLayout;
         private RatingBar mProductReviewRatingBar;
         private TextView mProductReviewRatingValueTextView;
         private TextView mProductReviewRatingCountTextView;
@@ -590,6 +592,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     itemView.findViewById(R.id.list_item_product_brand_text_view);
             mProductNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_product_name_text_view);
+            mProductReviewRatingLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_product_review_rating_layout);
             mProductReviewRatingBar = (RatingBar)
                     itemView.findViewById(R.id.list_item_product_review_rating_bar);
             mProductReviewRatingValueTextView = (TextView)
@@ -614,6 +618,12 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mProductReviewRatingBar.setRating(mProduct.getRatingValue());
             mProductReviewRatingValueTextView.setText(String.valueOf(mProduct.getRatingValue()));
             mProductReviewRatingCountTextView.setText(getString(R.string.product_review_count, String.valueOf(mProduct.getRatingCount())));
+
+            if (mProduct.getRatingCount() < 5) {
+                mProductReviewRatingLayout.setVisibility(View.GONE);
+            } else {
+                mProductReviewRatingLayout.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
