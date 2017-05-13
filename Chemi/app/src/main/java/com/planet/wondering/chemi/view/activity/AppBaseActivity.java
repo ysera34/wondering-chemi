@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.planet.wondering.chemi.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 /**
@@ -20,31 +22,62 @@ public class AppBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
-        Uri uriData = getIntent().getData();
-        String productId;
-        String contentId;
-
-        if (uriData != null) {
+//        Uri uriData = getIntent().getData();
+//        String productId;
+//        final String contentId;
+//
+//        if (uriData != null) {
 //            Log.i(TAG, "uri data" + uriData.toString());
-            productId = uriData.getQueryParameter("product_id");
-            contentId = uriData.getQueryParameter("content_id");
+//            productId = uriData.getQueryParameter("product_id");
+//            contentId = uriData.getQueryParameter("content_id");
+//        }
 
-            if (productId != null) {
-//                Log.i(TAG, productId);
-                startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId), (byte) 0));
-                finish();
-            } else if (contentId != null) {
-//                Log.i(TAG, contentId);
-                startActivity(ContentActivity.newIntent(getApplicationContext(), Integer.valueOf(contentId)));
-                finish();
-            } else {
-                startActivity(new Intent(AppBaseActivity.this, MemberStartActivity.class));
-                finish();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Uri uriData = getIntent().getData();
+                String productId;
+                String contentId;
+
+                if (uriData != null) {
+                    productId = uriData.getQueryParameter("product_id");
+                    contentId = uriData.getQueryParameter("content_id");
+
+                    if (productId != null) {
+                        startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId), (byte) 0));
+                        finish();
+                    } else if (contentId != null) {
+                        startActivity(ContentActivity.newIntent(getApplicationContext(), Integer.valueOf(contentId)));
+                        finish();
+                    }
+                }
+
             }
-        } else {
+        }, 800);
+
+//        if (uriData != null) {
+//            Log.i(TAG, "uri data" + uriData.toString());
+//            productId = uriData.getQueryParameter("product_id");
+//            contentId = uriData.getQueryParameter("content_id");
+//
+//            if (productId != null) {
+//                Log.i(TAG, productId);
+//                startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId), (byte) 0));
+//                finish();
+//            } else if (contentId != null) {
+//                Log.i(TAG, contentId);
+//                startActivity(ContentActivity.newIntent(getApplicationContext(), Integer.valueOf(contentId)));
+//                finish();
+//            } else {
+//                startActivity(new Intent(AppBaseActivity.this, MemberStartActivity.class));
+//                finish();
+//            }
+//        } else {
 //            Log.i(TAG, "uriData : did not get it");
-        }
+//        }
 
     }
 
