@@ -233,8 +233,10 @@ public class ReviewActivity extends BottomNavigationActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getApplicationContext(),
-                                "리뷰를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "리뷰를 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )

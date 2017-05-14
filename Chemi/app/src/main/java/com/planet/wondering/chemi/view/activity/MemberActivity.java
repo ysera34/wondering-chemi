@@ -361,18 +361,20 @@ public class MemberActivity extends BottomNavigationActivity
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
                         Log.e(TAG, error.toString());
-                        if (error instanceof com.android.volley.TimeoutError) {
-                            Toast.makeText(getApplicationContext(),
-                                    "회원 정보 요청 중 문제가 발생하였습니다. 다시 요청 하겠습니다.", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(MemberActivity.this, MemberActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            startActivity(intent);
-
-                        } else if (error instanceof com.android.volley.NoConnectionError) {
-                            Toast.makeText(getApplicationContext(),
-                                    "네트워크에 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
+//                        if (error instanceof com.android.volley.TimeoutError) {
+//                            Toast.makeText(getApplicationContext(),
+//                                    "회원 정보 요청 중 문제가 발생하였습니다. 다시 요청 하겠습니다.", Toast.LENGTH_SHORT).show();
+//
+//                            Intent intent = new Intent(MemberActivity.this, MemberActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                            startActivity(intent);
+//
+//                        } else if (error instanceof com.android.volley.NoConnectionError) {
+//                            Toast.makeText(getApplicationContext(),
+//                                    "네트워크에 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 }
         )

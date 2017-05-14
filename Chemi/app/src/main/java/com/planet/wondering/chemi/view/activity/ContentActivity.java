@@ -176,48 +176,54 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.content_comment_submit_text_view:
-                if (isValidatedCreateComment) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
-                    builder1.setMessage("댓글을 등록하시겠어요?");
-                    builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
-                            requestCreateContentComment(mContent, false);
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+                    if (isValidatedCreateComment) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+                        builder1.setMessage("댓글을 등록하시겠어요?");
+                        builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+                                requestCreateContentComment(mContent, false);
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
-                } else if (isValidatedCreateCommentComment) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
-                    builder1.setMessage("답글을 등록하시겠어요?");
-                    builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
-                            requestCreateContentComment(mContent, true);
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
+                    } else if (isValidatedCreateCommentComment) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
+                        builder1.setMessage("답글을 등록하시겠어요?");
+                        builder1.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+                                requestCreateContentComment(mContent, true);
+                            }
+                        });
+                        builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
-                } else {
-                    if (!isCommentSelected) {
-                        Toast.makeText(getApplicationContext(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        AlertDialog dialog1 = builder1.create();
+                        dialog1.show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "답글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                        if (!isCommentSelected) {
+                            Toast.makeText(getApplicationContext(), "댓글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "답글을 입력해보세요!", Toast.LENGTH_SHORT).show();
+                        }
                     }
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
         }
@@ -395,8 +401,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getApplicationContext(),
-                                "컨텐츠의 댓글을 등록하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "컨텐츠의 댓글을 등록하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -447,8 +455,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getApplicationContext(),
-                                "컨텐츠 좋아요하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "컨텐츠 좋아요하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -499,8 +509,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getApplicationContext(),
-                                "컨텐츠 보관 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "컨텐츠 보관 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )

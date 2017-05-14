@@ -660,6 +660,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

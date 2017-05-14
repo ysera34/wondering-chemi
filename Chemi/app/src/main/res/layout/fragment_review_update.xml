@@ -59,7 +59,7 @@
                 android:id="@+id/review_update_product_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerInside"/>
+                android:scaleType="center"/>
 
         </LinearLayout>
 

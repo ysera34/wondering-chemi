@@ -306,8 +306,10 @@ public class MemberSignInLocalFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.toString()));
-                        Toast.makeText(getActivity(),
-                                "로그인 중 오류가 발생했어요.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "로그인 중 오류가 발생했어요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

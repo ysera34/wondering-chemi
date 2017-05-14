@@ -320,13 +320,10 @@ public class MemberFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(1);
                 break;
             case R.id.archive_product_more_button_text_view:
-//                more to ArchiveActivity.ArchiveFragment.ArchiveProduct Tab;
                 break;
             case R.id.archive_content_more_button_text_view:
-//                more to ArchiveActivity.ArchiveFragment.ArchiveContent Tab
                 break;
             case R.id.archive_review_product_more_button_text_view:
-//                more to ArchiveActivity.ArchiveFragment.ArchiveReviewProduct Tab
                 break;
         }
     }
@@ -375,13 +372,6 @@ public class MemberFragment extends Fragment
 
     private void updateUI() {
 
-//        for (int i = 0; i < 10; i++) {
-//            Product product = new Product();
-//            product.setBrand("brand" + i);
-//            product.setName("name" + i);
-//            mArchiveProducts.add(product);
-//        }
-
         if (mArchiveProductAdapter == null) {
             mArchiveProductAdapter = new ArchiveProductAdapter(mArchiveProducts);
             mArchiveProductRecyclerView.setAdapter(mArchiveProductAdapter);
@@ -389,26 +379,12 @@ public class MemberFragment extends Fragment
             mArchiveProductAdapter.notifyDataSetChanged();
         }
 
-//        for (int i = 0; i < 10; i++) {
-//            Content content = new Content();
-//            content.setTitle("title" + i + "title title title title title title title title title title");
-//            mArchiveContents.add(content);
-//        }
-
         if (mArchiveContentAdapter == null) {
             mArchiveContentAdapter = new ArchiveContentAdapter(mArchiveContents);
             mArchiveContentRecyclerView.setAdapter(mArchiveContentAdapter);
         } else {
             mArchiveContentAdapter.notifyDataSetChanged();
         }
-
-//        for (int i = 0; i < 10; i++) {
-//            ReviewProduct reviewProduct = new ReviewProduct();
-//            reviewProduct.setProductName("product " + i + " name  product name product name");
-//            reviewProduct.setRatingValue(i % 5);
-//            reviewProduct.setWriteDate(new Date());
-//            mArchiveReviewProducts.add(reviewProduct);
-//        }
 
         if (mArchiveReviewProductAdapter == null) {
             mArchiveReviewProductAdapter = new ArchiveReviewProductAdapter(mArchiveReviewProducts);

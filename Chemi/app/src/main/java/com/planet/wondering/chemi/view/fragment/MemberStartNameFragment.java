@@ -33,6 +33,7 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.NAME_STRING;
 import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
@@ -152,7 +153,7 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
     private void requestConfirmNameRepetition(String name) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("nameString", name);
+        params.put(NAME_STRING, name);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + NAME_STRING_PATH, new JSONObject(params),
@@ -179,8 +180,10 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.toString()));
-                        Toast.makeText(getActivity(),
-                                "닉네임 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "닉네임 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

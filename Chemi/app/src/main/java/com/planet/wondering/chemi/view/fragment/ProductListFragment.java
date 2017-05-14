@@ -263,6 +263,24 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
+        mProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition();
+                int itemSize = mProductRecyclerView.getAdapter().getItemCount();
+                if (lastItem == itemSize - 1) {
+                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                }
+                int firstItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPosition();
+                if (firstItem == 0) {
+                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                }
+            }
+        });
+
         mProductListProgressBar = (ProgressBar) view.findViewById(R.id.product_list_progress_bar);
 
         updateUI();

@@ -120,6 +120,23 @@ public class ContentListFragment extends Fragment {
                 }
             }
         });
+        mContentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = ((LinearLayoutManager) mContentRecyclerView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition();
+                int itemSize = mContentRecyclerView.getAdapter().getItemCount();
+                if (lastItem == itemSize - 1) {
+                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                }
+                int firstItem = ((LinearLayoutManager) mContentRecyclerView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPosition();
+                if (firstItem == 0) {
+                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                }
+            }
+        });
 
         updateUI();
         requestContentList(mCategoryId);
@@ -169,8 +186,8 @@ public class ContentListFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

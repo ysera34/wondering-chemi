@@ -61,7 +61,6 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
     private LinearLayout mBackLayout;
     private FAQAdapter mFAQAdapter;
     private RecyclerView mFAQRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
     private ArrayList<FAQ> mFAQs;
 
     @Override
@@ -78,8 +77,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         mBackLayout = (LinearLayout) view.findViewById(R.id.member_config_faq_back_layout);
         mBackLayout.setOnClickListener(this);
         mFAQRecyclerView = (RecyclerView) view.findViewById(R.id.member_config_faq_recycler_view);
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        mFAQRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mFAQRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        mFAQRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
 //            @Override
 //            public void onShowView() {
@@ -140,8 +138,10 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "자주 묻는 질문을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "자주 묻는 질문을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -161,11 +161,11 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onResponse(JSONObject response) {
                         FAQBody faqBody = Parser.parserFAQ(response);
-                        if (faq.getModifyDate().equals("null")) {
-                            faqBody.setUpdateDate(faq.getCreateDate());
-                        } else {
-                            faqBody.setUpdateDate(faq.getModifyDate());
-                        }
+//                        if (faq.getModifyDate().equals("null")) {
+//                            faqBody.setUpdateDate(faq.getCreateDate());
+//                        } else {
+//                            faqBody.setUpdateDate(faq.getModifyDate());
+//                        }
                         faq.getChildList().add(faqBody);
                         updateUI();
                     }
@@ -174,8 +174,10 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "자주 묻는 질문을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "자주 묻는 질문을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -257,17 +259,16 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         public void onClick(View v) {
             if (mParentFAQ.getChildList() != null && mParentFAQ.getChildList().size() == 0) {
                 requestFAQ(mParentFAQ);
-
-                final int scrollPositionY = mBackLayout.getMeasuredHeight() + (int) v.getY();
-                mFAQRecyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFAQRecyclerView.scrollTo(0, scrollPositionY);
-                    }
-                }, 300);
-
             }
+
             super.onClick(v);
+            final int scrollPositionY = (int) v.getY();
+            mFAQRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAQRecyclerView.smoothScrollBy(0, scrollPositionY);
+                }
+            }, 300);
         }
 
         @Override
@@ -309,7 +310,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         private TextView mAnswerTextView;
         private LinearLayout mImageLayout;
         private ImageView mImage1ImageView;
-        private TextView mUpdateDateTextView;
+//        private TextView mUpdateDateTextView;
 
         public ChildFAQHolder(@NonNull View itemView) {
             super(itemView);
@@ -319,8 +320,8 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     itemView.findViewById(R.id.list_item_faq_child_image_layout);
             mImage1ImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_faq_child_image1_image_view);
-            mUpdateDateTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_faq_child_date_text_view);
+//            mUpdateDateTextView = (TextView)
+//                    itemView.findViewById(R.id.list_item_faq_child_date_text_view);
         }
 
         public void bindChildFAQ(FAQBody faqBody) {
@@ -335,7 +336,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                         .crossFade()
                         .into(mImage1ImageView);
             }
-            mUpdateDateTextView.setText(String.valueOf(mFAQBody.getUpdateDate()));
+//            mUpdateDateTextView.setText(String.valueOf(mFAQBody.getUpdateDate()));
         }
     }
 

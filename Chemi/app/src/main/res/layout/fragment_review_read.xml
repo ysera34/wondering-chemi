@@ -74,6 +74,7 @@
             android:descendantFocusability="blocksDescendants">
 
             <LinearLayout
+                android:id="@+id/review_read_product_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_search_product_height"
                 android:paddingTop="4dp"
@@ -81,7 +82,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:orientation="horizontal"
-                android:background="@drawable/widget_border_bottom">
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -94,7 +95,7 @@
                         android:id="@+id/review_read_product_image_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="center"/>
 
                 </LinearLayout>
 
@@ -295,7 +296,6 @@
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>
 
                     </LinearLayout>
-
                 </LinearLayout>
             </LinearLayout>
 

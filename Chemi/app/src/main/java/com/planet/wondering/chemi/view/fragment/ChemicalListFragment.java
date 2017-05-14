@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -343,6 +344,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

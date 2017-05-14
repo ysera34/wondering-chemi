@@ -516,6 +516,8 @@ public class ChemicalLatestListFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -561,8 +563,8 @@ public class ChemicalLatestListFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_product_faq"
-        android:icon="@drawable/ic_question"
+        android:icon="@drawable/ic_question_true"
         android:title="@string/menu_toolbar_product_action_faq"
         android:orderInCategory="100"
         app:showAsAction="always" />

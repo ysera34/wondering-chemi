@@ -41,6 +41,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
@@ -125,6 +126,7 @@ public class ReviewReadFragment extends Fragment
 
     private NestedScrollView mReviewReadNestedScrollView;
 
+    private LinearLayout mReviewReadProductLayout;
     private ImageView mReviewReadProductImageView;
     private TextView mReviewReadProductBrandTextView;
     private TextView mReviewReadProductNameTextView;
@@ -184,6 +186,8 @@ public class ReviewReadFragment extends Fragment
 
         mReviewReadNestedScrollView = (NestedScrollView) view.findViewById(R.id.review_read_nested_scroll_view);
 
+        mReviewReadProductLayout = (LinearLayout) view.findViewById(R.id.review_read_product_layout);
+        mReviewReadProductLayout.setOnClickListener(this);
         mReviewReadProductImageView = (ImageView) view.findViewById(R.id.review_read_product_image_view);
         mReviewReadProductBrandTextView = (TextView) view.findViewById(R.id.review_read_product_brand_text_view);
         mReviewReadProductNameTextView = (TextView) view.findViewById(R.id.review_read_product_name_text_view);
@@ -298,6 +302,9 @@ public class ReviewReadFragment extends Fragment
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                break;
+            case R.id.review_read_product_layout:
+                startActivity(ProductActivity.newIntent(getActivity(), mReview.getProductId(), (byte) 0));
                 break;
             case R.id.review_read_comment_submit_text_view:
                 if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
@@ -557,8 +564,8 @@ public class ReviewReadFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "리뷰를 삭제하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -605,8 +612,8 @@ public class ReviewReadFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "리뷰의 댓글을 등록하는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )

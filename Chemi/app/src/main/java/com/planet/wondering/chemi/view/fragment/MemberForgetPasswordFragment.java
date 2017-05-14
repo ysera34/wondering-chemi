@@ -183,8 +183,10 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.toString()));
                         mMemberForgetPasswordSubmitButtonTextView.setEnabled(true);
-                        Toast.makeText(getActivity(),
-                                "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

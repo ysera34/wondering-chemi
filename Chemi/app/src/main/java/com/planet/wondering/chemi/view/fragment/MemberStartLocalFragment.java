@@ -464,8 +464,10 @@ public class MemberStartLocalFragment extends Fragment
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.toString()));
                         mEmailAuthButtonTextView.setEnabled(true);
-                        Toast.makeText(getActivity(),
-                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

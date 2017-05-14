@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_congratulations"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_gravity="center_horizontal"
+        android:text="축하합니다!"
+        android:textSize="22sp"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="케미 회원가입이 완료되었습니다.
+지금부터 안전한 소비생활을 함께 시작해요."
+        android:lineSpacingMultiplier="1.2"
+        android:textSize="14sp"
+        android:textColor="@color/colorDoveGray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="~~~하기"
+        android:textSize="16sp"
+        android:textColor="@color/color_selector_button_white_primary"
+        android:background="@drawable/selector_opaque_primary"/>
+
+</LinearLayout>

@@ -111,7 +111,6 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
             mNoticeRecyclerView.setAdapter(mNoticeAdapter);
         } else {
             mNoticeAdapter.setParentList(mNotices, true);
-//            mNoticeAdapter.notifyDataSetChanged();
         }
     }
 
@@ -139,8 +138,10 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "공지사항을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "공지사항을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -168,8 +169,10 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getActivity(),
-                                "공지사항을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),
+//                                "공지사항을 가져오는 중에 오류가 발생하였습니다. 잠시후 다시 요쳥해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -228,8 +231,6 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
 
         public ParentNoticeHolder(@NonNull View itemView) {
             super(itemView);
-
-
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_notification_parent_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_notification_parent_date_text_view);
             mDownArrowImageView = (ImageView) itemView.findViewById(R.id.list_item_notification_parent_arrow_image_view);
@@ -247,6 +248,14 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
                 requestNotice(mParentNotice);
             }
             super.onClick(v);
+
+            final int scrollPositionY = (int) v.getY();
+            mNoticeRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mNoticeRecyclerView.smoothScrollBy(0, scrollPositionY);
+                }
+            }, 300);
         }
 
         @Override

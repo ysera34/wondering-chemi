@@ -274,6 +274,8 @@ public class ProductActivity extends AppBaseActivity
                     public void onErrorResponse(VolleyError error) {
 //                        progressDialog.dismiss();
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -324,8 +326,10 @@ public class ProductActivity extends AppBaseActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
-                        Toast.makeText(getApplicationContext(),
-                                "상품을 보관하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "상품을 보관하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )

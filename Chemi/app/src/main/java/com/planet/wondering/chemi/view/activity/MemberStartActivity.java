@@ -560,8 +560,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, String.valueOf(error.getMessage()));
-                        Toast.makeText(getApplicationContext(),
-                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                         if (platformId == 1) {
                             revokeAccessGoogle();
                         } else if (platformId == 2) {
@@ -648,8 +650,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 //                        progressDialog.dismiss();
                         hideProgressDialog();
                         Log.e(TAG, String.valueOf(error.getMessage()));
-                        Toast.makeText(getApplicationContext(),
-                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );
