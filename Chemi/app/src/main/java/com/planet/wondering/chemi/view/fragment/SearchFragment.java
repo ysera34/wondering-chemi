@@ -25,6 +25,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
+    private static final String ARG_IS_FIRST_USER = "is_first_user";
+
     private RelativeLayout mSearchView;
     private Button mSearchButton;
     private ImageButton mSearchImageButton;
@@ -34,6 +36,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public static SearchFragment newInstance() {
 
         Bundle args = new Bundle();
+
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SearchFragment newInstance(boolean isFirstUser) {
+
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_IS_FIRST_USER, isFirstUser);
 
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
@@ -68,6 +80,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 //                .asGif()
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .into(mSearchBackgroundImageView);
+
+        if (getArguments().getBoolean(ARG_IS_FIRST_USER, false)) {
+            MemberCongratulationDialogFragment dialogFragment = MemberCongratulationDialogFragment.newInstance();
+            dialogFragment.show(getFragmentManager(), "congratulation_dialog");
+        }
     }
 
     @Override
