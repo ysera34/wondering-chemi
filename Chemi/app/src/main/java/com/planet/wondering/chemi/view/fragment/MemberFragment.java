@@ -76,6 +76,7 @@ public class MemberFragment extends Fragment
 //    private ImageView mMemberConfigImageView;
     private TextView mMemberNameTextView;
 
+    private LinearLayout mMemberProfileInfoLayout;
     private LinearLayout mParentLayout;
     private TextView mParentAgeTextView;
     private TextView mParentDrySkinTextView;
@@ -165,6 +166,7 @@ public class MemberFragment extends Fragment
 //        mMemberConfigImageView = (ImageView) view.findViewById(R.id.member_config_image_view);
 //        mMemberConfigImageView.setOnTouchListener(this);
 
+        mMemberProfileInfoLayout = (LinearLayout) view.findViewById(R.id.member_profile_info_layout);
         mParentLayout = (LinearLayout) view.findViewById(R.id.member_profile_parent_layout);
         mParentAgeTextView = (TextView) view.findViewById(R.id.member_profile_parent_age_text_view);
         mParentDrySkinTextView = (TextView) view.findViewById(R.id.member_profile_parent_dry_skin_text_view);
@@ -236,13 +238,11 @@ public class MemberFragment extends Fragment
         mMemberNameTextView.setText(mUser.getName());
 
         if (mUser.isHasExtraInfo()) {
-//            promote member survey
-
+            mParentAgeTextView.setText(mUser.getAge());
         } else {
-//            display member info
+            mMemberProfileInfoLayout.setVisibility(View.GONE);
+//            mParentAgeTextView.setVisibility(View.GONE);
         }
-
-        mParentAgeTextView.setText(mUser.getAge());
 
         if (mUser.isHasDrySkin() && mUser.isHasOilySkin()) {
             mParentDrySkinTextView.setVisibility(View.GONE);

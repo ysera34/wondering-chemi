@@ -194,6 +194,11 @@ public class ReviewActivity extends BottomNavigationActivity
         if (isChose) {
             startActivity(MemberStartActivity.newIntent(getApplicationContext()));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+            if (fragment instanceof ReviewReadFragment) {
+                ((ReviewReadFragment) fragment).hideSoftKeyboard();
+            }
         }
     }
 

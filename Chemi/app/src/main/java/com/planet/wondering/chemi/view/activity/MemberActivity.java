@@ -1,9 +1,10 @@
 package com.planet.wondering.chemi.view.activity;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnUserInfoUpdateListener;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigChangeNameFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigChangePasswordFragment;
@@ -325,10 +327,19 @@ public class MemberActivity extends BottomNavigationActivity
 
     private void requestMemberConfigUser() {
 
-        final ProgressDialog progressDialog =
-                ProgressDialog.show(MemberActivity.this,
-                        "회원님의 정보를 가져오고 있습니다.",
-                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(MemberActivity.this,
+//                        "회원님의 정보를 가져오고 있습니다.",
+//                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog = new ProgressDialog(MemberActivity.this);
+//        progressDialog.setIndeterminate(true);
+//        progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_bar_animation));
+//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        progressDialog.show();
+
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberActivity.this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH,

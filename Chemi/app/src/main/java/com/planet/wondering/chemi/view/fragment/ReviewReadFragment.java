@@ -232,6 +232,7 @@ public class ReviewReadFragment extends Fragment
 
         mCommentCreateEditText = (EditText) view.findViewById(R.id.review_read_comment_edit_text);
         mCommentCreateEditText.setOnFocusChangeListener(this);
+        mCommentCreateEditText.setOnClickListener(this);
         mCommentSubmitTextView = (TextView) view.findViewById(R.id.review_read_comment_submit_text_view);
         mCommentSubmitTextView.setOnClickListener(this);
 
@@ -305,6 +306,15 @@ public class ReviewReadFragment extends Fragment
                 break;
             case R.id.review_read_product_layout:
                 startActivity(ProductActivity.newIntent(getActivity(), mReview.getProductId(), (byte) 0));
+                break;
+            case R.id.review_read_comment_edit_text:
+                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                    dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+                }
                 break;
             case R.id.review_read_comment_submit_text_view:
                 if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
@@ -635,6 +645,10 @@ public class ReviewReadFragment extends Fragment
 
     public void commentSelected(Comment comment) {
 
+    }
+
+    public void hideSoftKeyboard() {
+        mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
     }
 
     public void commentNestedScroll() {

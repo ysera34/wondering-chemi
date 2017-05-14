@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +50,7 @@ import com.planet.wondering.chemi.util.helper.BackPressCloseHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
 import com.planet.wondering.chemi.view.fragment.MemberChangePasswordFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigTermsFragment;
@@ -403,7 +406,8 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
+//            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             mProgressDialog.setIndeterminate(true);
         }
         mProgressDialog.show();
@@ -477,6 +481,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
     private void requestConfirmEmailRepetition(final GoogleSignInAccount googleSignInAccount,
             final String emailAddress, final String accessToken, final int platformId) {
 
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberStartActivity.this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+
         Map<String, String> params = new HashMap<>();
         if (platformId == 1) {
             params.put(ACCESS_TOKEN, googleSignInAccount.getIdToken());
@@ -494,9 +502,12 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        progressDialog.dismiss();
+
                         if (Parser.parseSimpleResult(response)) {
 //                            requestSubmitUserInfo(accessToken, platformId);
                             User user = Parser.parseEmailConfirm(response);
+
 
                             if (user == null) { /*member sign up for*/
                                 mFragmentManager.beginTransaction()
@@ -559,6 +570,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
                         Log.e(TAG, String.valueOf(error.getMessage()));
 //                        Toast.makeText(getApplicationContext(),
 //                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
@@ -582,20 +594,18 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 
     public void requestSubmitUserInfo(String name) {
 
-//        final ProgressDialog progressDialog;
-//        progressDialog = ProgressDialog.show(getApplicationContext(), "회원가입을 요청하고 있습니다.",
-//                getString(R.string.progress_dialog_message_wait), false, false);
+//        if (mPlatformId == 1) {
+//            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mGoogleSignInAccount.getIdToken());
+//        } else if (mPlatformId == 2){
+//            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
+//        }
+//        Log.i(TAG, "requestSubmitUserInfo : name :" + name);
+//        Log.i(TAG, "requestSubmitUserInfo : mPlatformId :" + String.valueOf(mPlatformId));
+//        Log.i(TAG, "requestSubmitUserInfo : pushToken :" + FirebaseInstanceId.getInstance().getToken());
 
-        showProgressDialog();
-
-        if (mPlatformId == 1) {
-            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mGoogleSignInAccount.getIdToken());
-        } else if (mPlatformId == 2){
-            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
-        }
-        Log.i(TAG, "requestSubmitUserInfo : name :" + name);
-        Log.i(TAG, "requestSubmitUserInfo : mPlatformId :" + String.valueOf(mPlatformId));
-        Log.i(TAG, "requestSubmitUserInfo : pushToken :" + FirebaseInstanceId.getInstance().getToken());
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberStartActivity.this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -612,8 +622,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-//                        progressDialog.dismiss();
-                        hideProgressDialog();
+                        progressDialog.dismiss();
 //                        Toast.makeText(getApplicationContext(),
 //                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, response.toString());
@@ -647,8 +656,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
-                        hideProgressDialog();
+                        progressDialog.dismiss();
                         Log.e(TAG, String.valueOf(error.getMessage()));
 //                        Toast.makeText(getApplicationContext(),
 //                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();

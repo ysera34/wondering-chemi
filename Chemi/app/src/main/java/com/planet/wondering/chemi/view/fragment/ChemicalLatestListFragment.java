@@ -1,6 +1,5 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -492,9 +491,12 @@ public class ChemicalLatestListFragment extends Fragment {
 
     private void requestChemical(int chemicalId) {
 
-        final ProgressDialog progressDialog =
-                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
-                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+//                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final CustomProgressDialog progressDialog = new CustomProgressDialog(getActivity());
+//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        progressDialog.show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH + chemicalId,
@@ -502,7 +504,7 @@ public class ChemicalLatestListFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Chemical chemical = Parser.parseChemical(response);
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
 //                        if (mModeId == RESULT_MODE) {
 //                            ChemicalDialogFragment dialogFragment = ChemicalDialogFragment.newInstance(chemical);
 //                            dialogFragment.show(getChildFragmentManager(), "CHEMICAL_DIALOG");
@@ -514,7 +516,7 @@ public class ChemicalLatestListFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();
@@ -531,9 +533,9 @@ public class ChemicalLatestListFragment extends Fragment {
 
     private void requestChemicals(String query) {
 
-        final ProgressDialog progressDialog =
-                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
-                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+//                        getString(R.string.progress_dialog_message_wait), false, false);
 
         if (mPager == null) {
             mUrlBuilder.delete(0, mUrlBuilder.length());
@@ -552,7 +554,7 @@ public class ChemicalLatestListFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         mChemicals.addAll(Parser.parseChemicalList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -561,7 +563,7 @@ public class ChemicalLatestListFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();

@@ -1,6 +1,5 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -324,9 +323,12 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
     private void requestChemical(int chemicalId) {
 
-        final ProgressDialog progressDialog =
-                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
-                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+//                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final CustomProgressDialog progressDialog = new CustomProgressDialog(getActivity());
+//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        progressDialog.show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH + chemicalId,
@@ -334,7 +336,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                     @Override
                     public void onResponse(JSONObject response) {
                         mChemical = Parser.parseChemical(response);
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         ChemicalDialogFragment dialogFragment = ChemicalDialogFragment.newInstance(mChemical);
                         dialogFragment.show(getFragmentManager(), CHEMICAL_DIALOG);
                     }
@@ -342,7 +344,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();

@@ -41,6 +41,7 @@
         android:paddingEnd="36dp"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
+        android:clickable="true"
         android:text="~~~하기"
         android:textSize="16sp"
         android:textColor="@color/color_selector_button_white_primary"

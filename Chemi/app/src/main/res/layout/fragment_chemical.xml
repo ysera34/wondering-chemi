@@ -132,12 +132,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="57dp">
         <!--android:layout_height="@dimen/chemical_dialog_hazard_info_height"-->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/chemical_hazard_info_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>

@@ -83,6 +83,7 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.L
  */
 
 public class ContentActivity extends AppBaseActivity implements View.OnClickListener,
+        View.OnFocusChangeListener,
         OnCommentSelectedListener, OnDialogFinishedListener,
         OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener {
 
@@ -138,6 +139,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentFragmentContainer = (FrameLayout) findViewById(R.id.content_fragment_container);
         mContentCommentEditLayout = (RelativeLayout) findViewById(R.id.content_comment_edit_layout);
         mContentCommentEditText = (EditText) findViewById(R.id.content_comment_edit_text);
+        mContentCommentEditText.setOnFocusChangeListener(this);
         mContentCommentEditText.setOnClickListener(this);
         mContentCommentUserNameTextView = (TextView) findViewById(R.id.content_comment_user_name_text_view);
         mContentCommentSubmitTextView = (TextView) findViewById(R.id.content_comment_submit_text_view);
@@ -160,6 +162,23 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.content_comment_edit_text:
+                if (hasFocus) {
+                    if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+
+                    } else {
+                        CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                                .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                        dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -764,6 +783,14 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         if (isChose) {
             startActivity(MemberStartActivity.newIntent(getApplicationContext()));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+//            Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+//            if (fragment instanceof ContentHorizontalFragment) {
+//                ((ContentHorizontalFragment) fragment).hideSoftKeyboard();
+//            } else if (fragment instanceof ContentVerticalFragment) {
+//                ((ContentVerticalFragment) fragment).hideSoftKeyboard();
+//            }
         }
     }
 
