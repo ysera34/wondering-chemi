@@ -119,6 +119,10 @@ public class MemberActivity extends BottomNavigationActivity
                         .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
             }
+        } else if (mFragment instanceof MemberFragment) {
+            if (mAccessToken != null) {
+                requestMemberConfigUser();
+            }
         }
     }
 
@@ -353,10 +357,20 @@ public class MemberActivity extends BottomNavigationActivity
 //                        Log.i(TAG, mUser.toString());
 
                         if (!isInfoValueUpdate) {
-                            mFragment = MemberFragment.newInstance(mUser);
-                            mFragmentManager.beginTransaction()
-                                    .add(R.id.main_fragment_container, mFragment)
-                                    .commit();
+                            mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+                            if (mFragment == null) {
+                                mFragmentManager.beginTransaction()
+                                        .add(R.id.main_fragment_container, MemberFragment.newInstance(mUser))
+                                        .commit();
+                            } else if (mFragment instanceof MemberFragment) {
+                                mFragmentManager.beginTransaction()
+                                        .replace(R.id.main_fragment_container, MemberFragment.newInstance(mUser))
+                                        .commit();
+                            }
+//                            mFragment = MemberFragment.newInstance(mUser);
+//                            mFragmentManager.beginTransaction()
+//                                    .add(R.id.main_fragment_container, mFragment)
+//                                    .commit();
                         } else {
                             isInfoValueUpdate = false;
                             mBottomNavigationLayout.setVisibility(View.VISIBLE);
