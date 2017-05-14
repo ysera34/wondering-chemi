@@ -63,14 +63,17 @@ public class MemberSurveyStage4Fragment extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.member_survey_baby_true_layout:
+
                 if (!isCheckedTrue) {
                     mMemberSurveyBabyTrueImageView.setImageResource(R.drawable.ic_circle_check_white_true);
                     isCheckedTrue = true;
 
                     mMemberSurveyBabyFalseImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedFalse = false;
+                    mSurveyCompletedListener.onSurveyValueSubmit(4, 0);
                     mSurveyCompletedListener.onSurveyCompleted(4, true);
                 } else {
                     mMemberSurveyBabyTrueImageView.setImageResource(R.drawable.ic_circle_check_white_false);
@@ -85,6 +88,7 @@ public class MemberSurveyStage4Fragment extends Fragment implements View.OnClick
 
                     mMemberSurveyBabyTrueImageView.setImageResource(R.drawable.ic_circle_check_white_false);
                     isCheckedTrue = false;
+                    mSurveyCompletedListener.onSurveyValueSubmit(4, 1);
                     mSurveyCompletedListener.onSurveyCompleted(4, true);
                 } else {
                     mMemberSurveyBabyFalseImageView.setImageResource(R.drawable.ic_circle_check_white_false);
@@ -94,11 +98,11 @@ public class MemberSurveyStage4Fragment extends Fragment implements View.OnClick
                 break;
         }
         // hasChild true : 0; hasChild false : 1;
-        if (isCheckedTrue) {
-            mSurveyCompletedListener.onSurveyValueSubmit(4, 0);
-        } else if (isCheckedFalse) {
-            mSurveyCompletedListener.onSurveyValueSubmit(4, 1);
-        }
+//        if (isCheckedTrue) {
+//            mSurveyCompletedListener.onSurveyValueSubmit(4, 0);
+//        } else if (isCheckedFalse) {
+//            mSurveyCompletedListener.onSurveyValueSubmit(4, 1);
+//        }
     }
 
     OnSurveyCompletedListener mSurveyCompletedListener;

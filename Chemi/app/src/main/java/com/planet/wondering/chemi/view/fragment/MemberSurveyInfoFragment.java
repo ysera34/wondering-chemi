@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -184,6 +185,11 @@ public class MemberSurveyInfoFragment extends Fragment
                     startActivity(SearchActivity.newIntent(getActivity()));
                     getActivity().finish();
                 }
+                if (currentStage == 3 && !mUser.isHasChild()) {
+                    requestSubmitUserInfo(mUser);
+                    startActivity(SearchActivity.newIntent(getActivity()));
+                    getActivity().finish();
+                }
                 break;
         }
     }
@@ -268,6 +274,22 @@ public class MemberSurveyInfoFragment extends Fragment
                 }
                 break;
         }
+
+        if (stageNumber == 4) {
+            if (isCompleted) {
+                if (!mUser.isHasChild()) {
+                    mMemberSurveyInfoConfirmButtonTextView.setText("정보 입력 마치고 시작하기");
+                } else {
+                    mMemberSurveyInfoConfirmButtonTextView.setText("다 음");
+                }
+            } else {
+                if (!mUser.isHasChild()) {
+                    mMemberSurveyInfoConfirmButtonTextView.setText("다 음");
+                } else {
+                    mMemberSurveyInfoConfirmButtonTextView.setText("다 음");
+                }
+            }
+        }
     }
 
     public void updateUserInfo(int stageNumber, int value) {
@@ -344,6 +366,8 @@ public class MemberSurveyInfoFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         )
@@ -369,6 +393,8 @@ public class MemberSurveyInfoFragment extends Fragment
                 .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
         mMemberSurveyInfoConfirmButtonTextView
                 .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
+
+
     }
 
     private void disableConfirmButton() {

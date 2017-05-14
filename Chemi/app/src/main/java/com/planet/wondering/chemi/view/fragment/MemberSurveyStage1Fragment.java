@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
@@ -138,8 +139,6 @@ public class MemberSurveyStage1Fragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-//            Toast.makeText(getActivity(), String.valueOf(mDefaultYear + getAdapterPosition()),
-//                    Toast.LENGTH_SHORT).show();
 
             if (mYearCheckBox.isChecked() && isYearSelected) {
                 mYearCheckBox.setChecked(false);
@@ -147,6 +146,9 @@ public class MemberSurveyStage1Fragment extends Fragment {
                 mSurveyCompletedListener.onSurveyCompleted(1, false);
                 mYearLayoutManager.setScrollEnable(true);
             } else if (!mYearCheckBox.isChecked() && !isYearSelected) {
+                Toast.makeText(getActivity(), "다시 선택하시려면, 선택한 것을 다시 누르시면 되요.",
+                        Toast.LENGTH_SHORT).show();
+
                 mYearCheckBox.setChecked(true);
                 isYearSelected = true;
                 mSurveyCompletedListener.onSurveyCompleted(1, true);
