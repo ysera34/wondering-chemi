@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
@@ -179,11 +180,20 @@ public class MemberChangePasswordFragment extends Fragment implements View.OnCli
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        User user = Parser.parseSignInUserToken(response);
+
                         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
                             UserSharedPreferences.removeStoredToken(getActivity());
                         }
-                        UserSharedPreferences.setStoreToken(getActivity(), Parser.parseSignInUserToken(response));
+                        UserSharedPreferences.setStoreToken(getActivity(), user.getToken());
                         Log.d(TAG, "user token after changing password: " + UserSharedPreferences.getStoredToken(getActivity()));
+
+                        if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
+                            UserSharedPreferences.removeStoredUserName(getActivity());
+                        }
+                        UserSharedPreferences.setStoreUserName(getActivity(), user.getName());
+                        Log.d(TAG, "user name after changing password: " + UserSharedPreferences.getStoredUserName(getActivity()));
+
 
                         Toast.makeText(getActivity(),
                                 "비밀 번호 변경 되었습니다.", Toast.LENGTH_SHORT).show();

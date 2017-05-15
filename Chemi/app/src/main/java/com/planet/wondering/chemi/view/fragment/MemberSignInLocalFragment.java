@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
@@ -277,17 +278,19 @@ public class MemberSignInLocalFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         if (Parser.parseSimpleResult(response)) {
 
+                            User user = Parser.parseSignInUserToken(response);
+
                             if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
                                 UserSharedPreferences.removeStoredToken(getActivity());
                             }
-                            UserSharedPreferences.setStoreToken(getActivity(), Parser.parseSignInUserToken(response));
+                            UserSharedPreferences.setStoreToken(getActivity(), user.getToken());
                             Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
 
-//                            if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
-//                                UserSharedPreferences.removeStoredUserName(getActivity());
-//                            }
-//                            UserSharedPreferences.setStoreUserName(getActivity(), user.getName());
-//                            Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getActivity()));
+                            if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
+                                UserSharedPreferences.removeStoredUserName(getActivity());
+                            }
+                            UserSharedPreferences.setStoreUserName(getActivity(), user.getName());
+                            Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getActivity()));
 
                             // sign in firebase user
                             signInFirebaseAccount(email, email);

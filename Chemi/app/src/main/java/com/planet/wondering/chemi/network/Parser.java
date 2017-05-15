@@ -908,19 +908,22 @@ public class Parser {
         return email;
     }
 
-    public static String parseSignInUserToken(JSONObject responseObject) {
+    public static User parseSignInUserToken(JSONObject responseObject) {
 
-        String token = null;
+        User user = new User();
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
-                JSONObject tokenObject = responseObject.getJSONObject(RESPONSE_DATA);
-                token = tokenObject.getString(TOKEN);
+                JSONObject userObject = responseObject.getJSONObject(RESPONSE_DATA);
+                user.setName(userObject.getString(Config.User.Key.NAME));
+                user.setPlatformId((byte) userObject.getInt(Config.User.Key.PLATFORM));
+                user.setToken(userObject.getString(TOKEN));
+                user.setPushToken(userObject.getString(PUSH_TOKEN));
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        return token;
+        return user;
     }
 
     public static String parseMemberImagePath(JSONObject responseObject) {
