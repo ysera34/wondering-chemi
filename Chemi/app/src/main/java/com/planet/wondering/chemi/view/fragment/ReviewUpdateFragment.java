@@ -116,6 +116,7 @@ public class ReviewUpdateFragment extends Fragment
     private String mReviewHint;
     private Review mReview;
     private ArrayList<String> mReviewImagePaths;
+    private HashMap<Integer, String> mImagePathMap;
 
     private ImageHandler mReviewImageHandler;
 
@@ -129,6 +130,10 @@ public class ReviewUpdateFragment extends Fragment
         mReviewHint = getString(R.string.review_create_review_hint);
         mReview = (Review) getArguments().getSerializable(ARG_REVIEW);
         mReviewImagePaths = mReview.getImagePaths();
+        mImagePathMap = new HashMap<>();
+        for (int i = 1; i <= mReviewImagePaths.size(); i++) {
+            mImagePathMap.put(i, mReviewImagePaths.get(i - 1));
+        }
     }
 
     @Nullable
@@ -271,11 +276,10 @@ public class ReviewUpdateFragment extends Fragment
         switch (v.getId()) {
             case R.id.review_update_confirm_layout:
                 if (!isHasUploadImage1 && !isHasUploadImage2 && !isHasUploadImage3) {
-                    mReviewImagePaths.clear();
+//                    mReviewImagePaths.clear();
                     requestUpdateReview();
                 } else {
                     if (isHasUploadImage1) {
-
                         requestUpdateReviewImage(1);
                     }
                     if (isHasUploadImage2) {
@@ -443,23 +447,54 @@ public class ReviewUpdateFragment extends Fragment
                     mUpdateReviewImage2ImageView.setImageDrawable(mUpdateReviewImage3ImageView.getDrawable());
                     mUpdateReviewImage3ImageView.setImageBitmap(null);
                     isHasImage3 = false;
-                    if (isHasUploadImage1) isHasUploadImage1 = false;
-                    if (isHasUploadImage2) isHasUploadImage1 = true;
-                    if (isHasUploadImage3) isHasUploadImage2 = true; isHasUploadImage3 = false;
+                    isHasUploadImage3 = false;
+
+                    if (mImagePathMap.containsKey(2)) {
+                        mImagePathMap.put(1, (mImagePathMap.get(2)));
+                    } else {
+                        isHasImage1 = true;
+                        isHasUploadImage1 = true;
+                    }
+                    if (mImagePathMap.containsKey(3)) {
+                        mImagePathMap.put(2, (mImagePathMap.get(3)));
+                    } else {
+                        isHasImage2 = true;
+                        isHasUploadImage2 = true;
+                    }
+                    if (mImagePathMap.containsKey(3)) {
+                        mImagePathMap.remove(3);
+                    }
+
+//                    if (isHasUploadImage1) isHasUploadImage1 = false;
+//                    if (isHasUploadImage2) isHasUploadImage1 = true;
+//                    if (isHasUploadImage3) isHasUploadImage2 = true; isHasUploadImage3 = false;
 
                 } else if (isHasImage2) {
                     mUpdateReviewImage1ImageView.setImageDrawable(mUpdateReviewImage2ImageView.getDrawable());
                     mUpdateReviewImage2ImageView.setImageBitmap(null);
                     isHasImage2 = false;
-                    if (isHasUploadImage1) isHasUploadImage1 = false;
-                    if (isHasUploadImage2) isHasUploadImage1 = true; isHasUploadImage2 = false;
+                    isHasUploadImage2 = false;
 
+                    if (mImagePathMap.containsKey(2)) {
+                        mImagePathMap.put(1, (mImagePathMap.get(2)));
+                    } else {
+                        isHasImage1 = true;
+                        isHasUploadImage1 = true;
+                    }
+                    if (mImagePathMap.containsKey(2)) {
+                        mImagePathMap.remove(2);
+                    }
+//                    if (isHasUploadImage1) isHasUploadImage1 = false;
+//                    if (isHasUploadImage2) isHasUploadImage1 = true; isHasUploadImage2 = false;
                     mUpdateReviewImage3ImageView.setVisibility(View.INVISIBLE);
                 } else if (isHasImage1) {
                     mUpdateReviewImage1ImageView.setImageBitmap(null);
                     isHasImage1 = false;
-                    if (isHasUploadImage1) isHasUploadImage1 = false;
-
+                    isHasUploadImage1 = false;
+                    if (mImagePathMap.containsKey(1)) {
+                        mImagePathMap.remove(1);
+                    }
+//                    if (isHasUploadImage1) isHasUploadImage1 = false;
                     mUpdateReviewImage2ImageView.setVisibility(View.INVISIBLE);
                 }
                 break;
@@ -468,21 +503,41 @@ public class ReviewUpdateFragment extends Fragment
                     mUpdateReviewImage2ImageView.setImageDrawable(mUpdateReviewImage3ImageView.getDrawable());
                     mUpdateReviewImage3ImageView.setImageBitmap(null);
                     isHasImage3 = false;
-                    if (isHasUploadImage2) isHasUploadImage2 = false;
-                    if (isHasUploadImage3) isHasUploadImage2 = true; isHasUploadImage3 = false;
+                    isHasUploadImage3 = false;
+
+                    if (mImagePathMap.containsKey(3)) {
+                        mImagePathMap.put(2, (mImagePathMap.get(3)));
+                    } else {
+                        isHasImage2 = true;
+                        isHasUploadImage2 = true;
+                    }
+                    if (mImagePathMap.containsKey(3)) {
+                        mImagePathMap.remove(3);
+                    }
+//                    if (isHasUploadImage2) isHasUploadImage2 = false;
+//                    if (isHasUploadImage3) isHasUploadImage2 = true; isHasUploadImage3 = false;
 
                 } else if (isHasImage2) {
                     mUpdateReviewImage2ImageView.setImageBitmap(null);
                     isHasImage2 = false;
+                    isHasUploadImage2 = false;
+
+                    if (mImagePathMap.containsKey(2)) {
+                        mImagePathMap.remove(2);
+                    }
+//                    if (isHasUploadImage2) isHasUploadImage2 = false;
                     mUpdateReviewImage3ImageView.setVisibility(View.INVISIBLE);
-                    if (isHasUploadImage2) isHasUploadImage2 = false;
                 }
                 break;
             case 3:
                 if (isHasImage3) {
                     mUpdateReviewImage3ImageView.setImageBitmap(null);
                     isHasImage3 = false;
-                    if (isHasUploadImage3) isHasUploadImage3 = false;
+                    isHasUploadImage3 = false;
+                    if (mImagePathMap.containsKey(3)) {
+                        mImagePathMap.remove(3);
+                    }
+//                    if (isHasUploadImage3) isHasUploadImage3 = false;
                 }
                 break;
         }
@@ -620,24 +675,41 @@ public class ReviewUpdateFragment extends Fragment
                             JSONObject responseJSONObject = new JSONObject(responseString);
                             String imagePath = Parser.parseUpdateReviewImagePath(responseJSONObject);
                             Log.i(TAG, imagePosition + " imagePath : " + imagePath);
-                            if (mReviewImagePaths.size() >= imagePosition) {
-                                mReviewImagePaths.set(imagePosition - 1, imagePath);
-                            } else {
-                                mReviewImagePaths.add(imagePath);
+//                            if (mReviewImagePaths.size() >= imagePosition) {
+//                                mReviewImagePaths.set(imagePosition - 1, imagePath);
+//                            } else {
+//                                mReviewImagePaths.add(imagePath);
+//                            }
+                            mImagePathMap.put(imagePosition, imagePath);
+                            switch (imagePosition) {
+                                case 1:
+                                    isHasUploadImage1 = false;
+                                    break;
+                                case 2:
+                                    isHasUploadImage2 = false;
+                                    break;
+                                case 3:
+                                    isHasUploadImage3 = false;
+                                    break;
+                            }
+                            if (!isHasUploadImage1 && !isHasUploadImage2 && !isHasUploadImage3) {
+                                requestUpdateReview();
                             }
 
-                            if (isHasUploadImage3 && imagePosition == 3) {
-                                Log.i(TAG, "request position : " + imagePosition);
-                                requestUpdateReview();
-                            }
-                            if (!isHasUploadImage3 && isHasUploadImage2 && imagePosition == 2) {
-                                Log.i(TAG, "request position : " + imagePosition);
-                                requestUpdateReview();
-                            }
-                            if (!isHasUploadImage2 && isHasUploadImage1 && imagePosition == 1) {
-                                Log.i(TAG, "request position : " + imagePosition);
-                                requestUpdateReview();
-                            }
+//
+//
+//                            if (isHasUploadImage3 && imagePosition == 3) {
+//                                Log.i(TAG, "request position : " + imagePosition);
+//                                requestUpdateReview();
+//                            }
+//                            if (!isHasUploadImage3 && isHasUploadImage2 && imagePosition == 2) {
+//                                Log.i(TAG, "request position : " + imagePosition);
+//                                requestUpdateReview();
+//                            }
+//                            if (!isHasUploadImage2 && isHasUploadImage1 && imagePosition == 1) {
+//                                Log.i(TAG, "request position : " + imagePosition);
+//                                requestUpdateReview();
+//                            }
 
 
                         } catch (JSONException e) {
@@ -702,23 +774,34 @@ public class ReviewUpdateFragment extends Fragment
 //        params.put(RATING, String.valueOf(mUpdateReviewRatingBar.getRating()));
 //        params.put(DESCRIPTION, mUpdateReviewTextView.getText().toString());
 
-            JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(RATING, String.valueOf(mUpdateReviewRatingBar.getRating()));
             jsonObject.put(DESCRIPTION, mUpdateReviewTextView.getText().toString());
 
-            if (mReviewImagePaths.size() > 0) {
+//            if (mReviewImagePaths.size() > 0) {
+
 //                Gson gson = new GsonBuilder().create();
 //                JsonArray mReviewImagePathsJsonArray = gson.toJsonTree(mReviewImagePaths).getAsJsonArray();
     //            params.put(IMAGE_PATHS, mReviewImagePathsJsonArray);
 //                jsonObject.put(IMAGE_PATHS, mReviewImagePathsJsonArray);
 
+//                JSONArray imagePathJsonArray = new JSONArray();
+//                for (String str : mReviewImagePaths) {
+//                    imagePathJsonArray.put(str);
+//                }
+//                jsonObject.put(IMAGE_PATHS, imagePathJsonArray);
+//            }
+
+
+            if (mImagePathMap.size() > 0) {
                 JSONArray imagePathJsonArray = new JSONArray();
-                for (String str : mReviewImagePaths) {
-                    imagePathJsonArray.put(str);
+                for (int i = 1; i <= mImagePathMap.size(); i++) {
+                    imagePathJsonArray.put(mImagePathMap.get(i));
                 }
                 jsonObject.put(IMAGE_PATHS, imagePathJsonArray);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
             jsonObject = null;
