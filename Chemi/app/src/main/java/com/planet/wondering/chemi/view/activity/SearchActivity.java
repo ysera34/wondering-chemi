@@ -77,7 +77,11 @@ public class SearchActivity extends BottomNavigationActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        mBackPressCloseHandler.onBackPressed();
+        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        if (mFragment instanceof SearchFragment) {
+            mBackPressCloseHandler.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
