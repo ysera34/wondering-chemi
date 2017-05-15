@@ -22,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.User;
@@ -486,6 +487,7 @@ public class MemberFragment extends Fragment
 
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .crossFade()
                     .into(mArchiveProductImageView);
             mArchiveProductBrandTextView.setText(mProduct.getBrand());
@@ -589,6 +591,7 @@ public class MemberFragment extends Fragment
             mContent = content;
             Glide.with(getActivity())
                     .load(mContent.getImagePath())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .crossFade()
                     .into(mArchiveContentImageView);
             mArchiveContentTitleTextView.setText(mContent.getTitle());
@@ -696,6 +699,7 @@ public class MemberFragment extends Fragment
 
             Glide.with(getActivity())
                     .load(mReviewProduct.getProductImagePath())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .crossFade()
                     .into(mArchiveReviewProductImageView);
             mArchiveReviewProductNameTextView.setText(mReviewProduct.getProductName());

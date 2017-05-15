@@ -791,7 +791,11 @@ public class Parser {
                         Comment parentComment = new Comment();
                         parentComment.setId(commentJSONObject.getInt(COMMENT_ID));
                         parentComment.setUserId(commentJSONObject.getInt(Config.Comment.Key.USER_ID));
-                        parentComment.setUserName(commentJSONObject.getString(USER_NAME));
+                        if (commentJSONObject.getString(USER_NAME).equals("null")) {
+                            parentComment.setUserName("");
+                        } else {
+                            parentComment.setUserName(commentJSONObject.getString(USER_NAME));
+                        }
                         parentComment.setUserGender(commentJSONObject.getInt(USER_GENDER));
                         parentComment.setUserImagePath(commentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                         parentComment.setDescription(commentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
@@ -805,7 +809,11 @@ public class Parser {
                                     childComment.setId(childCommentJSONObject.getInt(COMMENT_ID));
                                     childComment.setParentId(parentComment.getId());
                                     childComment.setUserId(childCommentJSONObject.getInt(Config.Comment.Key.USER_ID));
-                                    childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
+                                    if (childCommentJSONObject.getString(USER_NAME).equals("null")) {
+                                        childComment.setUserName("");
+                                    } else {
+                                        childComment.setUserName(childCommentJSONObject.getString(USER_NAME));
+                                    }
                                     childComment.setUserGender(childCommentJSONObject.getInt(USER_GENDER));
                                     childComment.setUserImagePath(childCommentJSONObject.getString(Config.Comment.Key.USER_IMAGE_PATH));
                                     childComment.setDescription(childCommentJSONObject.getString(Config.Comment.Key.DESCRIPTION));
@@ -854,6 +862,8 @@ public class Parser {
                     user = null;
                 } else {
                     JSONObject tokenObject = responseObject.getJSONObject(RESPONSE_DATA);
+                    user.setName(tokenObject.getString(Config.User.Key.NAME));
+                    user.setPlatformId((byte) tokenObject.getInt(PLATFORM));
                     user.setToken(tokenObject.getString(TOKEN));
                     user.setPushToken(tokenObject.getString(PUSH_TOKEN));
                 }

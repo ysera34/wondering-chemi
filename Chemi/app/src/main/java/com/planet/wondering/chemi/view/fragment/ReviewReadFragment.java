@@ -51,6 +51,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
@@ -263,7 +264,8 @@ public class ReviewReadFragment extends Fragment
 
                     } else {
                         CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                                .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                                .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                        R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                         dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
                     }
                 }
@@ -312,7 +314,8 @@ public class ReviewReadFragment extends Fragment
 
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
@@ -341,7 +344,8 @@ public class ReviewReadFragment extends Fragment
                     }
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
                 }
                 break;

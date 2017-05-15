@@ -1,7 +1,8 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,6 +47,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.DictionaryActivity;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import org.json.JSONObject;
 
@@ -342,10 +344,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 .commit();
     }
 
-    public void onDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.dictionary_fragment_container);
         if (fragment instanceof ChemicalLatestListFragment) {
-            ((ChemicalLatestListFragment) fragment).onDialogFinished(isChose);
+            ((ChemicalLatestListFragment) fragment).onDialogFinished(isChose, requestCode);
         }
     }
 
@@ -629,9 +631,13 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private void requestChemical(int chemicalId, final boolean isCorrect) {
 
-        final ProgressDialog progressDialog =
-                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
-                        getString(R.string.progress_dialog_message_wait), false, false);
+//        final ProgressDialog progressDialog =
+//                ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_chemical),
+//                        getString(R.string.progress_dialog_message_wait), false, false);
+
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(getActivity());
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH + chemicalId,

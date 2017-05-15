@@ -67,10 +67,10 @@ public class DictionaryActivity extends BottomNavigationActivity
     }
 
     @Override
-    public void onDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
         if (fragment instanceof DictionaryFragment) {
-            ((DictionaryFragment) fragment).onDialogFinished(isChose);
+            ((DictionaryFragment) fragment).onDialogFinished(isChose, requestCode);
         }
     }
 

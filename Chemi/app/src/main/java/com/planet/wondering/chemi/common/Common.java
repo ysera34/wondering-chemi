@@ -26,4 +26,12 @@ public class Common {
     public static final String CONTENT_SHARE_TEMPLATE_CODE = "3827";
     public static final String PRODUCT_SHARE_TEMPLATE_CODE = "3828";
 
+    public static final int CLEAR_DIALOG_REQUEST_CODE = 3111;
+    public static final int LOGIN_DIALOG_REQUEST_CODE = 3112;
+    public static final int LOGOUT_DIALOG_REQUEST_CODE = 3113;
+    public static final int REVOKE_DIALOG_REQUEST_CODE = 3114;
+    public static final int WITHDRAW_DIALOG_REQUEST_CODE = 3115;
+    public static final int PROMOTE_EXTRA_DIALOG_REQUEST_CODE = 3116;
+
+
 }

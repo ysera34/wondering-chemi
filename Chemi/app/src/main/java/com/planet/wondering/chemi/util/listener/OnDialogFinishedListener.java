@@ -6,5 +6,5 @@ package com.planet.wondering.chemi.util.listener;
 
 public interface OnDialogFinishedListener {
 
-    void onDialogFinished(boolean isChose);
+    void onDialogFinished(boolean isChose, int requestCode);
 }

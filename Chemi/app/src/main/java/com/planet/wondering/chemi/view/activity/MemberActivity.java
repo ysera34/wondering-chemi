@@ -118,6 +118,11 @@ public class MemberActivity extends BottomNavigationActivity
 //                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.main_fragment_container, MemberConfigFAQFragment.newInstance())
                         .commit();
+            } else if (mRequestId == 5) {
+                mBottomNavigationLayout.setVisibility(View.GONE);
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, MemberAskInfoFragment.newInstance(null, 5))
+                        .commit();
             }
         } else if (mFragment instanceof MemberFragment) {
             if (mAccessToken != null) {
@@ -207,10 +212,10 @@ public class MemberActivity extends BottomNavigationActivity
     }
 
     @Override
-    public void onDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
         if (fragment instanceof MemberConfigProfileFragment) {
-            ((MemberConfigProfileFragment) fragment).onDialogFinished(isChose);
+            ((MemberConfigProfileFragment) fragment).onDialogFinished(isChose, requestCode);
         }
     }
 
@@ -320,10 +325,15 @@ public class MemberActivity extends BottomNavigationActivity
         } else if (fragment instanceof MemberAskInfoFragment) {
 //            mBottomNavigationLayout.setVisibility(View.VISIBLE);
             showBottomNavigationView();
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
-                    .commit();
+            if (mRequestId == -1) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
+                        .commit();
+            } else if (mRequestId == 5){
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         } else {
             super.onBackPressed();
         }

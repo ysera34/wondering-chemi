@@ -56,6 +56,7 @@ public class MemberAskInfoFragment extends Fragment
     private static final String TAG = MemberAskInfoFragment.class.getSimpleName();
 
     private static final String ARG_CONFIG_USER = "config_user";
+    private static final String ARG_REQUEST_CODE = "request_code";
 
     public static MemberAskInfoFragment newInstance() {
 
@@ -70,6 +71,17 @@ public class MemberAskInfoFragment extends Fragment
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIG_USER, user);
+
+        MemberAskInfoFragment fragment = new MemberAskInfoFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MemberAskInfoFragment newInstance(User user, int requestCode) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CONFIG_USER, user);
+        args.putInt(ARG_REQUEST_CODE, requestCode);
 
         MemberAskInfoFragment fragment = new MemberAskInfoFragment();
         fragment.setArguments(args);
@@ -99,12 +111,14 @@ public class MemberAskInfoFragment extends Fragment
     private TextView mAskInfoSubmitTextView;
 
     private User mUser;
+    private int mRequestCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
+        mRequestCode = getArguments().getInt(ARG_REQUEST_CODE, -1);
     }
 
     @Nullable
@@ -150,7 +164,10 @@ public class MemberAskInfoFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         validateBirthYearEditText();
-        bindUserInfo(mUser);
+
+        if (mUser != null) {
+            bindUserInfo(mUser);
+        }
     }
 
     private void bindUserInfo(User user) {
@@ -424,7 +441,12 @@ public class MemberAskInfoFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, response.toString());
                         Toast.makeText(getActivity(), "회원정보가 업데이트 되었습니다.", Toast.LENGTH_SHORT).show();
-                        mUserInfoUpdateListener.onUserInfoValueUpdate();
+                        if (mRequestCode == -1) {
+                            mUserInfoUpdateListener.onUserInfoValueUpdate();
+                        } else if (mRequestCode == 5) {
+                            getActivity().finish();
+                            getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                        }
 //                        mUserInfoUpdateListener.onUserInfoValueUpdate(user);
 //                        getActivity().onBackPressed();
                     }

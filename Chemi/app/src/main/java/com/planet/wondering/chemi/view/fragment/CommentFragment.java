@@ -390,8 +390,12 @@ public class CommentFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                mParentComment.setPositionY(v.getY());
-                requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
+                if (mParentComment.getUserName().equals("")) {
+                    Toast.makeText(getActivity(), "해당 글에는 답글을 작성할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    mParentComment.setPositionY(v.getY());
+                    requestConfirmCommentAuthor(mRelevantId, mParentComment, mCommentType, PARENT_COMMENT_CLASS);
+                }
             } else {
                 Toast.makeText(getActivity(), "로그인 하시면 답글을 작성하실 수 있어요.", Toast.LENGTH_SHORT).show();
 //                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
@@ -462,8 +466,12 @@ public class CommentFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                mChildComment.setPositionY(v.getY());
-                requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
+                if (mChildComment.getUserName().equals("")) {
+                    Toast.makeText(getActivity(), "해당 글에는 답글을 작성할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    mChildComment.setPositionY(v.getY());
+                    requestConfirmCommentAuthor(mRelevantId, mChildComment, mCommentType, CHILD_COMMENT_CLASS);
+                }
             } else {
                 Toast.makeText(getActivity(), "로그인 하시면 답글을 작성하실 수 있어요.", Toast.LENGTH_SHORT).show();
 //                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment

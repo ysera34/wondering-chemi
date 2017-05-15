@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Review;
@@ -45,6 +48,7 @@ import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ImageHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -174,8 +178,9 @@ public class ReviewUpdateFragment extends Fragment
                 .load(mReview.getProductImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .override(240, 160)
                 .crossFade()
-                .override(300, 200)
                 .into(mUpdateProductImageView);
         mUpdateProductBrandTextView.setText(mReview.getProductBrand());
         mUpdateProductNameTextView.setText(mReview.getProductName());
@@ -271,10 +276,15 @@ public class ReviewUpdateFragment extends Fragment
     private boolean isHasImage2 = false;
     private boolean isHasImage3 = false;
 
+    CustomProgressDialog mProgressDialog;
+
     @Override
     public void onClick(View v) {
+        mProgressDialog = new CustomProgressDialog(getActivity());
         switch (v.getId()) {
             case R.id.review_update_confirm_layout:
+                mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                mProgressDialog.show();
                 if (!isHasUploadImage1 && !isHasUploadImage2 && !isHasUploadImage3) {
 //                    mReviewImagePaths.clear();
                     requestUpdateReview();
@@ -814,6 +824,9 @@ public class ReviewUpdateFragment extends Fragment
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        if (mProgressDialog.isShowing()) {
+                            mProgressDialog.dismiss();
+                        }
                         Toast.makeText(getActivity(),
                                 "작성하신 리뷰가 수정되었습니다.", Toast.LENGTH_SHORT).show();
                         getActivity().onBackPressed();
@@ -822,6 +835,9 @@ public class ReviewUpdateFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (mProgressDialog.isShowing()) {
+                            mProgressDialog.dismiss();
+                        }
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();

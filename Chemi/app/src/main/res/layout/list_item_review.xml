@@ -3,6 +3,7 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:paddingTop="13dp"
               android:background="@drawable/selector_ripple_list_item_border_gray">
 
     <LinearLayout
@@ -190,8 +191,8 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="24dp"
             android:paddingTop="8dp"
-            android:orientation="vertical"
-            android:background="@drawable/widget_border_top">
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/list_item_review_content_text_view"
@@ -208,7 +209,7 @@
                 android:id="@+id/list_item_review_images_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 android:gravity="start">
 

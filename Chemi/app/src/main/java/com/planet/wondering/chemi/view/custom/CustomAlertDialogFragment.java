@@ -30,11 +30,13 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
     public static final String CLEAR_DIALOG = "clear_dialog";
     public static final String REVOKE_DIALOG = "revoke_dialog";
     public static final String WITHDRAW_DIALOG = "withdraw_dialog";
+    public static final String EXTRA_DIALOG = "extra_dialog";
 
     private static final String ARG_ICON_ID = "icon_id";
     private static final String ARG_TITLE_ID = "title_id";
     private static final String ARG_MESSAGE_ID = "message_id";
     private static final String ARG_POSITIVE_STRING_ID = "positive_string_id";
+    private static final String ARG_REQUEST_CODE = "request_code";
 
     public static CustomAlertDialogFragment newInstance() {
 
@@ -45,12 +47,26 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
         return fragment;
     }
 
-    public static CustomAlertDialogFragment newInstance(int iconId, int messageId, int positiveStringId) {
+//    public static CustomAlertDialogFragment newInstance(int iconId, int messageId, int positiveStringId) {
+//
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_ICON_ID, iconId);
+//        args.putInt(ARG_MESSAGE_ID, messageId);
+//        args.putInt(ARG_POSITIVE_STRING_ID, positiveStringId);
+//
+//        CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+
+    public static CustomAlertDialogFragment newInstance(int iconId, int messageId,
+                                                        int positiveStringId, int requestCode) {
 
         Bundle args = new Bundle();
         args.putInt(ARG_ICON_ID, iconId);
         args.putInt(ARG_MESSAGE_ID, messageId);
         args.putInt(ARG_POSITIVE_STRING_ID, positiveStringId);
+        args.putInt(ARG_REQUEST_CODE, requestCode);
 
         CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
         fragment.setArguments(args);
@@ -61,6 +77,7 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
     private int mTitleId;
     private int mMessageId;
     private int mPositiveStringId;
+    private int mRequestCode;
 
     private ImageView mCustomAlertDialogIconImageView;
     private TextView mCustomAlertDialogMessageTextView;
@@ -77,6 +94,7 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
         mTitleId = getArguments().getInt(ARG_TITLE_ID, -1);
         mMessageId = getArguments().getInt(ARG_MESSAGE_ID, -1);
         mPositiveStringId = getArguments().getInt(ARG_POSITIVE_STRING_ID, -1);
+        mRequestCode = getArguments().getInt(ARG_REQUEST_CODE, -1);
     }
 
     @NonNull
@@ -143,11 +161,11 @@ public class CustomAlertDialogFragment extends DialogFragment implements View.On
         switch (v.getId()) {
             case R.id.custom_alert_dialog_positive_button:
                 getDialog().dismiss();
-                mDialogFinishedListener.onDialogFinished(true);
+                mDialogFinishedListener.onDialogFinished(true, mRequestCode);
                 break;
             case R.id.custom_alert_dialog_negative_button:
                 getDialog().dismiss();
-                mDialogFinishedListener.onDialogFinished(false);
+                mDialogFinishedListener.onDialogFinished(false, mRequestCode);
                 break;
 
         }

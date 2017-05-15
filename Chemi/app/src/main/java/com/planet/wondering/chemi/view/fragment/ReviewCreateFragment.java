@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +34,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.BottomSheetMenu;
 import com.planet.wondering.chemi.model.Product;
@@ -44,6 +47,7 @@ import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ImageHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -184,8 +188,9 @@ public class ReviewCreateFragment extends Fragment
                 .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .override(240, 160)
                 .crossFade()
-                .override(300, 200)
                 .into(mReviewCreateProductImageView);
         mReviewCreateProductBrandTextView.setText(mProduct.getBrand());
         mReviewCreateProductNameTextView.setText(mProduct.getName());
@@ -521,6 +526,10 @@ public class ReviewCreateFragment extends Fragment
 
     private void requestCreateReview() {
 
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(getActivity());
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+
         MultipartRequest multipartRequest = new MultipartRequest(
                 Request.Method.POST, URL_HOST + PATH + mProduct.getId() + Config.Review.PATH,
                 new Response.Listener<NetworkResponse>() {
@@ -536,6 +545,7 @@ public class ReviewCreateFragment extends Fragment
 //                        }
 //                        String responseString = new String(response.data);
 //                        Log.i(TAG, responseString.toString());
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(),
                                 "작성하신 리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                         getActivity().onBackPressed();
@@ -545,6 +555,7 @@ public class ReviewCreateFragment extends Fragment
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
                         mReviewCreateConfirmLayout.setEnabled(true);

@@ -32,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kakao.kakaolink.internal.KakaoTalkLinkProtocol;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
@@ -55,7 +56,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
+import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
@@ -104,6 +107,10 @@ public class ProductActivity extends AppBaseActivity
     private AppBarLayout mProductAppBarLayout;
     private CollapsingToolbarLayout mProductCollapsingToolbarLayout;
     private Toolbar mProductToolbar;
+
+    private TextView mProductDetailToolbarTitleTextView;
+    private TextView mProductDetailToolbarSubTitleTextView;
+
     private ImageView mProductDetailImageView;
     private RatingBar mProductDetailReviewRatingBar;
     private TextView mProductDetailReviewRatingValueTextView;
@@ -147,6 +154,9 @@ public class ProductActivity extends AppBaseActivity
         setSupportActionBar(mProductToolbar);
         mProductToolbar.setTitle(null);
 
+        mProductDetailToolbarTitleTextView = (TextView) findViewById(R.id.product_detail_toolbar_title_text_view);
+        mProductDetailToolbarSubTitleTextView = (TextView) findViewById(R.id.product_detail_toolbar_sub_title_text_view);
+
         mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
         mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);
         mProductDetailReviewRatingValueTextView =
@@ -169,13 +179,24 @@ public class ProductActivity extends AppBaseActivity
 
     private void bindProduct(Product product) {
 
-        setTitle(mProduct.getBrand());
-        mProductToolbar.setSubtitle(mProduct.getName());
+        mProductDetailToolbarTitleTextView.setText(String.valueOf(mProduct.getBrand()));
+        mProductDetailToolbarSubTitleTextView.setText(String.valueOf(mProduct.getName()));
+
+        mProductDetailToolbarSubTitleTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mProductDetailToolbarSubTitleTextView.setSelected(true);
+            }
+        }, 1500);
+
+//        setTitle(mProduct.getBrand());
+//        mProductToolbar.setSubtitle(mProduct.getName());
 
         Glide.with(getApplicationContext())
                 .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
 //                .override(700, 460)
                 .into(mProductDetailImageView);
@@ -220,7 +241,8 @@ public class ProductActivity extends AppBaseActivity
                     requestArchiveProduct(mProduct.isArchive());
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
@@ -232,10 +254,16 @@ public class ProductActivity extends AppBaseActivity
     }
 
     @Override
-    public void onDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
         if (isChose) {
-            startActivity(MemberStartActivity.newIntent(getApplicationContext()));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            if (requestCode == LOGIN_DIALOG_REQUEST_CODE) {
+                startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            } else if (requestCode == PROMOTE_EXTRA_DIALOG_REQUEST_CODE) {
+                startActivityForResult(MemberActivity.newIntent(getApplicationContext(), 5),
+                        PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
         }
     }
 
@@ -354,7 +382,7 @@ public class ProductActivity extends AppBaseActivity
         String prefixTitle = "";
         if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
             prefixTitle = getString(R.string.share_user_name_format,
-                    UserSharedPreferences.getStoredUserName(getApplicationContext()));
+                    UserSharedPreferences.getStoredUserName(getApplicationContext())) + " ";
         }
 
         Map<String, String> templateArgs = new HashMap<>();

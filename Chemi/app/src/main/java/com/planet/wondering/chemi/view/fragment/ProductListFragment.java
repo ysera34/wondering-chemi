@@ -36,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
@@ -627,8 +628,9 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .override(240, 160)
                     .crossFade()
-                    .override(300, 200)
                     .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));
             mProductNameTextView.setText(String.valueOf(mProduct.getName()));

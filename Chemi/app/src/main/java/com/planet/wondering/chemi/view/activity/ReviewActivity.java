@@ -41,6 +41,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.Review.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -190,8 +191,8 @@ public class ReviewActivity extends BottomNavigationActivity
     }
 
     @Override
-    public void onDialogFinished(boolean isChose) {
-        if (isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
+        if (isChose && requestCode == LOGIN_DIALOG_REQUEST_CODE) {
             startActivity(MemberStartActivity.newIntent(getApplicationContext()));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else {

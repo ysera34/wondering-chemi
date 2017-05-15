@@ -27,12 +27,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_IS_FIRST_USER = "is_first_user";
 
-    private RelativeLayout mSearchView;
-    private Button mSearchButton;
-    private ImageButton mSearchImageButton;
-
-    private Animation mSearchViewAnimation;
-
     public static SearchFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -51,6 +45,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private RelativeLayout mSearchView;
+    private Button mSearchButton;
+    private ImageButton mSearchImageButton;
+
+    private Animation mSearchViewAnimation;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

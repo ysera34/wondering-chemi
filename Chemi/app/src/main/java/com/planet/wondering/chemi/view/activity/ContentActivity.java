@@ -64,6 +64,7 @@ import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_IN
 import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.CONTENT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
@@ -173,7 +174,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
                     } else {
                         CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                                .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                                .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                        R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                         dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                     }
                 }
@@ -190,7 +192,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                 } else {
                     mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
@@ -241,7 +244,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     }
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
                 break;
@@ -276,7 +280,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     requestLikeContent(mContent.isLike());
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
 //                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_true));
@@ -286,7 +291,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     requestArchiveContent(mContent.isArchive());
                 } else {
                     CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message, R.string.login_button_title);
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
                     dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
                 }
 //                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
@@ -556,7 +562,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         String prefixTitle = "";
         if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
             prefixTitle = getString(R.string.share_user_name_format,
-                    UserSharedPreferences.getStoredUserName(getApplicationContext()));
+                    UserSharedPreferences.getStoredUserName(getApplicationContext())) + " ";
         }
 
         Map<String, String> templateArgs = new HashMap<>();
@@ -779,8 +785,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     }
 
     @Override
-    public void onDialogFinished(boolean isChose) {
-        if (isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
+        if (isChose && requestCode == LOGIN_DIALOG_REQUEST_CODE) {
             startActivity(MemberStartActivity.newIntent(getApplicationContext()));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else {

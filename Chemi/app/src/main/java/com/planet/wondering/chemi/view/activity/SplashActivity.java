@@ -32,11 +32,11 @@ public class SplashActivity extends AppBaseActivity {
                 if (UserSharedPreferences.getStoredIntroSlide(getApplicationContext())) {
                     Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
                     startActivity(intent);
-//                    finish();
+                    finish();
                 } else {
                     Intent intent = new Intent(SplashActivity.this, IntroActivity.class);
                     startActivity(intent);
-//                    finish();
+                    finish();
                 }
 
             }

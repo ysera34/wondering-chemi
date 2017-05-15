@@ -105,6 +105,36 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:layout_collapseMode="pin">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/product_detail_toolbar_title_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorFontNormal"/>
+
+                    <TextView
+                        android:id="@+id/product_detail_toolbar_sub_title_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:textSize="13sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/colorFontNormal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"/>
+
+                </LinearLayout>
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>

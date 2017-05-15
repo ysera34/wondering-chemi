@@ -66,6 +66,9 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
+import static com.planet.wondering.chemi.common.Common.LOGOUT_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
@@ -341,31 +344,29 @@ public class MemberConfigProfileFragment extends Fragment
                 break;
             case R.id.member_config_profile_sign_out_layout:
                 CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                        .newInstance(R.drawable.ic_logout, R.string.logout_info_message, R.string.logout_button_title);
+                        .newInstance(R.drawable.ic_logout, R.string.logout_info_message,
+                                R.string.logout_button_title, LOGOUT_DIALOG_REQUEST_CODE);
                 dialogFragment1.show(getFragmentManager(), LOGOUT_DIALOG);
-                mDialogType = 1;
                 break;
             case R.id.member_config_profile_revoke_layout:
                 CustomAlertDialogFragment dialogFragment3 = CustomAlertDialogFragment
-                        .newInstance(R.drawable.ic_logout, R.string.revoke_info_message, R.string.revoke_button_title);
+                        .newInstance(R.drawable.ic_logout, R.string.revoke_info_message,
+                                R.string.revoke_button_title, REVOKE_DIALOG_REQUEST_CODE);
                 dialogFragment3.show(getFragmentManager(), REVOKE_DIALOG);
-                mDialogType = 2;
                 break;
             case R.id.member_config_profile_withdraw_layout:
                 CustomAlertDialogFragment dialogFragment2 = CustomAlertDialogFragment
-                        .newInstance(R.drawable.ic_logout, R.string.withdraw_info_message, R.string.withdraw_button_title);
+                        .newInstance(R.drawable.ic_logout, R.string.withdraw_info_message,
+                                R.string.withdraw_button_title, WITHDRAW_DIALOG_REQUEST_CODE);
                 dialogFragment2.show(getFragmentManager(), WITHDRAW_DIALOG);
-                mDialogType = 3;
                 break;
         }
     }
 
-    private byte mDialogType = 0;
-
-    public void onDialogFinished(boolean isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
         if (isChose) {
-            switch (mDialogType) {
-                case 1:
+            switch (requestCode) {
+                case LOGOUT_DIALOG_REQUEST_CODE:
                     // need to know platform id and have to sign out
                     UserSharedPreferences.removeStoredToken(getActivity());
 
@@ -377,9 +378,8 @@ public class MemberConfigProfileFragment extends Fragment
 
                     Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
-                    mDialogType = 0;
                     break;
-                case 2:
+                case REVOKE_DIALOG_REQUEST_CODE:
                     UserSharedPreferences.removeStoredToken(getActivity());
 
                     if (mUserPlatformId == 1) {
@@ -390,13 +390,11 @@ public class MemberConfigProfileFragment extends Fragment
 
                     Toast.makeText(getActivity(), "연동해제 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
-                    mDialogType = 0;
                     break;
-                case 3:
+                case WITHDRAW_DIALOG_REQUEST_CODE:
                     // need to know platform id and have to revoke
                     // want to leave member and then have to revoke
                     Toast.makeText(getActivity(), "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
-                    mDialogType = 0;
                     break;
             }
         }

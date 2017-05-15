@@ -21,13 +21,22 @@ public class SearchActivity extends BottomNavigationActivity
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
+    private static final String EXTRA_IS_FIRST_USER = "com.planet.wondering.chemi.is_first_user";
+
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, SearchActivity.class);
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, boolean isFirstUser) {
+        Intent intent = new Intent(packageContext, SearchActivity.class);
+        intent.putExtra(EXTRA_IS_FIRST_USER, isFirstUser);
+        return intent;
+    }
+
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
+    private boolean mIsFirstUser;
 
     private BackPressCloseHandler mBackPressCloseHandler;
 
@@ -35,13 +44,15 @@ public class SearchActivity extends BottomNavigationActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsFirstUser = getIntent().getBooleanExtra(EXTRA_IS_FIRST_USER, false);
+
         mBackPressCloseHandler = new BackPressCloseHandler(SearchActivity.this);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
-            mFragment = SearchFragment.newInstance(true);
+            mFragment = SearchFragment.newInstance(mIsFirstUser);
             mFragmentManager.beginTransaction()
                     .add(R.id.main_fragment_container, mFragment)
 //                    .addToBackStack(null)

@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static com.planet.wondering.chemi.common.Common.CLEAR_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
 import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_CHEMICAL_NAME;
 import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_PATH;
@@ -386,7 +387,7 @@ public class ChemicalLatestListFragment extends Fragment {
             if (v.getId() == R.id.list_item_chemical_latest_clear_layout) {
                 CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment
                         .newInstance(R.drawable.ic_dictionary, R.string.search_clear_info_message,
-                                R.string.search_clear_button_title);
+                                R.string.search_clear_button_title, CLEAR_DIALOG_REQUEST_CODE);
                 dialogFragment.show(getFragmentManager(), CLEAR_DIALOG);
 //                mChemicalLatestAdapter.clearChemical();
 //                mChemicalLatestAdapter.notifyDataSetChanged();
@@ -394,8 +395,8 @@ public class ChemicalLatestListFragment extends Fragment {
         }
     }
 
-    public void onDialogFinished(boolean isChose) {
-        if (isChose) {
+    public void onDialogFinished(boolean isChose, int requestCode) {
+        if (isChose && requestCode == CLEAR_DIALOG_REQUEST_CODE) {
             mChemicalLatestAdapter.clearChemical();
             mChemicalLatestAdapter.notifyDataSetChanged();
         }

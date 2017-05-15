@@ -1,6 +1,8 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
 
 import org.json.JSONObject;
@@ -164,7 +167,7 @@ public class MemberSurveyInfoFragment extends Fragment
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(SearchActivity.newIntent(getActivity()));
+                        startActivity(SearchActivity.newIntent(getActivity(), true));
                         getActivity().finish();
                     }
                 });
@@ -182,13 +185,13 @@ public class MemberSurveyInfoFragment extends Fragment
 
                 } else if (currentStage == mMemberSurveyStageFragments.size() - 1) {
                     requestSubmitUserInfo(mUser);
-                    startActivity(SearchActivity.newIntent(getActivity()));
-                    getActivity().finish();
+//                    startActivity(SearchActivity.newIntent(getActivity()));
+//                    getActivity().finish();
                 }
                 if (currentStage == 3 && !mUser.isHasChild()) {
                     requestSubmitUserInfo(mUser);
-                    startActivity(SearchActivity.newIntent(getActivity()));
-                    getActivity().finish();
+//                    startActivity(SearchActivity.newIntent(getActivity()));
+//                    getActivity().finish();
                 }
                 break;
         }
@@ -342,6 +345,10 @@ public class MemberSurveyInfoFragment extends Fragment
 
     private void requestSubmitUserInfo(User user) {
 
+        final CustomProgressDialog progressDialog = new CustomProgressDialog(getActivity());
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+
         Log.i(TAG, user.toString());
 
         Map<String, String> params = new HashMap<>();
@@ -360,11 +367,17 @@ public class MemberSurveyInfoFragment extends Fragment
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, response.toString());
+                        progressDialog.dismiss();
+
+                        startActivity(SearchActivity.newIntent(getActivity(), true));
+                        getActivity().finish();
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();
