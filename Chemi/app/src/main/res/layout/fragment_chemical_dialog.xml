@@ -103,7 +103,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="근거 자료가 풍부해요"
                 android:textSize="12sp"
                 android:textColor="@color/colorDoveGray"/>
 

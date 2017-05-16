@@ -71,12 +71,15 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL_STRING;
+import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
+import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -586,8 +589,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -608,14 +610,14 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         progressDialog.show();
 
         Map<String, String> params = new HashMap<>();
-        params.put("name", name);
+        params.put(NAME, name);
         if (mPlatformId == 1) {
-            params.put("accessToken", mGoogleSignInAccount.getIdToken());
+            params.put(ACCESS_TOKEN, mGoogleSignInAccount.getIdToken());
         } else if (mPlatformId == 2) {
-            params.put("accessToken", mAccessToken);
+            params.put(ACCESS_TOKEN, mAccessToken);
         }
-        params.put("platform", String.valueOf(mPlatformId));
-        params.put("pushToken", FirebaseInstanceId.getInstance().getToken());
+        params.put(PLATFORM, String.valueOf(mPlatformId));
+        params.put(PUSH_TOKEN, FirebaseInstanceId.getInstance().getToken());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
@@ -667,8 +669,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }

@@ -15,7 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--libraryjars ../app/libs/naveroauthlogin_4.1.4.jar
+-dontshrink
+#-libraryjars ../app/libs/naveroauthlogin_4.1.4.jar
 -keep public class com.nhn.android.naverlogin.** {
        public protected *;
 }
+# Bottom Navigation Helper
+-keep class android.support.design.internal.BottomNavigationItemView{ *; }
+-keep class android.support.design.internal.BottomNavigationMenuView{ *; }

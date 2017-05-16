@@ -31,7 +31,7 @@
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:id="@+id/member_config_profile_text_view"
@@ -58,8 +58,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,8 +84,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,7 +111,7 @@
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -140,8 +138,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -168,8 +165,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -194,7 +190,7 @@
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -219,8 +215,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"
@@ -247,7 +242,7 @@
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorWhite">
+        android:background="@drawable/selector_ripple_list_item_border_gray">
 
         <TextView
             android:layout_width="wrap_content"

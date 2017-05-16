@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:background="@color/colorWhite">
+    android:background="@drawable/selector_ripple_list_item_border_gray">
 
     <TextView
         android:id="@+id/list_item_tag_name_text_view"

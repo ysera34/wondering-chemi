@@ -41,6 +41,7 @@ import static com.planet.wondering.chemi.common.Common.CLEAR_DIALOG_REQUEST_CODE
 import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
 import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_CHEMICAL_NAME;
 import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_PATH;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.encodeUTF8;
@@ -526,8 +527,7 @@ public class ChemicalLatestListFragment extends Fragment {
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -573,8 +573,7 @@ public class ChemicalLatestListFragment extends Fragment {
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }

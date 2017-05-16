@@ -69,6 +69,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.planet.wondering.chemi.common.Common.LOGOUT_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.WITHDRAW_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
@@ -533,8 +534,7 @@ public class MemberConfigProfileFragment extends Fragment
         };
 
         multipartRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(multipartRequest, TAG);
     }

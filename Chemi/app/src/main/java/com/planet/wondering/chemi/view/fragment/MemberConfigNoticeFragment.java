@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Notice.NOTICE_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -147,8 +149,7 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -238,7 +239,7 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
 
         public void bindParentNotice(Notice notice) {
             mParentNotice = notice;
-            mTitleTextView.setText(String.valueOf(mParentNotice.getTitle()));
+            mTitleTextView.setText(Html.fromHtml(String.valueOf(mParentNotice.getTitle())));
             mDateTextView.setText(String.valueOf(mParentNotice.getCreateDate()));
         }
 
@@ -304,7 +305,7 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
 
         public void bindChildNotice(NoticeBody noticeBody) {
             mNoticeBody = noticeBody;
-            mDescriptionTextView.setText(String.valueOf(mNoticeBody.getDescription()));
+            mDescriptionTextView.setText(Html.fromHtml(String.valueOf(mNoticeBody.getDescription())));
         }
     }
 

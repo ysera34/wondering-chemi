@@ -29,8 +29,9 @@ public class Config {
     public static final String PAGE_NEXT = "next";
     public static final String QUERY_START = "?";
 
-    public static final int SOCKET_TIMEOUT_GET_REQ = 5000;
-    public static final int SOCKET_TIMEOUT_POST_REQ = 10000;
+    public static final int SOCKET_TIMEOUT_GET_REQ = 10000;
+    public static final int SOCKET_TIMEOUT_POST_REQ = 20000;
+    public static final int NUMBER_OF_RETRIES = 2;
 
     public static final class User {
         public static final String PATH = File.separator + "users";

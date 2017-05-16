@@ -1,6 +1,8 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
@@ -211,7 +212,18 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
                 this.dismiss();
                 break;
             case R.id.chemical_dialog_update_request_button_text_view:
-                Toast.makeText(getActivity(), "수정 요청 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "수정 요청 하였습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND, Uri.fromParts(
+                        "mailto", getString(R.string.administrator_support_email), null));
+//                        intent.setData(Uri.parse("mailto:chemi.helper@gmail.com"));
+                intent.setType("text/plain");
+//                        intent.putExtra(Intent.EXTRA_EMAIL, "chemi.helper@gmail.com");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.administrator_support_email)});
+                intent.putExtra(Intent.EXTRA_TEXT, getChemicalReport());
+                intent.putExtra(Intent.EXTRA_SUBJECT,
+                        getString(R.string.request_chemical_subject));
+                intent = Intent.createChooser(intent, getString(R.string.request_chemical_title));
+                startActivity(intent);
                 break;
         }
     }
@@ -269,4 +281,10 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
             mHazardDescriptionTextView.setText(mHazard.getDescription());
         }
     }
+
+    private String getChemicalReport() {
+
+        return getString(R.string.request_chemical_description, mChemical.getNameKo());
+    }
+
 }

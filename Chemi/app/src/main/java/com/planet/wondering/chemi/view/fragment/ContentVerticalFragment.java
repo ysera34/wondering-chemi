@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
 
@@ -213,6 +214,7 @@ public class ContentVerticalFragment extends Fragment {
             mContentImagePath = contentImagePath;
             Glide.with(getActivity())
                     .load(mContentImagePath)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .crossFade()
                     .into(mContentImageImageView);
         }

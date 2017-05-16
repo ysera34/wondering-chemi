@@ -60,6 +60,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.CTAG_PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
@@ -673,8 +674,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }

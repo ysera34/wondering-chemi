@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
 
 /**
@@ -65,6 +66,7 @@ public class ContentImageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Glide.with(getActivity())
                 .load(mContentPartialImagePath)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
                 .into(mContentPartialImageView);
     }

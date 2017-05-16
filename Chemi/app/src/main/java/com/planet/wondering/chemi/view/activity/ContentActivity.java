@@ -73,6 +73,7 @@ import static com.planet.wondering.chemi.network.Config.Content.CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.KEEPER_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.QUERY_ADD_COUNT;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -348,8 +349,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -443,8 +443,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -497,8 +496,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -551,8 +549,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -831,23 +828,6 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             if (taskInfo.numActivities == 1) {
                 startActivity(ContentListActivity.newIntent(getApplicationContext()));
             }
-
-//            Iterator<ActivityManager.RunningTaskInfo> iterator = runningTaskInfos.iterator();
-//
-//            while (iterator.hasNext()) {
-//                ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo) iterator.next();
-//                int id = runningTaskInfo.id;
-//                CharSequence desc = runningTaskInfo.description;
-//                int numOfActivities = runningTaskInfo.numActivities;
-//                String topActivity = runningTaskInfo.topActivity.getShortClassName();
-//                String activityName = runningTaskInfo.
-//                Log.i("id", String.valueOf(id));
-//                Log.i("desc", String.valueOf(desc));
-//                Log.i("numOfActivities", String.valueOf(numOfActivities));
-//                Log.i("topActivity", String.valueOf(topActivity));
-//
-//            }
-
             super.onBackPressed();
         }
     }

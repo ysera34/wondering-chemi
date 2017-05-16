@@ -51,7 +51,8 @@ import static com.planet.wondering.chemi.common.Common.PRODUCT_TAG_CHARACTER_REQ
  * Created by yoon on 2017. 3. 20..
  */
 
-public class MemberConfigRequestFragment extends Fragment implements View.OnClickListener {
+public class MemberConfigRequestFragment extends Fragment
+        implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = MemberConfigRequestFragment.class.getSimpleName();
 
@@ -202,6 +203,7 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
         mImage3ImageView = (ImageView) view.findViewById(R.id.member_config_request_image3_image_view);
         mImage3ImageView.setOnClickListener(this);
         mDetailsEditText = (EditText) view.findViewById(R.id.member_config_request_details_edit_text);
+        mDetailsEditText.setOnFocusChangeListener(this);
 
         return view;
     }
@@ -253,6 +255,22 @@ public class MemberConfigRequestFragment extends Fragment implements View.OnClic
                     checkStoragePermission(3);
                 } else {
                     createEditImageMenuBottomSheetDialog(3);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.member_config_request_details_edit_text:
+                if (hasFocus) {
+//                    mConfigRequestNestedScrollView.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mConfigRequestNestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
+//                        }
+//                    }, 350);
                 }
                 break;
         }

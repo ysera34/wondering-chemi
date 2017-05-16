@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_ID;
@@ -179,6 +180,7 @@ public class Parser {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
                 int tagSize = responseObject.getInt(TAG_COUNT);
                 if (tagSize > 0) {
                 JSONArray tagJSONArray = responseObject.getJSONArray(RESPONSE_DATA);

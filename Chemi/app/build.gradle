@@ -11,22 +11,22 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-//    signingConfigs {
-//        config {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
     signingConfigs {
         config {
-            keyAlias 'ChemiAndroidKey'
-            keyPassword 'chemireleasekey'
-            storeFile file('/Users/yoon/AndroidStudioProjects/WonderingPlanet/Reference/keystores/ChemiAndroidKey.jks')
-            storePassword 'chemiandroid'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
+//    signingConfigs {
+//        config {
+//            keyAlias 'ChemiAndroidKey'
+//            keyPassword 'chemireleasekey'
+//            storeFile file('/Users/yoon/AndroidStudioProjects/WonderingPlanet/Reference/keystores/ChemiAndroidKey.jks')
+//            storePassword 'chemiandroid'
+//        }
+//    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
@@ -39,6 +39,11 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config

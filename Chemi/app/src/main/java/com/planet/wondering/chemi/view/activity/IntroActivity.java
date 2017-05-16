@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
@@ -33,8 +29,6 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
     private TextView[] mIndicators;
     private TextView mIntroSkipButtonTextView;
     private Button mIntroEndButton;
-    private IntroViewPagerAdapter mIntroViewPagerAdapter;
-    private ArrayList<Integer> mIntroImageResIds;
 
     private ArrayList<Fragment> mIntroFragments;
 
@@ -47,11 +41,6 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
             startActivity(intent);
             finish();
         }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().getDecorView().setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//        }
 
         setContentView(R.layout.activity_intro);
         mIntroViewPager = (ViewPager) findViewById(R.id.intro_view_pager);
@@ -69,16 +58,6 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
         mIntroSkipButtonTextView.setOnClickListener(this);
         mIntroEndButton = (Button) findViewById(R.id.intro_end_button);
         mIntroEndButton.setOnClickListener(this);
-
-//        mIntroImageResIds = new ArrayList<>();
-//        mIntroImageResIds.add(R.drawable.intro_slide01);
-//        mIntroImageResIds.add(R.drawable.intro_slide02);
-//        mIntroImageResIds.add(R.drawable.intro_slide03);
-//        mIntroImageResIds.add(R.drawable.intro_slide04);
-//        mIntroImageResIds.add(R.drawable.intro_slide05);
-
-//        mIntroViewPagerAdapter = new IntroViewPagerAdapter(mIntroImageResIds);
-//        mIntroViewPager.setAdapter(mIntroViewPagerAdapter);
 
         mIntroFragments = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -147,44 +126,5 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
         Intent intent = new Intent(IntroActivity.this, MemberStartActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    private class IntroViewPagerAdapter extends PagerAdapter {
-
-        private ArrayList<Integer> mIntroImageResIds;
-        private LayoutInflater mLayoutInflater;
-
-        public IntroViewPagerAdapter(ArrayList<Integer> introImageResIds) {
-            mIntroImageResIds = introImageResIds;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-//            return super.instantiateItem(container, position);
-            mLayoutInflater = LayoutInflater.from(getApplicationContext());
-            View view = mLayoutInflater.inflate(R.layout.list_item_intro, container, false);
-            ImageView imageView = (ImageView) view.findViewById(R.id.list_item_intro_image_image_view);
-
-//            imageView.setImageResource(mIntroImageResIds.get(position));
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public int getCount() {
-            return mIntroImageResIds.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-//            super.destroyItem(container, position, object);
-            View view = (View) object;
-            container.removeView(view);
-        }
     }
 }

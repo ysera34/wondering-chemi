@@ -7,6 +7,7 @@
     <string name="bottom_navigation_title4">성분사전</string>
     <string name="bottom_navigation_title5">마이케미</string>
 
+    <string name="bottom_navigation_shifting_mode">mShiftingMode</string>
     <!-- toolbar menu-->
     <string name="menu_toolbar_product_action_faq">자주묻는질문</string>
     <string name="menu_toolbar_product_action_archive">제품보관</string>
@@ -43,7 +44,7 @@
     <string name="chemical_dialog_name_eng_format">[%s]</string>
     <string name="chemical_dialog_allergy_false">\"알레르기 과민성이 없다고 해요\"</string>
     <string name="chemical_dialog_allergy_true">\"알레르기 과민성이 있어요\"</string>
-    <string name="list_item_tag_popular_update_date">업데이트 날짜 : %s</string>
+    <string name="list_item_tag_popular_update_date">업데이트 시간 : %s</string>
     <string name="member_start_naver">네이버 아이디로 시작하기</string>
     <string name="member_start_google">구글 아이디로 시작하기</string>
     <string name="member_start_local">이메일로 시작하기</string>
@@ -205,6 +206,10 @@
     <string name="request_product_subject">아래 제품에 대해서 분석을 요청합니다.</string>
     <string name="request_product_description">브랜드 : %1$s\n제품명 : %2$s\n제품 분석을 요청합니다.</string>
     <string name="request_product_detail_hint">제품 관련 링크나 추가 요청하실 내용을 입력해주세요.</string>
+
+    <string name="request_chemical_title">성분 정보 수정 요청</string>
+    <string name="request_chemical_subject">성분 정보의 수정을 요청합니다</string>
+    <string name="request_chemical_description">%s 성분에 대한 정보가 부정확하여 수정을 요청합니다.\n제가 확인한 정보는 케미의 정보와 다릅니다. 그것은 다음과 같습니다.\n</string>
 
     <string-array name="category_name_array">
         <item>@string/category_name_hint_format</item>
