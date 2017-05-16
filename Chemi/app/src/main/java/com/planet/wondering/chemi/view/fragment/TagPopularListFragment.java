@@ -31,7 +31,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.LOWEST_QUEST_DEFAULT;
 import static com.planet.wondering.chemi.network.Config.Tag.PATH;
@@ -125,8 +127,7 @@ public class TagPopularListFragment extends Fragment {
         );
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
@@ -242,8 +243,21 @@ public class TagPopularListFragment extends Fragment {
 
         public void bindDate(Date updateDate) {
             mUpdateDate = updateDate;
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            Locale systemLocale = getActivity().getResources().getConfiguration().locale;
+
+//            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd-HH", systemLocale);
+//            transFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
             String transformedDate = transFormat.format(mUpdateDate);
+            Log.i(TAG, transformedDate);
+            String month = transformedDate.split("-")[0];
+            int monthInt = Integer.valueOf(month);
+            String day = transformedDate.split("-")[1];
+            int dayInt = Integer.valueOf(day);
+            String hour = transformedDate.split("-")[2];
+            int hourInt = Integer.valueOf(hour);
+            transformedDate = monthInt + "월 " + dayInt + "일 " + hourInt + "시";
             mUpdateDateTextView.setText(getString(R.string.list_item_tag_popular_update_date, transformedDate));
         }
     }
