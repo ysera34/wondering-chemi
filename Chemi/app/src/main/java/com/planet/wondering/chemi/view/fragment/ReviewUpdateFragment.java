@@ -180,11 +180,13 @@ public class ReviewUpdateFragment extends Fragment
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .override(240, 160)
+                .override(260, 200)
+                .centerCrop()
                 .crossFade()
                 .into(mUpdateProductImageView);
         mUpdateProductBrandTextView.setText(mReview.getProductBrand());
         mUpdateProductNameTextView.setText(mReview.getProductName());
+        mUpdateProductNameTextView.setSelected(true);
     }
 
     private void bindReview() {

@@ -408,11 +408,13 @@ public class ReviewReadFragment extends Fragment
                 .load(mReview.getProductImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
+                .override(260, 200)
+                .centerCrop()
                 .crossFade()
-                .override(300, 200)
                 .into(mReviewReadProductImageView);
         mReviewReadProductBrandTextView.setText(mReview.getProductBrand());
         mReviewReadProductNameTextView.setText(mReview.getProductName());
+        mReviewReadProductNameTextView.setSelected(true);
     }
 
     private void bindReview() {

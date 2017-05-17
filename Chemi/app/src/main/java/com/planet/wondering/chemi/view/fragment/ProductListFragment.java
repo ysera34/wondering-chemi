@@ -626,7 +626,9 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .override(240, 160)
+//                    .override(280, 215)
+                    .override(260, 200)
+                    .centerCrop()
                     .crossFade()
                     .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));

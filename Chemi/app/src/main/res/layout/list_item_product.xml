@@ -35,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="브랜드명"
             android:textSize="12sp"
             android:textColor="@color/colorFontNormal"/>
 
@@ -43,8 +42,6 @@
             android:id="@+id/list_item_product_name_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="상품명"
             android:textSize="14sp"
             android:textStyle="bold|italic"
             android:textColor="@color/colorFontNormal"
@@ -54,7 +51,8 @@
         <LinearLayout
             android:id="@+id/list_item_product_review_rating_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp">
 
             <RatingBar
                 android:id="@+id/list_item_product_review_rating_bar"
