@@ -724,6 +724,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         switch (layoutIndex) {
             case 7000: /* browsing user  */
                 startActivity(SearchActivity.newIntent(getApplicationContext()));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 break;
             case 7001: /* signUpForLocal  */

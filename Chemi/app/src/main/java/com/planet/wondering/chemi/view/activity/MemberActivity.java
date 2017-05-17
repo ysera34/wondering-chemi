@@ -149,6 +149,7 @@ public class MemberActivity extends BottomNavigationActivity
                             .commit();
                 } else {
                     startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     finish();
                 }
 
@@ -298,8 +299,8 @@ public class MemberActivity extends BottomNavigationActivity
                         .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                         .commit();
             } else if (mRequestId == 4){
-                finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                finish();
             }
         } else if (fragment instanceof MemberConfigTermsFragment) {
 //            mBottomNavigationLayout.setVisibility(View.VISIBLE);

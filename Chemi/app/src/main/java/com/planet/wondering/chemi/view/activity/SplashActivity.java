@@ -32,10 +32,12 @@ public class SplashActivity extends AppBaseActivity {
                 if (UserSharedPreferences.getStoredIntroSlide(getApplicationContext())) {
                     Intent intent = new Intent(SplashActivity.this, MemberStartActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     finish();
                 } else {
                     Intent intent = new Intent(SplashActivity.this, IntroActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     finish();
                 }
 

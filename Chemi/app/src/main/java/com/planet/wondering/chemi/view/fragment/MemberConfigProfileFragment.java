@@ -420,16 +420,21 @@ public class MemberConfigProfileFragment extends Fragment
                 dismissMenuBottomSheetDialog();
                 mImageHandler = new ImageHandler(getActivity());
                 if (position == 0) {
-                    switch (mUser.getGender()) {
-                        case 0:
-                            mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_mommy);
-                            break;
-                        case 1:
-                            mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_daddy);
-                            break;
-                        default:
-                            mUserCircleImageView.setImageResource(R.drawable.ic_user);
-                            break;
+
+                    if (!mUser.isHasExtraInfo()) {
+                        mUserCircleImageView.setImageResource(R.drawable.ic_user);
+                    } else {
+                        switch (mUser.getGender()) {
+                            case 0:
+                                mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_mommy);
+                                break;
+                            case 1:
+                                mUserCircleImageView.setImageResource(R.drawable.ic_user_profile_daddy);
+                                break;
+                            default:
+                                mUserCircleImageView.setImageResource(R.drawable.ic_user);
+                                break;
+                        }
                     }
                     requestUserImage(true);
                 } else if (position == 1) {
@@ -557,7 +562,7 @@ public class MemberConfigProfileFragment extends Fragment
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("저장소 권한 요청합니다.")
-                            .setMessage("프로필 이미지 변경을 위한 갤러리 접근 권한을 요청합니다.");
+                            .setMessage("프로필 이미지를 변경하시려면, 저장소의 접근 권한을 필요해요.");
                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

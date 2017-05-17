@@ -12,7 +12,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="center_horizontal"
-        android:text="태어난 연도를 선택해주세요"
+        android:text="본인의 태어난 연도를 선택해주세요"
         android:textSize="19sp"
         android:textStyle="bold"
         android:textColor="@color/colorWhite"

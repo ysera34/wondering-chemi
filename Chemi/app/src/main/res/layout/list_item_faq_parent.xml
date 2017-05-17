@@ -26,12 +26,10 @@
             android:id="@+id/list_item_faq_parent_question_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:textColor="@color/colorFontNormal"
+            android:textSize="15sp"
             android:maxLines="2"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"/>
+            android:ellipsize="end"/>
 
     </LinearLayout>
 

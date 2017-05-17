@@ -39,6 +39,7 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
         if (UserSharedPreferences.getStoredIntroSlide(getApplicationContext())) {
             Intent intent = new Intent(IntroActivity.this, MemberStartActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         }
 
@@ -125,6 +126,7 @@ public class IntroActivity extends AppBaseActivity implements View.OnClickListen
         UserSharedPreferences.setStoredIntroSlide(getApplicationContext(), true);
         Intent intent = new Intent(IntroActivity.this, MemberStartActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 }

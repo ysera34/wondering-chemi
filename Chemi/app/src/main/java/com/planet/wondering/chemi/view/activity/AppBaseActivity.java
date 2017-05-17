@@ -48,9 +48,11 @@ public class AppBaseActivity extends AppCompatActivity {
 
                     if (productId != null) {
                         startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId), (byte) 0));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         finish();
                     } else if (contentId != null) {
                         startActivity(ContentActivity.newIntent(getApplicationContext(), Integer.valueOf(contentId)));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         finish();
                     }
                 }

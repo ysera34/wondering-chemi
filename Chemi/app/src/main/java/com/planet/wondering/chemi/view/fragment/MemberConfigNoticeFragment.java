@@ -240,7 +240,7 @@ public class MemberConfigNoticeFragment extends Fragment implements View.OnClick
         public void bindParentNotice(Notice notice) {
             mParentNotice = notice;
             mTitleTextView.setText(Html.fromHtml(String.valueOf(mParentNotice.getTitle())));
-            mDateTextView.setText(String.valueOf(mParentNotice.getCreateDate()));
+            mDateTextView.setText(String.valueOf(mParentNotice.getCreateDate().split("T")[0]));
         }
 
         @Override

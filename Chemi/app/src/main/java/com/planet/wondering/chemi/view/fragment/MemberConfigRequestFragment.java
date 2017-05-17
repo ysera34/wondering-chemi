@@ -474,7 +474,7 @@ public class MemberConfigRequestFragment extends Fragment
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("저장소 권한을 요청합니다.")
-                            .setMessage("리뷰 사진을 저장한 갤러리의 접근 권한을 요청합니다.");
+                            .setMessage("제품 분석 요청에 첨부하시려면, 저장소의 접근 권한이 필요해요.");
                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

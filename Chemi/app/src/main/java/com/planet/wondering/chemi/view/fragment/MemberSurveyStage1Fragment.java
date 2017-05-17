@@ -60,7 +60,7 @@ public class MemberSurveyStage1Fragment extends Fragment {
         mMemberSurveyYearRecyclerView.setLayoutManager(mYearLayoutManager);
         mYearAdapter = new YearAdapter(mYears);
         mMemberSurveyYearRecyclerView.setAdapter(mYearAdapter);
-
+        mYearLayoutManager.scrollToPosition(30);
         return view;
     }
 
@@ -146,7 +146,7 @@ public class MemberSurveyStage1Fragment extends Fragment {
                 mSurveyCompletedListener.onSurveyCompleted(1, false);
                 mYearLayoutManager.setScrollEnable(true);
             } else if (!mYearCheckBox.isChecked() && !isYearSelected) {
-                Toast.makeText(getActivity(), "다시 선택하시려면, 선택한 것을 다시 누르시면 되요.",
+                Toast.makeText(getActivity(), "다시 선택하시려면, 선택한 것을 다시 누르시면 돼요.",
                         Toast.LENGTH_SHORT).show();
 
                 mYearCheckBox.setChecked(true);

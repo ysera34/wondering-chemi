@@ -217,6 +217,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
                         "mailto", getString(R.string.administrator_support_email), null));
 //                        intent.setData(Uri.parse("mailto:chemi.helper@gmail.com"));
                 intent.setType("text/plain");
+                intent.setType("message/rfc822");
 //                        intent.putExtra(Intent.EXTRA_EMAIL, "chemi.helper@gmail.com");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.administrator_support_email)});
                 intent.putExtra(Intent.EXTRA_TEXT, getChemicalReport());
