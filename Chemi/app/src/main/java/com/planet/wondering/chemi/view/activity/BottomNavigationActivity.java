@@ -3,6 +3,7 @@ package com.planet.wondering.chemi.view.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -64,5 +65,11 @@ public class BottomNavigationActivity extends AppBaseActivity
     public void hideBottomNavigationView() {
         mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    public int getScreenWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 }

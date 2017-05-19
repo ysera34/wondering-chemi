@@ -51,6 +51,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_PATH;
@@ -155,6 +157,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private ProductAdapter mProductAdapter;
     private ProgressBar mProductListProgressBar;
 
+    private int mScreenWidth;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +174,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mCategoryName = mCategoryNameArray[mCategoryId];
         }
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
@@ -313,7 +318,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-//        updateUI();
     }
 
     @Override
@@ -632,13 +636,18 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         void bindProduct(Product product) {
             mProduct = product;
 
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
+            Log.i(TAG, "thumbnailWidth : " + thumbnailWidth);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+            Log.i(TAG, "thumbnailHeight : " + thumbnailHeight);
+
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 //                    .override(280, 215)
-                    .override(260, 200)
+                    .override(thumbnailWidth, thumbnailHeight)
                     .centerCrop()
                     .crossFade()
                     .into(mProductImageView);

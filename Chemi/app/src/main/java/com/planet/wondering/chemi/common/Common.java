@@ -26,6 +26,9 @@ public class Common {
     public static final String CONTENT_SHARE_TEMPLATE_CODE = "3827";
     public static final String PRODUCT_SHARE_TEMPLATE_CODE = "3828";
 
+    public static final float PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO = 0.24f;
+    public static final float PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO = 0.77f;
+
     public static final int CLEAR_DIALOG_REQUEST_CODE = 3111;
     public static final int LOGIN_DIALOG_REQUEST_CODE = 3112;
     public static final int LOGOUT_DIALOG_REQUEST_CODE = 3113;
