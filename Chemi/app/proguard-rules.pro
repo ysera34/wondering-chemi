@@ -23,3 +23,5 @@
 # Bottom Navigation Helper
 -keep class android.support.design.internal.BottomNavigationItemView{ *; }
 -keep class android.support.design.internal.BottomNavigationMenuView{ *; }
+
+-keep class com.planet.wondering.chemi.network.GlideConfig{ *; }

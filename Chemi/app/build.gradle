@@ -19,22 +19,14 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-//    signingConfigs {
-//        config {
-//            keyAlias 'ChemiAndroidKey'
-//            keyPassword 'chemireleasekey'
-//            storeFile file('/Users/yoon/AndroidStudioProjects/WonderingPlanet/Reference/keystores/ChemiAndroidKey.jks')
-//            storePassword 'chemiandroid'
-//        }
-//    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.planet.wondering.chemi"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -44,7 +36,7 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }

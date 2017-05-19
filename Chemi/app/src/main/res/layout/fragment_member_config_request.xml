@@ -193,7 +193,7 @@
                 android:hint="@string/request_product_detail_hint"
                 android:textColorHint="@color/colorFontFrenchGray"
                 android:imeOptions="actionDone"
-                android:inputType="text"
+                android:inputType="textMultiLine|textImeMultiLine"
                 android:textSize="15sp"
                 android:textColor="@color/colorArmadillo"
                 android:maxLines="5"

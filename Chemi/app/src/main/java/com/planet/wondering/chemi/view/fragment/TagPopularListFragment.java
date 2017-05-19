@@ -23,7 +23,6 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 
 import org.json.JSONObject;
@@ -73,9 +72,9 @@ public class TagPopularListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tag_popular_list, container, false);
         mTagPopularRecyclerView = (RecyclerView) view.findViewById(R.id.tag_popular_recycler_view);
         mTagPopularRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-        mTagPopularRecyclerView.addItemDecoration(decoration);
+//        SeparatorDecoration decoration =
+//                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+//        mTagPopularRecyclerView.addItemDecoration(decoration);
 
         updateUI();
 

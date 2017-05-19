@@ -14,15 +14,15 @@
         <RelativeLayout
             android:id="@+id/dictionary_logo_layout"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="37dp"
             android:background="@color/colorPrimary">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/dictionary_white_logo_image_view"
-                android:layout_marginEnd="14dp"
-                android:src="@drawable/dic_flag"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/dic_flag_white"
                 android:scaleType="centerInside"/>
 
             <ImageView
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/logo_dic_white"
+                android:src="@drawable/logo_dic_white_kr"
                 android:scaleType="centerInside"/>
 
         </RelativeLayout>

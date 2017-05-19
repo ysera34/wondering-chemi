@@ -86,10 +86,10 @@ public class ProductListActivity extends BottomNavigationActivity {
         } else if (mCategoryId != -1) {
             mFragment = ProductListFragment.newInstance(mCategoryId);
         }
-            mFragmentManager.beginTransaction()
-//                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                    .add(R.id.main_fragment_container, mFragment)
-                    .commit();
+        mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .add(R.id.main_fragment_container, mFragment)
+                .commit();
     }
 
     @Override

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
-import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.TagSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 
@@ -57,9 +56,9 @@ public class TagLatestListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tag_latest_list, container, false);
         mTagLatestRecyclerView = (RecyclerView) view.findViewById(R.id.tag_latest_recycler_view);
         mTagLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-        mTagLatestRecyclerView.addItemDecoration(decoration);
+//        SeparatorDecoration decoration =
+//                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+//        mTagLatestRecyclerView.addItemDecoration(decoration);
 
         updateUI();
 

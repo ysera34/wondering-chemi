@@ -52,7 +52,7 @@ public class AppBaseActivity extends AppCompatActivity {
                         finish();
                     } else if (contentId != null) {
                         startActivity(ContentActivity.newIntent(getApplicationContext(), Integer.valueOf(contentId)));
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                         finish();
                     }
                 }

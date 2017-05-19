@@ -121,6 +121,17 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
+    public static ProductListFragment newInstance(int categoryId, String tagName) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_CATEGORY_ID, categoryId);
+        args.putString(ARG_TAG_NAME, tagName);
+
+        ProductListFragment fragment = new ProductListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private StringBuilder mUrlBuilder;
     private ArrayList<Product> mProducts;
     private ArrayList<Integer> mProductIds;
@@ -168,7 +179,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         mSearchAutoCompleteTextView =
                 (AutoCompleteTextView) view.findViewById(R.id.product_list_search_auto_text_view);
-        if (mTagName != null) {
+        if (mTagName != null && mCategoryId == -1) {
             mSearchAutoCompleteTextView.setText(mTagName);
         } else if (mCategoryId > 0) {
             mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
