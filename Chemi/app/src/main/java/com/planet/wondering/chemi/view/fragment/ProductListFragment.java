@@ -637,9 +637,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mProduct = product;
 
             int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
-            Log.i(TAG, "thumbnailWidth : " + thumbnailWidth);
             int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
-            Log.i(TAG, "thumbnailHeight : " + thumbnailHeight);
 
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())

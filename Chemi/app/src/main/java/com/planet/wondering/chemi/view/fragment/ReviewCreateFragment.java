@@ -47,6 +47,7 @@ import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ImageHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.Key.DESCRIPTION;
@@ -142,6 +145,8 @@ public class ReviewCreateFragment extends Fragment
     private Product mProduct;
     private Review mReview;
 
+    private int mScreenWidth;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +157,7 @@ public class ReviewCreateFragment extends Fragment
 
         mReviewHint = getString(R.string.review_create_review_hint);
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
+        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
@@ -185,12 +191,17 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
+        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+
         Glide.with(getActivity())
                 .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .override(260, 200)
+//                .override(260, 200)
+                .override(thumbnailWidth, thumbnailHeight)
                 .centerCrop()
                 .crossFade()
                 .into(mReviewCreateProductImageView);

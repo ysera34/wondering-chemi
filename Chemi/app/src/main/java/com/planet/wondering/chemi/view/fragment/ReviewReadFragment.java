@@ -41,6 +41,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
@@ -52,6 +53,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
@@ -164,6 +167,8 @@ public class ReviewReadFragment extends Fragment
     private EditText mCommentCreateEditText;
     private TextView mCommentSubmitTextView;
 
+    private int mScreenWidth;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,6 +179,8 @@ public class ReviewReadFragment extends Fragment
         mReviewId = getArguments().getInt(ARG_REVIEW_ID, -1);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
         mReview = (Review) getArguments().getSerializable(ARG_REVIEW);
+
+        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
@@ -404,11 +411,16 @@ public class ReviewReadFragment extends Fragment
     }
 
     private void bindProduct() {
+
+        int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
+        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+
         Glide.with(getActivity())
                 .load(mReview.getProductImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
-                .override(260, 200)
+//                .override(260, 200)
+                .override(thumbnailWidth, thumbnailHeight)
                 .centerCrop()
                 .crossFade()
                 .into(mReviewReadProductImageView);
