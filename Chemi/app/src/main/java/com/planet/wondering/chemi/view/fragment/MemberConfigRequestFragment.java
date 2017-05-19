@@ -188,11 +188,11 @@ public class MemberConfigRequestFragment extends Fragment
         mProductClearImageView = (ImageView) view.findViewById(R.id.member_config_request_product_clear_image_view);
         mProductClearImageView.setOnClickListener(this);
 
-        mBrandCharacterAdapter = new TagCharacterAdapter(getActivity(),
+        mBrandCharacterAdapter = new TagCharacterAdapter(getActivity(), mBrandAutoCompleteTextView,
                 android.R.layout.simple_dropdown_item_1line, BRAND_TAG_CHARACTER_REQUEST_CODE);
         mBrandAutoCompleteTextView.setAdapter(mBrandCharacterAdapter);
 
-        mProductCharacterAdapter = new TagCharacterAdapter(getActivity(),
+        mProductCharacterAdapter = new TagCharacterAdapter(getActivity(), mProductAutoCompleteTextView,
                 android.R.layout.simple_dropdown_item_1line, PRODUCT_TAG_CHARACTER_REQUEST_CODE);
         mProductAutoCompleteTextView.setAdapter(mProductCharacterAdapter);
 

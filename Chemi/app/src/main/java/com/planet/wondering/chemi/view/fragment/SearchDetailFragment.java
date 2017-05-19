@@ -165,7 +165,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
         mSearchTabLayout.setupWithViewPager(mSearchViewPager);
 
-        mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, 1);
+        mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
+                android.R.layout.simple_dropdown_item_1line, 1);
         mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
         mSearchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

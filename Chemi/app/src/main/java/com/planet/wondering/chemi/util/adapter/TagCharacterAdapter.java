@@ -6,9 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -44,20 +47,26 @@ public class TagCharacterAdapter extends ArrayAdapter<String>
 
     private static final String TAG = TagCharacterAdapter.class.getSimpleName();
 
+    private Context mContext;
+    private AutoCompleteTextView mSearchView;
     private ArrayList<String> mTagRequestResults;
     private ArrayList<String> mTagResults;
     private int mRequestId;
     private int mCategoryId;
 
-    public TagCharacterAdapter(Context context, int resource, int requestId) {
+    public TagCharacterAdapter(Context context, AutoCompleteTextView searchView, int resource, int requestId) {
         super(context, resource);
+        mContext = context;
+        mSearchView = searchView;
         mTagRequestResults = new ArrayList<>();
         mTagResults = new ArrayList<>();
         mRequestId = requestId;
     }
 
-    public TagCharacterAdapter(Context context, int resource, int requestId, int categoryId) {
+    public TagCharacterAdapter(Context context, AutoCompleteTextView searchView, int resource, int requestId, int categoryId) {
         super(context, resource);
+        mContext = context;
+        mSearchView = searchView;
         mTagRequestResults = new ArrayList<>();
         mTagResults = new ArrayList<>();
         mRequestId = requestId;
@@ -271,6 +280,17 @@ public class TagCharacterAdapter extends ArrayAdapter<String>
             convertView = layoutInflater.inflate(R.layout.list_item_tag_character, parent, false);
             convertView.setTag(new TagCharacterHolder(convertView));
         }
+        convertView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    InputMethodManager inputMethodManager = (InputMethodManager)
+                            mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
 
         initializeViews(getItem(position), (TagCharacterHolder) convertView.getTag());
 

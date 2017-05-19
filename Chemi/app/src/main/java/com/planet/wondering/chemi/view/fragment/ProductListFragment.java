@@ -190,7 +190,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
             mSearchAutoCompleteTextView.setCursorVisible(true);
             mSearchAutoCompleteTextView.setThreshold(1);
-            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
+            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
+                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
             mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
 //            mTagCharacterAdapter = new SearchDetailFragment.TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
         }

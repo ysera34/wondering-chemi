@@ -17,6 +17,7 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -579,6 +580,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 convertView = layoutInflater.inflate(R.layout.list_item_chemical_character, parent, false);
                 convertView.setTag(new ChemicalCharacterHolder(convertView));
             }
+            convertView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        mInputMethodManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+                    }
+                    return false;
+                }
+            });
+
             initializeViews(getItem(position), (ChemicalCharacterHolder) convertView.getTag());
             return convertView;
         }
