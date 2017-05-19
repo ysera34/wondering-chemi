@@ -249,7 +249,7 @@ public class TagPopularListFragment extends Fragment {
             SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd-HH", systemLocale);
 //            transFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
             String transformedDate = transFormat.format(mUpdateDate);
-            Log.i(TAG, transformedDate);
+//            Log.i(TAG, transformedDate);
             String month = transformedDate.split("-")[0];
             int monthInt = Integer.valueOf(month);
             String day = transformedDate.split("-")[1];

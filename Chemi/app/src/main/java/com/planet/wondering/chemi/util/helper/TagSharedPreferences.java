@@ -10,6 +10,7 @@ import com.planet.wondering.chemi.model.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,6 +32,14 @@ public class TagSharedPreferences {
         Tag[] tagArray = gson.fromJson(jsonTags, Tag[].class);
         List<Tag> tags = Arrays.asList(tagArray);
         tags = new ArrayList<>(tags);
+
+        Iterator<Tag> iterator = tags.iterator();
+        while (iterator.hasNext()) {
+            Tag tag = iterator.next();
+            if (tag.getName() == null) {
+                iterator.remove();
+            }
+        }
         return (ArrayList<Tag>) tags;
     }
 

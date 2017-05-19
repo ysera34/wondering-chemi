@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,10 +218,13 @@ public class TagLatestListFragment extends Fragment {
 
         public void bindTag(Tag tag) {
             mTag = tag;
+
             mTagNameTextView.setText(mTag.getName());
             SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String transFormedDate = transFormat.format(mTag.getRankDate());
-            mDateTextView.setText(transFormedDate);
+            if (mTag.getRankDate() != null) {
+                String transFormedDate = transFormat.format(mTag.getRankDate());
+                mDateTextView.setText(transFormedDate);
+            }
         }
 
         @Override
