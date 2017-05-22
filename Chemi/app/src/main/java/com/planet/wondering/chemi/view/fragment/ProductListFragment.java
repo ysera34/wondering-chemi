@@ -362,32 +362,21 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         } else {
             mProductAdapter.setProducts(mProducts);
             mProductAdapter.notifyDataSetChanged();
-//            mProductTotalTextView.setText(highlightTotalText());
-
-//            mProductIds.clear();
-//            for (Product product : mProducts) {
-//                mProductIds.add(product.getId());
-//            }
         }
     }
 
     private void updateTagCategoryProductList() {
 
-//        mPager = null;
-//        mProducts.clear();
-//        requestTagCategoryProductList(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
         mUpdateProductListListener.OnTagCategoryUpdated(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
-//        mSearchAutoCompleteTextView.getText().clear();
         mSearchAutoCompleteTextView.dismissDropDown();
         mInputMethodManager.hideSoftInputFromWindow(mSearchAutoCompleteTextView.getWindowToken(), 0);
+        /* ignore dropdown */
         mSearchAutoCompleteTextView.setFocusable(false);
         mSearchAutoCompleteTextView.setFocusableInTouchMode(false);
         mSearchAutoCompleteTextView.setText(mTagName);
         mSearchAutoCompleteTextView.setFocusable(true);
         mSearchAutoCompleteTextView.setFocusableInTouchMode(true);
     }
-
-
 
     private void requestTagProductList(String query) {
 

@@ -1,67 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/home_baby02">
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/review_create_nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/search_editText_paddingTop"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <ImageView
-            android:id="@+id/white_logo_image_view"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="16dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_white_kr"
-            android:scaleType="centerInside"/>
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
-            android:id="@+id/search_view"
-            android:transitionName="@string/search_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/search_editText_height"
-            android:layout_below="@+id/white_logo_image_view"
-            android:background="@color/colorWhite">
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/search_editText_paddingTop"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
-            <Button
-                android:id="@+id/search_button"
-                android:transitionName="@string/search_edit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/search_image_button"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:hint="@string/search_guide_sentence"
-                android:textSize="14sp"
-                android:textAlignment="textStart"
-                android:textColorHint="@color/colorFontHint"
-                android:background="@android:color/transparent"/>
+            <ImageView
+                android:id="@+id/white_logo_image_view"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="16dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo_white_kr"
+                android:scaleType="centerInside"/>
 
-            <ImageButton
-                android:id="@+id/search_image_button"
-                android:transitionName="@string/search_image_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:src="@drawable/ic_search_primary"
-                android:background="@android:color/transparent"/>
+            <RelativeLayout
+                android:id="@+id/search_view"
+                android:transitionName="@string/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_editText_height"
+                android:layout_below="@+id/white_logo_image_view"
+                android:background="@color/colorWhite">
+
+                <Button
+                    android:id="@+id/search_button"
+                    android:transitionName="@string/search_edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/search_image_button"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:hint="@string/search_guide_sentence"
+                    android:textSize="14sp"
+                    android:textAlignment="textStart"
+                    android:textColorHint="@color/colorFontHint"
+                    android:background="@android:color/transparent"/>
+
+                <ImageButton
+                    android:id="@+id/search_image_button"
+                    android:transitionName="@string/search_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/ic_search_primary"
+                    android:background="@android:color/transparent"/>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>
