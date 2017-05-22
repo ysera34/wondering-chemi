@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Hazard;
+import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 
 import java.util.ArrayList;
 
@@ -104,6 +106,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
         mChemicalId = getArguments().getInt(ARG_CHEMICAL_ID, -1);
         mChemical = (Chemical) getArguments().getSerializable(ARG_CHEMICAL);
         mHazards = mChemical.getHazards();
+        ChemicalSharedPreferences.addStoreChemical(getActivity(), mChemical);
     }
 
     @NonNull
@@ -127,11 +130,23 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
 
         mChemicalDialogNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_ko_text_view);
-        mChemicalDialogNameKoTextView.setSelected(true);
+        mChemicalDialogNameKoTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mChemicalDialogNameKoTextView.setSelected(true);
+            }
+        }, 1500);
+
         mChemicalDialogNameKoTextView.setText(mChemical.getNameKo());
         mChemicalDialogNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_name_eng_text_view);
-        mChemicalDialogNameEngTextView.setSelected(true);
+        mChemicalDialogNameEngTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mChemicalDialogNameEngTextView.setSelected(true);
+            }
+        }, 1500);
+
         mChemicalDialogNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
         mChemicalDialogHazardLineTextView = (TextView)
                 view.findViewById(R.id.chemical_dialog_hazard_bg_text_view);
@@ -209,6 +224,7 @@ public class ChemicalDialogFragment extends DialogFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.chemical_dialog_close_button_text_view:
+                Toast.makeText(getActivity(), "성분사전에서 다시 보실 수 있어요!", Toast.LENGTH_SHORT).show();
                 this.dismiss();
                 break;
             case R.id.chemical_dialog_update_request_button_text_view:

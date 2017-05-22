@@ -42,6 +42,9 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
+
 /**
  * Created by yoon on 2016. 12. 31..
  */
@@ -108,6 +111,7 @@ public class MemberFragment extends Fragment
     private ArrayList<ReviewProduct> mArchiveReviewProducts;
 
     private User mUser;
+    private int mScreenWidth;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,6 +119,7 @@ public class MemberFragment extends Fragment
         setHasOptionsMenu(true);
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
+        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
 
         if (mUser.getArchiveProducts() == null) {
             mArchiveProducts = new ArrayList<>();
@@ -485,9 +490,14 @@ public class MemberFragment extends Fragment
         public void bindProduct(Product product) {
             mProduct = product;
 
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .override(thumbnailWidth, thumbnailHeight)
+                    .centerCrop()
                     .crossFade()
                     .into(mArchiveProductImageView);
             mArchiveProductBrandTextView.setText(mProduct.getBrand());
@@ -697,9 +707,14 @@ public class MemberFragment extends Fragment
         public void bindReviewProduct(ReviewProduct reviewProduct) {
             mReviewProduct = reviewProduct;
 
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+
             Glide.with(getActivity())
                     .load(mReviewProduct.getProductImagePath())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .override(thumbnailWidth, thumbnailHeight)
+                    .centerCrop()
                     .crossFade()
                     .into(mArchiveReviewProductImageView);
             mArchiveReviewProductNameTextView.setText(mReviewProduct.getProductName());

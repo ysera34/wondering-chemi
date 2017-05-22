@@ -79,10 +79,10 @@ public class ChemicalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical, container, false);
+        view.setOnClickListener(this);
 
         mChemicalHeaderInfoLayout = (LinearLayout)
                 view.findViewById(R.id.chemical_header_info_layout);
-        mChemicalHeaderInfoLayout.setOnClickListener(this);
         mChemicalCircleTextView = (TextView)
                 view.findViewById(R.id.chemical_circle_text_view);
         mChemicalCircleTextView.setText(mChemical.getHazardValueString());
@@ -97,11 +97,22 @@ public class ChemicalFragment extends Fragment implements View.OnClickListener {
 
         mChemicalNameKoTextView = (TextView)
                 view.findViewById(R.id.chemical_name_ko_text_view);
-        mChemicalNameKoTextView.setSelected(true);
+        mChemicalNameKoTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mChemicalNameKoTextView.setSelected(true);
+            }
+        }, 1500);
+
         mChemicalNameKoTextView.setText(mChemical.getNameKo());
         mChemicalNameEngTextView = (TextView)
                 view.findViewById(R.id.chemical_name_eng_text_view);
-        mChemicalNameEngTextView.setSelected(true);
+        mChemicalNameEngTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mChemicalNameEngTextView.setSelected(true);
+            }
+        }, 1500);
         mChemicalNameEngTextView.setText(getString(R.string.chemical_dialog_name_eng_format, mChemical.getNameEn()));
         mChemicalHazardLineTextView = (TextView)
                 view.findViewById(R.id.chemical_hazard_bg_text_view);
@@ -144,11 +155,7 @@ public class ChemicalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.chemical_header_info_layout:
-//                Toast.makeText(getActivity(), "intercept click listener", Toast.LENGTH_SHORT).show();
-                break;
-        }
+
     }
 
     private class HazardAdapter extends RecyclerView.Adapter<HazardHolder> {
