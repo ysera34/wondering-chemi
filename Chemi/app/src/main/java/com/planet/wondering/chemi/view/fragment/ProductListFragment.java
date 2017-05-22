@@ -44,6 +44,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.adapter.TagCharacterAdapter;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.util.listener.OnUpdateProductListListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 
@@ -123,11 +124,11 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProductListFragment newInstance(int categoryId, String tagName) {
+    public static ProductListFragment newInstance(String tagName, int categoryId) {
 
         Bundle args = new Bundle();
-        args.putInt(ARG_CATEGORY_ID, categoryId);
         args.putString(ARG_TAG_NAME, tagName);
+        args.putInt(ARG_CATEGORY_ID, categoryId);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -153,6 +154,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private TextView mProductTotalTextView;
     private TextView mProductSortButtonTextView;
 
+    private LinearLayout mProductListLayout;
     private RecyclerView mProductRecyclerView;
     private ProductAdapter mProductAdapter;
     private ProgressBar mProductListProgressBar;
@@ -184,16 +186,17 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         mSearchAutoCompleteTextView =
                 (AutoCompleteTextView) view.findViewById(R.id.product_list_search_auto_text_view);
-        if (mTagName != null && mCategoryId == -1) {
+        if (mTagName != null) {
             mSearchAutoCompleteTextView.setText(mTagName);
-        } else if (mCategoryId > 0) {
+        }
+        if (mCategoryId > 0) {
             mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
             mSearchAutoCompleteTextView.setCursorVisible(true);
+            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
             mSearchAutoCompleteTextView.setThreshold(1);
             mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
                     android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
             mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
-//            mTagCharacterAdapter = new SearchDetailFragment.TagCharacterAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
         }
         mSearchAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -224,7 +227,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                         Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     } else {
 //                        Toast.makeText(getActivity(), textView.getText().toString(), Toast.LENGTH_SHORT).show();
-                        updateProductList();
+                        updateTagCategoryProductList();
                     }
                 }
                 return false;
@@ -242,12 +245,14 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         mSearchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                updateProductList();
+                updateTagCategoryProductList();
             }
         });
 
 //        mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
 //        mProductSortButtonTextView = (TextView) view.findViewById(R.id.product_sort_button_text_view);
+        mProductListLayout = (LinearLayout) view.findViewById(R.id.product_list_layout);
+        mProductListLayout.setOnClickListener(this);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        SeparatorDecoration decoration =
@@ -273,10 +278,12 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 if (lastItem == mProductAdapter.getItemCount() - 1 && mPager != null
                         && mPager.getTotal() > mProductAdapter.getItemCount() - 1) {
                     // all product == > mTagName = ""
-                    if (mTagName != null) {
+                    if (mTagName != null && mCategoryId == -1) {
                         requestTagProductList(mTagName);
-                    } else if (mCategoryId > 0) {
+                    } else if (mTagName == null && mCategoryId > 0) {
                         requestCategoryProductList(mCategoryId);
+                    } else if (mTagName != null && mCategoryId > 0) {
+                        requestTagCategoryProductList(mTagName, mCategoryId);
                     }
                 }
             }
@@ -303,10 +310,12 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         updateUI();
 
-        if (mTagName != null) {
+        if (mTagName != null && mCategoryId == -1) {
             requestTagProductList(mTagName);
-        } else if (mCategoryId > 0) {
+        } else if (mTagName == null && mCategoryId > 0) {
             requestCategoryProductList(mCategoryId);
+        } else if (mTagName != null && mCategoryId > 0) {
+            requestTagCategoryProductList(mTagName, mCategoryId);
         }
         return view;
     }
@@ -340,7 +349,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
 //                    Toast.makeText(getActivity(), mSearchAutoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
-                    updateProductList();
+                    updateTagCategoryProductList();
                 }
                 break;
         }
@@ -362,14 +371,23 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private void updateProductList() {
+    private void updateTagCategoryProductList() {
 
-        mPager = null;
-        mProducts.clear();
-        requestTagCategoryProductList(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
+//        mPager = null;
+//        mProducts.clear();
+//        requestTagCategoryProductList(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
+        mUpdateProductListListener.OnTagCategoryUpdated(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
+//        mSearchAutoCompleteTextView.getText().clear();
         mSearchAutoCompleteTextView.dismissDropDown();
         mInputMethodManager.hideSoftInputFromWindow(mSearchAutoCompleteTextView.getWindowToken(), 0);
+        mSearchAutoCompleteTextView.setFocusable(false);
+        mSearchAutoCompleteTextView.setFocusableInTouchMode(false);
+        mSearchAutoCompleteTextView.setText(mTagName);
+        mSearchAutoCompleteTextView.setFocusable(true);
+        mSearchAutoCompleteTextView.setFocusableInTouchMode(true);
     }
+
+
 
     private void requestTagProductList(String query) {
 
@@ -652,7 +670,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     .into(mProductImageView);
             mProductBrandTextView.setText(String.valueOf(mProduct.getBrand()));
             mProductNameTextView.setText(String.valueOf(mProduct.getName()));
-            mProductNameTextView.setSelected(true);
+
             mProductReviewRatingBar.setRating(mProduct.getRatingValue());
             mProductReviewRatingValueTextView.setText(String.valueOf(mProduct.getRatingValue()));
             mProductReviewRatingCountTextView.setText(getString(R.string.product_review_count, String.valueOf(mProduct.getRatingCount())));
@@ -676,24 +694,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private SpannableString highlightTotalText() {
-        SpannableString spannableString = new SpannableString(
-                getString(R.string.product_total_count, String.valueOf(mProducts.size())));
-        int startIndex = 6;
-        int endIndex;
-        if (mProducts.size() >= 0 && mProducts.size() < 10) {
-            endIndex = startIndex + 1;
-        } else if (mProducts.size() >= 10 && mProducts.size() <= 99) {
-            endIndex = startIndex + 2;
-        } else {
-            endIndex = startIndex + 3;
-        }
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
-                startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        return spannableString;
-    }
-
     private SpannableString highlightTotalText(int total) {
         SpannableString spannableString = new SpannableString(
                 getString(R.string.product_total_count, String.valueOf(total)));
@@ -710,5 +710,18 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return spannableString;
+    }
+
+    OnUpdateProductListListener mUpdateProductListListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mUpdateProductListListener = (OnUpdateProductListListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnUpdateProductListListener");
+        }
     }
 }

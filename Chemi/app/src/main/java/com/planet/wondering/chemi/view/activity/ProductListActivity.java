@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.util.helper.TagSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnUpdateProductListListener;
 import com.planet.wondering.chemi.view.fragment.ProductListFragment;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import java.util.Date;
  * Created by yoon on 2017. 1. 17..
  */
 
-public class ProductListActivity extends BottomNavigationActivity {
+public class ProductListActivity extends BottomNavigationActivity
+        implements OnUpdateProductListListener {
 
     private static final String TAG = ProductListActivity.class.getSimpleName();
 
@@ -102,5 +104,20 @@ public class ProductListActivity extends BottomNavigationActivity {
         }
     }
 
+    @Override
+    public void OnTagCategoryUpdated(String tagName, int category) {
+        mFragmentManager.beginTransaction()
+                .add(R.id.main_fragment_container, ProductListFragment.newInstance(tagName, category))
+                .addToBackStack(tagName)
+                .commit();
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (mFragmentManager.getBackStackEntryCount() > 0) {
+            mFragmentManager.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
