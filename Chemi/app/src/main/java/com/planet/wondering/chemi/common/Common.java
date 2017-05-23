@@ -40,6 +40,7 @@ public class Common {
     public static final String EXTRA_RESPONSE_USER_CODE = "com.planet.wondering.chemi.response_user_code";
     public static final String EXTRA_REQUEST_USER = "com.planet.wondering.chemi.request_user";
     public static final String EXTRA_RESPONSE_USER = "com.planet.wondering.chemi.response_user";
+    public static final String EXTRA_COMPLICATED_REVOKE = "com.planet.wondering.chemi.complicated_revoke";
 
     public static final int SIGN_IN_GOOGLE_REQUEST_CODE = 17001;
     public static final int SIGN_OUT_GOOGLE_REQUEST_CODE = 17002;
@@ -61,7 +62,8 @@ public class Common {
     public static final int SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE = 17015;
     public static final int SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE = 17016;
 
-
+    public static final int REVOKE_ACCESS_GOOGLE_RESULT_CODE = 17017;
+    public static final int REVOKE_ACCESS_NAVER_RESULT_CODE = 17018;
 
 
 

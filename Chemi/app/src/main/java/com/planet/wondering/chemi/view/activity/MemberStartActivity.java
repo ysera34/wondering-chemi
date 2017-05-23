@@ -34,6 +34,10 @@ import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_
 import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_TRUE_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
+import static com.planet.wondering.chemi.common.Common.GOOGLE_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
@@ -67,6 +71,8 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
+
+    private int mPlatformId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -232,6 +238,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                                     .replace(R.id.member_fragment_container,
                                             MemberStartNameFragment.newInstance(anonymousUser))
                                     .commit();
+                            mPlatformId = anonymousUser.getPlatformId();
                             break;
                     }
 
@@ -250,6 +257,11 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     }
                 }
                 break;
+            case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
+            case REVOKE_ACCESS_NAVER_REQUEST_CODE:
+
+                break;
+
         }
     }
 
@@ -815,7 +827,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         if (fragment instanceof MemberStartLocalFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.member_fragment_container, MemberStartFragment.newInstance())
+                    .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberConfigTermsFragment) {
             mFragmentManager.popBackStackImmediate();
@@ -825,10 +837,17 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     .replace(R.id.member_fragment_container, MemberStartFragment.newInstance())
                     .commit();
 //            if (mPlatformId == 1) {
-//                revokeAccessGoogle();
+//                startActivityForResult(UserActivity.newIntent(getApplicationContext(),
+//                        REVOKE_ACCESS_GOOGLE_REQUEST_CODE), REVOKE_ACCESS_GOOGLE_REQUEST_CODE);
 //            } else if (mPlatformId == 2) {
-//                revokeAccessNaver();
+//                startActivityForResult(UserActivity.newIntent(getApplicationContext(),
+//                        REVOKE_ACCESS_NAVER_REQUEST_CODE), REVOKE_ACCESS_NAVER_REQUEST_CODE);
 //            }
+            if (mPlatformId == GOOGLE_USER_PLATFORM_ID) {
+                startActivity(UserActivity.newIntent(getApplicationContext(), REVOKE_ACCESS_GOOGLE_REQUEST_CODE));
+            } else if (mPlatformId == NAVER_USER_PLATFORM_ID) {
+                startActivity(UserActivity.newIntent(getApplicationContext(), REVOKE_ACCESS_NAVER_REQUEST_CODE));
+            }
 
         } else if (fragment instanceof MemberSignInLocalFragment) {
             mFragmentManager.beginTransaction()

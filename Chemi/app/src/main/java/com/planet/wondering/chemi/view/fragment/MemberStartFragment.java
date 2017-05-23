@@ -57,13 +57,8 @@ public class MemberStartFragment extends Fragment
         mStartLocalLayout.setOnClickListener(this);
         mStartBrowseTextView = (TextView) view.findViewById(R.id.member_start_browse_text_view);
         mStartBrowseTextView.setOnClickListener(this);
-        mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
-        mStartAlreadyUserTextView.setOnClickListener(this);
-
-//        view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
-//        view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
-//        view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
-//        view.findViewById(R.id.naver_revoke_button).setOnClickListener(this);
+//        mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
+//        mStartAlreadyUserTextView.setOnClickListener(this);
         return view;
     }
 
@@ -76,35 +71,19 @@ public class MemberStartFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_start_naver_layout:
-//                ((MemberStartActivity) getActivity()).signInNaver();
                 mMenuSelectedListener.onMenuSelected(7020);
                 break;
             case R.id.member_start_google_layout:
-//                ((MemberStartActivity) getActivity()).signInGoogle();
                 mMenuSelectedListener.onMenuSelected(7010);
                 break;
             case R.id.member_start_local_layout:
-                mMenuSelectedListener.onMenuSelected(7001);
-//                ((MemberStartActivity) getActivity()).signUpForLocal();
+                mMenuSelectedListener.onMenuSelected(7002);
                 break;
             case R.id.member_start_browse_text_view:
                 mMenuSelectedListener.onMenuSelected(7000);
                 break;
-            case R.id.member_start_already_user_text_view:
-                mMenuSelectedListener.onMenuSelected(7002);
-//                ((MemberStartActivity) getActivity()).signInLocal();
-                break;
-//            case R.id.naver_sign_out_button:
-//                ((MemberStartActivity) getActivity()).signOutNaver();
-//                break;
-//            case R.id.naver_revoke_button:
-//                ((MemberStartActivity) getActivity()).revokeAccessNaver();
-//                break;
-//            case R.id.google_sign_out_button:
-//                ((MemberStartActivity) getActivity()).signOutGoogle();
-//                break;
-//            case R.id.google_revoke_button:
-//                ((MemberStartActivity) getActivity()).revokeAccessGoogle();
+//            case R.id.member_start_already_user_text_view:
+//                mMenuSelectedListener.onMenuSelected(7002);
 //                break;
         }
     }

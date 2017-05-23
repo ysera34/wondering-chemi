@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -55,6 +56,7 @@ import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_ANOTHER_PLA
 import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_ERROR_CODE;
 import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_FALSE_CODE;
 import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_TRUE_CODE;
+import static com.planet.wondering.chemi.common.Common.EXTRA_COMPLICATED_REVOKE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_REQUEST_USER;
 import static com.planet.wondering.chemi.common.Common.EXTRA_REQUEST_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
@@ -62,7 +64,9 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.GOOGLE_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_RESULT_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_RESULT_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_REQUEST_CODE;
@@ -79,6 +83,7 @@ import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL_STRING;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
 import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -86,7 +91,7 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
  */
 
 public class UserActivity extends AppCompatActivity
-        implements GoogleApiClient.OnConnectionFailedListener{
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = UserActivity.class.getSimpleName();
 
@@ -103,6 +108,13 @@ public class UserActivity extends AppCompatActivity
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, int requestCode, boolean isUnComplicatedRevoke) {
+        Intent intent = new Intent(packageContext, UserActivity.class);
+        intent.putExtra(EXTRA_REQUEST_USER_CODE, requestCode);
+        intent.putExtra(EXTRA_COMPLICATED_REVOKE, isUnComplicatedRevoke);
+        return intent;
+    }
+
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
 
@@ -112,6 +124,8 @@ public class UserActivity extends AppCompatActivity
     private OAuthLogin mNaverOAuthLogin;
     private Context mContext;
     private CustomProgressDialog mProgressDialog;
+
+    private int mRequestUserCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,6 +141,7 @@ public class UserActivity extends AppCompatActivity
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .addConnectionCallbacks(this)
                 .build();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -142,17 +157,16 @@ public class UserActivity extends AppCompatActivity
             }
         };
 
+        mContext = UserActivity.this;
         mNaverOAuthLogin = OAuthLogin.getInstance();
         mNaverOAuthLogin.init(this,
                 getString(R.string.naver_oauth_client_id),
                 getString(R.string.naver_oauth_client_secret),
                 getString(R.string.app_name));
 
-        int requestUserCode = getIntent().getIntExtra(EXTRA_REQUEST_USER_CODE, -1);
-        executeRequestCode(requestUserCode);
+        mRequestUserCode = getIntent().getIntExtra(EXTRA_REQUEST_USER_CODE, -1);
+        executeRequestCode(mRequestUserCode);
     }
-
-
 
     @Override
     protected void onStart() {
@@ -165,12 +179,7 @@ public class UserActivity extends AppCompatActivity
             case SIGN_IN_GOOGLE_REQUEST_CODE:
                 signInGoogle();
                 break;
-            case SIGN_OUT_GOOGLE_REQUEST_CODE:
-                signOutGoogle();
-                break;
-            case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
-                revokeAccessGoogle();
-                break;
+
             case SIGN_IN_NAVER_REQUEST_CODE:
                 signInNaver();
                 break;
@@ -215,6 +224,24 @@ public class UserActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d(TAG, "GoogleApiClient:onConnected");
+        switch (mRequestUserCode) {
+            case SIGN_OUT_GOOGLE_REQUEST_CODE:
+                signOutGoogle();
+                break;
+            case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
+                revokeAccessGoogle();
+                break;
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.w(TAG, "GoogleApiClient:onConnectionSuspended");
+    }
+
     public void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -242,6 +269,11 @@ public class UserActivity extends AppCompatActivity
                         Log.d(TAG, "revoke access GoogleApiClient.");
                     }
                 });
+        if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
+            requestRevokeUser(GOOGLE_USER_PLATFORM_ID);
+        } else {
+            finish();
+        }
     }
 
     private void firebaseAuthWithGoogle(String accessToken, String email) {
@@ -279,6 +311,11 @@ public class UserActivity extends AppCompatActivity
     public void revokeAccessNaver() {
         mFirebaseAuth.signOut();
         new NaverMemberTokenDeleteTask().execute();
+        if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
+            requestRevokeUser(NAVER_USER_PLATFORM_ID);
+        } else {
+            finish();
+        }
     }
 
     private void createFirebaseAccount(String email, String password) {
@@ -341,6 +378,9 @@ public class UserActivity extends AppCompatActivity
                 String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).toString();
                 String errorDesc = mNaverOAuthLogin.getLastErrorDesc(mContext);
                 Log.w(TAG, "Naver OAuthLogin: " + "errorCode: " + errorCode + ", errorDesc: " + errorDesc);
+                if (errorCode.equals("user_cancel")) {
+                    finish();
+                }
             }
         }
     };
@@ -501,46 +541,6 @@ public class UserActivity extends AppCompatActivity
         }
     }
 
-    private void finishUserActivity(User user, int resultCode) {
-
-        Intent intent = new Intent();
-
-        switch (resultCode) {
-            case CONFIRM_EMAIL_REPETITION_TRUE_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_TRUE_CODE);
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
-            case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_FALSE_CODE);
-                intent.putExtra(EXTRA_RESPONSE_USER, user);
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
-            case CONFIRM_EMAIL_ANOTHER_PLATFORM_USER_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_ANOTHER_PLATFORM_USER_CODE);
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
-            case CONFIRM_EMAIL_REPETITION_ERROR_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_ERROR_CODE);
-                setResult(RESULT_CANCELED, intent);
-                finish();
-                break;
-
-            case SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE);
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
-            case SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE:
-                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE);
-                setResult(RESULT_CANCELED, intent);
-                finish();
-                break;
-        }
-    }
-
     private void setUserSharedPreferences(User user) {
         if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
             UserSharedPreferences.removeStoredToken(getApplicationContext());
@@ -552,6 +552,18 @@ public class UserActivity extends AppCompatActivity
             UserSharedPreferences.removeStoredUserName(getApplicationContext());
         }
         UserSharedPreferences.setStoreUserName(getApplicationContext(), user.getName());
+        Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
+    }
+
+    private void removeUserSharedPreferences() {
+        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+            UserSharedPreferences.removeStoredToken(getApplicationContext());
+        }
+        Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
+
+        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+            UserSharedPreferences.removeStoredUserName(getApplicationContext());
+        }
         Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
     }
 
@@ -602,5 +614,105 @@ public class UserActivity extends AppCompatActivity
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
 
+    }
+
+    private void requestRevokeUser(final int platformId) {
+
+        Log.d(TAG, "requestRevokeUser");
+        showProgressDialog();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE, URL_HOST + PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        hideProgressDialog();
+                        if (Parser.parseSimpleResult(response)) {
+                            removeUserSharedPreferences();
+                            switch (platformId) {
+                                case GOOGLE_USER_PLATFORM_ID:
+                                    finishUserActivity(null, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
+                                    break;
+                                case NAVER_USER_PLATFORM_ID:
+                                    finishUserActivity(null, REVOKE_ACCESS_NAVER_RESULT_CODE);
+                                    break;
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                        Log.e(TAG, String.valueOf(error.getMessage()));
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void finishUserActivity(User user, int resultCode) {
+
+        Intent intent = new Intent();
+
+        switch (resultCode) {
+            case CONFIRM_EMAIL_REPETITION_TRUE_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_TRUE_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_FALSE_CODE);
+                intent.putExtra(EXTRA_RESPONSE_USER, user);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case CONFIRM_EMAIL_ANOTHER_PLATFORM_USER_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_ANOTHER_PLATFORM_USER_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case CONFIRM_EMAIL_REPETITION_ERROR_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, CONFIRM_EMAIL_REPETITION_ERROR_CODE);
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
+
+            case SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE);
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
+
+            case REVOKE_ACCESS_GOOGLE_RESULT_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case REVOKE_ACCESS_NAVER_RESULT_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, REVOKE_ACCESS_NAVER_RESULT_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+        }
     }
 }

@@ -36,113 +36,52 @@
             android:layout_alignParentBottom="true">
 
         <RelativeLayout
-            android:id="@+id/member_start_local_layout"
+            android:id="@+id/member_start_google_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="10dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:clickable="true"
-            android:background="@drawable/selector_bg_member_start_button_layout">
+            android:background="@drawable/selector_opaque_red_google">
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="28dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_email_primary"
+                android:src="@drawable/ic_google_white"
                 android:scaleType="centerInside"/>
 
             <TextView
-                android:id="@+id/member_start_local_text_view"
+                android:id="@+id/member_start_google_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="@string/member_start_local"
+                android:text="@string/member_start_google"
                 android:textSize="15sp"
+                android:textColor="@color/colorWhite"
                 android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+
         </RelativeLayout>
-
-        <LinearLayout
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/naver_sign_out_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/naver_revoke_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-        <RelativeLayout
-                android:id="@+id/member_start_google_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:clickable="true"
-                android:background="@drawable/selector_bg_member_start_button_layout">
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="28dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_google"
-                    android:scaleType="centerInside"/>
-
-                <TextView
-                    android:id="@+id/member_start_google_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/member_start_google"
-                    android:textSize="15sp"
-                    android:textAppearance="@style/MemberStartGrayTextAppearance"/>
-            </RelativeLayout>
-
-        <LinearLayout
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/google_sign_out_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/google_revoke_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/member_start_naver_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="10dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:clickable="true"
-            android:background="@drawable/selector_bg_member_start_button_layout">
+            android:background="@drawable/selector_opaque_green_naver">
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="28dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_naver"
+                android:src="@drawable/ic_naver_white"
                 android:scaleType="centerInside"/>
 
             <TextView
@@ -153,42 +92,73 @@
                 android:layout_centerVertical="true"
                 android:text="@string/member_start_naver"
                 android:textSize="15sp"
+                android:textColor="@color/colorWhite"
                 android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/member_start_local_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:clickable="true"
+            android:background="@drawable/selector_opaque_white_local">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="28dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_email_green"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/member_start_local_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/member_start_local"
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimary"
+                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+
         </RelativeLayout>
 
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="26dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:layout_marginBottom="26dp">
 
-                <TextView
-                    android:id="@+id/member_start_browse_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:clickable="true"
-                    android:text="@string/member_start_browse"
-                    android:textSize="12sp"
-                    android:textColor="@color/color_selector_white_armadillo"
-                    android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+            <TextView
+                android:id="@+id/member_start_browse_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="10dp"
+                android:clickable="true"
+                android:text="@string/member_start_browse"
+                android:textSize="18sp"
+                android:textColor="@color/color_selector_white_armadillo"
+                android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
 
-                <TextView
-                    android:id="@+id/member_start_already_user_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:padding="10dp"
-                    android:clickable="true"
-                    android:text="@string/member_start_already_user"
-                    android:textSize="12sp"
-                    android:textColor="@color/color_selector_white_armadillo"
-                    android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+            <!--<TextView-->
+                <!--android:id="@+id/member_start_already_user_text_view"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:padding="10dp"-->
+                <!--android:clickable="true"-->
+                <!--android:text="@string/member_start_already_user"-->
+                <!--android:textSize="12sp"-->
+                <!--android:textColor="@color/color_selector_white_armadillo"-->
+                <!--android:textAppearance="@style/MemberStartWhiteTextAppearance"/>-->
 
-            </RelativeLayout>
+        </RelativeLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

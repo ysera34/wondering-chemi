@@ -187,7 +187,7 @@ public class MemberSignInLocalFragment extends Fragment
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
 //                ((MemberStartActivity) getActivity()).cancelSignInLocal();
-                mMenuSelectedListener.onMenuSelected(7004);
+                mMenuSelectedListener.onMenuSelected(7001);
                 break;
         }
     }
