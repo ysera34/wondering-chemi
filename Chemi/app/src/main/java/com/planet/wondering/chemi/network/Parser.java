@@ -891,7 +891,7 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-//        Log.i(TAG, user.toString());
+        Log.i(TAG, user.toString());
         return user;
     }
 

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
-import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 
 /**
  * Created by yoon on 2017. 2. 12..
@@ -61,10 +60,10 @@ public class MemberStartFragment extends Fragment
         mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
         mStartAlreadyUserTextView.setOnClickListener(this);
 
-        view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
-        view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
-        view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
-        view.findViewById(R.id.naver_revoke_button).setOnClickListener(this);
+//        view.findViewById(R.id.naver_sign_out_button).setOnClickListener(this);
+//        view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
+//        view.findViewById(R.id.google_revoke_button).setOnClickListener(this);
+//        view.findViewById(R.id.naver_revoke_button).setOnClickListener(this);
         return view;
     }
 
@@ -95,18 +94,18 @@ public class MemberStartFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(7002);
 //                ((MemberStartActivity) getActivity()).signInLocal();
                 break;
-            case R.id.naver_sign_out_button:
-                ((MemberStartActivity) getActivity()).signOutNaver();
-                break;
-            case R.id.naver_revoke_button:
-                ((MemberStartActivity) getActivity()).revokeAccessNaver();
-                break;
-            case R.id.google_sign_out_button:
-                ((MemberStartActivity) getActivity()).signOutGoogle();
-                break;
-            case R.id.google_revoke_button:
-                ((MemberStartActivity) getActivity()).revokeAccessGoogle();
-                break;
+//            case R.id.naver_sign_out_button:
+//                ((MemberStartActivity) getActivity()).signOutNaver();
+//                break;
+//            case R.id.naver_revoke_button:
+//                ((MemberStartActivity) getActivity()).revokeAccessNaver();
+//                break;
+//            case R.id.google_sign_out_button:
+//                ((MemberStartActivity) getActivity()).signOutGoogle();
+//                break;
+//            case R.id.google_revoke_button:
+//                ((MemberStartActivity) getActivity()).revokeAccessGoogle();
+//                break;
         }
     }
 

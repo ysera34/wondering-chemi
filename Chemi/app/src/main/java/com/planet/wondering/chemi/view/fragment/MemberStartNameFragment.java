@@ -20,17 +20,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
-import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.UserActivity;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
+import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -44,9 +45,23 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 public class MemberStartNameFragment extends Fragment implements View.OnClickListener {
 
+    private static final String TAG = MemberStartNameFragment.class.getSimpleName();
+
+    private static final String ARG_ANONYMOUS_USER = "anonymous_user";
+
     public static MemberStartNameFragment newInstance() {
 
         Bundle args = new Bundle();
+
+        MemberStartNameFragment fragment = new MemberStartNameFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MemberStartNameFragment newInstance(User user) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ANONYMOUS_USER, user);
 
         MemberStartNameFragment fragment = new MemberStartNameFragment();
         fragment.setArguments(args);
@@ -59,11 +74,14 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
     private TextView mMemberStartNameNameValidationTextView;
     private TextView mMemberStartNameNameAuthButtonTextView;
 
+    private User mAnonymousUser;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mAnonymousUser = (User) getArguments().getSerializable(ARG_ANONYMOUS_USER);
     }
 
     @Nullable
@@ -169,7 +187,10 @@ public class MemberStartNameFragment extends Fragment implements View.OnClickLis
 
                         if (isAuthNameValidation && isConfirmName) {
 //                            requestSubmitUserInfo();
-                            ((MemberStartActivity) getActivity()).requestSubmitUserInfo(mMemberStartNameNameEditText.getText().toString());
+//                            ((MemberStartActivity) getActivity()).requestSubmitUserInfo(mMemberStartNameNameEditText.getText().toString());
+                            mAnonymousUser.setName(mMemberStartNameNameEditText.getText().toString());
+                            getActivity().startActivityForResult(UserActivity.newIntent(getActivity(),
+                                    SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE, mAnonymousUser), SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE);
                         } else {
                             mMemberStartNameNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mMemberStartNameNameValidationTextView.setText(getString(R.string.name_submit_message_incorrect));

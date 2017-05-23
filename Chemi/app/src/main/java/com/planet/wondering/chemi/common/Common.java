@@ -36,5 +36,33 @@ public class Common {
     public static final int WITHDRAW_DIALOG_REQUEST_CODE = 3115;
     public static final int PROMOTE_EXTRA_DIALOG_REQUEST_CODE = 3116;
 
+    public static final String EXTRA_REQUEST_USER_CODE = "com.planet.wondering.chemi.request_user_code";
+    public static final String EXTRA_RESPONSE_USER_CODE = "com.planet.wondering.chemi.response_user_code";
+    public static final String EXTRA_REQUEST_USER = "com.planet.wondering.chemi.request_user";
+    public static final String EXTRA_RESPONSE_USER = "com.planet.wondering.chemi.response_user";
+
+    public static final int SIGN_IN_GOOGLE_REQUEST_CODE = 17001;
+    public static final int SIGN_OUT_GOOGLE_REQUEST_CODE = 17002;
+    public static final int REVOKE_ACCESS_GOOGLE_REQUEST_CODE = 17003;
+    public static final int SIGN_IN_NAVER_REQUEST_CODE = 17004;
+    public static final int SIGN_OUT_NAVER_REQUEST_CODE = 17005;
+    public static final int REVOKE_ACCESS_NAVER_REQUEST_CODE = 17006;
+    public static final int SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE = 17007;
+
+    public static final int LOCAL_USER_PLATFORM_ID = 0;
+    public static final int GOOGLE_USER_PLATFORM_ID = 1;
+    public static final int NAVER_USER_PLATFORM_ID = 2;
+
+    public static final int CONFIRM_EMAIL_REPETITION_TRUE_CODE = 17011;
+    public static final int CONFIRM_EMAIL_REPETITION_FALSE_CODE = 17012;
+    public static final int CONFIRM_EMAIL_ANOTHER_PLATFORM_USER_CODE = 17013;
+    public static final int CONFIRM_EMAIL_REPETITION_ERROR_CODE = 17014;
+
+    public static final int SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE = 17015;
+    public static final int SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE = 17016;
+
+
+
+
 
 }

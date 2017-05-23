@@ -18,6 +18,7 @@ public class User implements Serializable {
     private String mEmail;
     private String mName;
     private String mToken;
+    private String mIdToken;
     private String mPushToken;
     private byte mPlatformId;
     private String mImagePath;
@@ -70,6 +71,14 @@ public class User implements Serializable {
 
     public void setToken(String token) {
         mToken = token;
+    }
+
+    public String getIdToken() {
+        return mIdToken;
+    }
+
+    public void setIdToken(String idToken) {
+        mIdToken = idToken;
     }
 
     public String getPushToken() {

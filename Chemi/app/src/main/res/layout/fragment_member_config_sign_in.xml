@@ -7,9 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/member_header_height"
-        android:orientation="vertical"
-        android:background="@drawable/widget_border_bottom_member_appbar">
+        android:layout_height="92dp">
 
         <ImageView
             android:id="@+id/member_config_setting_image_view"
@@ -30,7 +28,6 @@
             android:textSize="15sp"
             android:textColor="@color/colorFontAluminum"/>
 
-
     </RelativeLayout>
 
     <LinearLayout
@@ -38,12 +35,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/ic_login"/>
 
         <TextView
             android:id="@+id/member_config_sign_in_text_view"
