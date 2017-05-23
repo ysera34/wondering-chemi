@@ -5,7 +5,7 @@
                 android:background="@color/colorWhiteAlphaBackground">
 
     <RelativeLayout
-        android:id="@+id/member_forget_email_header"
+        android:id="@+id/member_sign_in_local_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:background="@color/colorWhite"
@@ -41,7 +41,7 @@
         android:id="@+id/member_sign_in_email_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/member_forget_email_header"
+        android:layout_below="@+id/member_sign_in_local_header"
         android:orientation="vertical"
         android:paddingTop="18dp"
         android:paddingStart="18dp"
@@ -102,6 +102,7 @@
             android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/member_sign_in_submit_button_layout"
         android:layout_width="match_parent"

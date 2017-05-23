@@ -3,16 +3,20 @@ package com.planet.wondering.chemi.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
-import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.MemberActivity;
 
 /**
  * Created by yoon on 2017. 3. 25..
@@ -29,12 +33,13 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
         return fragment;
     }
 
-    private ImageView mMemberConfigSettingImageView;
-    private TextView mMemberConfigSignInTextView;
+    private AppBarLayout mMemberConfigSignInAppBarLayout;
+    private Toolbar mMemberConfigSignInToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -42,10 +47,23 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_config_sign_in, container, false);
-        mMemberConfigSettingImageView = (ImageView) view.findViewById(R.id.member_config_setting_image_view);
-        mMemberConfigSettingImageView.setOnClickListener(this);
-        mMemberConfigSignInTextView = (TextView) view.findViewById(R.id.member_config_sign_in_text_view);
-        mMemberConfigSignInTextView.setOnClickListener(this);
+        mMemberConfigSignInToolbar = (Toolbar) view.findViewById(R.id.member_config_sign_in_toolbar);
+        ((MemberActivity) getActivity()).setSupportActionBar(mMemberConfigSignInToolbar);
+        mMemberConfigSignInAppBarLayout = (AppBarLayout) view.findViewById(R.id.member_config_sign_in_app_bar_layout);
+        mMemberConfigSignInAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, final int verticalOffset) {
+//                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+//                if (verticalOffset == -mMemberAppBarLayout.getHeight() + mMemberToolbar.getHeight()) {
+                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 2) {
+                    ((MemberActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                } else {
+                    ((MemberActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                }
+            }
+        });
         return view;
     }
 
@@ -57,14 +75,24 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.member_config_setting_image_view:
+
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_toolbar_member, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_config:
                 mMenuSelectedListener.onMenuSelected(-1);
-                break;
-            case R.id.member_config_sign_in_text_view:
-                startActivity(MemberStartActivity.newIntent(getActivity()));
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                getActivity().finish();
-                break;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
