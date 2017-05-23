@@ -52,9 +52,16 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();
     public static final int RC_SIGN_IN = 9001;
+    private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, MemberStartActivity.class);
+        return intent;
+    }
+
+    public static Intent newIntent(Context packageContext, int requestId) {
+        Intent intent = new Intent(packageContext, MemberStartActivity.class);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
     }
 
@@ -73,6 +80,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
     private Fragment mFragment;
 
     private int mPlatformId;
+    private int mRequestId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,12 +136,7 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_fragment_container);
 
-        if (mFragment == null) {
-            mFragment = MemberStartFragment.newInstance();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.member_fragment_container, mFragment)
-                    .commit();
-        }
+        mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
     }
 
 //    @Override
@@ -145,6 +148,24 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
     @Override
     protected void onResume() {
         super.onResume();
+        if (mFragment == null) {
+            if (mRequestId == -1) {
+                mFragment = MemberStartFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            } else if (mRequestId == 2) {
+                mFragment = MemberForgetPasswordFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            } else if (mRequestId == 3) {
+                mFragment = MemberStartLocalFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            }
+        }
 
         Uri uriData = getIntent().getData();
         String accessToken = null;
@@ -751,10 +772,15 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
             case 7003: /* cancel signUpForLocal  */
                 fragment = getSupportFragmentManager().findFragmentById(R.id.member_fragment_container);
                 if (fragment instanceof MemberStartLocalFragment) {
-                    mFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                            .replace(R.id.member_fragment_container, MemberStartFragment.newInstance())
-                            .commit();
+                    if (mRequestId == -1) {
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                                .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
+                                .commit();
+                    } else if (mRequestId == 3) {
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                 }
                 break;
             case 7004: /* cancel signInLocal  */
@@ -825,10 +851,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_fragment_container);
         if (fragment instanceof MemberStartLocalFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
-                    .commit();
+//            mFragmentManager.beginTransaction()
+//                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//                    .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
+//                    .commit();
         } else if (fragment instanceof MemberConfigTermsFragment) {
             mFragmentManager.popBackStackImmediate();
         } else if (fragment instanceof MemberStartNameFragment) {
@@ -855,10 +881,15 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     .replace(R.id.member_fragment_container, MemberStartFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberForgetPasswordFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
-                    .commit();
+            if (mRequestId == -1) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
+                        .commit();
+            } else if (mRequestId == 2) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         } else if (fragment instanceof MemberSendEmailFragment) {
 //            Toast.makeText(getApplicationContext(), "비밀번호 변경이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 //            mFragmentManager.beginTransaction()

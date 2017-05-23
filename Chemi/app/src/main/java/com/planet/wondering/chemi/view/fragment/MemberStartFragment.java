@@ -57,8 +57,6 @@ public class MemberStartFragment extends Fragment
         mStartLocalLayout.setOnClickListener(this);
         mStartBrowseTextView = (TextView) view.findViewById(R.id.member_start_browse_text_view);
         mStartBrowseTextView.setOnClickListener(this);
-//        mStartAlreadyUserTextView = (TextView) view.findViewById(R.id.member_start_already_user_text_view);
-//        mStartAlreadyUserTextView.setOnClickListener(this);
         return view;
     }
 
@@ -82,9 +80,6 @@ public class MemberStartFragment extends Fragment
             case R.id.member_start_browse_text_view:
                 mMenuSelectedListener.onMenuSelected(7000);
                 break;
-//            case R.id.member_start_already_user_text_view:
-//                mMenuSelectedListener.onMenuSelected(7002);
-//                break;
         }
     }
 

@@ -1,7 +1,8 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +42,7 @@ import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import org.json.JSONObject;
 
@@ -46,6 +51,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.planet.wondering.chemi.common.Common.LOCAL_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -80,11 +86,16 @@ public class MemberStartLocalFragment extends Fragment
         return fragment;
     }
 
+    private RelativeLayout mMemberStartLocalGuideDimLayout;
+    private LinearLayout mMemberStartLocalGuideLayout;
+    private ImageView mMemberStartLocalGuideImageView;
     private RelativeLayout mMemberStartLocalCancelLayout;
     private EditText mMemberStartLocalEmailEditText;
     private EditText mMemberStartLocalNameEditText;
     private EditText mMemberStartLocalPasswordEditText;
     private EditText mMemberStartLocalConfirmEditText;
+
+    private Animation mShakeAnimation;
 
     private LinearLayout mEmailAuthButtonLayout;
     private TextView mEmailAuthButtonTextView;
@@ -107,6 +118,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private CustomProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,6 +138,7 @@ public class MemberStartLocalFragment extends Fragment
                 }
             }
         };
+        mShakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_left_right);
     }
 
     @Nullable
@@ -133,6 +146,9 @@ public class MemberStartLocalFragment extends Fragment
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_start_local, container, false);
+        mMemberStartLocalGuideDimLayout = (RelativeLayout) view.findViewById(R.id.member_start_local_guide_dim_layout);
+        mMemberStartLocalGuideLayout = (LinearLayout) view.findViewById(R.id.member_start_local_guide_layout);
+        mMemberStartLocalGuideImageView = (ImageView) view.findViewById(R.id.member_start_local_guide_image_view);
         mMemberStartLocalCancelLayout = (RelativeLayout) view.findViewById(R.id.member_start_local_cancel_layout);
         mMemberStartLocalCancelLayout.setOnClickListener(this);
         mMemberStartLocalEmailEditText =
@@ -201,8 +217,8 @@ public class MemberStartLocalFragment extends Fragment
             case R.id.member_start_local_cancel_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
 //                ((MemberStartActivity) getActivity()).cancelSignUpForLocal();
-//                mMenuSelectedListener.onMenuSelected(7003);
-                getActivity().onBackPressed();
+                mMenuSelectedListener.onMenuSelected(7003);
+//                getActivity().onBackPressed();
                 break;
             case R.id.member_start_local_email_auth_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberStartLocalEmailEditText.getWindowToken(), 0);
@@ -248,6 +264,8 @@ public class MemberStartLocalFragment extends Fragment
             mMemberStartLocalEmailEditText.setEnabled(false);
             Log.i(TAG, "accessToken : " + accessToken);
             mAccessToken = accessToken;
+            mMemberStartLocalGuideDimLayout.setVisibility(View.GONE);
+            mMemberStartLocalGuideLayout.setVisibility(View.GONE);
         }
     }
 
@@ -438,9 +456,10 @@ public class MemberStartLocalFragment extends Fragment
 
     private void requestConfirmEmailRepetition(String emailAddress) {
 
+        showProgressDialog();
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL_STRING, emailAddress);
-        params.put(PLATFORM, "0");
+        params.put(PLATFORM, String.valueOf(LOCAL_USER_PLATFORM_ID));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH + EMAIL_STRING_PATH, new JSONObject(params),
@@ -449,10 +468,11 @@ public class MemberStartLocalFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         if (Parser.parseSimpleResult(response)) {
                             mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
-                            mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_correct));
+                            mEmailValidationMessageTextView.setText("이메일 중복 확인 중입니다. 완료 되면 메일을 발송해드릴께요.");
                             mEmailValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                             requestSendAuthEmail(mMemberStartLocalEmailEditText.getText().toString());
                         } else {
+                            hideProgressDialog();
                             mEmailAuthButtonTextView.setEnabled(true);
                             mMemberStartLocalEmailEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                             mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_incorrect));
@@ -463,6 +483,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
                         Log.e(TAG, String.valueOf(error.toString()));
                         mEmailAuthButtonTextView.setEnabled(true);
 //                        Toast.makeText(getActivity(),
@@ -489,14 +510,21 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getActivity(),
-                                "메일 발송이 완료 되었습니다.\n메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        hideProgressDialog();
+                        mEmailValidationMessageTextView.setText(getString(R.string.email_submit_message_correct));
+//                        Toast.makeText(getActivity(),
+//                                "메일 발송이 완료 되었습니다.\n홈 버튼을 누르시고, 메일함에서 확인해주세요.", Toast.LENGTH_SHORT).show();
                         isAuthEmailResult = true;
+
+                        mMemberStartLocalGuideDimLayout.setVisibility(View.VISIBLE);
+                        mMemberStartLocalGuideLayout.setVisibility(View.VISIBLE);
+                        mMemberStartLocalGuideImageView.setAnimation(mShakeAnimation);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
                         Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "메일 발송 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요.", Toast.LENGTH_SHORT).show();
@@ -555,9 +583,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private void requestSubmitUserInfo() {
 
-        final ProgressDialog progressDialog;
-        progressDialog = ProgressDialog.show(getActivity(), "회원가입을 요청하고 있습니다.",
-                    getString(R.string.progress_dialog_message_wait), false, false);
+        showProgressDialog();
 
         Map<String, String> params = new HashMap<>();
         params.put(EMAIL, mMemberStartLocalEmailEditText.getText().toString());
@@ -565,14 +591,14 @@ public class MemberStartLocalFragment extends Fragment
         params.put(PASSWORD, mMemberStartLocalConfirmEditText.getText().toString());
         params.put(ACCESS_TOKEN, mAccessToken);
         params.put(PUSH_TOKEN, FirebaseInstanceId.getInstance().getToken());
-        params.put(PLATFORM, "0");
+        params.put(PLATFORM, String.valueOf(LOCAL_USER_PLATFORM_ID));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+                        hideProgressDialog();
                         Toast.makeText(getActivity(),
                                 "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         mUser = Parser.parseSignUpForUser(response);
@@ -598,7 +624,7 @@ public class MemberStartLocalFragment extends Fragment
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
+                        hideProgressDialog();
                         Log.e(TAG, String.valueOf(error.toString()));
                         Toast.makeText(getActivity(),
                                 "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
@@ -629,6 +655,22 @@ public class MemberStartLocalFragment extends Fragment
                     }
                 });
     }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new CustomProgressDialog(getActivity());
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+    }
+
 
     OnMenuSelectedListener mMenuSelectedListener;
 

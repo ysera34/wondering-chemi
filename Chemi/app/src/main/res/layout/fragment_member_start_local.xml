@@ -239,4 +239,40 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/member_start_local_guide_dim_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/dim_effect_shape">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/member_start_local_guide_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/member_start_local_guide_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_comments"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
+            android:layout_marginBottom="16dp"
+            android:text="홈버튼을 누르시고,\n메일을 확인할 수 있는 앱으로 이동하셔야 해요."
+            android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

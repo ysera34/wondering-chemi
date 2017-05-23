@@ -101,7 +101,8 @@ public class MemberForgetPasswordFragment extends Fragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.member_forget_password_cancel_layout:
-                mMenuSelectedListener.onMenuSelected(7006);
+//                mMenuSelectedListener.onMenuSelected(7006);
+                getActivity().onBackPressed();
                 break;
             case R.id.member_forget_password_email_submit_button_text_view:
                 mInputMethodManager.hideSoftInputFromWindow(mMemberForgetPasswordEmailEditText.getWindowToken(), 0);

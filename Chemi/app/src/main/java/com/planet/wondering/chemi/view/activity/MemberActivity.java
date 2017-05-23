@@ -126,6 +126,7 @@ public class MemberActivity extends BottomNavigationActivity
                         .commit();
             }
         } else if (mFragment instanceof MemberFragment) {
+            /* refresh fragment */
             if (mAccessToken != null) {
                 requestMemberConfigUser();
             }
@@ -148,9 +149,13 @@ public class MemberActivity extends BottomNavigationActivity
                             .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                             .commit();
                 } else {
-                    startActivity(MemberStartActivity.newIntent(getApplicationContext()));
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                    finish();
+//                    startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+//                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//                    finish();
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.main_fragment_container, MemberConfigSignInFragment.newInstance())
+                            .commit();
                 }
 
                 break;
@@ -299,8 +304,8 @@ public class MemberActivity extends BottomNavigationActivity
                         .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                         .commit();
             } else if (mRequestId == 4){
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         } else if (fragment instanceof MemberConfigTermsFragment) {
 //            mBottomNavigationLayout.setVisibility(View.VISIBLE);

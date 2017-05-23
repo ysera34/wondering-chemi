@@ -82,18 +82,19 @@
                 android:layout_marginStart="28dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_naver_white"
-                android:scaleType="centerInside"/>
+                android:scaleType="centerInside"
+                android:id="@+id/imageView"/>
 
             <TextView
                 android:id="@+id/member_start_naver_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:text="@string/member_start_naver"
                 android:textSize="15sp"
                 android:textColor="@color/colorWhite"
-                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+                android:textAppearance="@style/MemberStartGrayTextAppearance"
+                android:layout_alignBottom="@+id/imageView"
+                android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
 
