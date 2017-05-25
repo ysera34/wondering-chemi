@@ -13,6 +13,7 @@ public class FAQBody {
 //    private String mUpdateDate;
     private boolean mIsText;
     private String mImagePath;
+    private boolean mIsFirstImage;
 
     public FAQBody() {
     }
@@ -55,5 +56,13 @@ public class FAQBody {
 
     public void setImagePath(String imagePath) {
         mImagePath = imagePath;
+    }
+
+    public boolean isFirstImage() {
+        return mIsFirstImage;
+    }
+
+    public void setFirstImage(boolean firstImage) {
+        mIsFirstImage = firstImage;
     }
 }

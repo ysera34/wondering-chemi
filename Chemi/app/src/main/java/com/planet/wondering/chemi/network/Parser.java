@@ -1185,6 +1185,9 @@ public class Parser {
                     for (int i = 0; i < imagePathJSONArray.length(); i++) {
                         FAQBody imagePathFAQBody = new FAQBody();
                         imagePathFAQBody.setImagePath(imagePathJSONArray.getString(i));
+                        if (i == 0) {
+                            imagePathFAQBody.setFirstImage(true);
+                        }
                         faqBodies.add(imagePathFAQBody);
                     }
                 }

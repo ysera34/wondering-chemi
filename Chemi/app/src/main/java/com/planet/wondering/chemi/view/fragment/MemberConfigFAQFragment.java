@@ -491,7 +491,9 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                 mFAQRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        mFAQRecyclerView.smoothScrollBy(0, imageHeight);
+                        if (mFAQBody.isFirstImage()) {
+                            mFAQRecyclerView.smoothScrollBy(0, imageHeight / 3);
+                        }
                     }
                 }, 200);
                 return false;
