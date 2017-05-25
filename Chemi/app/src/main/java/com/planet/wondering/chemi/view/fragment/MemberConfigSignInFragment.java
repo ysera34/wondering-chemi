@@ -35,6 +35,7 @@ import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.UserActivity;
 
 import org.json.JSONObject;
 
@@ -44,6 +45,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.planet.wondering.chemi.common.Common.LOCAL_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -171,10 +174,12 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.member_config_sign_in_google_layout:
-                Toast.makeText(getActivity(), "member_config_sign_in_google_layout", Toast.LENGTH_SHORT).show();
+                getActivity().startActivityForResult(UserActivity.newIntent(getActivity(),
+                        SIGN_IN_GOOGLE_REQUEST_CODE), SIGN_IN_GOOGLE_REQUEST_CODE);
                 break;
             case R.id.member_config_sign_in_naver_layout:
-                Toast.makeText(getActivity(), "member_config_sign_in_naver_layout", Toast.LENGTH_SHORT).show();
+                getActivity().startActivityForResult(UserActivity.newIntent(getActivity(),
+                        SIGN_IN_NAVER_REQUEST_CODE), SIGN_IN_NAVER_REQUEST_CODE);
                 break;
             case R.id.member_config_sign_in_local_layout:
                 startActivity(MemberStartActivity.newIntent(getActivity(), 3));

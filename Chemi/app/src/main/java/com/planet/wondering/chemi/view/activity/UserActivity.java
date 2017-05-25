@@ -62,6 +62,7 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_REQUEST_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.GOOGLE_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.LOCAL_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_RESULT_CODE;
@@ -70,10 +71,19 @@ import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_RESUL
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_RESPONSE_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_LOCAL_RESPONSE_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_NAVER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_NAVER_RESPONSE_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_GOOGLE_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_GOOGLE_USER_RESULT_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_LOCAL_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_LOCAL_USER_RESULT_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_NAVER_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_NAVER_USER_RESULT_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -130,7 +140,7 @@ public class UserActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_start);
+        setContentView(R.layout.layout_transparent);
 
         GoogleSignInOptions googleSignInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -187,12 +197,16 @@ public class UserActivity extends AppCompatActivity
                 signOutNaver();
                 break;
             case REVOKE_ACCESS_NAVER_REQUEST_CODE:
+            case WITHDRAW_NAVER_USER_REQUEST_CODE:
                 revokeAccessNaver();
                 break;
             case SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE:
                 User anonymousUser = (User) getIntent().getSerializableExtra(EXTRA_REQUEST_USER);
                 requestSignUpForPlatformUser(anonymousUser);
                 break;
+
+            case WITHDRAW_LOCAL_USER_REQUEST_CODE:
+                requestRevokeUser(LOCAL_USER_PLATFORM_ID);
         }
     }
 
@@ -232,6 +246,7 @@ public class UserActivity extends AppCompatActivity
                 signOutGoogle();
                 break;
             case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
+            case WITHDRAW_GOOGLE_USER_REQUEST_CODE:
                 revokeAccessGoogle();
                 break;
         }
@@ -255,6 +270,7 @@ public class UserActivity extends AppCompatActivity
                     @Override
                     public void onResult(@NonNull Status status) {
                         Log.d(TAG, "sign out GoogleApiClient.");
+                        finishUserActivity(null, SIGN_OUT_GOOGLE_RESPONSE_CODE);
                     }
                 });
     }
@@ -267,13 +283,13 @@ public class UserActivity extends AppCompatActivity
                     @Override
                     public void onResult(@NonNull Status status) {
                         Log.d(TAG, "revoke access GoogleApiClient.");
+                        if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
+                            requestRevokeUser(GOOGLE_USER_PLATFORM_ID);
+                        } else {
+                            finishUserActivity(null, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
+                        }
                     }
                 });
-        if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
-            requestRevokeUser(GOOGLE_USER_PLATFORM_ID);
-        } else {
-            finish();
-        }
     }
 
     private void firebaseAuthWithGoogle(String accessToken, String email) {
@@ -306,6 +322,7 @@ public class UserActivity extends AppCompatActivity
     public void signOutNaver() {
         mFirebaseAuth.signOut();
         mNaverOAuthLogin.logout(mContext);
+        finishUserActivity(null, SIGN_OUT_NAVER_RESPONSE_CODE);
     }
 
     public void revokeAccessNaver() {
@@ -314,7 +331,7 @@ public class UserActivity extends AppCompatActivity
         if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
             requestRevokeUser(NAVER_USER_PLATFORM_ID);
         } else {
-            finish();
+            finishUserActivity(null, REVOKE_ACCESS_NAVER_RESULT_CODE);
         }
     }
 
@@ -630,11 +647,14 @@ public class UserActivity extends AppCompatActivity
                         if (Parser.parseSimpleResult(response)) {
                             removeUserSharedPreferences();
                             switch (platformId) {
+                                case  LOCAL_USER_PLATFORM_ID:
+                                    finishUserActivity(null, WITHDRAW_LOCAL_USER_RESULT_CODE);
+                                    break;
                                 case GOOGLE_USER_PLATFORM_ID:
-                                    finishUserActivity(null, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
+                                    finishUserActivity(null, WITHDRAW_GOOGLE_USER_RESULT_CODE);
                                     break;
                                 case NAVER_USER_PLATFORM_ID:
-                                    finishUserActivity(null, REVOKE_ACCESS_NAVER_RESULT_CODE);
+                                    finishUserActivity(null, WITHDRAW_NAVER_USER_RESULT_CODE);
                                     break;
                             }
                         }
@@ -703,6 +723,22 @@ public class UserActivity extends AppCompatActivity
                 finish();
                 break;
 
+            case SIGN_OUT_GOOGLE_RESPONSE_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_OUT_GOOGLE_RESPONSE_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case SIGN_OUT_NAVER_RESPONSE_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_OUT_NAVER_RESPONSE_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case SIGN_OUT_LOCAL_RESPONSE_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_OUT_LOCAL_RESPONSE_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+
             case REVOKE_ACCESS_GOOGLE_RESULT_CODE:
                 intent.putExtra(EXTRA_RESPONSE_USER_CODE, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
                 setResult(RESULT_OK, intent);
@@ -710,6 +746,22 @@ public class UserActivity extends AppCompatActivity
                 break;
             case REVOKE_ACCESS_NAVER_RESULT_CODE:
                 intent.putExtra(EXTRA_RESPONSE_USER_CODE, REVOKE_ACCESS_NAVER_RESULT_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+
+            case WITHDRAW_GOOGLE_USER_RESULT_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, WITHDRAW_GOOGLE_USER_RESULT_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case WITHDRAW_NAVER_USER_RESULT_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, WITHDRAW_NAVER_USER_RESULT_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case WITHDRAW_LOCAL_USER_RESULT_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, WITHDRAW_LOCAL_USER_RESULT_CODE);
                 setResult(RESULT_OK, intent);
                 finish();
                 break;

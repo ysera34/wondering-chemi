@@ -55,6 +55,7 @@ public class MemberFragment extends Fragment
     private static final String TAG = MemberFragment.class.getSimpleName();
 
     private static final String ARG_CONFIG_USER = "config_user";
+    private static final String ARG_IS_FIRST_USER = "is_first_user";
 
     public static MemberFragment newInstance() {
 
@@ -69,6 +70,17 @@ public class MemberFragment extends Fragment
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIG_USER, user);
+
+        MemberFragment fragment = new MemberFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MemberFragment newInstance(User user, boolean isFirstUser) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CONFIG_USER, user);
+        args.putBoolean(ARG_IS_FIRST_USER, isFirstUser);
 
         MemberFragment fragment = new MemberFragment();
         fragment.setArguments(args);
@@ -223,6 +235,11 @@ public class MemberFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments().getBoolean(ARG_IS_FIRST_USER, false)) {
+            MemberCongratulationDialogFragment dialogFragment = MemberCongratulationDialogFragment.newInstance();
+            dialogFragment.show(getFragmentManager(), "congratulation_dialog");
+        }
 
         if (mUser.getImagePath() == null || mUser.getImagePath().equals("null")) {
             if (mUser.isHasExtraInfo()) {

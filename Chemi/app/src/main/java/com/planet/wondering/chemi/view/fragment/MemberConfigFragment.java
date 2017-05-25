@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ public class MemberConfigFragment extends Fragment
 
     private int[] mConfigLayoutIds;
     private RelativeLayout[] mConfigLayouts;
+    private ImageView mMemberConfigProfileArrowImageView;
     private TextView mMemberConfigProfileTextView;
     private TextView mMemberConfigVersionTextView;
     private Switch mPushSwitch;
@@ -95,6 +97,7 @@ public class MemberConfigFragment extends Fragment
             mConfigLayouts[i] = (RelativeLayout) view.findViewById(mConfigLayoutIds[i]);
             mConfigLayouts[i].setOnClickListener(this);
         }
+        mMemberConfigProfileArrowImageView = (ImageView) view.findViewById(R.id.member_config_profile_arrow_image_view);
         mMemberConfigProfileTextView = (TextView) view.findViewById(R.id.member_config_profile_text_view);
         mMemberConfigVersionTextView = (TextView) view.findViewById(R.id.member_config_version_text_view);
 
@@ -117,6 +120,7 @@ public class MemberConfigFragment extends Fragment
         requestGetUserConfig(); /* only for app version */
         if (UserSharedPreferences.getStoredToken(getActivity()) == null) {
             mMemberConfigProfileTextView.setText("회원 가입 및 로그인");
+            mMemberConfigProfileArrowImageView.setRotation(180f);
             mConfigLayouts[6].setVisibility(View.GONE);
         }
 

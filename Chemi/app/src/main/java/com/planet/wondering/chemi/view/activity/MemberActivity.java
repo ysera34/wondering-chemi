@@ -25,6 +25,7 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
 import com.planet.wondering.chemi.util.listener.OnUserInfoUpdateListener;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.fragment.MemberAskInfoFragment;
@@ -39,12 +40,30 @@ import com.planet.wondering.chemi.view.fragment.MemberConfigRequestFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigSignInFragment;
 import com.planet.wondering.chemi.view.fragment.MemberConfigTermsFragment;
 import com.planet.wondering.chemi.view.fragment.MemberFragment;
+import com.planet.wondering.chemi.view.fragment.MemberStartNameFragment;
+import com.planet.wondering.chemi.view.fragment.MemberSurveyInfoFragment;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_FALSE_CODE;
+import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_TRUE_CODE;
+import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
+import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_LOCAL_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_NAVER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_GOOGLE_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_LOCAL_USER_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.WITHDRAW_NAVER_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -55,12 +74,13 @@ import static com.planet.wondering.chemi.network.Config.User.PATH;
  * Created by yoon on 2016. 12. 31..
  */
 
-public class MemberActivity extends BottomNavigationActivity
-        implements OnMenuSelectedListener, OnDialogFinishedListener, OnUserInfoUpdateListener {
+public class MemberActivity extends BottomNavigationActivity implements OnMenuSelectedListener,
+        OnDialogFinishedListener, OnUserInfoUpdateListener, OnSurveyCompletedListener {
 
     private static final String TAG = MemberActivity.class.getSimpleName();
 
     private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
+    private static final String EXTRA_IS_FIRST_USER = "com.planet.wondering.chemi.is_first_user";
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
@@ -76,9 +96,16 @@ public class MemberActivity extends BottomNavigationActivity
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, boolean isFirstUser) {
+        Intent intent = new Intent(packageContext, MemberActivity.class);
+        intent.putExtra(EXTRA_IS_FIRST_USER, isFirstUser);
+        return intent;
+    }
+
     private String mAccessToken;
     private User mUser;
     private int mRequestId;
+    private boolean mIsFirstUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +114,7 @@ public class MemberActivity extends BottomNavigationActivity
         mAccessToken = UserSharedPreferences.getStoredToken(getApplicationContext());
 
         mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
+        mIsFirstUser = getIntent().getBooleanExtra(EXTRA_IS_FIRST_USER, false);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
@@ -130,6 +158,94 @@ public class MemberActivity extends BottomNavigationActivity
             if (mAccessToken != null) {
                 requestMemberConfigUser();
             }
+        }
+    }
+
+    private int mPlatformId;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case SIGN_IN_GOOGLE_REQUEST_CODE:
+            case SIGN_IN_NAVER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    int responseCode = data.getIntExtra(EXTRA_RESPONSE_USER_CODE, -1);
+                    switch (responseCode) {
+                        case CONFIRM_EMAIL_REPETITION_TRUE_CODE:
+                            Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MemberActivity.class);
+                            finish();
+                            startActivity(intent);
+                            break;
+                        case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
+                            User anonymousUser = (User) data.getSerializableExtra(EXTRA_RESPONSE_USER);
+                            mFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(R.id.main_fragment_container,
+                                            MemberStartNameFragment.newInstance(anonymousUser))
+                                    .commit();
+                            mPlatformId = anonymousUser.getPlatformId();
+                            break;
+                    }
+
+                }
+                break;
+            case SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    int responseCode = data.getIntExtra(EXTRA_RESPONSE_USER_CODE, -1);
+                    switch (responseCode) {
+                        case SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE:
+                            mFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(R.id.main_fragment_container, MemberSurveyInfoFragment.newInstance())
+                                    .commit();
+                            break;
+                    }
+                }
+                break;
+            case SIGN_OUT_LOCAL_REQUEST_CODE:
+            case SIGN_OUT_GOOGLE_REQUEST_CODE:
+            case SIGN_OUT_NAVER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                    UserSharedPreferences.removeStoredToken(getApplicationContext());
+                    UserSharedPreferences.removeStoredUserName(getApplicationContext());
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
+                            .commit();
+                }
+
+                break;
+
+            case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
+            case REVOKE_ACCESS_NAVER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "연동해제 하였습니다.", Toast.LENGTH_SHORT).show();
+                    UserSharedPreferences.removeStoredToken(getApplicationContext());
+                    UserSharedPreferences.removeStoredUserName(getApplicationContext());
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
+                            .commit();
+                }
+                break;
+
+            case WITHDRAW_GOOGLE_USER_REQUEST_CODE:
+            case WITHDRAW_NAVER_USER_REQUEST_CODE:
+            case WITHDRAW_LOCAL_USER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "탈퇴 하였습니다.", Toast.LENGTH_SHORT).show();
+                    UserSharedPreferences.removeStoredToken(getApplicationContext());
+                    UserSharedPreferences.removeStoredUserName(getApplicationContext());
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
+                            .commit();
+                }
+                break;
         }
     }
 
@@ -261,6 +377,20 @@ public class MemberActivity extends BottomNavigationActivity
     }
 
     @Override
+    public void onSurveyCompleted(int stageNumber, boolean isCompleted) {
+        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.main_fragment_container);
+        surveyInfoFragment.updateConfirmButtonTextView(stageNumber, isCompleted);
+    }
+
+    @Override
+    public void onSurveyValueSubmit(int stageNumber, int value) {
+        MemberSurveyInfoFragment surveyInfoFragment = (MemberSurveyInfoFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.main_fragment_container);
+        surveyInfoFragment.updateUserInfo(stageNumber, value);
+    }
+
+    @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
@@ -377,11 +507,11 @@ public class MemberActivity extends BottomNavigationActivity
                             mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
                             if (mFragment == null) {
                                 mFragmentManager.beginTransaction()
-                                        .add(R.id.main_fragment_container, MemberFragment.newInstance(mUser))
+                                        .add(R.id.main_fragment_container, MemberFragment.newInstance(mUser, mIsFirstUser))
                                         .commit();
                             } else if (mFragment instanceof MemberFragment) {
                                 mFragmentManager.beginTransaction()
-                                        .replace(R.id.main_fragment_container, MemberFragment.newInstance(mUser))
+                                        .replace(R.id.main_fragment_container, MemberFragment.newInstance(mUser, mIsFirstUser))
                                         .commit();
                             }
 //                            mFragment = MemberFragment.newInstance(mUser);

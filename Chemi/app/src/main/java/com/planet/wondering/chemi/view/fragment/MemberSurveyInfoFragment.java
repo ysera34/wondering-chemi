@@ -1,6 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.activity.MemberActivity;
+import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
@@ -370,9 +373,14 @@ public class MemberSurveyInfoFragment extends Fragment
                         Log.i(TAG, response.toString());
                         progressDialog.dismiss();
 
-                        startActivity(SearchActivity.newIntent(getActivity(), true));
-                        getActivity().finish();
-
+                        if (getActivity() instanceof MemberStartActivity) {
+                            startActivity(SearchActivity.newIntent(getActivity(), true));
+                            getActivity().finish();
+                        } else if (getActivity() instanceof MemberActivity) {
+                            Intent intent = MemberActivity.newIntent(getActivity(), true);
+                            getActivity().finish();
+                            startActivity(intent);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

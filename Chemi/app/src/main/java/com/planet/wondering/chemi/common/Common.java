@@ -50,6 +50,13 @@ public class Common {
     public static final int REVOKE_ACCESS_NAVER_REQUEST_CODE = 17006;
     public static final int SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE = 17007;
 
+    public static final int SIGN_IN_LOCAL_REQUEST_CODE = 17033;
+    public static final int SIGN_OUT_LOCAL_REQUEST_CODE = 17034;
+
+    public static final int WITHDRAW_GOOGLE_USER_REQUEST_CODE = 17008;
+    public static final int WITHDRAW_NAVER_USER_REQUEST_CODE = 17009;
+    public static final int WITHDRAW_LOCAL_USER_REQUEST_CODE = 17010;
+
     public static final int LOCAL_USER_PLATFORM_ID = 0;
     public static final int GOOGLE_USER_PLATFORM_ID = 1;
     public static final int NAVER_USER_PLATFORM_ID = 2;
@@ -62,8 +69,16 @@ public class Common {
     public static final int SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE = 17015;
     public static final int SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE = 17016;
 
-    public static final int REVOKE_ACCESS_GOOGLE_RESULT_CODE = 17017;
-    public static final int REVOKE_ACCESS_NAVER_RESULT_CODE = 17018;
+    public static final int SIGN_OUT_GOOGLE_RESPONSE_CODE = 17017;
+    public static final int SIGN_OUT_NAVER_RESPONSE_CODE = 17018;
+    public static final int SIGN_OUT_LOCAL_RESPONSE_CODE = 17019;
+
+    public static final int REVOKE_ACCESS_GOOGLE_RESULT_CODE = 17020;
+    public static final int REVOKE_ACCESS_NAVER_RESULT_CODE = 17021;
+
+    public static final int WITHDRAW_GOOGLE_USER_RESULT_CODE = 17022;
+    public static final int WITHDRAW_NAVER_USER_RESULT_CODE = 17023;
+    public static final int WITHDRAW_LOCAL_USER_RESULT_CODE = 17024;
 
 
 
