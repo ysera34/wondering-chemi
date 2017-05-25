@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -127,6 +128,7 @@ public class ReviewReadFragment extends Fragment
     private InputMethodManager mInputMethodManager;
     private LinearLayout mReviewReadBackLayout;
     private RelativeLayout mReviewReadMoreMenuLayout;
+    private ImageView mReviewReadMoreMenuImageView;
     private PopupWindow mPopupWindow;
 
     private NestedScrollView mReviewReadNestedScrollView;
@@ -169,6 +171,9 @@ public class ReviewReadFragment extends Fragment
 
     private int mScreenWidth;
 
+    private static final float MORE_MENU_INITIAL_POSITION = 0.0f;
+    private static final float MORE_MENU_ROTATED_POSITION = 90.0f;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +197,7 @@ public class ReviewReadFragment extends Fragment
         mReviewReadBackLayout.setOnClickListener(this);
         mReviewReadMoreMenuLayout = (RelativeLayout) view.findViewById(R.id.review_read_more_menu_layout);
         mReviewReadMoreMenuLayout.setOnClickListener(this);
+        mReviewReadMoreMenuImageView = (ImageView) view.findViewById(R.id.review_read_more_menu_image_view);
 
         mReviewReadNestedScrollView = (NestedScrollView) view.findViewById(R.id.review_read_nested_scroll_view);
 
@@ -290,6 +296,7 @@ public class ReviewReadFragment extends Fragment
             case R.id.review_read_more_menu_layout:
                 mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
                 displayPopupWindow(mReviewReadMoreMenuLayout);
+                rotateMoreMenuAnimation(true);
                 break;
             case R.id.popup_menu_action_update:
                 mPopupWindow.dismiss();
@@ -391,6 +398,8 @@ public class ReviewReadFragment extends Fragment
         });
     }
 
+
+
     private void displayPopupWindow(View anchorView) {
         mPopupWindow = new PopupWindow(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.layout_popup_menu, null);
@@ -403,11 +412,38 @@ public class ReviewReadFragment extends Fragment
         mPopupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(true);
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                rotateMoreMenuAnimation(false);
+            }
+        });
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mPopupWindow.setElevation(16.0f);
         }
         mPopupWindow.showAsDropDown(anchorView);
+    }
+
+    private void rotateMoreMenuAnimation(boolean isShowing) {
+        RotateAnimation rotateAnimation;
+        if (isShowing) {
+            mReviewReadMoreMenuImageView.setRotation(MORE_MENU_ROTATED_POSITION);
+            rotateAnimation = new RotateAnimation(MORE_MENU_ROTATED_POSITION,
+                    MORE_MENU_INITIAL_POSITION,
+                    RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                    RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        } else {
+            mReviewReadMoreMenuImageView.setRotation(MORE_MENU_INITIAL_POSITION);
+            rotateAnimation = new RotateAnimation(-1 * MORE_MENU_ROTATED_POSITION,
+                    MORE_MENU_INITIAL_POSITION,
+                    RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                    RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        }
+
+        rotateAnimation.setDuration(200);
+        rotateAnimation.setFillAfter(true);
+        mReviewReadMoreMenuImageView.startAnimation(rotateAnimation);
     }
 
     private void bindProduct() {
