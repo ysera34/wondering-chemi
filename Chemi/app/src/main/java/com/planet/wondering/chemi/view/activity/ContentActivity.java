@@ -830,5 +830,16 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             }
             super.onBackPressed();
         }
+
+//        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningTaskInfo> runningTaskInfoList = activityManager.getRunningTasks(10);
+//        Iterator<ActivityManager.RunningTaskInfo> iterator = runningTaskInfoList.iterator();
+//        while (iterator.hasNext()) {
+//            ActivityManager.RunningTaskInfo runningTaskInfo = (ActivityManager.RunningTaskInfo) iterator.next();
+//            int id = runningTaskInfo.id;
+//            CharSequence description = runningTaskInfo.description;
+//            int numOfActivities = runningTaskInfo.numActivities;
+//            String topActivity = runningTaskInfo.topActivity.getShortClassName();
+//        }
     }
 }
