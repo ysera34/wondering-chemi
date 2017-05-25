@@ -38,6 +38,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentCountChangedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
 
@@ -198,6 +199,7 @@ public class CommentFragment extends Fragment {
                     childItemCount += c.getChildList().size();
                 }
                 mCommentCountTextView.setText(String.valueOf(mComments.size() + childItemCount));
+                mCommentCountChangedListener.onCommentCountChanged(mComments.size() + childItemCount);
             }
             if (mComments.size() == 0) {
                 mCommentEmptyLayout.setVisibility(View.VISIBLE);
@@ -501,6 +503,7 @@ public class CommentFragment extends Fragment {
 
     OnCommentSelectedListener mSelectedListener;
     OnCommentNestedScrollListener mCommentNestedScrollListener;
+    OnCommentCountChangedListener mCommentCountChangedListener;
 
     @Override
     public void onAttach(Context context) {
@@ -508,6 +511,7 @@ public class CommentFragment extends Fragment {
         try {
             mSelectedListener = (OnCommentSelectedListener) context;
             mCommentNestedScrollListener = (OnCommentNestedScrollListener) context;
+            mCommentCountChangedListener = (OnCommentCountChangedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnCommentSelectedListener");

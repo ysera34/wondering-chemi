@@ -24,6 +24,7 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentCountChangedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
@@ -52,9 +53,9 @@ import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
  * Created by yoon on 2017. 2. 23..
  */
 
-public class ReviewActivity extends BottomNavigationActivity
-        implements OnReviewEditListener, OnMenuSelectedListener, OnCommentSelectedListener,
-        OnDialogFinishedListener, OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener {
+public class ReviewActivity extends BottomNavigationActivity implements OnReviewEditListener,
+        OnMenuSelectedListener, OnCommentSelectedListener, OnDialogFinishedListener,
+        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener, OnCommentCountChangedListener {
 
     private static final String TAG = ReviewActivity.class.getSimpleName();
 
@@ -218,6 +219,11 @@ public class ReviewActivity extends BottomNavigationActivity
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentEditDialogFinished(description);
         }
+    }
+
+    @Override
+    public void onCommentCountChanged(int commentCount) {
+
     }
 
     public void requestReview(int reviewId) {

@@ -131,7 +131,7 @@ public class ContentVerticalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+//        updateUI();
     }
 
     @Override
@@ -148,6 +148,19 @@ public class ContentVerticalFragment extends Fragment {
         } else {
             mContentImageAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void updateLikeCount() {
+        int currentLikeCount = Integer.valueOf(mContentLikeCountTextView.getText().toString());
+        if (mContent.isLike()) {
+            mContentLikeCountTextView.setText(String.valueOf(currentLikeCount + 1));
+        } else {
+            mContentLikeCountTextView.setText(String.valueOf(currentLikeCount - 1));
+        }
+    }
+
+    public void commentCountChanged(int commentCount) {
+        mContentCommentCountTextView.setText(String.valueOf(commentCount));
     }
 
     public void updateCommentList(boolean isAddComment) {

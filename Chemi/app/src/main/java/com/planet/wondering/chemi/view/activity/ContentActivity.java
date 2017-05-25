@@ -45,6 +45,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.util.listener.OnCommentCountChangedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
@@ -85,9 +86,8 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.L
  */
 
 public class ContentActivity extends AppBaseActivity implements View.OnClickListener,
-        View.OnFocusChangeListener,
-        OnCommentSelectedListener, OnDialogFinishedListener,
-        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener {
+        View.OnFocusChangeListener, OnCommentSelectedListener, OnDialogFinishedListener,
+        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener, OnCommentCountChangedListener {
 
     private static final String TAG = ContentActivity.class.getSimpleName();
 
@@ -467,11 +467,18 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                             if (!isLike) {
                                 Toast.makeText(getApplicationContext(), "\"좋아요\"하였습니다.", Toast.LENGTH_SHORT).show();
                                 mContent.setLike(true);
+//                                updateLikeCount(true);
                             } else {
                                 Toast.makeText(getApplicationContext(), "\"좋아요\"취소하였습니다.", Toast.LENGTH_SHORT).show();
                                 mContent.setLike(false);
+//                                updateLikeCount(false);
                             }
                             invalidateOptionsMenu();
+
+                            Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+                            if (fragment instanceof ContentVerticalFragment) {
+                                ((ContentVerticalFragment) fragment).updateLikeCount();
+                            }
                         }
                     }
                 },
@@ -500,6 +507,13 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
+
+//    private void updateLikeCount(boolean isLike) {
+//        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+//        if (fragment instanceof ContentVerticalFragment) {
+//            fragment.updateLikeCount(isLike);
+//        }
+//    }
 
     private void requestArchiveContent(final boolean isArchive) {
 
@@ -636,7 +650,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     }
 
     public void setStatusBarTranslucent(boolean makeTranslucent) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 144);
         if (makeTranslucent) {
             params.setMargins(0, 72, 0, 0);
@@ -814,6 +828,14 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             ((ContentHorizontalFragment) fragment).commentEditDialogFinished(description);
         } else if (fragment instanceof ContentVerticalFragment) {
             ((ContentVerticalFragment) fragment).commentEditDialogFinished(description);
+        }
+    }
+
+    @Override
+    public void onCommentCountChanged(int commentCount) {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+        if (fragment instanceof ContentVerticalFragment) {
+            ((ContentVerticalFragment) fragment).commentCountChanged(commentCount);
         }
     }
 
