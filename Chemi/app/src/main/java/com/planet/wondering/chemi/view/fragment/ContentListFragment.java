@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
 import static com.planet.wondering.chemi.network.Config.Content.QUERY_CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Content.QUERY_PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
@@ -272,7 +274,41 @@ public class ContentListFragment extends Fragment {
         @Override
         public void onClick(View v) {
 //            startActivity(ContentActivity.newIntent(getActivity()));
-            startActivity(ContentActivity.newIntent(getActivity(), mContent.getId()));
+//            startActivity(ContentActivity.newIntent(getActivity(), mContent.getId()));
+            getActivity().startActivityForResult(
+                    ContentActivity.newIntent(getActivity(), mContent.getId()), CONTENT_REQUEST_CODE);
+        }
+    }
+
+    public static final int CONTENT_REQUEST_CODE = 8800;
+    public static final String EXTRA_RESPONSE_CONTENT_ID = "com.planet.wondering.chemi.response_content_id";
+    public static final String EXTRA_RESPONSE_CONTENT_LIKE_COUNT = "com.planet.wondering.chemi.response_content_like_count";
+    public static final String EXTRA_RESPONSE_CONTENT_VIEW_COUNT = "com.planet.wondering.chemi.response_content_view_count";
+    public static final String EXTRA_RESPONSE_CONTENT_COMMENT_COUNT = "com.planet.wondering.chemi.response_content_comment_count";
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONTENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                int contentId = data.getIntExtra(EXTRA_RESPONSE_CONTENT_ID, -1);
+                int contentLikeCount = data.getIntExtra(EXTRA_RESPONSE_CONTENT_LIKE_COUNT, -1);
+                int contentViewCount = data.getIntExtra(EXTRA_RESPONSE_CONTENT_VIEW_COUNT, -1);
+                int contentCommentCount = data.getIntExtra(EXTRA_RESPONSE_CONTENT_COMMENT_COUNT, -1);
+//                Log.i(TAG, "contentId: " + contentId);
+//                Log.i(TAG, "contentLikeCount: " + contentLikeCount);
+//                Log.i(TAG, "contentViewCount: " + contentViewCount);
+//                Log.i(TAG, "contentCommentCount: " + contentCommentCount);
+                for (Content content : mContents) {
+                    if (content.getId() == contentId) {
+                        content.setLikeCount(contentLikeCount);
+                        content.setViewCount(contentViewCount);
+                        content.setCommentCount(contentCommentCount);
+                        break;
+                    }
+                }
+                mContentAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

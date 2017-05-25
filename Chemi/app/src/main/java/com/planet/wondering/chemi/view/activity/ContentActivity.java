@@ -80,6 +80,10 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
+import static com.planet.wondering.chemi.view.fragment.ContentListFragment.EXTRA_RESPONSE_CONTENT_COMMENT_COUNT;
+import static com.planet.wondering.chemi.view.fragment.ContentListFragment.EXTRA_RESPONSE_CONTENT_ID;
+import static com.planet.wondering.chemi.view.fragment.ContentListFragment.EXTRA_RESPONSE_CONTENT_LIKE_COUNT;
+import static com.planet.wondering.chemi.view.fragment.ContentListFragment.EXTRA_RESPONSE_CONTENT_VIEW_COUNT;
 
 /**
  * Created by yoon on 2017. 3. 31..
@@ -112,6 +116,9 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
     private int mContentId;
     private Content mContent;
+    private int mCurrentLikeCount;
+    private int mCurrentCommentCount;
+    private int mCurrentViewCount;
 
     private Toolbar mContentToolbar;
     private Menu mContentToolbarMenu;
@@ -328,6 +335,9 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                                 .add(R.id.content_fragment_container, mFragment)
                                 .commit();
                         invalidateOptionsMenu();
+                        mCurrentLikeCount = mContent.getLikeCount();
+                        mCurrentCommentCount = mContent.getCommentCount();
+                        mCurrentViewCount = mContent.getViewCount();
                     }
                 },
                 new Response.ErrorListener() {
@@ -467,10 +477,12 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                             if (!isLike) {
                                 Toast.makeText(getApplicationContext(), "\"좋아요\"하였습니다.", Toast.LENGTH_SHORT).show();
                                 mContent.setLike(true);
+                                mCurrentLikeCount++;
 //                                updateLikeCount(true);
                             } else {
                                 Toast.makeText(getApplicationContext(), "\"좋아요\"취소하였습니다.", Toast.LENGTH_SHORT).show();
                                 mContent.setLike(false);
+                                mCurrentLikeCount--;
 //                                updateLikeCount(false);
                             }
                             invalidateOptionsMenu();
@@ -833,6 +845,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
     @Override
     public void onCommentCountChanged(int commentCount) {
+        mCurrentCommentCount = commentCount;
         Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
         if (fragment instanceof ContentVerticalFragment) {
             ((ContentVerticalFragment) fragment).commentCountChanged(commentCount);
@@ -850,7 +863,14 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             if (taskInfo.numActivities == 1) {
                 startActivity(ContentListActivity.newIntent(getApplicationContext()));
             }
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_RESPONSE_CONTENT_ID, mContentId);
+            intent.putExtra(EXTRA_RESPONSE_CONTENT_LIKE_COUNT, mCurrentLikeCount);
+            intent.putExtra(EXTRA_RESPONSE_CONTENT_VIEW_COUNT, mCurrentViewCount++);
+            intent.putExtra(EXTRA_RESPONSE_CONTENT_COMMENT_COUNT, mCurrentCommentCount);
+            setResult(RESULT_OK, intent);
             super.onBackPressed();
+
         }
 
 //        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);

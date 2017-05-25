@@ -45,4 +45,12 @@ public class ContentListActivity extends BottomNavigationActivity {
         super.onResume();
         setupBottomNavigation(2);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }

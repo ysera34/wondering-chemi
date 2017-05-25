@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -90,5 +91,13 @@ public class ContentPagerFragment extends Fragment {
     private void addFragment(Fragment fragment, String title) {
         mContentFragments.add(fragment);
         mContentFragmentTitles.add(title);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
