@@ -1,13 +1,11 @@
 package com.planet.wondering.chemi.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,41 +18,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
-import com.planet.wondering.chemi.network.AppSingleton;
-import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
-import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 import com.planet.wondering.chemi.view.activity.UserActivity;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.planet.wondering.chemi.common.Common.LOCAL_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
-import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
-import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
-import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
-import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
-import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
-import static com.planet.wondering.chemi.network.Config.User.LOGIN_PARAMS;
-import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
  * Created by yoon on 2017. 3. 25..
@@ -156,20 +134,21 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
+        mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
         switch (v.getId()) {
             case R.id.member_config_sign_in_submit_button_text_view:
-                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
-                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 if (isValidatedEmail && isValidatedPassword) {
-                    requestSignInLocal(mMemberSignInEmailEditText.getText().toString(),
-                            mMemberSignInPasswordEditText.getText().toString());
+                    User anonymousUser = new User();
+                    anonymousUser.setEmail(mMemberSignInEmailEditText.getText().toString());
+                    anonymousUser.setPassword(mMemberSignInPasswordEditText.getText().toString());
+                    getActivity().startActivityForResult(UserActivity.newIntent(getActivity(),
+                            SIGN_IN_LOCAL_REQUEST_CODE, anonymousUser), SIGN_IN_LOCAL_REQUEST_CODE);
                 } else {
                     Toast.makeText(getActivity(), "이메일과 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.member_config_sign_in_forget_password_text_view:
-                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
-                mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 startActivity(MemberStartActivity.newIntent(getActivity(), 2));
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
@@ -259,67 +238,6 @@ public class MemberConfigSignInFragment extends Fragment implements View.OnClick
             }
         }
         return null;
-    }
-
-    private void requestSignInLocal(final String email, final String password) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put(EMAIL, email);
-        params.put(PASSWORD, password);
-        params.put(PLATFORM, String.valueOf(LOCAL_USER_PLATFORM_ID));
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, URL_HOST + PATH + LOGIN_PARAMS, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (Parser.parseSimpleResult(response)) {
-
-                            User user = Parser.parseSignInUserToken(response);
-
-                            if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                                UserSharedPreferences.removeStoredToken(getActivity());
-                            }
-                            UserSharedPreferences.setStoreToken(getActivity(), user.getToken());
-                            Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getActivity()));
-
-                            if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
-                                UserSharedPreferences.removeStoredUserName(getActivity());
-                            }
-                            UserSharedPreferences.setStoreUserName(getActivity(), user.getName());
-                            Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getActivity()));
-
-                            // sign in firebase user
-//                            signInFirebaseAccount(email, email);
-
-                            Toast.makeText(getActivity(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(getActivity(), MemberActivity.class);
-                            getActivity().finish();
-                            startActivity(intent);
-
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    "가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, String.valueOf(error.toString()));
-//                        Toast.makeText(getActivity(),
-//                                "로그인 중 오류가 발생했어요.", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     @Override

@@ -69,9 +69,14 @@ import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_RESU
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_RESULT_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_ERROR_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_FAIL_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_SUCCESS_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_RESPONSE_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_OUT_LOCAL_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_LOCAL_RESPONSE_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_NAVER_RESPONSE_CODE;
@@ -89,11 +94,14 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL_STRING;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME;
+import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
 import static com.planet.wondering.chemi.network.Config.User.Key.PLATFORM;
 import static com.planet.wondering.chemi.network.Config.User.Key.PUSH_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.network.Config.User.LOGIN_PARAMS;
 import static com.planet.wondering.chemi.network.Config.User.PATH;
 
 /**
@@ -205,8 +213,15 @@ public class UserActivity extends AppCompatActivity
                 requestSignUpForPlatformUser(anonymousUser);
                 break;
 
+            case SIGN_IN_LOCAL_REQUEST_CODE:
+                signInLocal();
+                break;
+            case SIGN_OUT_LOCAL_REQUEST_CODE:
+                signOutLocal();
+                break;
             case WITHDRAW_LOCAL_USER_REQUEST_CODE:
-                requestRevokeUser(LOCAL_USER_PLATFORM_ID);
+                requestWithdrawUser(LOCAL_USER_PLATFORM_ID);
+                break;
         }
     }
 
@@ -234,6 +249,7 @@ public class UserActivity extends AppCompatActivity
                 }
             } else {
                 Log.w(TAG, "Google Sign in failed");
+                finish();
             }
         }
     }
@@ -284,7 +300,7 @@ public class UserActivity extends AppCompatActivity
                     public void onResult(@NonNull Status status) {
                         Log.d(TAG, "revoke access GoogleApiClient.");
                         if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
-                            requestRevokeUser(GOOGLE_USER_PLATFORM_ID);
+                            requestWithdrawUser(GOOGLE_USER_PLATFORM_ID);
                         } else {
                             finishUserActivity(null, REVOKE_ACCESS_GOOGLE_RESULT_CODE);
                         }
@@ -329,10 +345,20 @@ public class UserActivity extends AppCompatActivity
         mFirebaseAuth.signOut();
         new NaverMemberTokenDeleteTask().execute();
         if (getIntent().getBooleanExtra(EXTRA_COMPLICATED_REVOKE, false)) {
-            requestRevokeUser(NAVER_USER_PLATFORM_ID);
+            requestWithdrawUser(NAVER_USER_PLATFORM_ID);
         } else {
             finishUserActivity(null, REVOKE_ACCESS_NAVER_RESULT_CODE);
         }
+    }
+
+    private void signInLocal() {
+        User anonymousUser = (User) getIntent().getSerializableExtra(EXTRA_REQUEST_USER);
+        requestSignInLocal(anonymousUser.getEmail(), anonymousUser.getPassword());
+    }
+
+    private void signOutLocal() {
+        mFirebaseAuth.signOut();
+        finishUserActivity(null, SIGN_OUT_LOCAL_RESPONSE_CODE);
     }
 
     private void createFirebaseAccount(String email, String password) {
@@ -633,9 +659,55 @@ public class UserActivity extends AppCompatActivity
 
     }
 
-    private void requestRevokeUser(final int platformId) {
+    private void requestSignInLocal(final String email, final String password) {
 
-        Log.d(TAG, "requestRevokeUser");
+        Log.d(TAG, "requestSignInLocal:Email: " + email);
+        showProgressDialog();
+
+        Map<String, String> params = new HashMap<>();
+        params.put(EMAIL, email);
+        params.put(PASSWORD, password);
+        params.put(PLATFORM, String.valueOf(LOCAL_USER_PLATFORM_ID));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, URL_HOST + PATH + LOGIN_PARAMS, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+                            hideProgressDialog();
+                            User user = Parser.parseSignInUserToken(response);
+
+                            setUserSharedPreferences(user);
+                            // sign in firebase user
+                            signInFirebaseAccount(email, email);
+                            finishUserActivity(null, SIGN_IN_LOCAL_USER_SUCCESS_CODE);
+                        } else {
+                            finishUserActivity(null, SIGN_IN_LOCAL_USER_FAIL_CODE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                        Log.e(TAG, String.valueOf(error.toString()));
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
+                        finishUserActivity(null, SIGN_IN_LOCAL_USER_ERROR_CODE);
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestWithdrawUser(final int platformId) {
+
+        Log.d(TAG, "requestWithdrawUser:platformId: " + platformId);
         showProgressDialog();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -763,6 +835,22 @@ public class UserActivity extends AppCompatActivity
             case WITHDRAW_LOCAL_USER_RESULT_CODE:
                 intent.putExtra(EXTRA_RESPONSE_USER_CODE, WITHDRAW_LOCAL_USER_RESULT_CODE);
                 setResult(RESULT_OK, intent);
+                finish();
+                break;
+
+            case SIGN_IN_LOCAL_USER_SUCCESS_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_IN_LOCAL_USER_SUCCESS_CODE);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case SIGN_IN_LOCAL_USER_FAIL_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_IN_LOCAL_USER_FAIL_CODE);
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
+            case SIGN_IN_LOCAL_USER_ERROR_CODE:
+                intent.putExtra(EXTRA_RESPONSE_USER_CODE, SIGN_IN_LOCAL_USER_ERROR_CODE);
+                setResult(RESULT_CANCELED, intent);
                 finish();
                 break;
         }

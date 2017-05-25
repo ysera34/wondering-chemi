@@ -162,7 +162,6 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         if (mUser != null) {
             mUserPlatformId = mUser.getPlatformId();
         }
-
     }
 
     @Nullable
@@ -584,97 +583,4 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                     + " must implement OnMenuSelectedListener or OnUserInfoUpdateListener");
         }
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (mAuthStateListener != null) {
-//            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-//        }
-//    }
-//
-//    public void signOutGoogle() {
-//        mFirebaseAuth.signOut();
-//        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(@NonNull Status status) {
-//                        updateUI(null);
-//                    }
-//                }
-//        );
-//    }
-//
-//    public void revokeAccessGoogle() {
-//        mFirebaseAuth.signOut();
-//        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(@NonNull Status status) {
-//                        updateUI(null);
-//                    }
-//                }
-//        );
-//    }
-//
-//    private void updateUI(FirebaseUser user) {
-//        if (user != null) {
-//            Log.i(TAG, getString(R.string.google_status_fmt, user.getEmail()));
-//            Log.i(TAG, getString(R.string.firebase_status_fmt, user.getUid()));
-//        } else {
-//            Log.i(TAG, "Google User, Firebase User is null");
-//        }
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-//        // be available.
-//        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-////        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    public void signOutNaver() {
-//        mFirebaseAuth.signOut();
-//
-//        mNaverOAuthLogin.logout(mContext);
-////        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
-//    }
-//
-//    public void revokeAccessNaver() {
-//        mFirebaseAuth.signOut();
-//
-//        new DeleteTokenTask().execute();
-//    }
-//
-//    private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            boolean isSuccessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
-//
-//            if (!isSuccessDeleteToken) {
-//                Log.d(TAG, "errorCode:" + mNaverOAuthLogin.getLastErrorCode(mContext));
-//                Log.d(TAG, "errorDese:" + mNaverOAuthLogin.getLastErrorDesc(mContext));
-//            }
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        if (mUserPlatformId == 1) {
-//            mGoogleApiClient.stopAutoManage(getActivity());
-//            mGoogleApiClient.disconnect();
-//        } else if (mUserPlatformId == 2) {
-//            mContext = null;
-//            mNaverOAuthLogin = null;
-//        }
-//    }
 }

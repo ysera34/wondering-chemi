@@ -55,6 +55,9 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_ERROR_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_FAIL_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_OUT_LOCAL_REQUEST_CODE;
@@ -178,6 +181,8 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                             Intent intent = new Intent(getApplicationContext(), MemberActivity.class);
                             finish();
                             startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
                             break;
                         case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
                             User anonymousUser = (User) data.getSerializableExtra(EXTRA_RESPONSE_USER);
@@ -189,7 +194,6 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                             mPlatformId = anonymousUser.getPlatformId();
                             break;
                     }
-
                 }
                 break;
             case SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE:
@@ -205,6 +209,28 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                     }
                 }
                 break;
+            case SIGN_IN_LOCAL_REQUEST_CODE:
+                int responseCode = data.getIntExtra(EXTRA_RESPONSE_USER_CODE, -1);
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MemberActivity.class);
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                } else if (resultCode == RESULT_CANCELED) {
+                    switch (responseCode) {
+                        case SIGN_IN_LOCAL_USER_FAIL_CODE:
+                            Toast.makeText(getApplicationContext(),
+                                    "가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
+                            break;
+                        case SIGN_IN_LOCAL_USER_ERROR_CODE:
+//                            Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+//                                    Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+                break;
+
             case SIGN_OUT_LOCAL_REQUEST_CODE:
             case SIGN_OUT_GOOGLE_REQUEST_CODE:
             case SIGN_OUT_NAVER_REQUEST_CODE:

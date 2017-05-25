@@ -17,6 +17,7 @@ public class User implements Serializable {
     private int mId;
     private String mEmail;
     private String mName;
+    private String mPassword;
     private String mToken;
     private String mIdToken;
     private String mPushToken;
@@ -63,6 +64,14 @@ public class User implements Serializable {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public void setPassword(String password) {
+        mPassword = password;
     }
 
     public String getToken() {

@@ -33,6 +33,7 @@ import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
+import com.planet.wondering.chemi.view.activity.UserActivity;
 
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -169,8 +171,14 @@ public class MemberSignInLocalFragment extends Fragment
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInEmailEditText.getWindowToken(), 0);
                 mInputMethodManager.hideSoftInputFromWindow(mMemberSignInPasswordEditText.getWindowToken(), 0);
                 if (isValidatedEmail && isValidatedPassword) {
-                    requestSignInLocal(mMemberSignInEmailEditText.getText().toString(),
-                            mMemberSignInPasswordEditText.getText().toString());
+                    User anonymousUser = new User();
+                    anonymousUser.setEmail(mMemberSignInEmailEditText.getText().toString());
+                    anonymousUser.setPassword(mMemberSignInPasswordEditText.getText().toString());
+                    getActivity().startActivityForResult(UserActivity.newIntent(getActivity(),
+                            SIGN_IN_LOCAL_REQUEST_CODE, anonymousUser), SIGN_IN_LOCAL_REQUEST_CODE);
+
+//                    requestSignInLocal(mMemberSignInEmailEditText.getText().toString(),
+//                            mMemberSignInPasswordEditText.getText().toString());
                 } else {
                     Toast.makeText(getActivity(), "이메일과 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                     mMemberSignInSubmitResultTextView.setText("이메일과 비밀번호를 확인해주세요.");

@@ -39,6 +39,9 @@ import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_ERROR_CODE;
+import static com.planet.wondering.chemi.common.Common.SIGN_IN_LOCAL_USER_FAIL_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE;
@@ -139,12 +142,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -174,8 +171,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 //            Log.i(TAG, String.valueOf(uriData.toString()));
             accessToken = uriData.getQueryParameter("accesstoken");
             resetsPassword = uriData.getQueryParameter("resetspassword");
-        } else {
-//            Log.i(TAG, "uriData : did not get it");
         }
         if (accessToken != null) {
 //            Log.i(TAG, "accesstoken : " + accessToken);
@@ -198,8 +193,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     startActivity(MemberStartActivity.newIntent(getApplication()));
                 }
             }
-        } else {
-//            Log.e(TAG, "accesstoken : did not get it");
         }
     }
 
@@ -209,37 +202,9 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         setIntent(intent);
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (mAuthStateListener != null) {
-//            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-//        }
-//        hideProgressDialog();
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        if (requestCode == RC_SIGN_IN) {
-//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-//            if (result.isSuccess()) {
-//                Log.i(TAG, "GoogleSignInResult" + " isSuccess");
-//                GoogleSignInAccount account = result.getSignInAccount();
-//
-//                // TODO(user): send token to server and validate server-side
-//                if (account != null) {
-////                    requestConfirmEmailRepetition(account.getEmail(), account.getIdToken(), 1);
-//                    requestConfirmEmailRepetition(account, null, null, 1);
-////                    mGoogleSignInAccount = account;
-//                }
-////              requestSubmitUserInfo(account.getIdToken(), 1);
-//            } else {
-//                Log.i(TAG, "GoogleSignInResult" + " isFail");
-//                updateUI(null);
-//            }
-//        }
 
         switch (requestCode) {
             case SIGN_IN_GOOGLE_REQUEST_CODE:
@@ -249,8 +214,9 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     switch (responseCode) {
                         case CONFIRM_EMAIL_REPETITION_TRUE_CODE:
                             Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
-                            startActivity(SearchActivity.newIntent(getApplicationContext()));
                             finish();
+                            startActivity(SearchActivity.newIntent(getApplicationContext()));
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
                             User anonymousUser = (User) data.getSerializableExtra(EXTRA_RESPONSE_USER);
@@ -278,6 +244,27 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     }
                 }
                 break;
+            case SIGN_IN_LOCAL_REQUEST_CODE:
+                int responseCode = data.getIntExtra(EXTRA_RESPONSE_USER_CODE, -1);
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(SearchActivity.newIntent(getApplicationContext()));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                } else if (resultCode == RESULT_CANCELED) {
+                    switch (responseCode) {
+                        case SIGN_IN_LOCAL_USER_FAIL_CODE:
+                            Toast.makeText(getApplicationContext(),
+                                    "가입된 이메일이 아니거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
+                            break;
+                        case SIGN_IN_LOCAL_USER_ERROR_CODE:
+//                            Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+//                                    Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+                break;
+
             case REVOKE_ACCESS_GOOGLE_REQUEST_CODE:
             case REVOKE_ACCESS_NAVER_REQUEST_CODE:
 
@@ -286,439 +273,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         }
     }
 
-//    private void firebaseAuthGoogle(GoogleSignInAccount account) {
-//        Log.d(TAG, "firebaseAuthWithGoogle: id : " + account.getId());
-//        Log.d(TAG, "firebaseAuthWithGoogle: id token : " + account.getIdToken());
-//        Log.d(TAG, "firebaseAuthWithGoogle: full name : " + account.getDisplayName());
-//        Log.d(TAG, "firebaseAuthWithGoogle: email : " + account.getEmail());
-//        Log.d(TAG, "firebaseAuthWithGoogle: server auth code : " + account.getServerAuthCode());
-//        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
-//        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
-//        Log.d(TAG, "FirebaseInstanceId: token : " + FirebaseInstanceId.getInstance().getToken());
-//
-//        showProgressDialog();
-//
-//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-//        mFirebaseAuth.signInWithCredential(credential)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-//
-//                        if (!task.isSuccessful()) {
-//                            Log.w(TAG, "signInWithCredential", task.getException());
-//                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                        hideProgressDialog();
-//                    }
-//                });
-//    }
-//
-//    public void signInGoogle() {
-//        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-//        startActivityForResult(signInIntent, RC_SIGN_IN);
-//    }
-//
-//    public void signOutGoogle() {
-////        FirebaseAuth.getInstance().signOut();
-//        mFirebaseAuth.signOut();
-//
-//        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(@NonNull Status status) {
-//                        updateUI(null);
-//                    }
-//                }
-//        );
-//    }
-//
-//    public void revokeAccessGoogle() {
-//        mFirebaseAuth.signOut();
-//
-//        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(@NonNull Status status) {
-//                        updateUI(null);
-//                    }
-//                }
-//        );
-//    }
-//
-//    private void updateUI(FirebaseUser user) {
-//        hideProgressDialog();
-//        if (user != null) {
-//            Log.i(TAG, getString(R.string.google_status_fmt, user.getEmail()));
-//            Log.i(TAG, getString(R.string.firebase_status_fmt, user.getUid()));
-//        } else {
-//            Log.i(TAG, "Google User, Firebase User is null");
-//        }
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-//        // be available.
-//        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-////        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    private void signInFirebase(String email, String password) {
-//        Log.d(TAG, "signIn Firebase:" + email);
-//
-//        mFirebaseAuth.signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        Log.d(TAG, "signInWIthEmail:onComplete: " + task.isSuccessful());
-//
-//                        if (!task.isSuccessful()) {
-//                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-//                            Toast.makeText(MemberStartActivity.this, "signInWithEmail:failed", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
-//
-//    public void signInNaver() {
-//        mNaverOAuthLogin.startOauthLoginActivity(MemberStartActivity.this, mOAuthLoginHandler);
-//    }
-//
-//    public void signOutNaver() {
-//        mFirebaseAuth.signOut();
-//
-//        mNaverOAuthLogin.logout(mContext);
-////        mNaverOAuthLogin.logoutAndDeleteToken(mContext);
-//    }
-//
-//    public void revokeAccessNaver() {
-//        mFirebaseAuth.signOut();
-//
-//        new DeleteTokenTask().execute();
-//    }
-//
-//    private OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
-//        @Override
-//        public void run(boolean success) {
-//            if (success) {
-//                String accessToken = mNaverOAuthLogin.getAccessToken(mContext);
-//                String refreshToken = mNaverOAuthLogin.getRefreshToken(mContext);
-//                long expiresAt = mNaverOAuthLogin.getExpiresAt(mContext);
-//                String tokenType = mNaverOAuthLogin.getTokenType(mContext);
-//                Log.i(TAG, "Naver accessToken: " + accessToken);
-//                Log.i(TAG, "Naver refreshToken: " + refreshToken);
-//                Log.i(TAG, "Naver expiresAt: " + String.valueOf(expiresAt));
-//                Log.i(TAG, "Naver tokenType: " + tokenType);
-//                Log.i(TAG, "Naver oauthState: " + mNaverOAuthLogin.getState(mContext).toString());
-//
-//                // TODO(user): send token to server and validate server-side
-//                String email = null;
-//                try {
-//                    email = new NaverMemberProfileTask().execute(accessToken).get();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                requestConfirmEmailRepetition(null, email, accessToken, 2);
-////                requestSubmitUserInfo(accessToken, 2);
-//
-//            } else {
-//                String errorCode = mNaverOAuthLogin.getLastErrorCode(mContext).getCode();
-//                String errorDesc = mNaverOAuthLogin.getLastErrorDesc(mContext);
-//                Log.i(TAG, "naver OAuthLogin " + "errorCode:" + errorCode + ", errorDesc:" + errorDesc);
-//            }
-//        }
-//    };
-
-//    @VisibleForTesting
-//    public ProgressDialog mProgressDialog;
-//
-//    public void showProgressDialog() {
-//        if (mProgressDialog == null) {
-//            mProgressDialog = new ProgressDialog(this);
-////            mProgressDialog.setMessage(getString(R.string.loading));
-//            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            mProgressDialog.setIndeterminate(true);
-//        }
-//        mProgressDialog.show();
-//    }
-//
-//    public void hideProgressDialog() {
-//        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-//            mProgressDialog.dismiss();
-//        }
-//    }
-//
-//    private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            boolean isSuccessDeleteToken = mNaverOAuthLogin.logoutAndDeleteToken(mContext);
-//
-//            if (!isSuccessDeleteToken) {
-//                Log.d(TAG, "errorCode:" + mNaverOAuthLogin.getLastErrorCode(mContext));
-//                Log.d(TAG, "errorDese:" + mNaverOAuthLogin.getLastErrorDesc(mContext));
-//            }
-//            return null;
-//        }
-//    }
-//
-//    private class NaverMemberProfileTask extends AsyncTask<String, Void, String> {
-//
-//        private String email = null;
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-////            String token = "YOUR_ACCESS_TOKEN";// 네이버 로그인 접근 토큰;
-//            String token = params[0];
-//            String header = "Bearer " + token; // Bearer 다음에 공백 추가
-//            try {
-//                String apiURL = "https://openapi.naver.com/v1/nid/me";
-//                URL url = new URL(apiURL);
-//                HttpURLConnection con = (HttpURLConnection)url.openConnection();
-//                con.setRequestMethod("GET");
-//                con.setRequestProperty("Authorization", header);
-//                int responseCode = con.getResponseCode();
-//                BufferedReader br;
-//                if(responseCode==200) { // 정상 호출
-//                    br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//                } else {  // 에러 발생
-//                    br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-//                }
-//                String inputLine;
-//                StringBuilder stringBuilder = new StringBuilder();
-//                while ((inputLine = br.readLine()) != null) {
-//                    stringBuilder.append(inputLine);
-//                }
-//                br.close();
-////                System.out.println(response.toString());
-//                Log.i(TAG, "naver member profile : " + stringBuilder.toString());
-//                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-//                email = Parser.parseNaverUser(jsonObject);
-//                Log.i(TAG, "naver member profile email : " + email);
-//            } catch (Exception e) {
-////                System.out.println(e);
-//                Log.e(TAG, e.getMessage());
-//            }
-//            return email;
-//        }
-//    }
-
-//    private GoogleSignInAccount mGoogleSignInAccount;
-//    private String mNaverEmail = null;
-//    private String mAccessToken = null;
-//    private int mPlatformId = -1;
-
-//    private void requestConfirmEmailRepetition(final GoogleSignInAccount googleSignInAccount,
-//            final String emailAddress, final String accessToken, final int platformId) {
-//
-//        final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberStartActivity.this);
-//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        progressDialog.show();
-//
-//        Map<String, String> params = new HashMap<>();
-//        if (platformId == 1) {
-//            params.put(ACCESS_TOKEN, googleSignInAccount.getIdToken());
-//            params.put(EMAIL_STRING, googleSignInAccount.getEmail());
-//            params.put(PLATFORM, String.valueOf(platformId));
-//        } else if (platformId == 2) {
-//            params.put(ACCESS_TOKEN, accessToken);
-//            params.put(EMAIL_STRING, emailAddress);
-//            params.put(PLATFORM, String.valueOf(platformId));
-//        }
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                Request.Method.POST, URL_HOST + PATH + EMAIL_STRING_PATH, new JSONObject(params),
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        progressDialog.dismiss();
-//
-//                        if (Parser.parseSimpleResult(response)) {
-////                            requestSubmitUserInfo(accessToken, platformId);
-//                            User user = Parser.parseEmailConfirm(response);
-//
-//
-//                            if (user == null) { /*member sign up for*/
-//                                mFragmentManager.beginTransaction()
-//                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-//                                        .replace(R.id.member_fragment_container, MemberStartNameFragment.newInstance())
-//                                        .commit();
-//
-//                                if (platformId == 1) {
-//                                    mGoogleSignInAccount = googleSignInAccount;
-//                                } else if (platformId == 2) {
-//                                    mNaverEmail = emailAddress;
-//                                    mAccessToken = accessToken;
-//                                }
-//                                mPlatformId = platformId;
-//
-//                            } else {
-//                                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-//                                    UserSharedPreferences.removeStoredToken(getApplicationContext());
-//                                }
-//                                UserSharedPreferences.setStoreToken(getApplicationContext(), user.getToken());
-//                                Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
-//
-//                                if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
-//                                    UserSharedPreferences.removeStoredUserName(getApplicationContext());
-//                                }
-//                                UserSharedPreferences.setStoreUserName(getApplicationContext(), user.getName());
-//                                Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
-//
-//                                if (platformId == 1) {
-//                                    firebaseAuthGoogle(googleSignInAccount);
-//                                } else if (platformId == 2) {
-//                                    signInFirebase(emailAddress, emailAddress);
-//                                }
-//
-//                                Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
-//
-//                                startActivity(SearchActivity.newIntent(getApplicationContext()));
-//                                finish();
-//                            }
-//
-//                        } else {
-//                            if (platformId == 1) {
-//                                Toast.makeText(getApplicationContext(),
-//                                        "이미 가입된 계정 입니다. 다른 계정으로 시도해주세요.",
-////                                        "동일한 이메일이 구글 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
-//                                        Toast.LENGTH_SHORT).show();
-////                                signOutGoogle();
-//                                revokeAccessGoogle();
-//                            } else if (platformId == 2) {
-//                                Toast.makeText(getApplicationContext(),
-//                                        "이미 가입된 아이디 입니다. 다른 아이디로 시도해주세요.",
-////                                        "동일한 이메일이 네이버 인증 절차를 통하지 않고 가입 되었습니다. 다른 이메일로 가입해주세요.",
-//                                        Toast.LENGTH_SHORT).show();
-////                                signOutNaver();
-//                                revokeAccessNaver();
-//                            }
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
-//                        Log.e(TAG, String.valueOf(error.getMessage()));
-////                        Toast.makeText(getApplicationContext(),
-////                                "메일 중복 확인 중 오류가 발생하였습니다. 잠시 후 다시 요청해주세요", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
-//                                Toast.LENGTH_SHORT).show();
-//                        if (platformId == 1) {
-//                            revokeAccessGoogle();
-//                        } else if (platformId == 2) {
-//                            revokeAccessNaver();
-//                        }
-//                    }
-//                }
-//        );
-//
-//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-//                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//
-//        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
-//    }
-
-//    public void requestSubmitUserInfo(String name) {
-//
-////        if (mPlatformId == 1) {
-////            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mGoogleSignInAccount.getIdToken());
-////        } else if (mPlatformId == 2){
-////            Log.i(TAG, "requestSubmitUserInfo : mAccessToken :" + mAccessToken);
-////        }
-////        Log.i(TAG, "requestSubmitUserInfo : name :" + name);
-////        Log.i(TAG, "requestSubmitUserInfo : mPlatformId :" + String.valueOf(mPlatformId));
-////        Log.i(TAG, "requestSubmitUserInfo : pushToken :" + FirebaseInstanceId.getInstance().getToken());
-//
-//        final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberStartActivity.this);
-//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        progressDialog.show();
-//
-//        Map<String, String> params = new HashMap<>();
-//        params.put(NAME, name);
-//        if (mPlatformId == 1) {
-//            params.put(ACCESS_TOKEN, mGoogleSignInAccount.getIdToken());
-//        } else if (mPlatformId == 2) {
-//            params.put(ACCESS_TOKEN, mAccessToken);
-//        }
-//        params.put(PLATFORM, String.valueOf(mPlatformId));
-//        params.put(PUSH_TOKEN, FirebaseInstanceId.getInstance().getToken());
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                Request.Method.POST, URL_HOST + PATH, new JSONObject(params),
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        progressDialog.dismiss();
-////                        Toast.makeText(getApplicationContext(),
-////                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-//                        Log.i(TAG, response.toString());
-//                        mUser = Parser.parseSignUpForUser(response);
-//
-//                        /*firebase sign up for or sign in*/
-//                        if (mPlatformId == 1) {
-//                            firebaseAuthGoogle(mGoogleSignInAccount);
-//                        } else if (mPlatformId == 2) {
-//                            createFirebaseAccount(mNaverEmail, mNaverEmail);
-//                        }
-//
-//                        if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-//                            UserSharedPreferences.removeStoredToken(getApplicationContext());
-//                        }
-//                        UserSharedPreferences.setStoreToken(getApplicationContext(), mUser.getToken());
-//                        Log.d(TAG, "user token : " + UserSharedPreferences.getStoredToken(getApplicationContext()));
-//
-//                        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
-//                            UserSharedPreferences.removeStoredUserName(getApplicationContext());
-//                        }
-//                        UserSharedPreferences.setStoreUserName(getApplicationContext(), mUser.getName());
-//                        Log.d(TAG, "user name : " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
-//
-//                        mFragmentManager.beginTransaction()
-//                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-//                                .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
-//                                .commit();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
-//                        Log.e(TAG, String.valueOf(error.getMessage()));
-////                        Toast.makeText(getApplicationContext(),
-////                                "회원 가입 중 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        );
-//
-//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-//                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//
-//        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
-//    }
-
-//    private void createFirebaseAccount(String email, String password) {
-//        Log.d(TAG, "createFirebaseAccount with Firebase: " + email);
-//
-//        mFirebaseAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        Log.d(TAG, "createUserWithEmail:onComplete: " + task.isSuccessful());
-//
-//                        if (!task.isSuccessful()) {
-////                            Toast.makeText(MemberStartActivity.this,
-////                                    "fail to create firebase user", Toast.LENGTH_SHORT).show();
-//                            Log.i(TAG, "fail to create firebase user");
-//                        }
-//                    }
-//                });
-//    }
 
     public void replaceFragment(String email) {
         Fragment fragment = getSupportFragmentManager()
@@ -816,13 +370,11 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                         .commit();
                 break;
             case 7010: /* signInGoogle  */
-//                signInGoogle();
                 startActivityForResult(UserActivity.newIntent(getApplicationContext(),
                         SIGN_IN_GOOGLE_REQUEST_CODE), SIGN_IN_GOOGLE_REQUEST_CODE);
                 break;
 
             case 7020: /* signInNaver */
-//                signInNaver();
                 startActivityForResult(UserActivity.newIntent(getApplicationContext(),
                         SIGN_IN_NAVER_REQUEST_CODE), SIGN_IN_NAVER_REQUEST_CODE);
                 break;

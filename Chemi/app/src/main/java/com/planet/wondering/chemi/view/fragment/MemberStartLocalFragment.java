@@ -599,8 +599,6 @@ public class MemberStartLocalFragment extends Fragment
                     @Override
                     public void onResponse(JSONObject response) {
                         hideProgressDialog();
-                        Toast.makeText(getActivity(),
-                                "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         mUser = Parser.parseSignUpForUser(response);
 
                         createFirebaseAccount(mMemberStartLocalEmailEditText.getText().toString(),

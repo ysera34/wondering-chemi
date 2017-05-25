@@ -241,15 +241,6 @@ public class MemberSurveyInfoFragment extends Fragment
         } else {
             mMemberSurveyInfoConfirmButtonTextView.setText("다 음");
         }
-
-        // mMemberSurveyInfoConfirmButtonTextView initialize
-
-
-//        mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
-//        mMemberSurveyInfoConfirmButtonTextView
-//                .setTextColor(getResources().getColor(R.color.colorReef));
-//        mMemberSurveyInfoConfirmButtonTextView
-//                .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
     }
 
     @Override
@@ -266,18 +257,8 @@ public class MemberSurveyInfoFragment extends Fragment
             case 1:case 2:case 3:case 4:case 5:
                 if (isCompleted) {
                     enableConfirmButton();
-//                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(true);
-//                    mMemberSurveyInfoConfirmButtonTextView
-//                            .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
-//                    mMemberSurveyInfoConfirmButtonTextView
-//                            .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
                 } else {
                     disableConfirmButton();
-//                    mMemberSurveyInfoConfirmButtonTextView.setEnabled(false);
-//                    mMemberSurveyInfoConfirmButtonTextView
-//                            .setTextColor(getResources().getColor(R.color.colorReef));
-//                    mMemberSurveyInfoConfirmButtonTextView
-//                            .setBackgroundResource(R.drawable.widget_solid_oval_rectangle_pale);
                 }
                 break;
         }

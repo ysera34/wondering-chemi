@@ -69,6 +69,10 @@ public class Common {
     public static final int SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE = 17015;
     public static final int SIGN_UP_FOR_PLATFORM_USER_ERROR_CODE = 17016;
 
+    public static final int SIGN_IN_LOCAL_USER_SUCCESS_CODE = 17025;
+    public static final int SIGN_IN_LOCAL_USER_FAIL_CODE = 17026;
+    public static final int SIGN_IN_LOCAL_USER_ERROR_CODE = 17027;
+
     public static final int SIGN_OUT_GOOGLE_RESPONSE_CODE = 17017;
     public static final int SIGN_OUT_NAVER_RESPONSE_CODE = 17018;
     public static final int SIGN_OUT_LOCAL_RESPONSE_CODE = 17019;
@@ -79,7 +83,5 @@ public class Common {
     public static final int WITHDRAW_GOOGLE_USER_RESULT_CODE = 17022;
     public static final int WITHDRAW_NAVER_USER_RESULT_CODE = 17023;
     public static final int WITHDRAW_LOCAL_USER_RESULT_CODE = 17024;
-
-
 
 }

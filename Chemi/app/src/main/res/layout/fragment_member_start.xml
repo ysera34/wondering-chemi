@@ -102,7 +102,6 @@
             android:id="@+id/member_start_local_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:clickable="true"
@@ -132,6 +131,7 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="26dp">
 
             <TextView
@@ -142,21 +142,9 @@
                 android:padding="10dp"
                 android:clickable="true"
                 android:text="@string/member_start_browse"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textColor="@color/color_selector_white_armadillo"
                 android:textAppearance="@style/MemberStartWhiteTextAppearance"/>
-
-            <!--<TextView-->
-                <!--android:id="@+id/member_start_already_user_text_view"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:padding="10dp"-->
-                <!--android:clickable="true"-->
-                <!--android:text="@string/member_start_already_user"-->
-                <!--android:textSize="12sp"-->
-                <!--android:textColor="@color/color_selector_white_armadillo"-->
-                <!--android:textAppearance="@style/MemberStartWhiteTextAppearance"/>-->
 
         </RelativeLayout>
 
