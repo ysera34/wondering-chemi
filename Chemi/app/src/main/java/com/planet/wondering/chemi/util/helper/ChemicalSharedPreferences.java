@@ -8,6 +8,7 @@ import com.planet.wondering.chemi.model.Chemical;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,6 +30,14 @@ public class ChemicalSharedPreferences {
         Chemical[] chemicalArray = gson.fromJson(jsonChemicals, Chemical[].class);
         List<Chemical> chemicals = Arrays.asList(chemicalArray);
         chemicals = new ArrayList<>(chemicals);
+
+        Iterator<Chemical> iterator = chemicals.iterator();
+        while (iterator.hasNext()) {
+            Chemical chemical = iterator.next();
+            if (chemical.getNameKo() == null) {
+                iterator.remove();
+            }
+        }
         return (ArrayList<Chemical>) chemicals;
     }
 

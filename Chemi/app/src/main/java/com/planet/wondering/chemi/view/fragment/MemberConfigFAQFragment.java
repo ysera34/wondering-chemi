@@ -26,6 +26,10 @@ import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.config.FAQ;
 import com.planet.wondering.chemi.model.config.FAQBody;
@@ -92,6 +96,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
 //        });
 
         updateUI();
+        requestFAQList();
         return view;
     }
 
@@ -103,7 +108,6 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        requestFAQList();
     }
 
     private void updateUI() {
@@ -256,18 +260,19 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
 
         @Override
         public void onClick(View v) {
-            if (mParentFAQ.getChildList() != null && mParentFAQ.getChildList().size() == 0) {
-                requestFAQ(mParentFAQ);
-            }
-
             super.onClick(v);
             final int scrollPositionY = (int) v.getY();
+            Log.i(TAG, "scrollPositionY:" + scrollPositionY);
             mFAQRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mFAQRecyclerView.smoothScrollBy(0, scrollPositionY);
                 }
             }, 300);
+
+            if (mParentFAQ.getChildList() != null && mParentFAQ.getChildList().size() == 0) {
+                requestFAQ(mParentFAQ);
+            }
         }
 
         @Override
@@ -308,7 +313,8 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
 
         private TextView mAnswerTextView;
         private LinearLayout mImageLayout;
-        private ImageView mImage1ImageView;
+        private int[] mImageViewIds;
+        private ImageView[] mImageViews;
 //        private TextView mUpdateDateTextView;
 
         public ChildFAQHolder(@NonNull View itemView) {
@@ -317,26 +323,76 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     itemView.findViewById(R.id.list_item_faq_child_answer_text_view);
             mImageLayout = (LinearLayout)
                     itemView.findViewById(R.id.list_item_faq_child_image_layout);
-            mImage1ImageView = (ImageView)
-                    itemView.findViewById(R.id.list_item_faq_child_image1_image_view);
-//            mUpdateDateTextView = (TextView)
-//                    itemView.findViewById(R.id.list_item_faq_child_date_text_view);
+
+            mImageViewIds = new int[]{
+                    R.id.list_item_faq_child_image1_image_view, R.id.list_item_faq_child_image2_image_view,
+                    R.id.list_item_faq_child_image3_image_view, R.id.list_item_faq_child_image4_image_view,};
+            mImageViews = new ImageView[mImageViewIds.length];
+
+            for (int i = 0; i < mImageViews.length; i++) {
+                mImageViews[i] = (ImageView) itemView.findViewById(mImageViewIds[i]);
+            }
         }
 
         public void bindChildFAQ(FAQBody faqBody) {
             mFAQBody = faqBody;
+//            mUpdateDateTextView.setText(String.valueOf(mFAQBody.getUpdateDate()));
 //            mAnswerTextView.setText(String.valueOf(mFAQBody.getAnswer()));
             mAnswerTextView.setText(Html.fromHtml(String.valueOf(mFAQBody.getAnswer())));
             if (mFAQBody.getImagePaths() == null || mFAQBody.getImagePaths().size() == 0) {
                 mImageLayout.setVisibility(View.GONE);
             } else {
-                Glide.with(getActivity())
-                        .load(mFAQBody.getImagePaths().get(0))
-                        .crossFade()
-                        .into(mImage1ImageView);
+                for (String str : mFAQBody.getImagePaths()) {
+                    Log.i(TAG, "ImagePath: " + str);
+                }
+                for (ImageView imageView : mImageViews) {
+                    imageView.setImageDrawable(null);
+                    Glide.clear(imageView);
+                }
+                for (int i = 0; i < mFAQBody.getImagePaths().size(); i++) {
+                    Glide.with(getActivity())
+                            .load(mFAQBody.getImagePaths().get(i))
+                            .listener(mRequestListener)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .crossFade()
+                            .into(mImageViews[i]);
+                }
+                int emptyImageSize = mImageViews.length - mFAQBody.getImagePaths().size();
+                for (int i = 1; i <= emptyImageSize; i++) {
+                    mImageViews[mImageViews.length - i].setImageResource(R.drawable.widget_solid_rectangle_black_haze);
+                }
             }
-//            mUpdateDateTextView.setText(String.valueOf(mFAQBody.getUpdateDate()));
         }
+
+        private RequestListener<String, GlideDrawable> mRequestListener =
+                new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model,
+                       Target<GlideDrawable> target, boolean isFirstResource) {
+                Log.w(TAG, "RequestListener:onException: " + e.getMessage());
+                Log.w(TAG, "RequestListener:onException: " + target.toString());
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model,
+                       Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                final int imageHeight = resource.getIntrinsicHeight();
+                Log.i(TAG, "imageHeight: " + imageHeight);
+                Log.i(TAG, "model: " + model);
+                Log.i(TAG, "target: " + target.toString());
+                Log.i(TAG, "isFromMemoryCache: " + isFromMemoryCache);
+                Log.i(TAG, "isFirstResource: " + isFirstResource);
+
+                mFAQRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        mFAQRecyclerView.smoothScrollBy(0, imageHeight);
+                    }
+                }, 200);
+                return false;
+            }
+        };
     }
 
 }

@@ -13,6 +13,40 @@
         android:padding="16dp"
         android:background="@color/colorBlackHaze">
 
+        <LinearLayout
+            android:id="@+id/list_item_faq_child_image_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/list_item_faq_child_image1_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"/>
+
+            <ImageView
+                android:id="@+id/list_item_faq_child_image2_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"/>
+
+            <ImageView
+                android:id="@+id/list_item_faq_child_image3_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"/>
+
+            <ImageView
+                android:id="@+id/list_item_faq_child_image4_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"/>
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/list_item_faq_child_answer_text_view"
             android:layout_width="match_parent"
@@ -21,18 +55,6 @@
             android:textSize="14sp"
             android:textColor="@color/colorArmadillo"/>
 
-        <LinearLayout
-            android:id="@+id/list_item_faq_child_image_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
-
-            <ImageView
-                android:id="@+id/list_item_faq_child_image1_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
 
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->

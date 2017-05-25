@@ -103,12 +103,12 @@ public class ReviewEditFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.review_edit_confirm_layout:
-                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
+                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 break;
             case R.id.review_edit_review_edit_complete_button:
-                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 mInputMethodManager.hideSoftInputFromWindow(mReviewEditReviewEditText.getWindowToken(), 0);
+                mReviewEditListener.onReviewEdit(mReviewEditReviewEditText.getText().toString(), false, mRequestId);
                 break;
         }
     }
