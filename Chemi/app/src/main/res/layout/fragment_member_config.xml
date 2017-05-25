@@ -23,219 +23,235 @@
             android:textColor="@color/colorFontNormal"/>
 
     </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:descendantFocusability="blocksDescendants">
     
-    <RelativeLayout
-        android:id="@+id/member_config_profile_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+            <RelativeLayout
+                android:id="@+id/member_config_profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:id="@+id/member_config_profile_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="프로필 설정"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:id="@+id/member_config_profile_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="프로필 설정"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <ImageView
-            android:id="@+id/member_config_profile_arrow_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_24dp"
-            android:scaleType="centerInside"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/member_config_notice_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+                <ImageView
+                    android:id="@+id/member_config_profile_arrow_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_24dp"
+                    android:scaleType="centerInside"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/member_config_notice_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="공지사항"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="공지사항"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <ImageView
-            android:id="@+id/member_config_notice_arrow_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_24dp"
-            android:scaleType="centerInside"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/member_config_request_product_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+                <ImageView
+                    android:id="@+id/member_config_notice_arrow_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_24dp"
+                    android:scaleType="centerInside"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/member_config_request_product_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="제품 분석 요청"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="제품 분석 요청"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <ImageView
-            android:id="@+id/member_config_request_product_arrow_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_24dp"
-            android:scaleType="centerInside"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/member_config_faq_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+                <ImageView
+                    android:id="@+id/member_config_request_product_arrow_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_24dp"
+                    android:scaleType="centerInside"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/member_config_faq_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="자주 묻는 질문"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="자주 묻는 질문"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <ImageView
-            android:id="@+id/member_config_faq_arrow_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_24dp"
-            android:scaleType="centerInside"/>
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/member_config_faq_arrow_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_24dp"
+                    android:scaleType="centerInside"/>
+            </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/member_config_version_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+            <RelativeLayout
+                android:id="@+id/member_config_version_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="버전정보"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="버전정보"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <TextView
-            android:id="@+id/member_config_version_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="1.0.1"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/member_config_push_notification_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+                <TextView
+                    android:id="@+id/member_config_version_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="1.0.1"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/member_config_push_notification_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="푸쉬 알림 설정"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="푸쉬 알림 설정"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <Switch
-            android:id="@+id/member_config_push_notification_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/member_config_email_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+                <Switch
+                    android:id="@+id/member_config_push_notification_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/member_config_email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="이메일 수신 설정"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="이메일 수신 설정"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <Switch
-            android:id="@+id/member_config_email_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+                <Switch
+                    android:id="@+id/member_config_email_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/member_config_privacy_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/member_config_body_menu_height"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+            <RelativeLayout
+                android:id="@+id/member_config_privacy_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_config_body_menu_height"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:background="@drawable/selector_ripple_list_item_border_gray">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="이용약관 및 개인정보 취급방침"
-            android:textSize="14sp"
-            android:textColor="@color/colorArmadillo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="이용약관 및 개인정보 취급방침"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorArmadillo"/>
 
-        <ImageView
-            android:id="@+id/member_config_privacy_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_24dp"
-            android:scaleType="centerInside"/>
-    </RelativeLayout>
-    <RelativeLayout
+                <ImageView
+                    android:id="@+id/member_config_privacy_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_24dp"
+                    android:scaleType="centerInside"/>
+            </RelativeLayout>
+            <RelativeLayout
         android:id="@+id/member_config_collaboration_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/member_config_body_menu_height"
@@ -262,5 +278,8 @@
             android:src="@drawable/ic_arrow_right_24dp"
             android:scaleType="centerInside"/>
     </RelativeLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

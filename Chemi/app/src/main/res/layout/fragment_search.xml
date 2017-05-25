@@ -51,11 +51,12 @@
                     android:layout_toStartOf="@+id/search_image_button"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:hint="@string/search_guide_sentence"
+                    android:hint="보솜이 안심물티슈"
                     android:textSize="14sp"
                     android:textAlignment="textStart"
                     android:textColorHint="@color/colorFontHint"
                     android:background="@android:color/transparent"/>
+                    <!--android:hint="@string/search_guide_sentence"-->
 
                 <ImageButton
                     android:id="@+id/search_image_button"
