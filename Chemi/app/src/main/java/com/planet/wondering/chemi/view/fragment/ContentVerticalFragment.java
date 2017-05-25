@@ -1,5 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +19,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import java.util.ArrayList;
 
@@ -61,6 +67,8 @@ public class ContentVerticalFragment extends Fragment {
     private ArrayList<String> mContentImagePaths;
     private RecyclerView mContentImageRecyclerView;
     private ContentImageAdapter mContentImageAdapter;
+    private int mImageBindCompletedCount;
+    private CustomProgressDialog mProgressDialog;
 
     private LinearLayout mContentCountLayout;
     private TextView mContentLikeCountTextView;
@@ -88,6 +96,10 @@ public class ContentVerticalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mProgressDialog = new CustomProgressDialog(getActivity());
+        mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mProgressDialog.show();
+
         View view = inflater.inflate(R.layout.fragment_content_vertical, container, false);
         mContentVerticalNestedScrollView = (NestedScrollView) view.findViewById(R.id.content_vertical_nested_scroll_view);
 //        mContentVerticalNestedScrollView.getParent().requestChildFocus(mContentVerticalNestedScrollView, mContentVerticalNestedScrollView);
@@ -112,6 +124,7 @@ public class ContentVerticalFragment extends Fragment {
         }
 
         updateUI();
+
         return view;
     }
 
@@ -214,9 +227,33 @@ public class ContentVerticalFragment extends Fragment {
             mContentImagePath = contentImagePath;
             Glide.with(getActivity())
                     .load(mContentImagePath)
+                    .listener(mRequestListener)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .crossFade()
                     .into(mContentImageImageView);
         }
     }
+
+    private RequestListener<String, GlideDrawable> mRequestListener =
+            new RequestListener<String, GlideDrawable>() {
+        @Override
+        public boolean onException(Exception e, String model,
+                   Target<GlideDrawable> target, boolean isFirstResource) {
+
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model,
+                   Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            mImageBindCompletedCount++;
+            if (mContentImageAdapter.getItemCount() == mImageBindCompletedCount) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                    mProgressDialog = null;
+                }
+            }
+            return false;
+        }
+    };
 }
