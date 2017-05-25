@@ -164,13 +164,18 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        FAQBody faqBody = Parser.parserFAQ(response);
+
 //                        if (faq.getModifyDate().equals("null")) {
 //                            faqBody.setUpdateDate(faq.getCreateDate());
 //                        } else {
 //                            faqBody.setUpdateDate(faq.getModifyDate());
 //                        }
-                        faq.getChildList().add(faqBody);
+//                        FAQBody faqBody = Parser.parserFAQ(response);
+//                        faq.getChildList().add(faqBody);
+//                        updateUI();
+
+                        ArrayList<FAQBody> faqBodies = Parser.parserFAQBodies(response);
+                        faq.setFAQBodies(faqBodies);
                         updateUI();
                     }
                 },
@@ -192,7 +197,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 
-    private class FAQAdapter extends ExpandableRecyclerAdapter<FAQ, FAQBody, ParentFAQHolder, ChildFAQHolder> {
+    private class FAQAdapter extends ExpandableRecyclerAdapter<FAQ, FAQBody, ParentFAQHolder, ChildViewHolder> {
 
         private LayoutInflater mLayoutInflater;
 
@@ -210,9 +215,19 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
 
         @NonNull
         @Override
-        public ChildFAQHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
-            View view = mLayoutInflater.inflate(R.layout.list_item_faq_child, childViewGroup, false);
-            return new ChildFAQHolder(view);
+        public ChildViewHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
+//            View view = mLayoutInflater.inflate(R.layout.list_item_faq_child, childViewGroup, false);
+//            return new ChildFAQHolder(view);
+            View faqBodyView;
+            switch (viewType) {
+                default:
+                case FAQ_CHILD_ANSWER:
+                    faqBodyView = mLayoutInflater.inflate(R.layout.list_item_faq_child_answer, childViewGroup, false);
+                    return new ChildFAQAnswerHolder(faqBodyView);
+                case FAQ_CHILD_IMAGEPATH:
+                    faqBodyView = mLayoutInflater.inflate(R.layout.list_item_faq_child_image, childViewGroup, false);
+                    return new ChildFAQImageHolder(faqBodyView);
+            }
         }
 
         @Override
@@ -221,10 +236,29 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         }
 
         @Override
-        public void onBindChildViewHolder(@NonNull ChildFAQHolder childViewHolder, int parentPosition, int childPosition, @NonNull FAQBody child) {
-            childViewHolder.bindChildFAQ(child);
+        public void onBindChildViewHolder(@NonNull ChildViewHolder childViewHolder, int parentPosition, int childPosition, @NonNull FAQBody child) {
+//            childViewHolder.bindChildFAQ(child);
+            if (childViewHolder instanceof ChildFAQAnswerHolder) {
+                ((ChildFAQAnswerHolder) childViewHolder).bindChildFAQAnswer(child);
+            }
+            if (childViewHolder instanceof ChildFAQImageHolder) {
+                ((ChildFAQImageHolder) childViewHolder).bindChildFAQImage(child);
+            }
+        }
+
+        @Override
+        public int getChildViewType(int parentPosition, int childPosition) {
+            FAQBody faqBody = mFAQs.get(parentPosition).getFAQBody(childPosition);
+            if (faqBody.isText()) {
+                return FAQ_CHILD_ANSWER;
+            } else {
+                return FAQ_CHILD_IMAGEPATH;
+            }
         }
     }
+
+    public static final int FAQ_CHILD_ANSWER = 1011;
+    public static final int FAQ_CHILD_IMAGEPATH = 1012;
 
     private class ParentFAQHolder extends ParentViewHolder {
 
@@ -395,4 +429,73 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
         };
     }
 
+    private class ChildFAQAnswerHolder extends ChildViewHolder {
+
+        private TextView mAnswerTextView;
+        private FAQBody mFAQBody;
+
+        public ChildFAQAnswerHolder(@NonNull View itemView) {
+            super(itemView);
+            mAnswerTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_faq_child_answer_text_view);
+        }
+
+        public void bindChildFAQAnswer(FAQBody faqBody) {
+            mFAQBody = faqBody;
+//            mAnswerTextView.setText(String.valueOf(mFAQBody.getAnswer()));
+            mAnswerTextView.setText(Html.fromHtml(String.valueOf(mFAQBody.getAnswer())));
+        }
+    }
+
+    private class ChildFAQImageHolder extends ChildViewHolder {
+
+        private ImageView mImageView;
+        private FAQBody mFAQBody;
+
+        public ChildFAQImageHolder(@NonNull View itemView) {
+            super(itemView);
+            mImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_faq_child_image_image_view);
+        }
+
+        public void bindChildFAQImage(FAQBody faqBody) {
+            mFAQBody = faqBody;
+            Glide.with(getActivity())
+                    .load(mFAQBody.getImagePath())
+                    .listener(mRequestListener)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .crossFade()
+                    .into(mImageView);
+        }
+
+        private RequestListener<String, GlideDrawable> mRequestListener =
+                new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model,
+                                       Target<GlideDrawable> target, boolean isFirstResource) {
+                Log.w(TAG, "RequestListener:onException: " + e.getMessage());
+                Log.w(TAG, "RequestListener:onException: " + target.toString());
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model,
+                                           Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                final int imageHeight = resource.getIntrinsicHeight();
+                Log.i(TAG, "imageHeight: " + imageHeight);
+                Log.i(TAG, "model: " + model);
+                Log.i(TAG, "target: " + target.toString());
+                Log.i(TAG, "isFromMemoryCache: " + isFromMemoryCache);
+                Log.i(TAG, "isFirstResource: " + isFirstResource);
+
+                mFAQRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        mFAQRecyclerView.smoothScrollBy(0, imageHeight);
+                    }
+                }, 200);
+                return false;
+            }
+        };
+    }
 }

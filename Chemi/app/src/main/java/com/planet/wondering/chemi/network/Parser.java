@@ -1172,4 +1172,33 @@ public class Parser {
         }
         return faqBody;
     }
+
+    public static ArrayList<FAQBody> parserFAQBodies(JSONObject responseObject) {
+
+        ArrayList<FAQBody> faqBodies = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject faqBodyJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                JSONArray imagePathJSONArray = faqBodyJSONObject.getJSONArray(FAQ_IMAGEPATHS);
+                if (imagePathJSONArray.length() > 0) {
+                    for (int i = 0; i < imagePathJSONArray.length(); i++) {
+                        FAQBody imagePathFAQBody = new FAQBody();
+                        imagePathFAQBody.setImagePath(imagePathJSONArray.getString(i));
+                        faqBodies.add(imagePathFAQBody);
+                    }
+                }
+                String answer = faqBodyJSONObject.getString(FAQ_ANSWER);
+                if (!answer.equals("null")) {
+                    FAQBody textFAQBody = new FAQBody();
+                    textFAQBody.setAnswer(answer);
+                    textFAQBody.setText(true);
+                    faqBodies.add(textFAQBody);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return faqBodies;
+    }
 }

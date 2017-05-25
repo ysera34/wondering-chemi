@@ -54,6 +54,14 @@ public class FAQ implements Parent<FAQBody> {
         mModifyDate = modifyDate;
     }
 
+    public void setFAQBodies(ArrayList<FAQBody> FAQBodies) {
+        mFAQBodies = FAQBodies;
+    }
+
+    public FAQBody getFAQBody(int position) {
+        return mFAQBodies.get(position);
+    }
+
     @Override
     public List<FAQBody> getChildList() {
         return mFAQBodies;

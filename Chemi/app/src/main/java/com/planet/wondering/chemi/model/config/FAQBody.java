@@ -11,6 +11,8 @@ public class FAQBody {
     private String mAnswer;
     private ArrayList<String> mImagePaths;
 //    private String mUpdateDate;
+    private boolean mIsText;
+    private String mImagePath;
 
     public FAQBody() {
     }
@@ -38,4 +40,20 @@ public class FAQBody {
 //    public void setUpdateDate(String updateDate) {
 //        mUpdateDate = updateDate;
 //    }
+
+    public boolean isText() {
+        return mIsText;
+    }
+
+    public void setText(boolean text) {
+        mIsText = text;
+    }
+
+    public String getImagePath() {
+        return mImagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        mImagePath = imagePath;
+    }
 }
