@@ -78,6 +78,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/member_survey_info_view_pager_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/member_survey_info_body_height"
         android:layout_below="@+id/member_survey_info_header_layout">
@@ -94,8 +95,8 @@
         android:id="@+id/member_survey_info_confirm_button_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
+        android:layout_below="@+id/member_survey_info_view_pager_layout"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="47dp"
         android:layout_marginEnd="47dp"
         android:paddingTop="14dp"

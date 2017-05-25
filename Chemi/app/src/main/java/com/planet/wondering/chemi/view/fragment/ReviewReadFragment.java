@@ -53,8 +53,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.common.Common.REVIEW_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
@@ -412,8 +412,8 @@ public class ReviewReadFragment extends Fragment
 
     private void bindProduct() {
 
-        int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
-        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+        int thumbnailWidth = (int) (mScreenWidth * PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO);
+        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO);
 
         Glide.with(getActivity())
                 .load(mReview.getProductImagePath())

@@ -42,8 +42,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 
 /**
  * Created by yoon on 2016. 12. 31..
@@ -507,8 +507,8 @@ public class MemberFragment extends Fragment
         public void bindProduct(Product product) {
             mProduct = product;
 
-            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
-            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO);
 
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
@@ -724,8 +724,8 @@ public class MemberFragment extends Fragment
         public void bindReviewProduct(ReviewProduct reviewProduct) {
             mReviewProduct = reviewProduct;
 
-            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
-            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO);
 
             Glide.with(getActivity())
                     .load(mReviewProduct.getProductImagePath())

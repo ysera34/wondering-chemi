@@ -185,6 +185,7 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
 
                             break;
                         case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
+                            hideBottomNavigationView();
                             User anonymousUser = (User) data.getSerializableExtra(EXTRA_RESPONSE_USER);
                             mFragmentManager.beginTransaction()
                                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)

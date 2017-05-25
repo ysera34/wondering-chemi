@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:scaleType="centerInside"
+                        android:scaleType="center"
                         android:layout_above="@+id/product_detail_review_info_layout"/>
 
                     <LinearLayout

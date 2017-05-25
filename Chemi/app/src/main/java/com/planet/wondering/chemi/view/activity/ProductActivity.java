@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,7 @@ import java.util.Map;
 import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
@@ -120,6 +122,8 @@ public class ProductActivity extends AppBaseActivity
     protected BottomNavigationView mBottomNavigationView;
     public RelativeLayout mBottomNavigationLayout;
 
+    private int mScreenWidth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +173,8 @@ public class ProductActivity extends AppBaseActivity
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
         mBottomNavigationLayout = (RelativeLayout) findViewById(R.id.bottom_navigation_layout);
+
+        mScreenWidth = getScreenWidth();
     }
 
     @Override
@@ -193,6 +199,10 @@ public class ProductActivity extends AppBaseActivity
 //        setTitle(mProduct.getBrand());
 //        mProductToolbar.setSubtitle(mProduct.getName());
 
+        int thumbnailWidth = mScreenWidth;
+        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO);
+
+
         Glide.with(getApplicationContext())
                 .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
@@ -200,6 +210,8 @@ public class ProductActivity extends AppBaseActivity
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
 //                .override(700, 460)
+                .override(thumbnailWidth, thumbnailHeight)
+                .centerCrop()
                 .into(mProductDetailImageView);
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
@@ -472,5 +484,11 @@ public class ProductActivity extends AppBaseActivity
             startActivity(CategoryActivity.newIntent(getApplicationContext()));
         }
         super.onBackPressed();
+    }
+
+    public int getScreenWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 }

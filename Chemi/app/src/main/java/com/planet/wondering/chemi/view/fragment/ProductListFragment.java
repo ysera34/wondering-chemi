@@ -52,8 +52,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO;
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_PATH;
@@ -644,8 +644,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         void bindProduct(Product product) {
             mProduct = product;
 
-            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_THUMDNAIL_SCREEN_WIDTH_RATIO);
-            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUNMNAIL_WIDTH_HEIGHT_RATIO);
+            int thumbnailWidth = (int) (mScreenWidth * PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO);
+            int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO);
 
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
