@@ -20,6 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:textColor="@color/colorFontAluminum"
+        android:textSize="15dp"
         android:maxLines="1"/>
 
 </LinearLayout>

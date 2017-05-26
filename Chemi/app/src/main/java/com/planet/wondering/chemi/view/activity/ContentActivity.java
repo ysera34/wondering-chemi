@@ -50,6 +50,7 @@ import com.planet.wondering.chemi.util.listener.OnCommentCountChangedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
 import com.planet.wondering.chemi.util.listener.OnCommentNestedScrollListener;
 import com.planet.wondering.chemi.util.listener.OnCommentSelectedListener;
+import com.planet.wondering.chemi.util.listener.OnContentPageSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ContentHorizontalFragment;
@@ -93,7 +94,8 @@ import static com.planet.wondering.chemi.view.fragment.ContentListFragment.EXTRA
 
 public class ContentActivity extends AppBaseActivity implements View.OnClickListener,
         View.OnFocusChangeListener, OnCommentSelectedListener, OnDialogFinishedListener,
-        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener, OnCommentCountChangedListener {
+        OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener,
+        OnCommentCountChangedListener, OnContentPageSelectedListener {
 
     private static final String TAG = ContentActivity.class.getSimpleName();
 
@@ -656,11 +658,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             @Override
             public void run() {
                 mContentFragmentContainer.setLayoutParams(params);
+                mContentCommentEditLayout.animate().translationY(mContentCommentEditLayout.getHeight())
+                        .setInterpolator(new AccelerateInterpolator(2));
             }
         }, 200);
-
-        mContentCommentEditLayout.animate().translationY(mContentCommentEditLayout.getHeight())
-                .setInterpolator(new AccelerateInterpolator(2));
     }
 
     public void setStatusBarTranslucent(boolean makeTranslucent) {
@@ -859,7 +860,19 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     }
 
     @Override
+    public void onContentPageSelected(int page) {
+        mContentPage = page;
+    }
+
+    private int mContentPage;
+
+    @Override
     public void onBackPressed() {
+        if (mContentPage > 0) {
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
+            ((ContentHorizontalFragment) fragment).moveContentPage(mContentPage);
+        }
+
         if (isCommentSelected) {
             showDialogCancelComment();
         } else {

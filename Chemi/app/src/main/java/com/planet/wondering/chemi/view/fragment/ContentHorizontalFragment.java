@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Content;
-import com.planet.wondering.chemi.view.activity.ContentActivity;
+import com.planet.wondering.chemi.util.listener.OnContentPageSelectedListener;
 
 import java.util.ArrayList;
 
@@ -59,11 +60,13 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
     private ViewPager mContentImageViewPager;
     private ArrayList<Fragment> mContentImageFragments;
     private TextView mContentIndicatorTextView;
+    private TextView mContentConfirmCommentButtonTextView;
+    private int mContentShowingPage;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
+//        ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mContent = (Content) getArguments().getSerializable(ARG_CONTENT);
@@ -108,13 +111,15 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
 
                 if (position == mContent.getContentImagePaths().size()) {
                     mContentIndicatorTextView.setVisibility(View.GONE);
-                    ((ContentActivity) getActivity()).showCommentEditText();
-                    ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
+                    mContentConfirmCommentButtonTextView.setVisibility(View.GONE);
+//                    ((ContentActivity) getActivity()).showCommentEditText();
+//                    ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
                     updateCommentList(false);
                 } else {
                     mContentIndicatorTextView.setVisibility(View.VISIBLE);
-                    ((ContentActivity) getActivity()).hideCommentEditText();
-                    ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
+                    mContentConfirmCommentButtonTextView.setVisibility(View.VISIBLE);
+//                    ((ContentActivity) getActivity()).hideCommentEditText();
+//                    ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
                 }
                 mContentIndicatorTextView.setText(getString(R.string.content_indicator_format,
                         String.valueOf(position + 1), String.valueOf(mContent.getContentImagePaths().size())));
@@ -126,13 +131,15 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
             }
         });
         mContentIndicatorTextView = (TextView) view.findViewById(R.id.content_indicator_text_view);
+        mContentConfirmCommentButtonTextView = (TextView) view.findViewById(R.id.content_confirm_comment_button_text_view);
+        mContentConfirmCommentButtonTextView.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ContentActivity) getActivity()).hideCommentEditText();
+//        ((ContentActivity) getActivity()).hideCommentEditText();
         mContentIndicatorTextView.setText(getString(R.string.content_indicator_format,
                 String.valueOf(1), String.valueOf(mContent.getContentImagePaths().size())));
     }
@@ -147,6 +154,12 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
 //                    mContentHorizontalGuideLayout.setVisibility(View.GONE);
 //                }
 //                break;
+            case R.id.content_confirm_comment_button_text_view:
+                mContentImageViewPager.setCurrentItem(mContentImageFragments.size() - 1);
+//                mContentShowingPage = mContentImageViewPager.getCurrentItem();
+//                Log.i(TAG, "mContentShowingPage: " + mContentShowingPage);
+//                mContentPageSelectedListener.onContentPageSelected(mContentShowingPage);
+                break;
         }
     }
 
@@ -163,6 +176,10 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
     public void commentEditDialogFinished(String description) {
         ((CommentFragment) mContentImageFragments.get(mContent.getContentImagePaths().size()))
                 .commentEditDialogFinished(description);
+    }
+
+    public void moveContentPage(int page) {
+        mContentImageViewPager.setCurrentItem(page);
     }
 
     private class ContentImageAdapter extends FragmentStatePagerAdapter {
@@ -185,9 +202,22 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
         }
     }
 
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
+//    }
+
+    OnContentPageSelectedListener mContentPageSelectedListener;
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((ContentActivity) getActivity()).setStatusBarTranslucent(false);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mContentPageSelectedListener = (OnContentPageSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnContentPageSelectedListener");
+        }
     }
 }
