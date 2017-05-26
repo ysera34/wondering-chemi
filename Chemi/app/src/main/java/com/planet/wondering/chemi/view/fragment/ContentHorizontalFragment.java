@@ -113,8 +113,8 @@ public class ContentHorizontalFragment extends Fragment implements View.OnClickL
                     updateCommentList(false);
                 } else {
                     mContentIndicatorTextView.setVisibility(View.VISIBLE);
-                    ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
                     ((ContentActivity) getActivity()).hideCommentEditText();
+                    ((ContentActivity) getActivity()).setStatusBarTranslucent(true);
                 }
                 mContentIndicatorTextView.setText(getString(R.string.content_indicator_format,
                         String.valueOf(position + 1), String.valueOf(mContent.getContentImagePaths().size())));

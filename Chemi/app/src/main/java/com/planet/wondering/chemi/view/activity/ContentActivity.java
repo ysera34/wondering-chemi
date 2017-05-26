@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -67,6 +68,7 @@ import static com.planet.wondering.chemi.common.Common.CONTENT_SHARE_TEMPLATE_CO
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
+import static com.planet.wondering.chemi.common.Common.STATUS_BAR_HEIGHT_SCREEN_WIDTH_RATIO;
 import static com.planet.wondering.chemi.common.Common.VERTICAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.network.Config.Comment.COMMENT_PATH;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.DESCRIPTION;
@@ -662,10 +664,14 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     }
 
     public void setStatusBarTranslucent(boolean makeTranslucent) {
-        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 144);
+        int screenWidth = getScreenWidth();
+        int toolbarHeight = (int) (screenWidth * STATUS_BAR_HEIGHT_SCREEN_WIDTH_RATIO);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, toolbarHeight);
         if (makeTranslucent) {
-            params.setMargins(0, 72, 0, 0);
+            // as status bar margin
+            params.setMargins(0, toolbarHeight/2, 0, 0);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else {
             params.setMargins(0, 0, 0, 0);
@@ -883,5 +889,11 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //            int numOfActivities = runningTaskInfo.numActivities;
 //            String topActivity = runningTaskInfo.topActivity.getShortClassName();
 //        }
+    }
+
+    public int getScreenWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 }

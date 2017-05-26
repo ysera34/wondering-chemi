@@ -45,6 +45,10 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="ContentTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <style name="MemberStartWhiteTextAppearance">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorWhite</item>
