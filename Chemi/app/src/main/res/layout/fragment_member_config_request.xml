@@ -68,18 +68,34 @@
             android:paddingEnd="16dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="브랜드"
-                android:textSize="14sp"
-                android:textColor="@color/colorDoveGray"/>
+                android:layout_marginTop="18dp"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="브랜드"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorDoveGray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="(자동완성은 저희 제품군을 기준이예요)"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorFontFrenchGray"/>
+
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/member_config_request_brand_auto_complete_text_view"
@@ -97,7 +113,7 @@
                     android:dropDownAnchor="@+id/search_brand_bottom_anchor"
                     android:dropDownWidth="wrap_content"
                     android:dropDownSelector="@color/colorPrimary"
-                    android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+                    android:background="@drawable/widget_solid_rectangle_black_haze"/>
                     <!--android:imeOptions="actionDone"-->
 
                 <ImageView
@@ -120,18 +136,33 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="제품"
-                android:textSize="14sp"
-                android:textColor="@color/colorDoveGray"/>
+                android:layout_marginTop="12dp"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="제품"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorDoveGray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="(자동완성에 없는 제품도 좋아요!)"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorFontFrenchGray"/>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/member_config_request_product_auto_complete_text_view"
@@ -149,7 +180,7 @@
                     android:dropDownAnchor="@+id/search_product_bottom_anchor"
                     android:dropDownWidth="wrap_content"
                     android:dropDownSelector="@color/colorPrimary"
-                    android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+                    android:background="@drawable/widget_solid_rectangle_black_haze"/>
                     <!--android:imeOptions="actionDone"-->
 
                 <ImageView
@@ -175,16 +206,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="상세 내용"
+                android:layout_marginTop="12dp"
+                android:text="요청 사항"
                 android:textSize="14sp"
                 android:textColor="@color/colorDoveGray"/>
 
             <EditText
                 android:id="@+id/member_config_request_details_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="8dp"
                 android:gravity="top"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
@@ -198,27 +229,42 @@
                 android:textColor="@color/colorArmadillo"
                 android:maxLines="5"
                 android:maxLength="100"
-                android:background="@drawable/widget_solid_rectangle_request_product_edit_bg"/>
+                android:background="@drawable/widget_solid_rectangle_black_haze"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="제품 사진 및 전성분표기 사진 첨부"
+                android:layout_marginTop="12dp"
+                android:text="전성분 사진 첨부"
                 android:textSize="14sp"
                 android:textColor="@color/colorDoveGray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text=" 아래와 같이 모든 성분의 이름이 보이는 사진을 첨부해주세요!"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/request_product_sample"
+                android:scaleType="centerCrop"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:gravity="start">
 
                 <ImageView
                     android:id="@+id/member_config_request_image1_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_review_camera"/>
 
@@ -226,7 +272,7 @@
                     android:id="@+id/member_config_request_image2_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_review_camera"/>
 
@@ -234,7 +280,7 @@
                     android:id="@+id/member_config_request_image3_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_review_camera"/>
 

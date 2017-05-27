@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/list_item_product_empty_image_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_no_result"/>
+
+    <TextView
+        android:id="@+id/list_item_product_footer_message_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:lineSpacingMultiplier="1.2"
+        android:maxLines="3"
+        android:textSize="15sp"
+        android:textColor="@color/colorFontAluminum"/>
+
+    <TextView
+        android:id="@+id/list_item_product_empty_request_button_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:clickable="true"
+        android:text="제품 등록 요청하기"
+        android:textSize="14sp"
+        android:textColor="@color/color_selector_button_white_primary"
+        android:background="@drawable/selector_opaque_primary"/>
+
+</LinearLayout>

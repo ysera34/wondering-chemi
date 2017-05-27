@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ProductFragment;
+import com.planet.wondering.chemi.view.fragment.ProductImageDialogFragment;
 
 import org.json.JSONObject;
 
@@ -75,7 +77,8 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.L
  */
 
 public class ProductActivity extends AppBaseActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener, OnDialogFinishedListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener,
+        OnDialogFinishedListener, View.OnClickListener {
 
     private static final String TAG = ProductActivity.class.getSimpleName();
 
@@ -163,6 +166,7 @@ public class ProductActivity extends AppBaseActivity
         mProductDetailToolbarSubTitleTextView = (TextView) findViewById(R.id.product_detail_toolbar_sub_title_text_view);
 
         mProductDetailImageView = (ImageView) findViewById(R.id.product_detail_image_view);
+        mProductDetailImageView.setOnClickListener(this);
         mProductDetailReviewRatingBar = (RatingBar) findViewById(R.id.product_detail_review_rating_bar);
         mProductDetailReviewRatingValueTextView =
                 (TextView) findViewById(R.id.product_detail_review_rating_value_text_view);
@@ -196,28 +200,35 @@ public class ProductActivity extends AppBaseActivity
             }
         }, 1500);
 
-//        setTitle(mProduct.getBrand());
-//        mProductToolbar.setSubtitle(mProduct.getName());
-
         int thumbnailWidth = mScreenWidth;
         int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO);
-
 
         Glide.with(getApplicationContext())
                 .load(mProduct.getImagePath())
 //                    .placeholder(R.drawable.unloaded_image_holder)
 //                    .error(R.drawable.unloaded_image_holder)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
 //                .override(700, 460)
                 .override(thumbnailWidth, thumbnailHeight)
-                .centerCrop()
+                .crossFade()
+                .fitCenter()
                 .into(mProductDetailImageView);
         mProductDetailReviewRatingBar.setRating(product.getRatingValue());
         mProductDetailReviewRatingValueTextView.setText(String.valueOf(product.getRatingValue()));
         mProductDetailReviewRatingCountTextView.setText(
                 getString(R.string.product_review_count, String.valueOf(product.getRatingCount())));
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.product_detail_image_view:
+                ProductImageDialogFragment dialogFragment =
+                        ProductImageDialogFragment.newInstance(mProduct.getImagePath());
+                dialogFragment.show(getSupportFragmentManager(), "product_image_dialog_fragment");
+                break;
+        }
     }
 
     @Override

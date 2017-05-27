@@ -155,6 +155,11 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                 mFragmentManager.beginTransaction()
                         .replace(R.id.main_fragment_container, MemberAskInfoFragment.newInstance(null, 5))
                         .commit();
+            } else if (mRequestId == 6) {
+                mBottomNavigationLayout.setVisibility(View.GONE);
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, MemberConfigRequestFragment.newInstance())
+                        .commit();
             }
         } else if (mFragment instanceof MemberFragment) {
             /* refresh fragment */
@@ -449,10 +454,15 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                     .commit();
         } else if (fragment instanceof MemberConfigRequestFragment) {
             showBottomNavigationView();
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
-                    .commit();
+            if (mRequestId == -1) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
+                        .commit();
+            } else if (mRequestId == 6) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         } else if (fragment instanceof MemberConfigFAQFragment) {
             showBottomNavigationView();
             if (mRequestId == -1) {

@@ -492,7 +492,7 @@ public class MemberConfigFAQFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void run() {
                         if (mFAQBody.isFirstImage()) {
-                            mFAQRecyclerView.smoothScrollBy(0, imageHeight / 3);
+//                            mFAQRecyclerView.smoothScrollBy(0, imageHeight / 3);
                         }
                     }
                 }, 200);

@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
  * Created by yoon on 2016. 12. 31..
  */
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = CategoryFragment.class.getSimpleName();
 
@@ -37,6 +39,8 @@ public class CategoryFragment extends Fragment {
         return fragment;
     }
 
+    private TextView mCategoryHeaderTextView;
+    private TextView mCategoryCustomTextView;
     private ArrayList<CategoryItem> mCategoryItems;
     private CategoryAdapter mCategoryAdapter;
     private RecyclerView mCategoryRecyclerView;
@@ -54,6 +58,10 @@ public class CategoryFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
 
+        mCategoryHeaderTextView = (TextView) view.findViewById(R.id.category_header_text_view);
+        mCategoryHeaderTextView.setOnClickListener(this);
+        mCategoryCustomTextView = (TextView) view.findViewById(R.id.category_custom_text_view);
+        mCategoryCustomTextView.setOnClickListener(this);
         mCategoryRecyclerView = (RecyclerView) view.findViewById(R.id.category_recycler_view);
         mCategoryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
         mCategoryRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
@@ -78,6 +86,40 @@ public class CategoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.category_header_text_view:
+                validationFirstAction();
+                break;
+            case R.id.category_custom_text_view:
+                validationSecondAction();
+                break;
+        }
+    }
+
+    private int mFirstAction;
+
+    private void validationFirstAction() {
+        if (mFirstAction <= 7) {
+            mFirstAction++;
+            Log.i("secret", String.valueOf(mFirstAction));
+        }
+    }
+
+    private void validationSecondAction() {
+        if (mFirstAction == 5) {
+            int currentTime = (int) System.currentTimeMillis();
+            if (currentTime % 2 == 0) {
+                Log.i("secret", "go");
+                startActivity(ProductListActivity.newIntent(getActivity(), 99));
+            } else {
+                Log.i("secret", "sorry");
+                Toast.makeText(getActivity(), "...", Toast.LENGTH_SHORT).show();
+                mFirstAction = 0;
+            }
+        }
+    }
 
     private class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 

@@ -46,6 +46,7 @@ import com.planet.wondering.chemi.util.adapter.TagCharacterAdapter;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.util.listener.OnUpdateProductListListener;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 
 import org.json.JSONObject;
@@ -171,9 +172,11 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         mProductIds = new ArrayList<>();
         mUrlBuilder = new StringBuilder();
 
-        if (mCategoryId > 0) {
+        if (mCategoryId > 0 && mCategoryId < 90) {
             mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
             mCategoryName = mCategoryNameArray[mCategoryId];
+        } else if (mCategoryId >= 90) {
+            mCategoryName = "비밀의 문에 오신 것을 환영합니다.";
         }
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
@@ -189,8 +192,16 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         if (mTagName != null) {
             mSearchAutoCompleteTextView.setText(mTagName);
         }
-        if (mCategoryId > 0) {
+        if (mCategoryId > 0 && mCategoryId < 90) {
             mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+            mSearchAutoCompleteTextView.setCursorVisible(true);
+            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
+            mSearchAutoCompleteTextView.setThreshold(1);
+            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
+                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
+            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
+        } else if (mCategoryId >= 90) {
+            mSearchAutoCompleteTextView.setHint(mCategoryName);
             mSearchAutoCompleteTextView.setCursorVisible(true);
             mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
             mSearchAutoCompleteTextView.setThreshold(1);
@@ -548,6 +559,9 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 case VIEW_TYPE_ITEM:
                     view = layoutInflater.inflate(R.layout.list_item_product, parent, false);
                     return new ProductHolder(view);
+                case VIEW_TYPE_FOOTER:
+                    view = layoutInflater.inflate(R.layout.list_item_product_footer, parent, false);
+                    return new FooterHolder(view);
             }
             return null;
         }
@@ -557,24 +571,37 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             if (holder instanceof HeaderHolder) {
                 ((HeaderHolder) holder).bindHeader();
             }
-
             if (holder instanceof ProductHolder) {
                 Product product = mProducts.get(position - 1);
                 ((ProductHolder) holder).bindProduct(product);
     //            setFadeAnimation(holder.itemView);
             }
+            if (holder instanceof FooterHolder) {
+                ((FooterHolder) holder).bindFooter();
+//                setFadeAnimation(holder.itemView);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mProducts.size() + 1;
+//            return mProducts.size() + 1;
+            return mProducts.size() + 2; /* Header, Footer */
         }
 
         @Override
         public int getItemViewType(int position) {
+//            if (position == 0) {
+//                return VIEW_TYPE_HEADER;
+//            }  else {
+//                return VIEW_TYPE_ITEM;
+//            }
             if (position == 0) {
                 return VIEW_TYPE_HEADER;
-            }  else {
+            }
+            if (((mProducts == null || mProducts.size() == 0) && position == 1)
+                    || ((mProducts != null && mProducts.size() > 0) && position == mProducts.size() + 1)) {
+                return VIEW_TYPE_FOOTER;
+            } else {
                 return VIEW_TYPE_ITEM;
             }
         }
@@ -588,6 +615,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
     private static final int VIEW_TYPE_HEADER = -1;
     private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_FOOTER = 1;
 
     private class HeaderHolder extends RecyclerView.ViewHolder {
 
@@ -680,6 +708,60 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId(), (byte) 1));
             }
 //            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
+        }
+    }
+
+    private class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private ImageView mEmptyImageView;
+        private TextView mMessageTextView;
+        private TextView mRequestButtonTextView;
+
+        public FooterHolder(View itemView) {
+            super(itemView);
+            mEmptyImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_product_empty_image_image_view);
+            mMessageTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_product_footer_message_text_view);
+            mRequestButtonTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_product_empty_request_button_text_view);
+            mRequestButtonTextView.setOnClickListener(this);
+        }
+
+        public void bindFooter() {
+
+            if (mPager == null) {
+                if (mProductAdapter.getItemCount() == 2) {
+                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
+                    mEmptyImageView.setVisibility(View.VISIBLE);
+                    mMessageTextView.setText(
+                            getString(R.string.product_list_result_empty_request_promote_message));
+                }
+            } else {
+                if (mPager.getTotal() + 2 > mProductAdapter.getItemCount()) {
+                    Log.i(TAG, "mPager.getTotal() > mProductAdapter.getItemCount() + 2");
+                    Log.i(TAG, "mPager.getTotal():" + mPager.getTotal());
+                    Log.i(TAG, "mProductAdapter.getItemCount() + 2:" + (mProductAdapter.getItemCount() + 2));
+                    mEmptyImageView.setVisibility(View.GONE);
+                    mMessageTextView.setText(
+                            getString(R.string.product_list_result_paginating_message));
+                } else {
+                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
+                    mEmptyImageView.setVisibility(View.VISIBLE);
+                    mMessageTextView.setText(
+                            getString(R.string.product_list_result_empty_request_promote_message));
+                }
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.list_item_product_empty_request_button_text_view:
+                    startActivity(MemberActivity.newIntent(getActivity(), 6));
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    break;
+            }
         }
     }
 
