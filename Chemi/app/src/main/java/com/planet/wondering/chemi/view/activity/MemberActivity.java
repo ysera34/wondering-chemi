@@ -121,20 +121,23 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        executeRequestCode(mRequestId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setupBottomNavigation(4);
+    }
 
+    private void executeRequestCode(int requestId) {
         if (mFragment == null) {
             if (mRequestId == -1) {
                 if (mAccessToken != null) {
-    //                mFragment = MemberFragment.newInstance();
-    //                mFragmentManager.beginTransaction()
-    //                        .add(R.id.fragment_container, mFragment)
-    //                        .commit();
+//                mFragment = MemberFragment.newInstance();
+//                mFragmentManager.beginTransaction()
+//                        .add(R.id.fragment_container, mFragment)
+//                        .commit();
                     requestMemberConfigUser();
 
                 } else {
@@ -174,6 +177,9 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, String.valueOf(requestCode));
+        Log.i(TAG, String.valueOf(resultCode));
+//        Log.i(TAG, String.valueOf(data.toString()));
 
         switch (requestCode) {
             case SIGN_IN_GOOGLE_REQUEST_CODE:

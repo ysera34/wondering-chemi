@@ -50,7 +50,6 @@ import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ProductFragment;
-import com.planet.wondering.chemi.view.fragment.ProductImageDialogFragment;
 
 import org.json.JSONObject;
 
@@ -224,9 +223,9 @@ public class ProductActivity extends AppBaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.product_detail_image_view:
-                ProductImageDialogFragment dialogFragment =
-                        ProductImageDialogFragment.newInstance(mProduct.getImagePath());
-                dialogFragment.show(getSupportFragmentManager(), "product_image_dialog_fragment");
+//                ProductImageDialogFragment dialogFragment =
+//                        ProductImageDialogFragment.newInstance(mProduct.getImagePath());
+//                dialogFragment.show(getSupportFragmentManager(), "product_image_dialog_fragment");
                 break;
         }
     }

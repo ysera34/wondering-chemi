@@ -732,21 +732,21 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
             if (mPager == null) {
                 if (mProductAdapter.getItemCount() == 2) {
-                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
+//                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
                     mEmptyImageView.setVisibility(View.VISIBLE);
                     mMessageTextView.setText(
                             getString(R.string.product_list_result_empty_request_promote_message));
                 }
             } else {
                 if (mPager.getTotal() + 2 > mProductAdapter.getItemCount()) {
-                    Log.i(TAG, "mPager.getTotal() > mProductAdapter.getItemCount() + 2");
-                    Log.i(TAG, "mPager.getTotal():" + mPager.getTotal());
-                    Log.i(TAG, "mProductAdapter.getItemCount() + 2:" + (mProductAdapter.getItemCount() + 2));
+//                    Log.i(TAG, "mPager.getTotal() > mProductAdapter.getItemCount() + 2");
+//                    Log.i(TAG, "mPager.getTotal():" + mPager.getTotal());
+//                    Log.i(TAG, "mProductAdapter.getItemCount() + 2:" + (mProductAdapter.getItemCount() + 2));
                     mEmptyImageView.setVisibility(View.GONE);
                     mMessageTextView.setText(
                             getString(R.string.product_list_result_paginating_message));
                 } else {
-                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
+//                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
                     mEmptyImageView.setVisibility(View.VISIBLE);
                     mMessageTextView.setText(
                             getString(R.string.product_list_result_empty_request_promote_message));

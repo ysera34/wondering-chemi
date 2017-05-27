@@ -59,7 +59,9 @@
         android:layout_weight="1"
         android:clipToPadding="true"
         android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:text="(자동완성은 저희 제품군을 기준이예요)"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorFontFrenchGray"/>
 
             </LinearLayout>
@@ -110,6 +112,7 @@
                     android:textColor="@color/colorArmadillo"
                     android:maxLines="1"
                     android:inputType="textAutoComplete"
+                    android:imeOptions="actionNext"
                     android:dropDownAnchor="@+id/search_brand_bottom_anchor"
                     android:dropDownWidth="wrap_content"
                     android:dropDownSelector="@color/colorPrimary"
@@ -154,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:text="(자동완성에 없는 제품도 좋아요!)"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorFontFrenchGray"/>
 
             </LinearLayout>
@@ -177,6 +180,7 @@
                     android:textColor="@color/colorArmadillo"
                     android:maxLines="1"
                     android:inputType="textAutoComplete"
+                    android:imeOptions="actionNext"
                     android:dropDownAnchor="@+id/search_product_bottom_anchor"
                     android:dropDownWidth="wrap_content"
                     android:dropDownSelector="@color/colorPrimary"
@@ -203,13 +207,35 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/member_config_request_details_header_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="요청 사항"
-                android:textSize="14sp"
-                android:textColor="@color/colorDoveGray"/>
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="요청 사항"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorDoveGray"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/member_config_request_details_completed_button_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:text="완료"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_selector_aluminum_primary"/>
+
+            </RelativeLayout>
+
 
             <EditText
                 android:id="@+id/member_config_request_details_edit_text"
@@ -227,17 +253,32 @@
                 android:inputType="textMultiLine|textImeMultiLine"
                 android:textSize="15sp"
                 android:textColor="@color/colorArmadillo"
-                android:maxLines="5"
-                android:maxLength="100"
+                android:maxLines="3"
+                android:maxLength="50"
                 android:background="@drawable/widget_solid_rectangle_black_haze"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="전성분 사진 첨부"
-                android:textSize="14sp"
-                android:textColor="@color/colorDoveGray"/>
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전성분 사진 첨부"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorDoveGray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="(2장에서 3장도 괜찮아요!)"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorFontFrenchGray"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -269,6 +310,7 @@
                     android:background="@drawable/bg_review_camera"/>
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/member_config_request_image2_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -277,6 +319,7 @@
                     android:background="@drawable/bg_review_camera"/>
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/member_config_request_image3_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"

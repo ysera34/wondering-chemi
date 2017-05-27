@@ -168,23 +168,7 @@ public class ImageHandler {
         return pickIntent;
     }
 
-    public void handleCameraImage(ImageView imageView) {
-
-        if (mCurrentImageAbsolutePath != null) {
-            imageView.setImageBitmap(setPicture(imageView));
-            galleryAddPicture();
-            mCurrentImageAbsolutePath = null;
-        }
-    }
-
-    public String handleGalleryImage1(Intent intent, ImageView imageView) {
-
-        mCurrentImageAbsolutePath = getRealPathFromURI(intent.getData());
-        imageView.setImageBitmap(setPicture(imageView));
-        return mCurrentImageAbsolutePath;
-    }
-
-    public String handleCameraImage1(ImageView imageView) {
+    public String handleCameraImage(ImageView imageView) {
 
         if (mCurrentImageAbsolutePath != null) {
             imageView.setImageBitmap(setPicture(imageView));
@@ -194,11 +178,11 @@ public class ImageHandler {
         return null;
     }
 
-    public void handleGalleryImage(Intent intent, ImageView imageView) {
+    public String handleGalleryImage(Intent intent, ImageView imageView) {
 
         mCurrentImageAbsolutePath = getRealPathFromURI(intent.getData());
         imageView.setImageBitmap(setPicture(imageView));
-        mCurrentImageAbsolutePath = null;
+        return mCurrentImageAbsolutePath;
     }
 
     private void galleryAddPicture() {

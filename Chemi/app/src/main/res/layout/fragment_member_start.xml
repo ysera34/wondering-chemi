@@ -61,8 +61,8 @@
                 android:layout_centerVertical="true"
                 android:text="@string/member_start_google"
                 android:textSize="15sp"
-                android:textColor="@color/colorWhite"
-                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+                android:textColor="@color/colorWhite"/>
+            <!--android:textAppearance="@style/MemberStartGrayTextAppearance"-->
 
         </RelativeLayout>
 
@@ -92,9 +92,9 @@
                 android:text="@string/member_start_naver"
                 android:textSize="15sp"
                 android:textColor="@color/colorWhite"
-                android:textAppearance="@style/MemberStartGrayTextAppearance"
                 android:layout_alignBottom="@+id/imageView"
                 android:layout_centerHorizontal="true"/>
+                <!--android:textAppearance="@style/MemberStartGrayTextAppearance"-->
 
         </RelativeLayout>
 
@@ -123,8 +123,8 @@
                 android:layout_centerVertical="true"
                 android:text="@string/member_start_local"
                 android:textSize="15sp"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/MemberStartGrayTextAppearance"/>
+                android:textColor="@color/colorPrimary"/>
+            <!--android:textAppearance="@style/MemberStartGrayTextAppearance"-->
 
         </RelativeLayout>
 
