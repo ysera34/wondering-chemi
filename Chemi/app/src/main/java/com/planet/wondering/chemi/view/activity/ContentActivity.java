@@ -137,6 +137,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mContentId = getIntent().getIntExtra(EXTRA_CONTENT_ID, -1);

@@ -7,10 +7,12 @@
         android:id="@+id/content_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="44dp"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/content_comment_edit_layout"
+        android:layout_alignParentBottom="true"
         android:focusable="true"
         android:focusableInTouchMode="true">
+        <!--android:layout_above="@+id/content_comment_edit_layout"-->
 
     </FrameLayout>
 
