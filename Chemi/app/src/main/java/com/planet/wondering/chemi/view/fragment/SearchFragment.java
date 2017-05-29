@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -55,7 +54,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSearchViewAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_up_scale_up);
+//        mSearchViewAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_up_scale_up);
     }
 
     @Nullable
@@ -112,7 +111,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                         .addSharedElement(mSearchImageButton, getString(R.string.search_image_button))
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                         .replace(R.id.main_fragment_container, detailFragment)
-                        .addToBackStack(null)
+                        .addToBackStack("search_fragment")
                         .commit();
                 break;
         }

@@ -287,7 +287,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
                         .findLastCompletelyVisibleItemPosition();
                 if (lastItem == mProductAdapter.getItemCount() - 1 && mPager != null
-                        && mPager.getTotal() > mProductAdapter.getItemCount() - 1) {
+                        && mPager.getTotal() > mProductAdapter.getItemCount() - 2) {
                     // all product == > mTagName = ""
                     if (mTagName != null && mCategoryId == -1) {
                         requestTagProductList(mTagName);

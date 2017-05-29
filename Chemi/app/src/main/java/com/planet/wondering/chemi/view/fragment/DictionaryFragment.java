@@ -1,5 +1,7 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -103,6 +105,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
+    private AnimatorSet mDicFlagAnimatorSet;
+    private ImageView mWhiteFlagImageView;
+
     private static final int LATEST_MODE = -1;
     private static final int SUGGESTION_MODE = 1;
     private static final int RESULT_MODE = 2;
@@ -112,6 +117,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mDicFlagAnimatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.wave);
     }
 
     @Nullable
@@ -205,6 +212,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     .commit();
             mCurrentMode = LATEST_MODE;
         }
+
+        mWhiteFlagImageView = (ImageView) view.findViewById(R.id.dictionary_white_flag_image_view);
+        mWhiteFlagImageView.setOnClickListener(this);
+        mDicFlagAnimatorSet.setTarget(mWhiteFlagImageView);
         return view;
     }
 
@@ -216,6 +227,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.dictionary_white_flag_image_view:
+//                mDicFlagAnimatorSet.start();
+                break;
             case R.id.dictionary_search_edit_text:
                 if (!isSearchMode) {
                     showSearchMode();

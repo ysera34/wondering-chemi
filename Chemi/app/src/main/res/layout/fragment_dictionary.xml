@@ -18,6 +18,7 @@
             android:background="@color/colorPrimary">
 
             <ImageView
+                android:id="@+id/dictionary_white_flag_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/dictionary_white_logo_image_view"
