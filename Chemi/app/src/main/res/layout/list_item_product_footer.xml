@@ -13,6 +13,16 @@
         android:layout_marginTop="24dp"
         android:src="@drawable/ic_no_result"/>
 
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/list_item_product_scroll_promote_arrow_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_arrow_downward_48dp"/>
+
     <TextView
         android:id="@+id/list_item_product_footer_message_text_view"
         android:layout_width="wrap_content"
@@ -27,6 +37,7 @@
         android:textColor="@color/colorFontAluminum"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/list_item_product_empty_request_button_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

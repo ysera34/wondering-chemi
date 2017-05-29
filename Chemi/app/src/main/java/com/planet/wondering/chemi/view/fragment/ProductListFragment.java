@@ -714,6 +714,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView mEmptyImageView;
+        private ImageView mScrollPromoteArrowImageView;
         private TextView mMessageTextView;
         private TextView mRequestButtonTextView;
 
@@ -721,6 +722,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             super(itemView);
             mEmptyImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_product_empty_image_image_view);
+            mScrollPromoteArrowImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_product_scroll_promote_arrow_image_view);
             mMessageTextView = (TextView)
                     itemView.findViewById(R.id.list_item_product_footer_message_text_view);
             mRequestButtonTextView = (TextView)
@@ -732,24 +735,30 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
             if (mPager == null) {
                 if (mProductAdapter.getItemCount() == 2) {
-//                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
-                    mEmptyImageView.setVisibility(View.VISIBLE);
-                    mMessageTextView.setText(
-                            getString(R.string.product_list_result_empty_request_promote_message));
+                    mEmptyImageView.setVisibility(View.GONE);
+                    mScrollPromoteArrowImageView.setVisibility(View.GONE);
+                    mMessageTextView.setVisibility(View.GONE);
                 }
             } else {
-                if (mPager.getTotal() + 2 > mProductAdapter.getItemCount()) {
-//                    Log.i(TAG, "mPager.getTotal() > mProductAdapter.getItemCount() + 2");
-//                    Log.i(TAG, "mPager.getTotal():" + mPager.getTotal());
-//                    Log.i(TAG, "mProductAdapter.getItemCount() + 2:" + (mProductAdapter.getItemCount() + 2));
-                    mEmptyImageView.setVisibility(View.GONE);
-                    mMessageTextView.setText(
-                            getString(R.string.product_list_result_paginating_message));
-                } else {
-//                    Log.i(TAG, "mProductAdapter.getItemCount():" + mProductAdapter.getItemCount());
+                if (mPager.getTotal() == 0 && mProductAdapter.getItemCount() == 2) {
                     mEmptyImageView.setVisibility(View.VISIBLE);
+                    mScrollPromoteArrowImageView.setVisibility(View.GONE);
+                    mMessageTextView.setVisibility(View.VISIBLE);
                     mMessageTextView.setText(
                             getString(R.string.product_list_result_empty_request_promote_message));
+                    mRequestButtonTextView.setVisibility(View.VISIBLE);
+                } else if (mPager.getTotal() + 2 > mProductAdapter.getItemCount()) {
+                    mEmptyImageView.setVisibility(View.GONE);
+                    mScrollPromoteArrowImageView.setVisibility(View.VISIBLE);
+                    mMessageTextView.setVisibility(View.GONE);
+                    mRequestButtonTextView.setVisibility(View.GONE);
+                } else {
+                    mEmptyImageView.setVisibility(View.VISIBLE);
+                    mScrollPromoteArrowImageView.setVisibility(View.GONE);
+                    mMessageTextView.setVisibility(View.VISIBLE);
+                    mMessageTextView.setText(
+                            getString(R.string.product_list_result_empty_request_promote_message));
+                    mRequestButtonTextView.setVisibility(View.VISIBLE);
                 }
             }
         }
