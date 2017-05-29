@@ -98,6 +98,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     private Product mProduct;
     private Review mReview;
     private int mRequestId;
+    private boolean mIsAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,7 +239,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //                        mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragmentManager.beginTransaction()
-                                .add(R.id.main_fragment_container, mFragment)
+                                .replace(R.id.main_fragment_container, mFragment)
                                 .commit();
                     }
                 },
@@ -276,9 +277,10 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //            mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewCreateFragment.newInstance(mProduct, mReviewContent))
 //                    .commit();
-
             mFragmentManager.popBackStackImmediate();
 
+        } else if (fragment instanceof ReviewUpdateFragment) {
+            requestReview(mReviewId);
         } else {
             setResult(Activity.RESULT_OK, new Intent());
             super.onBackPressed();

@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="8dp"
-              android:background="@drawable/selector_ripple_list_item_border_gray">
+              android:background="@drawable/selector_ripple_list_item_gray">
 
     <ImageView
         android:id="@+id/list_item_content_image_view"

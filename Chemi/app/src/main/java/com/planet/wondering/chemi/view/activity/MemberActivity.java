@@ -383,6 +383,13 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
     @Override
     public void onUserNameInfoUpdate(String userName) {
         mUser.setName(userName);
+
+        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
+            UserSharedPreferences.removeStoredUserName(getApplicationContext());
+        }
+
+        UserSharedPreferences.setStoreUserName(getApplicationContext(), userName);
+        Log.d(TAG, "user name updated: " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
     }
 
     @Override

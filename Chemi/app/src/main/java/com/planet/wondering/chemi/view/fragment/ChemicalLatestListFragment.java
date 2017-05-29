@@ -25,7 +25,6 @@ import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.util.helper.ChemicalSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnChemicalSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
@@ -137,9 +136,9 @@ public class ChemicalLatestListFragment extends Fragment {
 
         mChemicalLatestRecyclerView = (RecyclerView) view.findViewById(R.id.chemical_latest_recycler_view);
         mChemicalLatestRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SeparatorDecoration decoration =
-                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-        mChemicalLatestRecyclerView.addItemDecoration(decoration);
+//        SeparatorDecoration decoration =
+//                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+//        mChemicalLatestRecyclerView.addItemDecoration(decoration);
         mChemicalLatestRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
             @Override
             public void onShowView() {

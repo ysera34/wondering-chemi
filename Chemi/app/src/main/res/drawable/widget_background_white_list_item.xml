@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:top="-0.1dp" android:bottom="0dp"
-      android:left="-0.1dp" android:right="-0.1dp">
-    <shape android:shape="rectangle">
-        <solid android:color="@color/colorWhite" />
-        <stroke android:width="0.1dp"
-                android:dashGap="1dp"
-                android:dashWidth="1dp"
-                android:color="@color/colorWhiteBackground" />
-    </shape>
-</item>
+    <!--<item android:top="-0.2dp" android:bottom="0dp"-->
+          <!--android:left="-0.2dp" android:right="-0.2dp">-->
+    <item android:top="-2dp" android:bottom="0dp"
+          android:left="-2dp" android:right="-2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorWhite" />
+            <stroke android:width="0.7dp"
+                    android:color="@color/colorWhiteBackground" />
+                    <!--android:dashGap="1dp"-->
+                    <!--android:dashWidth="1dp"-->
+        </shape>
+    </item>
 </layer-list>
