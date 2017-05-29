@@ -235,8 +235,11 @@ public class MemberStartLocalFragment extends Fragment
                 break;
             case R.id.member_start_local_submit_button_text_view:
                 if (isAuthEmailResult && isConfirmPassword) {
-//                    requestSubmitUserInfo();
-                    requestConfirmNameRepetition(mMemberStartLocalNameEditText.getText().toString());
+                    if (isValidatedName) {
+                        requestConfirmNameRepetition(mMemberStartLocalNameEditText.getText().toString());
+                    } else {
+                        Toast.makeText(getActivity(), "사용자 이름을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getActivity(),
                             "이메일 인증이 완료 되지 않았거나, 비밀번호가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
@@ -247,6 +250,7 @@ public class MemberStartLocalFragment extends Fragment
 
     private boolean isAuthEmailValidation = false;
     private boolean isAuthEmailResult = false;
+    private boolean isValidatedName = false;
     private boolean isConfirmName = false;
     private boolean isPassword = false;
     private String mPassword;
@@ -301,10 +305,12 @@ public class MemberStartLocalFragment extends Fragment
                     mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_correct);
                     mNameValidationMessageTextView.setText(mValidationMessages[6]);
                     mNameValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    isValidatedName = true;
                 } else {
                     mMemberStartLocalNameEditText.setBackgroundResource(R.drawable.edit_text_under_line_focus_true_accent);
                     mNameValidationMessageTextView.setText(validateName(text));
                     mNameValidationMessageTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                    isValidatedName = false;
                 }
             }
         });

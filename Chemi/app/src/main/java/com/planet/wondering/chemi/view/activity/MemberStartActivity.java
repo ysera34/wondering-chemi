@@ -10,12 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.nhn.android.naverlogin.OAuthLogin;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
-import com.planet.wondering.chemi.util.helper.BackPressCloseHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
 import com.planet.wondering.chemi.util.listener.OnSurveyCompletedListener;
@@ -35,6 +31,7 @@ import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
 import static com.planet.wondering.chemi.common.Common.GOOGLE_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.IS_NOW_USED_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
@@ -50,11 +47,10 @@ import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER
  * Created by yoon on 2017. 2. 12..
  */
 
-public class MemberStartActivity extends AppBaseActivity implements OnMenuSelectedListener,
-        /*GoogleApiClient.OnConnectionFailedListener,*/ OnSurveyCompletedListener {
+public class MemberStartActivity extends AppBaseActivity
+        implements OnMenuSelectedListener, OnSurveyCompletedListener {
 
     private static final String TAG = MemberStartActivity.class.getSimpleName();
-    public static final int RC_SIGN_IN = 9001;
     private static final String EXTRA_REQUEST_ID = "com.planet.wondering.chemi.request_id";
 
     public static Intent newIntent(Context packageContext) {
@@ -67,17 +63,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         intent.putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
     }
-
-    private BackPressCloseHandler mBackPressCloseHandler;
-
-    private User mUser;
-
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private GoogleApiClient mGoogleApiClient;
-
-    private static OAuthLogin mNaverOAuthLogin;
-    private static Context mContext;
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
@@ -100,69 +85,16 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
 
         setContentView(R.layout.activity_member_start);
 
-//        mBackPressCloseHandler = new BackPressCloseHandler(MemberStartActivity.this);
-//
-//        GoogleSignInOptions googleSignInOptions =
-//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken(getString(R.string.google_default_web_client_id))
-//                        .requestEmail()
-//                        .build();
-//
-//        mGoogleApiClient = new GoogleApiClient.Builder(MemberStartActivity.this)
-//                .enableAutoManage(MemberStartActivity.this, this)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-//                .build();
-//
-//        mFirebaseAuth = FirebaseAuth.getInstance();
-//
-//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if (user != null) {
-//                    Log.i(TAG, "onAuthStateChanged: signed_in:" + user.getUid());
-//                } else {
-//                    Log.i(TAG, "onAuthStateChanged: signed_out");
-//                }
-//                updateUI(user);
-//            }
-//        };
-
-//        OAuthLoginDefine.DEVELOPER_VERSION = true;
-//        mContext = this;
-//        mNaverOAuthLogin = OAuthLogin.getInstance();
-//        mNaverOAuthLogin.init(this,
-//                getString(R.string.naver_oauth_client_id),
-//                getString(R.string.naver_oauth_client_secret),
-//                getString(R.string.app_name));
-//
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.member_fragment_container);
 
         mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
+        executeRequestId(mRequestId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mFragment == null) {
-            if (mRequestId == -1) {
-                mFragment = MemberStartFragment.newInstance();
-                mFragmentManager.beginTransaction()
-                        .add(R.id.member_fragment_container, mFragment)
-                        .commit();
-            } else if (mRequestId == 2) {
-                mFragment = MemberForgetPasswordFragment.newInstance();
-                mFragmentManager.beginTransaction()
-                        .add(R.id.member_fragment_container, mFragment)
-                        .commit();
-            } else if (mRequestId == 3) {
-                mFragment = MemberStartLocalFragment.newInstance();
-                mFragmentManager.beginTransaction()
-                        .add(R.id.member_fragment_container, mFragment)
-                        .commit();
-            }
-        }
 
         Uri uriData = getIntent().getData();
         String accessToken = null;
@@ -196,6 +128,27 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
         }
     }
 
+    private void executeRequestId(int requestId) {
+        if (mFragment == null) {
+            if (mRequestId == -1 || mRequestId == IS_NOW_USED_USER_REQUEST_CODE) {
+                mFragment = MemberStartFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            } else if (mRequestId == 2) {
+                mFragment = MemberForgetPasswordFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            } else if (mRequestId == 3) {
+                mFragment = MemberStartLocalFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.member_fragment_container, mFragment)
+                        .commit();
+            }
+        }
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -215,8 +168,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                         case CONFIRM_EMAIL_REPETITION_TRUE_CODE:
                             Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
                             finish();
-                            startActivity(SearchActivity.newIntent(getApplicationContext()));
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            if (mRequestId != IS_NOW_USED_USER_REQUEST_CODE) {
+                                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
                             break;
                         case CONFIRM_EMAIL_REPETITION_FALSE_CODE:
                             User anonymousUser = (User) data.getSerializableExtra(EXTRA_RESPONSE_USER);
@@ -228,7 +183,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                             mPlatformId = anonymousUser.getPlatformId();
                             break;
                     }
-
                 }
                 break;
             case SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE:
@@ -236,10 +190,18 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     int responseCode = data.getIntExtra(EXTRA_RESPONSE_USER_CODE, -1);
                     switch (responseCode) {
                         case SIGN_UP_FOR_PLATFORM_USER_SUCCESS_CODE:
-                            mFragmentManager.beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
-                                    .commit();
+                            if (mRequestId == IS_NOW_USED_USER_REQUEST_CODE) {
+                                mFragmentManager.beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                        .replace(R.id.member_fragment_container,
+                                                MemberSurveyInfoFragment.newInstance(IS_NOW_USED_USER_REQUEST_CODE))
+                                        .commit();
+                            } else {
+                                mFragmentManager.beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                                        .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
+                                        .commit();
+                            }
                             break;
                     }
                 }
@@ -249,8 +211,10 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                 if (resultCode == RESULT_OK) {
                     Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
                     finish();
-                    startActivity(SearchActivity.newIntent(getApplicationContext()));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    if (mRequestId != IS_NOW_USED_USER_REQUEST_CODE) {
+                        startActivity(SearchActivity.newIntent(getApplicationContext()));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }
                 } else if (resultCode == RESULT_CANCELED) {
                     switch (responseCode) {
                         case SIGN_IN_LOCAL_USER_FAIL_CODE:
@@ -283,10 +247,20 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                     .replace(R.id.member_fragment_container, MemberStartNameFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberStartLocalFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
-                    .commit();
+            if (mRequestId == IS_NOW_USED_USER_REQUEST_CODE) {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.member_fragment_container,
+                                MemberSurveyInfoFragment.newInstance(IS_NOW_USED_USER_REQUEST_CODE))
+                        .commit();
+            } else {
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
+                        .commit();
+            }
+
+
         } else if (fragment instanceof MemberForgetPasswordFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -326,14 +300,14 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
             case 7003: /* cancel signUpForLocal  */
                 fragment = getSupportFragmentManager().findFragmentById(R.id.member_fragment_container);
                 if (fragment instanceof MemberStartLocalFragment) {
-                    if (mRequestId == -1) {
+                    if (mRequestId == 3) {
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    } else {
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                                 .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
                                 .commit();
-                    } else if (mRequestId == 3) {
-                        finish();
-                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
                 }
                 break;
@@ -373,7 +347,6 @@ public class MemberStartActivity extends AppBaseActivity implements OnMenuSelect
                 startActivityForResult(UserActivity.newIntent(getApplicationContext(),
                         SIGN_IN_GOOGLE_REQUEST_CODE), SIGN_IN_GOOGLE_REQUEST_CODE);
                 break;
-
             case 7020: /* signInNaver */
                 startActivityForResult(UserActivity.newIntent(getApplicationContext(),
                         SIGN_IN_NAVER_REQUEST_CODE), SIGN_IN_NAVER_REQUEST_CODE);

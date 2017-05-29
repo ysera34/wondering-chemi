@@ -17,6 +17,8 @@ import com.planet.wondering.chemi.model.Product;
 
 import java.util.ArrayList;
 
+import static com.planet.wondering.chemi.common.Common.REVIEW_READ_REQUEST_CODE;
+
 /**
  * Created by yoon on 2017. 1. 18..
  */
@@ -111,8 +113,11 @@ public class ProductFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fragment : getChildFragmentManager().getFragments()) {
-            fragment.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REVIEW_READ_REQUEST_CODE:
+            for (Fragment fragment : getChildFragmentManager().getFragments()) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

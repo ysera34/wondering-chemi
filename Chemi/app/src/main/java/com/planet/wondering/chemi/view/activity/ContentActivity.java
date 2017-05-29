@@ -55,6 +55,7 @@ import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ContentHorizontalFragment;
 import com.planet.wondering.chemi.view.fragment.ContentVerticalFragment;
+import com.planet.wondering.chemi.view.fragment.MemberCongratulationDialogFragment;
 
 import org.json.JSONObject;
 
@@ -67,6 +68,7 @@ import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_IN
 import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.CONTENT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
+import static com.planet.wondering.chemi.common.Common.IS_NOW_USED_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
 import static com.planet.wondering.chemi.common.Common.STATUS_BAR_HEIGHT_SCREEN_WIDTH_RATIO;
@@ -818,7 +820,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     @Override
     public void onDialogFinished(boolean isChose, int requestCode) {
         if (isChose && requestCode == LOGIN_DIALOG_REQUEST_CODE) {
-            startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+            startActivityForResult(MemberStartActivity.newIntent(getApplicationContext(),
+                    IS_NOW_USED_USER_REQUEST_CODE), IS_NOW_USED_USER_REQUEST_CODE);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else {
             mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
@@ -828,6 +831,21 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 //            } else if (fragment instanceof ContentVerticalFragment) {
 //                ((ContentVerticalFragment) fragment).hideSoftKeyboard();
 //            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case IS_NOW_USED_USER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data.getBooleanExtra("is_now_used_user", false)) {
+                        MemberCongratulationDialogFragment dialogFragment =
+                                MemberCongratulationDialogFragment.newInstance();
+                        dialogFragment.show(getSupportFragmentManager(), "congratulation_dialog");
+                    }
+                }
         }
     }
 

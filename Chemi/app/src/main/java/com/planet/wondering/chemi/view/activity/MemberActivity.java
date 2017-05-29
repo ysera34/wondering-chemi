@@ -128,6 +128,15 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
     protected void onResume() {
         super.onResume();
         setupBottomNavigation(4);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        if (fragment != null) {
+            if (fragment instanceof MemberFragment) {
+                /* refresh fragment */
+                if (mAccessToken != null) {
+                    requestMemberConfigUser();
+                }
+            }
+        }
     }
 
     private void executeRequestCode(int requestId) {
@@ -164,12 +173,13 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .replace(R.id.main_fragment_container, MemberConfigRequestFragment.newInstance())
                         .commit();
             }
-        } else if (mFragment instanceof MemberFragment) {
-            /* refresh fragment */
-            if (mAccessToken != null) {
-                requestMemberConfigUser();
-            }
         }
+//        else if (mFragment instanceof MemberFragment) {
+//            /* refresh fragment */
+//            if (mAccessToken != null) {
+//                requestMemberConfigUser();
+//            }
+//        }
     }
 
     private int mPlatformId;
@@ -387,7 +397,6 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
         if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
             UserSharedPreferences.removeStoredUserName(getApplicationContext());
         }
-
         UserSharedPreferences.setStoreUserName(getApplicationContext(), userName);
         Log.d(TAG, "user name updated: " + UserSharedPreferences.getStoredUserName(getApplicationContext()));
     }

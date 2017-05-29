@@ -222,7 +222,6 @@ public class ReviewCreateFragment extends Fragment
         mReviewCreateReviewLengthTextView.setText(
                 getString(R.string.review_create_review_length_format,
                         String.valueOf(mReviewCreateReviewTextView.getText().length())));
-
     }
 
     @Override

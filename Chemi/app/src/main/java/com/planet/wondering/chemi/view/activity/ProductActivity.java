@@ -49,6 +49,7 @@ import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
+import com.planet.wondering.chemi.view.fragment.MemberCongratulationDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ProductFragment;
 
 import org.json.JSONObject;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
+import static com.planet.wondering.chemi.common.Common.IS_NOW_USED_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO;
@@ -231,14 +233,6 @@ public class ProductActivity extends AppBaseActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mProduct != null) {
             if (!mProduct.isArchive()) {
@@ -280,13 +274,35 @@ public class ProductActivity extends AppBaseActivity
     public void onDialogFinished(boolean isChose, int requestCode) {
         if (isChose) {
             if (requestCode == LOGIN_DIALOG_REQUEST_CODE) {
-                startActivity(MemberStartActivity.newIntent(getApplicationContext()));
+                startActivityForResult(MemberStartActivity.newIntent(getApplicationContext(),
+                        IS_NOW_USED_USER_REQUEST_CODE), IS_NOW_USED_USER_REQUEST_CODE);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             } else if (requestCode == PROMOTE_EXTRA_DIALOG_REQUEST_CODE) {
                 startActivityForResult(MemberActivity.newIntent(getApplicationContext(), 5),
                         PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case IS_NOW_USED_USER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data.getBooleanExtra("is_now_used_user", false)) {
+                        MemberCongratulationDialogFragment dialogFragment =
+                                MemberCongratulationDialogFragment.newInstance();
+                        dialogFragment.show(getSupportFragmentManager(), "congratulation_dialog");
+                    }
+                }
+                break;
+            default:
+                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
         }
     }
 

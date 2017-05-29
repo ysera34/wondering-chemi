@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.IS_NOW_USED_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
@@ -65,9 +67,21 @@ public class MemberSurveyInfoFragment extends Fragment
 
     private static final String TAG = MemberSurveyInfoFragment.class.getSimpleName();
 
+    private static final String ARG_REQUEST_CODE = "request_code";
+
     public static MemberSurveyInfoFragment newInstance() {
 
         Bundle args = new Bundle();
+
+        MemberSurveyInfoFragment fragment = new MemberSurveyInfoFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MemberSurveyInfoFragment newInstance(int requestCode) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_REQUEST_CODE, requestCode);
 
         MemberSurveyInfoFragment fragment = new MemberSurveyInfoFragment();
         fragment.setArguments(args);
@@ -83,6 +97,7 @@ public class MemberSurveyInfoFragment extends Fragment
 
     private ArrayList<Fragment> mMemberSurveyStageFragments;
     private User mUser;
+    private int mRequestCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +110,7 @@ public class MemberSurveyInfoFragment extends Fragment
         mMemberSurveyStageFragments.add(MemberSurveyStage5Fragment.newInstance());
 
         mUser = new User();
+        mRequestCode = getArguments().getInt(ARG_REQUEST_CODE, -1);
     }
 
     @Nullable
@@ -171,8 +187,15 @@ public class MemberSurveyInfoFragment extends Fragment
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(SearchActivity.newIntent(getActivity(), true));
-                        getActivity().finish();
+                        if (mRequestCode == IS_NOW_USED_USER_REQUEST_CODE) {
+                            Intent intent = new Intent();
+                            intent.putExtra("is_now_used_user", true);
+                            getActivity().setResult(Activity.RESULT_OK, intent);
+                            getActivity().finish();
+                        } else {
+                            startActivity(SearchActivity.newIntent(getActivity(), true));
+                            getActivity().finish();
+                        }
                     }
                 });
                 builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -354,13 +377,19 @@ public class MemberSurveyInfoFragment extends Fragment
                         Log.i(TAG, response.toString());
                         progressDialog.dismiss();
 
-                        if (getActivity() instanceof MemberStartActivity) {
-                            startActivity(SearchActivity.newIntent(getActivity(), true));
+                        if (mRequestCode == IS_NOW_USED_USER_REQUEST_CODE) {
+                            Intent intent = new Intent();
+                            intent.putExtra("is_now_used_user", true);
+                            getActivity().setResult(Activity.RESULT_OK, intent);
                             getActivity().finish();
-                        } else if (getActivity() instanceof MemberActivity) {
-                            Intent intent = MemberActivity.newIntent(getActivity(), true);
-                            getActivity().finish();
-                            startActivity(intent);
+                        } else {
+                            if (getActivity() instanceof MemberStartActivity) {
+                                startActivity(SearchActivity.newIntent(getActivity(), true));
+                                getActivity().finish();
+                            } else if (getActivity() instanceof MemberActivity) {
+                                getActivity().finish();
+                                startActivity(MemberActivity.newIntent(getActivity(), true));
+                            }
                         }
                     }
                 },

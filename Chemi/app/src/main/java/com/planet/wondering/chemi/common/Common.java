@@ -44,6 +44,7 @@ public class Common {
     public static final String EXTRA_RESPONSE_USER = "com.planet.wondering.chemi.response_user";
     public static final String EXTRA_COMPLICATED_REVOKE = "com.planet.wondering.chemi.complicated_revoke";
 
+    public static final int IS_NOW_USED_USER_REQUEST_CODE = 17000;
     public static final int SIGN_IN_GOOGLE_REQUEST_CODE = 17001;
     public static final int SIGN_OUT_GOOGLE_REQUEST_CODE = 17002;
     public static final int REVOKE_ACCESS_GOOGLE_REQUEST_CODE = 17003;
