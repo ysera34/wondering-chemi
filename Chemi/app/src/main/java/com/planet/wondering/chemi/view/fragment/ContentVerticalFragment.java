@@ -176,7 +176,7 @@ public class ContentVerticalFragment extends Fragment {
             public void run() {
                 mContentVerticalNestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
             }
-        }, 200);
+        }, 300);
     }
 
     public void focusSelectedComment(float positionY) {

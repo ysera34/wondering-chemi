@@ -22,10 +22,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.helper.PrefixTextWatcher;
 import com.planet.wondering.chemi.util.listener.OnCommentEditDialogFinishedListener;
+
+import static com.planet.wondering.chemi.common.Common.COMMENT_USER_NAME_DIVIDER;
 
 /**
  * Created by yoon on 2017. 4. 26..
@@ -62,9 +66,11 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
 
     private InputMethodManager mInputMethodManager;
     private RelativeLayout mCommentConfirmLayout;
+    private TextView mCommentEditCommentUserNameTextView;
     private EditText mCommentEditText;
     private Button mEditCompleteButton;
 
+    private PrefixTextWatcher mPrefixTextWatcher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,10 +102,17 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
         mCommentConfirmLayout = (RelativeLayout) view.findViewById(R.id.comment_edit_confirm_layout);
         mCommentConfirmLayout.setOnClickListener(this);
         mCommentEditText = (EditText) view.findViewById(R.id.comment_edit_comment_edit_text);
+        mCommentEditCommentUserNameTextView =
+                (TextView) view.findViewById(R.id.comment_edit_comment_user_name_text_view);
 
-        String[] strings = String.valueOf(mCommentDescription).split("@");
+        String[] strings = String.valueOf(mCommentDescription).split(COMMENT_USER_NAME_DIVIDER, 2);
         if (strings.length > 1) {
-            mCommentEditText.setText(highlightUserNameText());
+//            mCommentEditText.setText(highlightUserNameText());
+            removePrefixTextChangedListener(mCommentEditText);
+            addPrefixTextChangedListener(mCommentEditText, strings[0], strings[1]);
+            mCommentEditCommentUserNameTextView.setVisibility(View.VISIBLE);
+            mCommentEditCommentUserNameTextView.setText(String.valueOf(strings[0]));
+//            mCommentEditText.setText(strings[0]);
         } else {
             mCommentEditText.setText(String.valueOf(mCommentDescription));
         }
@@ -189,20 +202,27 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
 
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
                         builder1.setMessage("댓글을 정말 수정하시겠어요?");
-                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if (isCompletedCommentEdit) {
-                                    if (mUserName == null) {
-                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
-                                                mCommentEditText.getText().toString());
-                                    } else {
-                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
-                                                mCommentEditText.getText().toString().substring(mUserName.length(), mCommentEditText.getText().length()) + mUserName);
-                                    }
-                                }
-                                mInputMethodManager.hideSoftInputFromWindow(mCommentEditText.getWindowToken(), 0);
+//                                if (isCompletedCommentEdit) {
+//                                    if (!mCommentEditCommentUserNameTextView.isShown()
+//                                            && mCommentEditCommentUserNameTextView.getText().equals("")) {
+//                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+//                                                mCommentEditText.getText().toString());
+//                                    } else {
+//                                        mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+//                                                mCommentEditText.getText().toString().substring(
+//                                                        mUserName.length(), mCommentEditText.getText().length()) + mUserName);
+//                                    }
+//                                }
+                                mCommentEditDialogFinishedListener.onCommentEditDialogFinished(
+                                        mCommentEditText.getText().toString());
+//                                mInputMethodManager.hideSoftInputFromWindow(mCommentEditText.getWindowToken(), 0);
+                                removePrefixTextChangedListener(mCommentEditText);
+                                mCommentEditCommentUserNameTextView.setText("");
+                                mCommentEditCommentUserNameTextView.setVisibility(View.GONE);
                                 dismiss();
                             }
                         });
@@ -217,7 +237,7 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
                     } else {
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
                         builder1.setMessage("변경사항이 없어요.\n댓글 수정을 취소하시겠어요?");
-                        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dismiss();
@@ -235,9 +255,7 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
                 } else {
                     Toast.makeText(getActivity(), "취소 하시려면 뒤로가기 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
-
         }
     }
 
@@ -267,6 +285,22 @@ public class CommentEditBottomSheetDialogFragment extends BottomSheetDialogFragm
             throw new ClassCastException(context.toString()
                     + " must implements OnReviewEditListener");
         }
+    }
+
+    private void addPrefixTextChangedListener(EditText editText, String prefixText, String commentDescription) {
+        mPrefixTextWatcher = new PrefixTextWatcher(getActivity());
+        mPrefixTextWatcher.setPrefixText(editText, prefixText, commentDescription);
+        editText.addTextChangedListener(mPrefixTextWatcher);
+    }
+
+    private void removePrefixTextChangedListener(EditText editText) {
+        mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        if (mPrefixTextWatcher != null) {
+            editText.removeTextChangedListener(mPrefixTextWatcher);
+        }
+
+        editText.getText().clear();
+        editText.clearFocus();
     }
 
     private SpannableString highlightUserNameText() {

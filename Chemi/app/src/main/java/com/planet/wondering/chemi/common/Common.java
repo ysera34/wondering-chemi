@@ -32,6 +32,9 @@ public class Common {
     public static final float PRODUCT_IMAGE_DIALOG_WIDTH_HEIGHT_RATIO = 0.85f;
     public static final float STATUS_BAR_HEIGHT_SCREEN_WIDTH_RATIO = 0.1333333f;
 
+    public static final String COMMENT_USER_NAME_PREFIX = "@";
+    public static final String COMMENT_USER_NAME_DIVIDER = "::";
+
     public static final int CLEAR_DIALOG_REQUEST_CODE = 3111;
     public static final int LOGIN_DIALOG_REQUEST_CODE = 3112;
     public static final int LOGOUT_DIALOG_REQUEST_CODE = 3113;

@@ -53,6 +53,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.planet.wondering.chemi.common.Common.CHILD_COMMENT_CLASS;
+import static com.planet.wondering.chemi.common.Common.COMMENT_USER_NAME_DIVIDER;
+import static com.planet.wondering.chemi.common.Common.COMMENT_USER_NAME_PREFIX;
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.common.Common.HORIZONTAL_CONTENT_VIEW_TYPE;
 import static com.planet.wondering.chemi.common.Common.PARENT_COMMENT_CLASS;
@@ -457,7 +459,7 @@ public class CommentFragment extends Fragment {
             mUserNameTextView.setText(String.valueOf(mChildComment.getUserName()));
             mDateTextView.setText(String.valueOf(mChildComment.getDate()));
 
-            String[] strings = String.valueOf(mChildComment.getDescription()).split("@");
+            String[] strings = String.valueOf(mChildComment.getDescription()).split(COMMENT_USER_NAME_PREFIX);
             if (strings.length > 1) {
                 mDescriptionTextView.setText(highlightUserNameText());
             } else {
@@ -485,17 +487,13 @@ public class CommentFragment extends Fragment {
         private SpannableString highlightUserNameText() {
 
             int startIndex = 0;
-            int endIndex = String.valueOf(mChildComment.getDescription()).split("@")[1].length() + 1;
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("@")
-                    .append(String.valueOf(mChildComment.getDescription()).split("@")[1]).append(" ")
-                    .append(String.valueOf(mChildComment.getDescription()).split("@")[0]);
-
-            SpannableString spannableString = new SpannableString(sb.toString());
+            int endIndex = String.valueOf(mChildComment.getDescription()).split(COMMENT_USER_NAME_DIVIDER, 2)[0].length();
+            SpannableString spannableString = new SpannableString(mChildComment.getDescription());
 
             spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
                     startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorWhite)),
+                    endIndex, endIndex + COMMENT_USER_NAME_DIVIDER.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             return spannableString;
         }

@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +43,7 @@ import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.PrefixTextWatcher;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnCommentCountChangedListener;
@@ -158,6 +158,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         mContentCommentEditText.setOnFocusChangeListener(this);
         mContentCommentEditText.setOnClickListener(this);
         mContentCommentUserNameTextView = (TextView) findViewById(R.id.content_comment_user_name_text_view);
+        mContentCommentUserNameTextView.setOnClickListener(this);
         mContentCommentSubmitTextView = (TextView) findViewById(R.id.content_comment_submit_text_view);
         mContentCommentSubmitTextView.setOnClickListener(this);
         validationEditText();
@@ -201,6 +202,9 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.content_comment_user_name_text_view:
+//                Toast.makeText(getApplicationContext(), "...", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.content_comment_edit_text:
                 if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
 
@@ -384,8 +388,9 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             } else if (mCommentClass == CHILD_COMMENT_CLASS) {
                 url = URL_HOST + CONTENT_PATH + content.getId() + COMMENT_PATH + File.separator + mComment.getParentId() + COMMENT_PATH;
             }
-            params.put(DESCRIPTION, mContentCommentEditText.getText().toString().trim()
-                    + mContentCommentUserNameTextView.getText().toString());
+//            params.put(DESCRIPTION, mContentCommentEditText.getText().toString().trim().split(COMMENT_USER_NAME_DIVIDER)[1]
+//                    + mContentCommentUserNameTextView.getText().toString().split(COMMENT_USER_NAME_DIVIDER)[0]);
+            params.put(DESCRIPTION, mContentCommentEditText.getText().toString().trim());
         }
 
         Log.i(TAG, "url " + url);
@@ -416,7 +421,10 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                             Toast.makeText(getApplicationContext(), "답글이 등록되었어요", Toast.LENGTH_SHORT).show();
                             isCommentSelected = false;
                             isValidatedCreateCommentComment = false;
-                            mContentCommentEditText.setOnKeyListener(null);
+//                            mContentCommentEditText.setOnKeyListener(null);
+
+                            removePrefixTextChangedListener(mContentCommentEditText);
+                            mContentCommentUserNameTextView.setText("");
                             mContentCommentUserNameTextView.setVisibility(View.GONE);
 
                             switch (mContent.getViewType()) {
@@ -432,7 +440,6 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                                     break;
                             }
                         }
-
                         mContentCommentEditText.getText().clear();
 //                        mContentCommentEditText.clearFocus();
                         mContentCommentSubmitTextView.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -526,13 +533,6 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
     }
-
-//    private void updateLikeCount(boolean isLike) {
-//        Fragment fragment = mFragmentManager.findFragmentById(R.id.content_fragment_container);
-//        if (fragment instanceof ContentVerticalFragment) {
-//            fragment.updateLikeCount(isLike);
-//        }
-//    }
 
     private void requestArchiveContent(final boolean isArchive) {
 
@@ -715,53 +715,55 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         });
     }
 
+    private PrefixTextWatcher mPrefixTextWatcher;
+
     @Override
     public void onCommentSelected(Comment comment, int commentClass) {
         isCommentSelected = true;
         mComment = comment;
         mCommentClass = commentClass;
 
-        final String userNameString = "@" + comment.getUserName();
+//        final String userNameString = "@" + comment.getUserName();
 //        SpannableString spannableString = new SpannableString(String.valueOf(userNameString));
 //        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
 //                0, userNameString.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        mContentCommentEditText.setText(spannableString);
 //        mContentCommentEditText.setSelection(userNameString.length());
 
-        mContentCommentUserNameTextView.setVisibility(View.VISIBLE);
-        mContentCommentUserNameTextView.setText(String.valueOf(userNameString));
+//        mContentCommentUserNameTextView.setVisibility(View.VISIBLE);
+//        mContentCommentUserNameTextView.setText(String.valueOf(userNameString));
 
-        float[] widths = new float[userNameString.length()];
-        mContentCommentUserNameTextView.getPaint().getTextWidths(userNameString, widths);
-
-        float textWidth = 0;
-        for (float w : widths) {
-            textWidth += w;
-        }
+//        float[] widths = new float[userNameString.length()];
+//        mContentCommentUserNameTextView.getPaint().getTextWidths(userNameString, widths);
+//
+//        float textWidth = 0;
+//        for (float w : widths) {
+//            textWidth += w;
+//        }
 //        Log.i(TAG, "textWidth : " + textWidth);
 //        Log.i(TAG, "getPaddingStart " + mContentCommentUserNameTextView.getPaddingStart());
 //        Log.i(TAG, "getPaddingEnd " + mContentCommentUserNameTextView.getPaddingEnd());
 //        Log.i(TAG, "getMeasuredWidth " + mContentCommentUserNameTextView.getMeasuredWidth());
 
-        int nameTextViewWidth = mContentCommentUserNameTextView.getPaddingStart() +
-                mContentCommentUserNameTextView.getPaddingEnd() + (int) textWidth;
+//        int nameTextViewWidth = mContentCommentUserNameTextView.getPaddingStart() +
+//                mContentCommentUserNameTextView.getPaddingEnd() + (int) textWidth;
 //        Log.i(TAG, "nameTextViewWidth : " + nameTextViewWidth);
 
-        float[] widths1 = new float[1];
-        mContentCommentEditText.getPaint().getTextWidths("\u0020", widths1);
+//        float[] widths1 = new float[1];
+//        mContentCommentEditText.getPaint().getTextWidths("\u0020", widths1);
 //        Log.i(TAG, "white space width" + widths1[0]);
 
-        int whiteSpaceLength = (int) Math.floor(nameTextViewWidth / widths1[0]);
+//        int whiteSpaceLength = (int) Math.floor(nameTextViewWidth / widths1[0]);
 //        Log.i(TAG, "whiteSpaceLength : " + whiteSpaceLength);
 
-        StringBuilder whiteSpaceBuilder = new StringBuilder();
-        for (int i = 0; i < whiteSpaceLength - 2; i++) {
-            whiteSpaceBuilder.append("\u0020");
-        }
+//        StringBuilder whiteSpaceBuilder = new StringBuilder();
+//        for (int i = 0; i < whiteSpaceLength - 2; i++) {
+//            whiteSpaceBuilder.append("\u0020");
+//        }
 
-        mContentCommentEditText.requestFocus();
-        mContentCommentEditText.setText(whiteSpaceBuilder.toString());
-        mContentCommentEditText.setSelection(whiteSpaceLength - 2);
+//        mContentCommentEditText.requestFocus();
+//        mContentCommentEditText.setText(whiteSpaceBuilder.toString());
+//        mContentCommentEditText.setSelection(whiteSpaceLength - 2);
 
 
         final float commentPositionY = comment.getPositionY();
@@ -774,21 +776,45 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                     ((ContentVerticalFragment) fragment).focusSelectedComment(commentPositionY);
                 }
             }
-        }, 100);
+        }, 200);
 
 
-        final int prefixLength = mContentCommentEditText.getText().length();
-        mContentCommentEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
-                    if (mContentCommentEditText.getText().length() < prefixLength) {
-                        showDialogCancelComment();
-                    }
-                }
-                return false;
-            }
-        });
+//        final int prefixLength = mContentCommentEditText.getText().length();
+//        mContentCommentEditText.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (keyCode == KeyEvent.KEYCODE_DEL) {
+//                    if (mContentCommentEditText.getText().length() < prefixLength) {
+//                        showDialogCancelComment();
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+
+        removePrefixTextChangedListener(mContentCommentEditText);
+        String prefixText = comment.getUserName();
+        mContentCommentEditText.requestFocus();
+        addPrefixTextChangedListener(mContentCommentEditText, prefixText);
+
+        mContentCommentUserNameTextView.setVisibility(View.VISIBLE);
+        mContentCommentUserNameTextView.setText(String.valueOf(mContentCommentEditText.getText().toString()));
+    }
+
+    private void addPrefixTextChangedListener(EditText editText, String prefixText) {
+        mPrefixTextWatcher = new PrefixTextWatcher(getApplicationContext());
+        mPrefixTextWatcher.setPrefixText(editText, prefixText);
+        editText.addTextChangedListener(mPrefixTextWatcher);
+    }
+
+    private void removePrefixTextChangedListener(EditText editText) {
+        mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        if (mPrefixTextWatcher != null) {
+            editText.removeTextChangedListener(mPrefixTextWatcher);
+        }
+//        editText.setText("");
+        editText.getText().clear();
+        editText.clearFocus();
 
     }
 
@@ -796,13 +822,15 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(ContentActivity.this);
         builder1.setMessage("답글 작성을 취소하시겠어요?");
-        builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
-                mContentCommentEditText.getText().clear();
-                mContentCommentEditText.clearFocus();
-                mContentCommentEditText.setOnKeyListener(null);
+//                mInputMethodManager.hideSoftInputFromWindow(mContentCommentEditText.getWindowToken(), 0);
+//                mContentCommentEditText.getText().clear();
+//                mContentCommentEditText.clearFocus();
+//                mContentCommentEditText.setOnKeyListener(null);
+                removePrefixTextChangedListener(mContentCommentEditText);
+                mContentCommentUserNameTextView.setText("");
                 mContentCommentUserNameTextView.setVisibility(View.GONE);
                 isCommentSelected = false;
             }
