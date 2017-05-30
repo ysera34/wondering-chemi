@@ -29,6 +29,7 @@ public class Common {
     public static final float PRODUCT_LIST_ITEM_THUMBNAIL_SCREEN_WIDTH_RATIO = 0.24f;
     public static final float PRODUCT_LIST_ITEM_THUMBNAIL_WIDTH_HEIGHT_RATIO = 0.77f;
     public static final float PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO = 0.38f;
+    public static final float PRODUCT_IMAGE_DIALOG_WIDTH_HEIGHT_RATIO = 0.85f;
     public static final float STATUS_BAR_HEIGHT_SCREEN_WIDTH_RATIO = 0.1333333f;
 
     public static final int CLEAR_DIALOG_REQUEST_CODE = 3111;

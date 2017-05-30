@@ -23,8 +23,7 @@
         <ImageView
             android:id="@+id/product_image_dialog_image_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"/>
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

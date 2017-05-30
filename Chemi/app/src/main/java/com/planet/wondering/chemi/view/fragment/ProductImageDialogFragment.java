@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
 
-import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_IMAGE_DIALOG_WIDTH_HEIGHT_RATIO;
 
 /**
  * Created by yoon on 2017. 5. 26..
@@ -66,12 +66,14 @@ public class ProductImageDialogFragment extends DialogFragment implements View.O
                 .inflate(R.layout.fragment_product_image_dialog, null);
 
         int thumbnailWidth = getScreenWidth();
-        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO);
+        int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_IMAGE_DIALOG_WIDTH_HEIGHT_RATIO);
 
         mProductImageDialogImageView = (ImageView) view.findViewById(R.id.product_image_dialog_image_view);
         Glide.with(getActivity())
                 .load(mImagePath)
+//                .override(thumbnailWidth, thumbnailHeight)
                 .override(thumbnailWidth, thumbnailHeight)
+//                .fitCenter()
                 .centerCrop()
                 .into(mProductImageDialogImageView);
         mProductImageDialogCancelImageView = (ImageView)
