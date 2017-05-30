@@ -223,8 +223,7 @@
                         android:id="@+id/member_config_sign_in_google_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
+                        android:layout_centerInParent="true"
                         android:text="@string/member_start_google"
                         android:textSize="15sp"
                         android:textColor="@color/colorWhite"/>
@@ -253,8 +252,7 @@
                         android:id="@+id/member_config_sign_in_naver_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
+                        android:layout_centerInParent="true"
                         android:text="@string/member_start_naver"
                         android:textSize="15sp"
                         android:textColor="@color/colorWhite"/>
@@ -282,8 +280,7 @@
                         android:id="@+id/member_config_sign_in_local_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
+                        android:layout_centerInParent="true"
                         android:text="@string/member_start_local"
                         android:textSize="15sp"
                         android:textColor="@color/color_selector_button_white_primary"/>

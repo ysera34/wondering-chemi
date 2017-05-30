@@ -57,8 +57,7 @@
                 android:id="@+id/member_start_google_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:text="@string/member_start_google"
                 android:textSize="15sp"
                 android:textColor="@color/colorWhite"/>
@@ -92,8 +91,7 @@
                 android:text="@string/member_start_naver"
                 android:textSize="15sp"
                 android:textColor="@color/colorWhite"
-                android:layout_alignBottom="@+id/imageView"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerInParent="true"/>
                 <!--android:textAppearance="@style/MemberStartGrayTextAppearance"-->
 
         </RelativeLayout>
@@ -119,8 +117,7 @@
                 android:id="@+id/member_start_local_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:text="@string/member_start_local"
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>

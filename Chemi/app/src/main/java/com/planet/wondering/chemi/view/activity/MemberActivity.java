@@ -52,6 +52,8 @@ import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_
 import static com.planet.wondering.chemi.common.Common.CONFIRM_EMAIL_REPETITION_TRUE_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESPONSE_USER_CODE;
+import static com.planet.wondering.chemi.common.Common.GOOGLE_USER_PLATFORM_ID;
+import static com.planet.wondering.chemi.common.Common.NAVER_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_GOOGLE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVOKE_ACCESS_NAVER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.SIGN_IN_GOOGLE_REQUEST_CODE;
@@ -274,10 +276,18 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                     Toast.makeText(getApplicationContext(), "연동해제 하였습니다.", Toast.LENGTH_SHORT).show();
                     UserSharedPreferences.removeStoredToken(getApplicationContext());
                     UserSharedPreferences.removeStoredUserName(getApplicationContext());
-                    mFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                            .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
-                            .commit();
+                    Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+                    if (fragment instanceof MemberStartNameFragment) {
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                                .replace(R.id.main_fragment_container, MemberConfigSignInFragment.newInstance())
+                                .commit();
+                    } else {
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                                .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
+                                .commit();
+                    }
                 }
                 break;
 
@@ -463,6 +473,18 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .replace(R.id.main_fragment_container, MemberConfigSignInFragment.newInstance())
                         .commit();
             }
+        } else if (fragment instanceof MemberStartNameFragment) {
+//            mFragmentManager.beginTransaction()
+//                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//                    .replace(R.id.main_fragment_container, MemberConfigSignInFragment.newInstance())
+//                    .commit();
+            if (mPlatformId == GOOGLE_USER_PLATFORM_ID) {
+                startActivityForResult(UserActivity.newIntent(getApplicationContext(),
+                        REVOKE_ACCESS_GOOGLE_REQUEST_CODE), REVOKE_ACCESS_GOOGLE_REQUEST_CODE);
+            } else if (mPlatformId == NAVER_USER_PLATFORM_ID) {
+                startActivityForResult(UserActivity.newIntent(getApplicationContext(),
+                        REVOKE_ACCESS_NAVER_REQUEST_CODE), REVOKE_ACCESS_NAVER_REQUEST_CODE);
+            }
         } else if (fragment instanceof MemberConfigProfileFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
@@ -492,7 +514,7 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                         .replace(R.id.main_fragment_container, MemberConfigFragment.newInstance())
                         .commit();
-            } else if (mRequestId == 4){
+            } else if (mRequestId == 4) {
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
@@ -526,7 +548,7 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                         .replace(R.id.main_fragment_container, MemberConfigProfileFragment.newInstance(mUser))
                         .commit();
-            } else if (mRequestId == 5){
+            } else if (mRequestId == 5) {
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
