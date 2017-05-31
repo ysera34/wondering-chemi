@@ -720,6 +720,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
     @Override
     public void onCommentSelected(Comment comment, int commentClass) {
         isCommentSelected = true;
+        isValidatedCreateComment = false;
+        isValidatedCreateCommentComment = false;
         mComment = comment;
         mCommentClass = commentClass;
 

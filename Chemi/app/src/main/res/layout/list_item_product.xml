@@ -36,7 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:textSize="12sp"
-            android:textColor="@color/colorFontNormal"/>
+            android:textColor="@color/colorFontNormal"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/list_item_product_name_text_view"

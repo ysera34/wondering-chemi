@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ChemicalSharedPreferences {
 
-    private static final int MAX_NUMBER_OF_CHEMICALS = 10;
+    private static final int MAX_NUMBER_OF_CHEMICALS = 20;
     private static final String PREF_CHEMICALS = "com.planet.wondering.chemi.latest.chemicals";
 
     public static ArrayList<Chemical> getStoredChemicals(Context context) {

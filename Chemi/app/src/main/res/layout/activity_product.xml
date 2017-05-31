@@ -117,7 +117,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colorFontNormal"/>
+                        android:textColor="@color/colorFontNormal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"/>
 
                     <TextView
                         android:id="@+id/product_detail_toolbar_sub_title_text_view"

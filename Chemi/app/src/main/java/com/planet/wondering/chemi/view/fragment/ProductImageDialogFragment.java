@@ -64,6 +64,7 @@ public class ProductImageDialogFragment extends DialogFragment implements View.O
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_product_image_dialog, null);
+        view.setOnClickListener(this);
 
         int thumbnailWidth = getScreenWidth();
         int thumbnailHeight = (int) (thumbnailWidth * PRODUCT_IMAGE_DIALOG_WIDTH_HEIGHT_RATIO);
@@ -89,6 +90,9 @@ public class ProductImageDialogFragment extends DialogFragment implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.product_image_dialog_cancel_image_view:
+                getDialog().dismiss();
+                break;
+            default:
                 getDialog().dismiss();
                 break;
         }

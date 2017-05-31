@@ -195,6 +195,12 @@ public class ProductActivity extends AppBaseActivity
         mProductDetailToolbarTitleTextView.setText(String.valueOf(mProduct.getBrand()));
         mProductDetailToolbarSubTitleTextView.setText(String.valueOf(mProduct.getName()));
 
+        mProductDetailToolbarTitleTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mProductDetailToolbarTitleTextView.setSelected(true);
+            }
+        }, 1500);
         mProductDetailToolbarSubTitleTextView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -301,7 +307,9 @@ public class ProductActivity extends AppBaseActivity
                 break;
             default:
                 for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                    fragment.onActivityResult(requestCode, resultCode, data);
+                    if (data != null) {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
                 }
                 break;
         }
