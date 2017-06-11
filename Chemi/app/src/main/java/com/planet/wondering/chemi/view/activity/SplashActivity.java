@@ -1,5 +1,6 @@
 package com.planet.wondering.chemi.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +8,11 @@ import android.support.annotation.Nullable;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+
+import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_USUALLY_MODE_CODE;
+import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE;
+import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSION;
 
 /**
  * Created by yoon on 2017. 1. 5..
@@ -21,9 +27,31 @@ public class SplashActivity extends AppBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+
+        startActivityForResult(UpdateActivity.newIntent(getApplicationContext(),
+                CHECK_VERSION_REQUEST_CODE, false), CHECK_VERSION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CHECK_VERSION_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        int resultModeCode = data.getIntExtra(EXTRA_RESULT_CHECK_VERSION, -1);
+                        if (resultModeCode == CHECK_VERSION_RESULT_USUALLY_MODE_CODE ||
+                                resultModeCode == CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE) {
+                            startMainActivity();
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void startMainActivity() {
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -44,4 +72,27 @@ public class SplashActivity extends AppBaseActivity {
             }
         }, SPLASH_TIME_OUT);
     }
+
+//    private void popupUpdateDialog() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this, R.style.SplashDialogTheme);
+//        builder.setMessage("케미가 업그레이드 되었어요!\n업데이트를 통해 더욱 향상된 서비스를 경험하세요 :)");
+//        builder.setPositiveButton("업데이트", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(APP_MARKET_URL)));
+//                finish();
+//            }
+//        });
+//        builder.setNegativeButton("종료", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                ActivityCompat.finishAffinity(SplashActivity.this);
+//            }
+//        });
+//        builder.setCancelable(false);
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+
 }

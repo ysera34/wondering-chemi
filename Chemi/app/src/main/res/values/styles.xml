@@ -27,6 +27,17 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="SplashDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@color/colorWhite</item>
+    </style>
+
+    <!--<style name="AppBaseTheme" parent="Theme.AppCompat.NoActionBar">-->
+        <!--<item name="android:windowBackground">@drawable/splash_gradient</item>-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <!--<item name="windowActionBarOverlay">true</item>-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+    <!--</style>-->
+
     <style name="NoStatusTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/colorWhiteBackground</item>
         <item name="android:windowContentOverlay">@null</item>

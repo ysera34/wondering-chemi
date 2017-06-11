@@ -7,6 +7,7 @@ import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Comment;
 import com.planet.wondering.chemi.model.Content;
 import com.planet.wondering.chemi.model.Hazard;
+import com.planet.wondering.chemi.model.Other;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
@@ -98,6 +99,9 @@ import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_ID;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_IMAGEPATHS;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_MODIFY;
 import static com.planet.wondering.chemi.network.Config.Notice.Key.NOTICE_TITLE;
+import static com.planet.wondering.chemi.network.Config.Other.Key.OTHER_DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Other.Key.OTHER_ID;
+import static com.planet.wondering.chemi.network.Config.Other.Key.OTHER_TITLE;
 import static com.planet.wondering.chemi.network.Config.PAGE;
 import static com.planet.wondering.chemi.network.Config.PAGE_NEXT;
 import static com.planet.wondering.chemi.network.Config.PAGE_PREV;
@@ -1203,5 +1207,55 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return faqBodies;
+    }
+
+    public static Other parseOther(JSONObject responseObject, String title) {
+
+        Other other = new Other();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONArray otherJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                if (otherJSONArray.length() > 0) {
+                    for (int i = 0; i < otherJSONArray.length(); i++) {
+                        JSONObject otherJSONObject = otherJSONArray.getJSONObject(0);
+                        if (otherJSONObject.getString(OTHER_TITLE).equals(title)) {
+                            other.setTitle(otherJSONObject.getString(OTHER_TITLE));
+                            other.setDescription(otherJSONObject.getString(OTHER_DESCRIPTION));
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        Log.i(TAG, "parseOther(): " + other.toString());
+        return other;
+    }
+
+    public static ArrayList<Other> parseOthers(JSONObject responseObject) {
+
+        ArrayList<Other> others = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONArray otherJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                if (otherJSONArray.length() > 0) {
+                    for (int i = 0; i < otherJSONArray.length(); i++) {
+                        Other other = new Other();
+                        JSONObject otherJSONObject = otherJSONArray.getJSONObject(i);
+                        other.setId(otherJSONObject.getInt(OTHER_ID));
+                        other.setTitle(otherJSONObject.getString(OTHER_TITLE));
+                        other.setDescription(otherJSONObject.getString(OTHER_DESCRIPTION));
+                        Log.i(TAG, other.toString());
+                        others.add(other);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return others;
     }
 }

@@ -1,11 +1,16 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +34,17 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.activity.UpdateActivity;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.APP_MARKET_URL;
+import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_USUALLY_MODE_CODE;
+import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSION;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
@@ -156,16 +166,18 @@ public class MemberConfigFragment extends Fragment
                 mMenuSelectedListener.onMenuSelected(4);
                 break;
             case R.id.member_config_version_layout:
-                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-                    if (mUserConfig != null) {
-                        if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
-                            Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    "최신 버전은 " + mUserConfig.getAppVersion() + "입니다. 업데이트가 필요합니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
+//                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+//                    if (mUserConfig != null) {
+//                        if (mCurrentAppVersion.equals(mUserConfig.getAppVersion())) {
+//                            Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(getActivity(),
+//                                    "최신 버전은 " + mUserConfig.getAppVersion() + "입니다. 업데이트가 필요합니다.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }
+                startActivityForResult(UpdateActivity.newIntent(getActivity(),
+                        CHECK_VERSION_REQUEST_CODE, true), CHECK_VERSION_REQUEST_CODE);
                 break;
             case R.id.member_config_push_notification_layout:
                 if (mPushSwitch.isChecked()) {
@@ -208,6 +220,46 @@ public class MemberConfigFragment extends Fragment
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CHECK_VERSION_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        /*if (data.getIntExtra(EXTRA_RESULT_CHECK_VERSION, -1)
+                                == CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE) {
+                            popupUpdateDialog();
+                        } else*/ if (data.getIntExtra(EXTRA_RESULT_CHECK_VERSION, -1)
+                                == CHECK_VERSION_RESULT_USUALLY_MODE_CODE) {
+                            Toast.makeText(getActivity(), "최신 버전 입니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void popupUpdateDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.SplashDialogTheme);
+        builder.setMessage("케미가 업그레이드 되었어요!\n업데이트를 통해 더욱 향상된 서비스를 경험하세요 :)");
+        builder.setPositiveButton("업데이트", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(APP_MARKET_URL)));
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void requestGetUserConfig() {

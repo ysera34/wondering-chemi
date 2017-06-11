@@ -6,6 +6,17 @@ package com.planet.wondering.chemi.common;
 
 public class Common {
 
+    public static final String APP_VERSION_NAME_KEY = "version";
+    public static final String EXTRA_REQUEST_CHECK_VERSION = "com.planet.wondering.chemi.request_check_version";
+    public static final String EXTRA_RESULT_CHECK_VERSION = "com.planet.wondering.chemi.result_check_version";
+    public static final String APP_MARKET_URL = "market://details?id=com.planet.wondering.chemi";
+    public static final int CHECK_VERSION_REQUEST_CODE = 11001;
+    public static final int CHECK_VERSION_RESULT_CODE = 11002;
+    public static final int CHECK_VERSION_RESULT_COMPULSORY_MODE_CODE = 11003;
+    public static final int CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE = 11004;
+    public static final int CHECK_VERSION_RESULT_USUALLY_MODE_CODE = 11005;
+    public static final int CHECK_VERSION_RESULT_ERROR_CODE = 11006;
+
     public static final int REVIEW_CREATE_REQUEST_CODE = 1100;
     public static final int REVIEW_READ_REQUEST_CODE = 1200;
 

@@ -16,7 +16,7 @@ import static com.planet.wondering.chemi.network.Config.User.Key.PASSWORD;
 
 public class Config {
 
-    public static final String URL_HOST = "http://52.79.127.149:3000";
+    public static final String URL_HOST = "http://52.79.127.149:3100";
     public static final String IMAGE_URL_HOST = "https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02";
     public static final String RESPONSE_MESSAGE = "message";
     public static final String RESPONSE_SUCCESS = "success";
@@ -284,6 +284,18 @@ public class Config {
             public static final String FAQ_IMAGEPATHS = "imagePaths";
             public static final String FAQ_CREATE = "created";
             public static final String FAQ_MODIFY = "modified";
+        }
+    }
+
+    public static final class Other {
+        public static final String OTHER_PATH = File.separator + "others";
+
+        public static final class Key {
+            public static final String OTHER_ID = "id";
+            public static final String OTHER_TITLE = "title";
+            public static final String OTHER_DESCRIPTION = "description";
+            public static final String OTHER_CREATED = "created";
+            public static final String OTHER_MODIFIED = "modified";
         }
     }
 
