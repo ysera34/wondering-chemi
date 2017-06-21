@@ -10,26 +10,26 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.helper.BackPressCloseHandler;
 import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
-import com.planet.wondering.chemi.view.fragment.SearchFragment;
+import com.planet.wondering.chemi.view.fragment.HomeFragment;
 
 /**
- * Created by yoon on 2016. 12. 31..
+ * Created by yoon on 2017. 6. 21..
  */
 
-public class SearchActivity extends BottomNavigationActivity
+public class HomeActivity extends BottomNavigationActivity
         implements OnTagSelectedListener {
 
-    private static final String TAG = SearchActivity.class.getSimpleName();
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     private static final String EXTRA_IS_FIRST_USER = "com.planet.wondering.chemi.is_first_user";
 
     public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, SearchActivity.class);
+        Intent intent = new Intent(packageContext, HomeActivity.class);
         return intent;
     }
 
     public static Intent newIntent(Context packageContext, boolean isFirstUser) {
-        Intent intent = new Intent(packageContext, SearchActivity.class);
+        Intent intent = new Intent(packageContext, HomeActivity.class);
         intent.putExtra(EXTRA_IS_FIRST_USER, isFirstUser);
         return intent;
     }
@@ -46,13 +46,13 @@ public class SearchActivity extends BottomNavigationActivity
 
         mIsFirstUser = getIntent().getBooleanExtra(EXTRA_IS_FIRST_USER, false);
 
-        mBackPressCloseHandler = new BackPressCloseHandler(SearchActivity.this);
+        mBackPressCloseHandler = new BackPressCloseHandler(HomeActivity.this);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
-            mFragment = SearchFragment.newInstance(mIsFirstUser);
+            mFragment = HomeFragment.newInstance(mIsFirstUser);
             mFragmentManager.beginTransaction()
                     .add(R.id.main_fragment_container, mFragment)
 //                    .addToBackStack(null)
@@ -78,7 +78,7 @@ public class SearchActivity extends BottomNavigationActivity
     @Override
     public void onBackPressed() {
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
-        if (mFragment instanceof SearchFragment) {
+        if (mFragment instanceof HomeFragment) {
             mBackPressCloseHandler.onBackPressed();
         } else {
             super.onBackPressed();

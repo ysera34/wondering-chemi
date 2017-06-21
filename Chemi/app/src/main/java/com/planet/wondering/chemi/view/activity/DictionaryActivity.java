@@ -49,7 +49,7 @@ public class DictionaryActivity extends BottomNavigationActivity
     @Override
     protected void onResume() {
         super.onResume();
-        setupBottomNavigation(3);
+        setupBottomNavigation(2);
     }
 
     public void resizeFrameLayout(int resize) {

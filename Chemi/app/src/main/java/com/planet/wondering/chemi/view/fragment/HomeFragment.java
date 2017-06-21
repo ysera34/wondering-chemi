@@ -17,30 +17,30 @@ import android.widget.RelativeLayout;
 import com.planet.wondering.chemi.R;
 
 /**
- * Created by yoon on 2016. 12. 31..
+ * Created by yoon on 2017. 6. 21..
  */
 
-public class SearchFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = SearchFragment.class.getSimpleName();
+    private static final String TAG = HomeFragment.class.getSimpleName();
 
     private static final String ARG_IS_FIRST_USER = "is_first_user";
 
-    public static SearchFragment newInstance() {
+    public static HomeFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        SearchFragment fragment = new SearchFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static SearchFragment newInstance(boolean isFirstUser) {
+    public static HomeFragment newInstance(boolean isFirstUser) {
 
         Bundle args = new Bundle();
         args.putBoolean(ARG_IS_FIRST_USER, isFirstUser);
 
-        SearchFragment fragment = new SearchFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }

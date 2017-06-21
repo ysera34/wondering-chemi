@@ -77,7 +77,7 @@ public class MemberStartActivity extends AppBaseActivity
         Log.i(TAG, "shared preferences accessToken : "
                 + UserSharedPreferences.getStoredToken(getApplicationContext()));
         if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-            Intent intent = new Intent(MemberStartActivity.this, SearchActivity.class);
+            Intent intent = new Intent(MemberStartActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
@@ -169,7 +169,7 @@ public class MemberStartActivity extends AppBaseActivity
                             Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
                             finish();
                             if (mRequestId != IS_NOW_USED_USER_REQUEST_CODE) {
-                                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                                startActivity(HomeActivity.newIntent(getApplicationContext()));
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                             break;
@@ -212,7 +212,7 @@ public class MemberStartActivity extends AppBaseActivity
                     Toast.makeText(getApplicationContext(), "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
                     finish();
                     if (mRequestId != IS_NOW_USED_USER_REQUEST_CODE) {
-                        startActivity(SearchActivity.newIntent(getApplicationContext()));
+                        startActivity(HomeActivity.newIntent(getApplicationContext()));
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
                 } else if (resultCode == RESULT_CANCELED) {
@@ -279,7 +279,7 @@ public class MemberStartActivity extends AppBaseActivity
         Fragment fragment;
         switch (layoutIndex) {
             case 7000: /* browsing user  */
-                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                startActivity(HomeActivity.newIntent(getApplicationContext()));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 break;
@@ -427,10 +427,10 @@ public class MemberStartActivity extends AppBaseActivity
                     .replace(R.id.member_fragment_container, MemberSignInLocalFragment.newInstance())
                     .commit();
         } else if (fragment instanceof MemberAskInfoFragment) {
-            startActivity(SearchActivity.newIntent(getApplicationContext()));
+            startActivity(HomeActivity.newIntent(getApplicationContext()));
             finish();
         } else if (fragment instanceof MemberSurveyInfoFragment) {
-//            startActivity(SearchActivity.newIntent(getApplicationContext()));
+//            startActivity(HomeActivity.newIntent(getApplicationContext()));
 //            finish();
             super.onBackPressed();
         } else {

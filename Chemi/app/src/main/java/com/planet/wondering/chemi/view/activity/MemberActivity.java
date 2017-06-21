@@ -129,7 +129,7 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
     @Override
     protected void onResume() {
         super.onResume();
-        setupBottomNavigation(4);
+        setupBottomNavigation(3);
         Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
         if (fragment != null) {
             if (fragment instanceof MemberFragment) {

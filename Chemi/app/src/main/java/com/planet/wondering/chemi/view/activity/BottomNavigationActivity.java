@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
@@ -34,11 +36,11 @@ public class BottomNavigationActivity extends AppBaseActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                startActivity(HomeActivity.newIntent(getApplicationContext()));
                 break;
-            case R.id.action_category:
-                startActivity(CategoryActivity.newIntent(getApplicationContext()));
-                break;
+//            case R.id.action_category:
+//                startActivity(CategoryActivity.newIntent(getApplicationContext()));
+//                break;
             case R.id.action_content:
                 startActivity(ContentListActivity.newIntent(getApplicationContext()));
                 break;
@@ -55,6 +57,11 @@ public class BottomNavigationActivity extends AppBaseActivity
     protected void setupBottomNavigation(int menuIndex) {
         mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
         mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
+
+        MenuItem menuItem = mBottomNavigationView.getMenu().getItem(menuIndex);
+        View menuItemView = mBottomNavigationView.findViewById(menuItem.getItemId());
+        Log.i(TAG, menuItem.getTitle().toString());
+
     }
 
     public void showBottomNavigationView() {

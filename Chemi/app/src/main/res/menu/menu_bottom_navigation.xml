@@ -3,11 +3,11 @@
     <item
         android:id="@+id/action_search"
         android:title="@string/bottom_navigation_title1"
-        android:icon="@drawable/ic_menu_search" />
-    <item
-        android:id="@+id/action_category"
-        android:title="@string/bottom_navigation_title2"
-        android:icon="@drawable/ic_menu_category" />
+        android:icon="@drawable/ic_menu_home" />
+    <!--<item-->
+        <!--android:id="@+id/action_category"-->
+        <!--android:title="@string/bottom_navigation_title2"-->
+        <!--android:icon="@drawable/ic_menu_category" />-->
     <item
         android:id="@+id/action_content"
         android:title="@string/bottom_navigation_title3"

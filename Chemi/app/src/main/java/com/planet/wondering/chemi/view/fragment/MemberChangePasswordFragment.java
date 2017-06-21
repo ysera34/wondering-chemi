@@ -22,7 +22,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
-import com.planet.wondering.chemi.view.activity.SearchActivity;
+import com.planet.wondering.chemi.view.activity.HomeActivity;
 
 import org.json.JSONObject;
 
@@ -198,7 +198,7 @@ public class MemberChangePasswordFragment extends Fragment implements View.OnCli
 
                         Toast.makeText(getActivity(),
                                 "비밀 번호 변경 되었습니다.", Toast.LENGTH_SHORT).show();
-                        startActivity(SearchActivity.newIntent(getActivity()));
+                        startActivity(HomeActivity.newIntent(getActivity()));
                         getActivity().finish();
                     }
                 },

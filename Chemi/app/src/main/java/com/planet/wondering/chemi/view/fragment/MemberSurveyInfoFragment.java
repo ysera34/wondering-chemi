@@ -31,9 +31,9 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.activity.HomeActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
-import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
 
@@ -193,7 +193,7 @@ public class MemberSurveyInfoFragment extends Fragment
                             getActivity().setResult(Activity.RESULT_OK, intent);
                             getActivity().finish();
                         } else {
-                            startActivity(SearchActivity.newIntent(getActivity(), true));
+                            startActivity(HomeActivity.newIntent(getActivity(), true));
                             getActivity().finish();
                         }
                     }
@@ -212,12 +212,12 @@ public class MemberSurveyInfoFragment extends Fragment
 
                 } else if (currentStage == mMemberSurveyStageFragments.size() - 1) {
                     requestSubmitUserInfo(mUser);
-//                    startActivity(SearchActivity.newIntent(getActivity()));
+//                    startActivity(HomeActivity.newIntent(getActivity()));
 //                    getActivity().finish();
                 }
                 if (currentStage == 3 && !mUser.isHasChild()) {
                     requestSubmitUserInfo(mUser);
-//                    startActivity(SearchActivity.newIntent(getActivity()));
+//                    startActivity(HomeActivity.newIntent(getActivity()));
 //                    getActivity().finish();
                 }
                 break;
@@ -384,7 +384,7 @@ public class MemberSurveyInfoFragment extends Fragment
                             getActivity().finish();
                         } else {
                             if (getActivity() instanceof MemberStartActivity) {
-                                startActivity(SearchActivity.newIntent(getActivity(), true));
+                                startActivity(HomeActivity.newIntent(getActivity(), true));
                                 getActivity().finish();
                             } else if (getActivity() instanceof MemberActivity) {
                                 getActivity().finish();

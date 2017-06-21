@@ -80,7 +80,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.SearchActivity"
+            android:name=".view.activity.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"

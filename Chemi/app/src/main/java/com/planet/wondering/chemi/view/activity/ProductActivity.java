@@ -477,11 +477,11 @@ public class ProductActivity extends AppBaseActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                startActivity(SearchActivity.newIntent(getApplicationContext()));
+                startActivity(HomeActivity.newIntent(getApplicationContext()));
                 break;
-            case R.id.action_category:
-                startActivity(CategoryActivity.newIntent(getApplicationContext()));
-                break;
+//            case R.id.action_category:
+//                startActivity(CategoryActivity.newIntent(getApplicationContext()));
+//                break;
             case R.id.action_content:
                 startActivity(ContentListActivity.newIntent(getApplicationContext()));
                 break;

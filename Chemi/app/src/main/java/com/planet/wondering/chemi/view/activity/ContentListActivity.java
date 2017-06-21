@@ -43,7 +43,7 @@ public class ContentListActivity extends BottomNavigationActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setupBottomNavigation(2);
+        setupBottomNavigation(1);
     }
 
     @Override
