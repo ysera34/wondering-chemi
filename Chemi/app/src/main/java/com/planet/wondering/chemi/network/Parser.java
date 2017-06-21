@@ -1230,7 +1230,7 @@ public class Parser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        Log.i(TAG, "parseOther(): " + other.toString());
+//        Log.i(TAG, "parseOther(): " + other.toString());
         return other;
     }
 
