@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_config"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_toolbar_settings"
         android:title="@string/menu_toolbar_member_action_config"
         android:orderInCategory="100"
         app:showAsAction="always" />

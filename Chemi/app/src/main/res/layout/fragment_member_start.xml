@@ -110,7 +110,7 @@
                 android:layout_height="15dp"
                 android:layout_marginStart="28dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_email_green"
+                android:src="@drawable/ic_email_primary"
                 android:scaleType="centerInside"/>
 
             <TextView

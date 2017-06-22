@@ -277,14 +277,14 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
         getMenuInflater().inflate(R.menu.menu_toolbar_content, menu);
         if (mContent != null) {
             if (!mContent.isLike()) {
-                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_false));
+                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_toolbar_like_false));
             } else {
-                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_like_true));
+                mContentToolbarMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_toolbar_like_true));
             }
             if (!mContent.isArchive()) {
-                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_false));
+                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_toolbar_archive_false));
             } else {
-                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_archive_true));
+                mContentToolbarMenu.getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_toolbar_archive_true));
             }
         }
 
