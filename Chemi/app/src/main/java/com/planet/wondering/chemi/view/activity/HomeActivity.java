@@ -80,7 +80,13 @@ public class HomeActivity extends BottomNavigationActivity
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
         if (mFragment instanceof HomeFragment) {
             mBackPressCloseHandler.onBackPressed();
-        } else {
+        }
+//        else if (mFragment instanceof SearchDetailFragment) {
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.main_fragment_container, HomeFragment.newInstance())
+//                    .commit();
+//        }
+        else {
             super.onBackPressed();
         }
     }

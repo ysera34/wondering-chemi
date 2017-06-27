@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_expert_group_layout"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:paddingTop="8dp"
+    android:background="#e9f4bd">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="4dp"
+            android:src="@drawable/ic_light_bulb"
+            android:scaleType="centerInside"
+            android:background="@drawable/widget_solid_oval_twilight_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="케미 전문가단"
+            android:textSize="15sp"
+            android:textColor="@color/colorArmadillo"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="18dp"
+        android:text="케미는 모든 컨텐츠를 각 분야의 전문가들과 함께\n만들어 나갑니다. 보다 꼼꼼하고 전문성 있는\n서비스가 되고자 끊임없이 노력하겠습니다."
+        android:lineSpacingMultiplier="1.1"
+        android:textSize="12sp"
+        android:textColor="@color/colorArmadillo"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/img_expert_group"/>
+
+</RelativeLayout>

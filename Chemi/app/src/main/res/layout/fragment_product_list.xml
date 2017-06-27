@@ -5,13 +5,12 @@
               android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/search_view"
+        android:id="@+id/search_layout"
         android:transitionName="@string/search_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_editText_height"
         android:background="@color/colorWhite"
-        android:elevation="4dp">
-        <!--android:layout_margin="8dp"-->
+        android:elevation="@dimen/toolbar_elevation">
 
         <AutoCompleteTextView
             android:id="@+id/product_list_search_auto_text_view"

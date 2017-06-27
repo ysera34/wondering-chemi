@@ -2,14 +2,16 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
@@ -58,10 +60,24 @@ public class BottomNavigationActivity extends AppBaseActivity
         mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
         mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
 
-        MenuItem menuItem = mBottomNavigationView.getMenu().getItem(menuIndex);
-        View menuItemView = mBottomNavigationView.findViewById(menuItem.getItemId());
-        Log.i(TAG, menuItem.getTitle().toString());
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(0);
+//        TextView disableTextView = (TextView) menuView.getChildAt(menuIndex).findViewById(R.id.smallLabel);
+//        TextView enableTextView = (TextView) menuView.getChildAt(menuIndex).findViewById(R.id.largeLabel);
 
+
+
+        for (int i = 0; i < 4; i++) {
+            BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(i);
+            if (i == menuIndex) {
+                TextView enableTextView = (TextView) itemView.findViewById(R.id.largeLabel);
+                enableTextView.setVisibility(View.VISIBLE);
+            } else {
+//                ViewGroup.LayoutParams params = itemView.getLayoutParams();
+//
+//                itemView.setLayoutParams(params);
+                itemView.getChildAt(1).setVisibility(View.GONE);
+            }
+        }
     }
 
     public void showBottomNavigationView() {
