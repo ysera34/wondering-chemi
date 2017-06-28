@@ -10,8 +10,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
+        <!-- header -->
         <LinearLayout
             android:id="@+id/home_header_layout"
             android:layout_width="match_parent"
@@ -52,6 +55,7 @@
                 android:paddingBottom="@dimen/bottom_navigation_height"
                 android:orientation="vertical">
 
+                <!-- latest content rotate -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/home_contents_rotate_view_pager_height"
@@ -59,11 +63,13 @@
                     android:background="@color/colorWhite"
                     android:elevation="1dp">
 
-                    <com.planet.wondering.chemi.view.custom.RotateImageViewPager
+                    <com.planet.wondering.chemi.view.custom.RotateViewPager
+                        android:id="@+id/home_banner_content_rotate_view_pager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        app:indicatorType="0">
 
-                    </com.planet.wondering.chemi.view.custom.RotateImageViewPager>
+                    </com.planet.wondering.chemi.view.custom.RotateViewPager>
 
                     <include layout="@layout/layout_home_search_view" />
     
@@ -71,6 +77,7 @@
 
                 <include layout="@layout/layout_home_category" />
 
+                <!-- recommend product -->
                 <LinearLayout
                     android:id="@+id/home_recommend_product_layout"
                     android:layout_width="match_parent"
@@ -103,7 +110,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="이 달의 추천제품"
+                            android:text="이 달의 인기제품"
                             android:textSize="15sp"
                             android:textColor="@color/colorArmadillo"/>
                         
@@ -116,7 +123,8 @@
 
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
-                
+
+                <!-- fine review rotate -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/home_reviews_rotate_view_pager_height"
@@ -152,15 +160,14 @@
 
                     </LinearLayout>
 
-                    <com.planet.wondering.chemi.view.custom.RotateItemViewPager
+                    <!--<com.planet.wondering.chemi.view.custom.RotateViewPager-->
 
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
 
-                    </com.planet.wondering.chemi.view.custom.RotateItemViewPager>
+                    <!--</com.planet.wondering.chemi.view.custom.RotateViewPager>-->
 
                 </RelativeLayout>
-
 
                 <include layout="@layout/layout_promote_sign_in" />
                 

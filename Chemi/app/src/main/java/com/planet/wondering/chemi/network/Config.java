@@ -218,6 +218,7 @@ public class Config {
     public static final class Content {
         public static final String CONTENT_PATH = File.separator + "contents" + File.separator;
         public static final String QUERY_PATH = File.separator + "contents?";
+        public static final String CONTENT_BANNER_PATH = File.separator + "promotedcontents";
         public static final String QUERY_ADD_COUNT = "?iscounted=1";
         public static final String QUERY_CATEGORY = "&categoryid=";
 
@@ -229,10 +230,10 @@ public class Config {
             public static final String SUB_TITLE = "title2";
             public static final String MAIN_IMAGE_PATH = "imagePath";
             public static final String THUMBNAIL_IMAGE_PATH = "imagePath2";
+            public static final String BANNER_IMAGE_PATH = "imagePath3";
             public static final String IMAGE_PATHS = "imagePaths";
             public static final String LIKE_COUNT = "liked";
-            public static final String
-                    VIEW_COUNT = "viewed";
+            public static final String VIEW_COUNT = "viewed";
             public static final String CONTENT_LIKE = "isLiker";
             public static final String CONTENT_KEEP = "isKeeper";
             public static final String LIKE_PATH = File.separator + "likers";

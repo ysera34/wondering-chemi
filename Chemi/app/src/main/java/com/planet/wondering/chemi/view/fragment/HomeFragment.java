@@ -11,6 +11,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.ChangeTransform;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.home.BannerContent;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.custom.RotateViewPager;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.planet.wondering.chemi.network.Config.Content.CONTENT_BANNER_PATH;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
 /**
  * Created by yoon on 2017. 6. 21..
@@ -65,6 +82,7 @@ public class HomeFragment extends Fragment
     private LinearLayout mHomeHeaderLayout;
     private LinearLayout mHomeToolbarLayout;
     private NestedScrollView mHomeNestedScrollView;
+    private RotateViewPager mHomeContentViewPager;
     private LinearLayout mHomeCategoryLayout;
     private TabLayout mHomeCategoryTabLayout;
     private LinearLayout mHomeRecommendProductLayout;
@@ -103,6 +121,8 @@ public class HomeFragment extends Fragment
         mHomeToolbarLayout = (LinearLayout) view.findViewById(R.id.home_toolbar_layout);
         mHomeNestedScrollView = (NestedScrollView) view.findViewById(R.id.home_scroll_view);
         mHomeNestedScrollView.setOnScrollChangeListener(this);
+        mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_banner_content_rotate_view_pager);
+
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryTabLayout = (TabLayout) view.findViewById(R.id.home_category_tab_layout);
         mHomeRecommendProductLayout = (LinearLayout) view.findViewById(R.id.home_recommend_product_layout);
@@ -132,6 +152,20 @@ public class HomeFragment extends Fragment
 
         updateUI();
         requestHome();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHomeContentViewPager.addOnPageChangeListener();
+        mHomeContentViewPager.startRotateViewPager();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHomeContentViewPager.removeOnPageChangeListener();
+        mHomeContentViewPager.stopRotateViewPager();
     }
 
     private void updateUI() {
@@ -248,7 +282,9 @@ public class HomeFragment extends Fragment
                     "성분을 함유한 쿨링 샴푸와 함께 하세요.");
             mRecommendProducts.add(recommendProduct);
         }
+
         updateUI();
+        requestBannerContents();
     }
 
     private void setupCategoryTabIcons() {
@@ -333,4 +369,28 @@ public class HomeFragment extends Fragment
         }
     }
 
+    private void requestBannerContents() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + CONTENT_BANNER_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        ArrayList<BannerContent> bannerContents = Parser.parerBannerContents(response);
+                        mHomeContentViewPager.setRotateViewPagerAdapter(bannerContents);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
 }

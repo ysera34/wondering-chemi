@@ -3,15 +3,20 @@ package com.planet.wondering.chemi.view.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.home.BannerContent;
 
 import java.util.ArrayList;
 
@@ -54,7 +59,9 @@ public class RotateViewPager extends RelativeLayout {
     private ImageView mTitleIconImageView;
     private TextView mTitleTextView;
     private LinearLayout mIndicatorLayout;
+    private IndicatorTextView mIndicatorTextView;
     protected ArrayList<TextView> mIndicatorTextViews;
+    private int mPagerItemSize;
 
     protected static final long ROTATE_THRESHOLD_TIME = 5000;
     protected int mRotateViewPagerCurrentIndex;
@@ -73,25 +80,154 @@ public class RotateViewPager extends RelativeLayout {
             mTitleTextView.setVisibility(View.GONE);
         }
         mIndicatorLayout = (LinearLayout) mRootView.findViewById(R.id.indicator_layout);
+        mIndicatorTextView = new IndicatorTextView(getContext());
+        mIndicatorTextViews = new ArrayList<>();
+    }
+
+    private RotateViewPagerAdapter mRotateViewPagerAdapter;
+    private RotateViewPagerChangeListener mRotateViewPagerChangeListener;
+
+    public void setRotateViewPagerAdapter(ArrayList<BannerContent> bannerContents) {
+        if (mRotateViewPagerAdapter == null) {
+            mRotateViewPagerAdapter = new RotateViewPagerAdapter(bannerContents);
+        }
+        mRotateViewPager.setAdapter(mRotateViewPagerAdapter);
+        mRotateViewPager.setCurrentItem(bannerContents.size() * 1000);
+        setViewPagerIndicator(bannerContents.size());
+        mPagerItemSize = bannerContents.size();
+    }
+
+    public void addOnPageChangeListener() {
+        if (mRotateViewPagerChangeListener == null) {
+            mRotateViewPagerChangeListener = new RotateViewPagerChangeListener();
+        }
+        mRotateViewPager.addOnPageChangeListener(mRotateViewPagerChangeListener);
+    }
+
+    public void removeOnPageChangeListener() {
+        if (mRotateViewPagerChangeListener != null) {
+            mRotateViewPager.removeOnPageChangeListener(mRotateViewPagerChangeListener);
+        }
+    }
+
+    private class RotateViewPagerAdapter extends PagerAdapter {
+
+        private ArrayList<BannerContent> mBannerContents;
+        private LayoutInflater mLayoutInflater;
+
+        public RotateViewPagerAdapter(ArrayList<BannerContent> bannerContents) {
+            mBannerContents = bannerContents;
+            mLayoutInflater = LayoutInflater.from(getContext());
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            int restPosition = position % mBannerContents.size();
+            BannerContent bannerContent = mBannerContents.get(restPosition);
+            View view = mLayoutInflater.inflate(R.layout.layout_rotate_image_view, container, false);
+            ImageView imageView = (ImageView) view;
+
+            Glide.with(getContext())
+                    .load(bannerContent.getImagePath())
+                    .into(imageView);
+            container.addView(imageView);
+            return imageView;
+        }
+
+        @Override
+        public int getCount() {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((ImageView) object);
+        }
+    }
+
+    private class RotateViewPagerChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (mPagerItemSize != 0) {
+                int restPosition = position % mPagerItemSize;
+                switch (mIndicatorType) {
+                    case 0:
+                        mIndicatorTextView.setCurrentPage(restPosition + 1);
+                        break;
+                    default:
+                        setIndicatorBackground(restPosition);
+                        break;
+                }
+                mRotateViewPagerCurrentIndex = position;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
+
+    public void startRotateViewPager() {
+        mRotateHandler = new Handler();
+        mRotateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mRotateViewPagerAdapter != null) {
+                    mRotateViewPager.setCurrentItem(mRotateViewPagerCurrentIndex++, true);
+                    mRotateHandler.postDelayed(mRotateRunnable, ROTATE_THRESHOLD_TIME);
+                }
+            }
+        };
+        mRotateHandler.postDelayed(mRotateRunnable, ROTATE_THRESHOLD_TIME);
+    }
+
+    public void stopRotateViewPager() {
+        if (mRotateHandler != null) {
+            mRotateHandler.removeCallbacks(mRotateRunnable);
+            mRotateHandler = null;
+        }
     }
 
     protected void setViewPagerIndicator(int size) {
-        mIndicatorTextViews = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            TextView indicatorTextView = new TextView(getContext());
-            specifyIndicatorSize(indicatorTextView);
 
-            if (i != size - 1) {
-                LinearLayout.LayoutParams params =
-                        (LinearLayout.LayoutParams) indicatorTextView.getLayoutParams();
-                params.setMarginEnd(20);
-                indicatorTextView.setLayoutParams(params);
-            }
-            mIndicatorLayout.addView(indicatorTextView);
-            mIndicatorTextViews.add(indicatorTextView);
+        switch (mIndicatorType) {
+            case 0:
+                mIndicatorTextView.setCurrentPage(1);
+                mIndicatorTextView.setPageSize(size);
+                mIndicatorLayout.addView(mIndicatorTextView);
+                break;
+            default:
+                for (int i = 0; i < size; i++) {
+                    TextView indicatorTextView = new TextView(getContext());
+                    specifyIndicatorSize(indicatorTextView);
+
+                    if (i != size - 1) {
+                        LinearLayout.LayoutParams params =
+                                (LinearLayout.LayoutParams) indicatorTextView.getLayoutParams();
+                        params.setMarginEnd(20);
+                        indicatorTextView.setLayoutParams(params);
+                    }
+                    mIndicatorLayout.addView(indicatorTextView);
+                    mIndicatorTextViews.add(indicatorTextView);
+                }
+                setIndicatorBackground(0);
+                break;
         }
-        setIndicatorBackground(0);
+
         setIndicatorLayoutType(mIndicatorType);
+        mRotateViewPagerCurrentIndex = mRotateViewPager.getCurrentItem();
     }
 
     private void specifyIndicatorSize(TextView indicatorTextView) {
@@ -122,10 +258,16 @@ public class RotateViewPager extends RelativeLayout {
         switch (layoutType) {
             case -1:
                 break;
+            case 0:
+                params.addRule(RelativeLayout.ALIGN_PARENT_END);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                params.setMargins(0, 0, 40, 40);
+                mIndicatorLayout.setLayoutParams(params);
+                break;
             case 1:
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
                 params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                params.setMargins(0, 30, 30, 0);
+                params.setMargins(0, 40, 40, 0);
                 mIndicatorLayout.setLayoutParams(params);
                 break;
         }

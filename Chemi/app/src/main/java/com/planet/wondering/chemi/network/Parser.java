@@ -19,6 +19,7 @@ import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
+import com.planet.wondering.chemi.model.home.BannerContent;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
@@ -70,6 +71,7 @@ import static com.planet.wondering.chemi.network.Config.Comment.Key.IS_AUTHOR;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_GENDER;
 import static com.planet.wondering.chemi.network.Config.Comment.Key.USER_NAME;
 import static com.planet.wondering.chemi.network.Config.Comment.PARENT_COMMENT;
+import static com.planet.wondering.chemi.network.Config.Content.Key.BANNER_IMAGE_PATH;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_ID;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_KEEP;
@@ -1257,5 +1259,31 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return others;
+    }
+
+    public static ArrayList<BannerContent> parerBannerContents(JSONObject responseObject) {
+
+        ArrayList<BannerContent> bannerContents = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int count = responseObject.getInt(COUNT);
+                if (count > 0) {
+                JSONArray bannerContentsJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < count; i++) {
+                        BannerContent bannerContent = new BannerContent();
+                        JSONObject bannerContentJSONObject = bannerContentsJSONArray.getJSONObject(i);
+                        bannerContent.setId(bannerContentJSONObject.getInt(CONTENT_ID));
+                        bannerContent.setTitle(bannerContentJSONObject.getString(TITLE));
+                        bannerContent.setSubTitle(bannerContentJSONObject.getString(SUB_TITLE));
+                        bannerContent.setImagePath(bannerContentJSONObject.getString(BANNER_IMAGE_PATH));
+                        bannerContents.add(bannerContent);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return bannerContents;
     }
 }
