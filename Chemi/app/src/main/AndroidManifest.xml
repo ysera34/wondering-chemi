@@ -19,7 +19,7 @@
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.activity.AppBaseActivity"
+            android:name=".view.activity.ShareActivity"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
