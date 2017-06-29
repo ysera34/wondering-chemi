@@ -128,6 +128,7 @@ public class Config {
 
     public static final class Product {
         public static final String PATH = File.separator + "products" + File.separator;
+        public static final String RECOMMEND_PATH = File.separator + "recommendedproducts";
         public static final String QUERY_PATH = File.separator + "products?";
         public static final String KEEP_PATH = File.separator + "keepers";
         public static final String QUERY_TAG = "&tag=";
@@ -154,6 +155,7 @@ public class Config {
             public static final String IMAGE_PATH = "imagePath";
             public static final String ALLERGY = "allergied";
             public static final String CHEMICALS_SIZE = "chemicaled";
+            public static final String RECOMMEND_DESCRIPTION = "description";
         }
     }
 
@@ -218,7 +220,7 @@ public class Config {
     public static final class Content {
         public static final String CONTENT_PATH = File.separator + "contents" + File.separator;
         public static final String QUERY_PATH = File.separator + "contents?";
-        public static final String CONTENT_BANNER_PATH = File.separator + "promotedcontents";
+        public static final String PROMOTE_CONTENT_PATH = File.separator + "promotedcontents";
         public static final String QUERY_ADD_COUNT = "?iscounted=1";
         public static final String QUERY_CATEGORY = "&categoryid=";
 

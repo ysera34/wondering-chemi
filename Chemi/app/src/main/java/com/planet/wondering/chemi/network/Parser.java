@@ -19,7 +19,10 @@ import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
-import com.planet.wondering.chemi.model.home.BannerContent;
+import com.planet.wondering.chemi.model.home.BestReview;
+import com.planet.wondering.chemi.model.home.PromoteContent;
+import com.planet.wondering.chemi.model.home.PromoteProduct;
+import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
@@ -116,6 +119,7 @@ import static com.planet.wondering.chemi.network.Config.Product.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.Product.Key.PRODUCT_ID;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING_COUNT;
+import static com.planet.wondering.chemi.network.Config.Product.Key.RECOMMEND_DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Product.Key.WHOLE_CHEMICALS;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
@@ -1261,9 +1265,9 @@ public class Parser {
         return others;
     }
 
-    public static ArrayList<BannerContent> parerBannerContents(JSONObject responseObject) {
+    public static ArrayList<PromoteContent> parerPromoteContents(JSONObject responseObject) {
 
-        ArrayList<BannerContent> bannerContents = new ArrayList<>();
+        ArrayList<PromoteContent> promoteContents = new ArrayList<>();
         try {
             String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
             if (responseMessage.equals(RESPONSE_SUCCESS)) {
@@ -1271,19 +1275,94 @@ public class Parser {
                 if (count > 0) {
                 JSONArray bannerContentsJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
                     for (int i = 0; i < count; i++) {
-                        BannerContent bannerContent = new BannerContent();
                         JSONObject bannerContentJSONObject = bannerContentsJSONArray.getJSONObject(i);
-                        bannerContent.setId(bannerContentJSONObject.getInt(CONTENT_ID));
-                        bannerContent.setTitle(bannerContentJSONObject.getString(TITLE));
-                        bannerContent.setSubTitle(bannerContentJSONObject.getString(SUB_TITLE));
-                        bannerContent.setImagePath(bannerContentJSONObject.getString(BANNER_IMAGE_PATH));
-                        bannerContents.add(bannerContent);
+                        PromoteContent promoteContent = new PromoteContent();
+                        promoteContent.setId(bannerContentJSONObject.getInt(CONTENT_ID));
+                        promoteContent.setTitle(bannerContentJSONObject.getString(TITLE));
+                        promoteContent.setSubTitle(bannerContentJSONObject.getString(SUB_TITLE));
+                        promoteContent.setImagePath(bannerContentJSONObject.getString(BANNER_IMAGE_PATH));
+                        promoteContents.add(promoteContent);
                     }
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        return bannerContents;
+        return promoteContents;
+    }
+
+    public static ArrayList<PromoteProduct> parsePromoteProducts(JSONObject responseObject) {
+
+        ArrayList<PromoteProduct> promoteProducts = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int count = responseObject.getInt(COUNT);
+                if (count > 0) {
+                    JSONArray promoteProductsJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < count; i++) {
+                        JSONObject promoteProductJSONObject = promoteProductsJSONArray.getJSONObject(i);
+                        PromoteProduct promoteProduct = new PromoteProduct();
+                        promoteProduct.setId(promoteProductJSONObject.getInt(PRODUCT_ID));
+                        promoteProduct.setBrand(promoteProductJSONObject.getString(BRAND));
+                        promoteProduct.setName(promoteProductJSONObject.getString(NAME));
+                        promoteProducts.add(promoteProduct);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return promoteProducts;
+    }
+
+    public static ArrayList<RecommendProduct> parseRecommendProducts(JSONObject responseObject) {
+
+        ArrayList<RecommendProduct> recommendProducts = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int count = responseObject.getInt(COUNT);
+                if (count > 0) {
+                    JSONArray recommendProductsJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < count; i++) {
+                        JSONObject recommendProductJSONObject = recommendProductsJSONArray.getJSONObject(i);
+                        RecommendProduct recommendProduct = new RecommendProduct();
+                        recommendProduct.setId(recommendProductJSONObject.getInt(PRODUCT_ID));
+                        recommendProduct.setImagePath(recommendProductJSONObject.getString(IMAGE_PATH));
+                        recommendProduct.setBrand(recommendProductJSONObject.getString(BRAND));
+                        recommendProduct.setName(recommendProductJSONObject.getString(NAME));
+                        recommendProduct.setDescription(recommendProductJSONObject.getString(RECOMMEND_DESCRIPTION));
+                        recommendProducts.add(recommendProduct);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return recommendProducts;
+    }
+
+    public static ArrayList<BestReview> parseBestReviews(JSONObject responseObject) {
+
+        ArrayList<BestReview> bestReviews = new ArrayList<>();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                int count = responseObject.getInt(COUNT);
+                if (count > 0) {
+                    JSONArray bestReviewsJSONArray = responseObject.getJSONArray(RESPONSE_DATA);
+                    for (int i = 0; i < count; i++) {
+                        JSONObject bestReviewJSONObject = bestReviewsJSONArray.getJSONObject(i);
+                        BestReview bestReview = new BestReview();
+                        bestReview.setId(bestReviewJSONObject.getInt("reviewid"));
+                        bestReviews.add(bestReview);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return bestReviews;
     }
 }

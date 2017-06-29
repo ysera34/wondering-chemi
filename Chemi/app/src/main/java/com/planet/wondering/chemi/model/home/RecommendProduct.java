@@ -51,4 +51,15 @@ public class RecommendProduct {
     public void setDescription(String description) {
         mDescription = description;
     }
+
+    @Override
+    public String toString() {
+        return "RecommendProduct{" +
+                "mId=" + mId +
+                ", mImagePath='" + mImagePath + '\'' +
+                ", mBrand='" + mBrand + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                '}';
+    }
 }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.model.home.BannerContent;
+import com.planet.wondering.chemi.model.home.PromoteContent;
 
 import java.util.ArrayList;
 
@@ -87,14 +87,14 @@ public class RotateViewPager extends RelativeLayout {
     private RotateViewPagerAdapter mRotateViewPagerAdapter;
     private RotateViewPagerChangeListener mRotateViewPagerChangeListener;
 
-    public void setRotateViewPagerAdapter(ArrayList<BannerContent> bannerContents) {
+    public void setRotateViewPagerAdapter(ArrayList<PromoteContent> promoteContents) {
         if (mRotateViewPagerAdapter == null) {
-            mRotateViewPagerAdapter = new RotateViewPagerAdapter(bannerContents);
+            mRotateViewPagerAdapter = new RotateViewPagerAdapter(promoteContents);
         }
         mRotateViewPager.setAdapter(mRotateViewPagerAdapter);
-        mRotateViewPager.setCurrentItem(bannerContents.size() * 1000);
-        setViewPagerIndicator(bannerContents.size());
-        mPagerItemSize = bannerContents.size();
+        mRotateViewPager.setCurrentItem(promoteContents.size() * 1000);
+        setViewPagerIndicator(promoteContents.size());
+        mPagerItemSize = promoteContents.size();
     }
 
     public void addOnPageChangeListener() {
@@ -112,23 +112,23 @@ public class RotateViewPager extends RelativeLayout {
 
     private class RotateViewPagerAdapter extends PagerAdapter {
 
-        private ArrayList<BannerContent> mBannerContents;
+        private ArrayList<PromoteContent> mPromoteContents;
         private LayoutInflater mLayoutInflater;
 
-        public RotateViewPagerAdapter(ArrayList<BannerContent> bannerContents) {
-            mBannerContents = bannerContents;
+        public RotateViewPagerAdapter(ArrayList<PromoteContent> promoteContents) {
+            mPromoteContents = promoteContents;
             mLayoutInflater = LayoutInflater.from(getContext());
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            int restPosition = position % mBannerContents.size();
-            BannerContent bannerContent = mBannerContents.get(restPosition);
+            int restPosition = position % mPromoteContents.size();
+            PromoteContent promoteContent = mPromoteContents.get(restPosition);
             View view = mLayoutInflater.inflate(R.layout.layout_rotate_image_view, container, false);
             ImageView imageView = (ImageView) view;
 
             Glide.with(getContext())
-                    .load(bannerContent.getImagePath())
+                    .load(promoteContent.getImagePath())
                     .into(imageView);
             container.addView(imageView);
             return imageView;

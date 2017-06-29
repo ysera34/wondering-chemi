@@ -32,7 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.model.home.BannerContent;
+import com.planet.wondering.chemi.model.home.PromoteContent;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
@@ -43,8 +43,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.planet.wondering.chemi.network.Config.Content.CONTENT_BANNER_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.PROMOTE_CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
+import static com.planet.wondering.chemi.network.Config.Product.RECOMMEND_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
@@ -124,6 +125,7 @@ public class HomeFragment extends Fragment
         mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_banner_content_rotate_view_pager);
 
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
+        mHomeCategoryLayout.setOnClickListener(this);
         mHomeCategoryTabLayout = (TabLayout) view.findViewById(R.id.home_category_tab_layout);
         mHomeRecommendProductLayout = (LinearLayout) view.findViewById(R.id.home_recommend_product_layout);
         mHomeRecommendProductRecyclerView = (RecyclerView) view.findViewById(R.id.home_recommend_product_recycler_view);
@@ -149,6 +151,7 @@ public class HomeFragment extends Fragment
         setupCategoryTabIcons();
         mAddSearchLayout = (RelativeLayout) mLayoutInflater.inflate(R.layout.layout_home_add_search_view, mHomeHeaderLayout, false);
         mAddCategoryLayout = (LinearLayout) mLayoutInflater.inflate(R.layout.layout_home_add_category, mHomeHeaderLayout, false);
+        mAddCategoryLayout.setOnClickListener(this);
 
         updateUI();
         requestHome();
@@ -199,10 +202,16 @@ public class HomeFragment extends Fragment
                         .addSharedElement(mSearchButton, getString(R.string.search_edit_text))
                         .addSharedElement(mSearchImageButton, getString(R.string.search_image_button))
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                        .replace(R.id.main_fragment_container, detailFragment)
-                        .add(R.id.main_fragment_container, detailFragment)
-                        .addToBackStack("search_fragment")
+                        .replace(R.id.main_fragment_container, detailFragment)
+//                        .add(R.id.main_fragment_container, detailFragment)
+//                        .addToBackStack("search_fragment")
                         .commit();
+                break;
+            case R.id.home_category_layout:
+                Toast.makeText(getActivity(), "home_category_layout", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.home_add_category_layout:
+                Toast.makeText(getActivity(), "home_add_category_layout", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -273,18 +282,8 @@ public class HomeFragment extends Fragment
     }
 
     private void requestHome() {
-        for (int i = 0; i < 4; i++) {
-            RecommendProduct recommendProduct = new RecommendProduct();
-            recommendProduct.setImagePath("https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02/images/products/312.jpg");
-            recommendProduct.setBrand("더퓨어");
-            recommendProduct.setName("아임키즈 2in1샴푸");
-            recommendProduct.setDescription("우리아이 스스로 씻는 습관, 시원한 멘톨\n" +
-                    "성분을 함유한 쿨링 샴푸와 함께 하세요.");
-            mRecommendProducts.add(recommendProduct);
-        }
-
-        updateUI();
-        requestBannerContents();
+        requestPromoteContents();
+        requestRecommendProducts();
     }
 
     private void setupCategoryTabIcons() {
@@ -369,15 +368,40 @@ public class HomeFragment extends Fragment
         }
     }
 
-    private void requestBannerContents() {
+    private void requestPromoteContents() {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + CONTENT_BANNER_PATH,
+                Request.Method.GET, URL_HOST + PROMOTE_CONTENT_PATH,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        ArrayList<BannerContent> bannerContents = Parser.parerBannerContents(response);
-                        mHomeContentViewPager.setRotateViewPagerAdapter(bannerContents);
+                        ArrayList<PromoteContent> promoteContents = Parser.parerPromoteContents(response);
+                        mHomeContentViewPager.setRotateViewPagerAdapter(promoteContents);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestRecommendProducts() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + RECOMMEND_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mRecommendProducts = Parser.parseRecommendProducts(response);
+                        updateUI();
                     }
                 },
                 new Response.ErrorListener() {

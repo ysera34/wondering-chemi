@@ -4,7 +4,7 @@ package com.planet.wondering.chemi.model.home;
  * Created by yoon on 2017. 6. 27..
  */
 
-public class BannerContent {
+public class PromoteContent {
 
     private int mId;
     private String mTitle;
@@ -54,7 +54,7 @@ public class BannerContent {
 
     @Override
     public String toString() {
-        return "BannerContent{" +
+        return "PromoteContent{" +
                 "mId=" + mId +
                 ", mTitle='" + mTitle + '\'' +
                 ", mSubTitle='" + mSubTitle + '\'' +
