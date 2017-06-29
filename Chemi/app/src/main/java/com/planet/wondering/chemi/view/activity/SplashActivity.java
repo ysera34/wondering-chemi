@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
@@ -18,7 +19,7 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSIO
  * Created by yoon on 2017. 1. 5..
  */
 
-public class SplashActivity extends AppBaseActivity {
+public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 

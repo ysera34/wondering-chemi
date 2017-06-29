@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import com.planet.wondering.chemi.R;
 
@@ -18,7 +19,7 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSIO
  * Created by yoon on 2017. 6. 29..
  */
 
-public class ShareActivity extends AppBaseActivity {
+public class ShareActivity extends AppCompatActivity {
 
     private static final String TAG = ShareActivity.class.getSimpleName();
 

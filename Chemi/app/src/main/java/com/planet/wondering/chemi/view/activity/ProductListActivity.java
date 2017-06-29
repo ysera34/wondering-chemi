@@ -19,7 +19,7 @@ import java.util.Date;
  * Created by yoon on 2017. 1. 17..
  */
 
-public class ProductListActivity extends BottomNavigationActivity
+public class ProductListActivity extends AppBaseActivity
         implements OnUpdateProductListListener {
 
     private static final String TAG = ProductListActivity.class.getSimpleName();
@@ -73,6 +73,7 @@ public class ProductListActivity extends BottomNavigationActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fragment);
 
 //        mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         mProductIds = getIntent().getIntegerArrayListExtra(EXTRA_PRODUCT_IDS);
@@ -81,7 +82,7 @@ public class ProductListActivity extends BottomNavigationActivity
 
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
 
         if (mFragment == null && mCategoryId == -1) {
             mFragment = ProductListFragment.newInstance(mTagName);
@@ -90,24 +91,14 @@ public class ProductListActivity extends BottomNavigationActivity
         }
         mFragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .add(R.id.main_fragment_container, mFragment)
+                .add(R.id.pure_fragment_container, mFragment)
                 .commit();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCategoryId > 0) {
-            setupBottomNavigation(1);
-        } else {
-            setupBottomNavigation(0);
-        }
     }
 
     @Override
     public void OnTagCategoryUpdated(String tagName, int category) {
         mFragmentManager.beginTransaction()
-                .add(R.id.main_fragment_container, ProductListFragment.newInstance(tagName, category))
+                .add(R.id.pure_fragment_container, ProductListFragment.newInstance(tagName, category))
                 .addToBackStack(tagName)
                 .commit();
     }

@@ -33,8 +33,6 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
-import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
@@ -132,17 +130,17 @@ public class ReviewListFragment extends Fragment {
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mReviewRecyclerView.addItemDecoration(decoration);
-        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-            @Override
-            public void onShowView() {
-                ((ProductActivity) getActivity()).showBottomNavigationView();
-            }
-
-            @Override
-            public void onHideView() {
-                ((ProductActivity) getActivity()).hideBottomNavigationView();
-            }
-        });
+//        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+//            @Override
+//            public void onShowView() {
+//                ((ProductActivity) getActivity()).showBottomNavigationView();
+//            }
+//
+//            @Override
+//            public void onHideView() {
+//                ((ProductActivity) getActivity()).hideBottomNavigationView();
+//            }
+//        });
         mReviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

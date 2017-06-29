@@ -8,13 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
 
 /**
  * Created by yoon on 2017. 6. 29..
  */
 
-public class SearchActivity extends AppBaseActivity {
+public class SearchActivity extends AppBaseActivity implements OnTagSelectedListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -42,5 +43,11 @@ public class SearchActivity extends AppBaseActivity {
         }
     }
 
-
+    @Override
+    public void onTagSelected(String tag) {
+        mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
+        if (mFragment instanceof SearchDetailFragment) {
+            ((SearchDetailFragment) mFragment).updateSearchEditText(tag);
+        }
+    }
 }

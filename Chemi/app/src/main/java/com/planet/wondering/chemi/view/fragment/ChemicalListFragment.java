@@ -24,8 +24,6 @@ import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
-import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
 import org.json.JSONObject;
@@ -130,19 +128,19 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mChemicalRecyclerView.addItemDecoration(decoration);
-        mChemicalRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-            @Override
-            public void onShowView() {
-                ((ProductActivity) getActivity()).showBottomNavigationView();
+//        mChemicalRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+//            @Override
+//            public void onShowView() {
+//                ((ProductActivity) getActivity()).showBottomNavigationView();
 //                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-            }
+//            }
 
-            @Override
-            public void onHideView() {
-                ((ProductActivity) getActivity()).hideBottomNavigationView();
+//            @Override
+//            public void onHideView() {
+//                ((ProductActivity) getActivity()).hideBottomNavigationView();
 //                ((BottomNavigationActivity) getActivity()).hideEditTextLayout();
-            }
-        });
+//            }
+//        });
 
         updateUI();
 

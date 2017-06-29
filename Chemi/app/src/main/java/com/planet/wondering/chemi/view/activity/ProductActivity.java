@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,13 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -44,9 +40,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
-import com.planet.wondering.chemi.util.listener.OnAppBarStateChangeListener;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.MemberCongratulationDialogFragment;
@@ -79,8 +73,7 @@ import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.L
  */
 
 public class ProductActivity extends AppBaseActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener,
-        OnDialogFinishedListener, View.OnClickListener {
+        implements OnDialogFinishedListener, View.OnClickListener {
 
     private static final String TAG = ProductActivity.class.getSimpleName();
 
@@ -148,16 +141,16 @@ public class ProductActivity extends AppBaseActivity
 //        }
 
         mProductAppBarLayout = (AppBarLayout) findViewById(R.id.product_detail_app_bar_layout);
-        mProductAppBarLayout.addOnOffsetChangedListener(new OnAppBarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if (state.name().equals("COLLAPSED")) {
-                    hideBottomNavigationView();
-                } else if (state.name().equals("EXPANDED")) {
-                    showBottomNavigationView();
-                }
-            }
-        });
+//        mProductAppBarLayout.addOnOffsetChangedListener(new OnAppBarStateChangeListener() {
+//            @Override
+//            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+//                if (state.name().equals("COLLAPSED")) {
+//                    hideBottomNavigationView();
+//                } else if (state.name().equals("EXPANDED")) {
+//                    showBottomNavigationView();
+//                }
+//            }
+//        });
         mProductCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.product_detail_collapsing_toolbar_layout);
 
         mProductToolbar = (Toolbar) findViewById(R.id.product_detail_toolbar);
@@ -175,20 +168,20 @@ public class ProductActivity extends AppBaseActivity
         mProductDetailReviewRatingCountTextView =
                 (TextView) findViewById(R.id.product_detail_review_rating_count_text_view);
 
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
-        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-        mBottomNavigationLayout = (RelativeLayout) findViewById(R.id.bottom_navigation_layout);
+//        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
+//        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+//        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+//        mBottomNavigationLayout = (RelativeLayout) findViewById(R.id.bottom_navigation_layout);
 
         mScreenWidth = getScreenWidth();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupBottomNavigation(mSearchType);
         requestProduct();
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        setupBottomNavigation(mSearchType);
+//    }
 
     private void bindProduct(Product product) {
 
@@ -473,42 +466,42 @@ public class ProductActivity extends AppBaseActivity
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                startActivity(HomeActivity.newIntent(getApplicationContext()));
-                break;
-//            case R.id.action_category:
-//                startActivity(CategoryActivity.newIntent(getApplicationContext()));
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_search:
+//                startActivity(HomeActivity.newIntent(getApplicationContext()));
 //                break;
-            case R.id.action_content:
-                startActivity(ContentListActivity.newIntent(getApplicationContext()));
-                break;
-            case R.id.action_dictionary:
-                startActivity(DictionaryActivity.newIntent(getApplicationContext()));
-                break;
-            case R.id.action_member:
-                startActivity(MemberActivity.newIntent(getApplicationContext()));
-                break;
-        }
-        return true;
-    }
+////            case R.id.action_category:
+////                startActivity(CategoryActivity.newIntent(getApplicationContext()));
+////                break;
+//            case R.id.action_content:
+//                startActivity(ContentListActivity.newIntent(getApplicationContext()));
+//                break;
+//            case R.id.action_dictionary:
+//                startActivity(DictionaryActivity.newIntent(getApplicationContext()));
+//                break;
+//            case R.id.action_member:
+//                startActivity(MemberActivity.newIntent(getApplicationContext()));
+//                break;
+//        }
+//        return true;
+//    }
 
-    public void setupBottomNavigation(int menuIndex) {
-        mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
-        mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
-    }
-
-    public void showBottomNavigationView() {
-        mBottomNavigationLayout.animate().translationY(0)
-                .setInterpolator(new DecelerateInterpolator(2));
-    }
-
-    public void hideBottomNavigationView() {
-        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
-                .setInterpolator(new AccelerateInterpolator(2));
-    }
+//    public void setupBottomNavigation(int menuIndex) {
+//        mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
+//        mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
+//    }
+//
+//    public void showBottomNavigationView() {
+//        mBottomNavigationLayout.animate().translationY(0)
+//                .setInterpolator(new DecelerateInterpolator(2));
+//    }
+//
+//    public void hideBottomNavigationView() {
+//        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
+//                .setInterpolator(new AccelerateInterpolator(2));
+//    }
 
     @Override
     public void onBackPressed() {
@@ -516,14 +509,8 @@ public class ProductActivity extends AppBaseActivity
         List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(10);
         ActivityManager.RunningTaskInfo taskInfo = runningTaskInfos.get(0);
         if (taskInfo.numActivities == 1) {
-            startActivity(CategoryActivity.newIntent(getApplicationContext()));
+            startActivity(HomeActivity.newIntent(getApplicationContext()));
         }
         super.onBackPressed();
-    }
-
-    public int getScreenWidth() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics.widthPixels;
     }
 }

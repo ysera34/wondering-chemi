@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 
@@ -16,5 +17,11 @@ public class AppBaseActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
+
+    public int getScreenWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 }

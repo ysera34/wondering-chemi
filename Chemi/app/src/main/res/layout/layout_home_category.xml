@@ -4,7 +4,7 @@
               android:id="@+id/home_category_layout"
               android:layout_width="match_parent"
               android:layout_height="84dp"
-              android:layout_marginBottom="18dp"
+              android:layout_marginBottom="16dp"
               android:orientation="horizontal"
               android:background="@color/colorWhite"
               android:elevation="1dp">

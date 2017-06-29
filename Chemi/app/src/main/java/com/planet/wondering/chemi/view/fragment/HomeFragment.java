@@ -1,7 +1,6 @@
 package com.planet.wondering.chemi.view.fragment;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.ChangeTransform;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +35,8 @@ import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.RotateViewPager;
 
 import org.json.JSONObject;
@@ -102,6 +102,8 @@ public class HomeFragment extends Fragment
     private boolean isAddedSearchLayout;
     private boolean isAddedCategoryLayout;
 
+    private LinearLayout mPromoteSignInLayout;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +139,10 @@ public class HomeFragment extends Fragment
         mSearchImageButton.setOnClickListener(this);
         mSearchButton = (Button) view.findViewById(R.id.search_button);
         mSearchButton.setOnClickListener(this);
+
+        mPromoteSignInLayout = (LinearLayout) view.findViewById(R.id.promote_sign_in_layout);
+        view.findViewById(R.id.promote_sign_in_clear_image_view).setOnClickListener(this);
+        view.findViewById(R.id.promote_sign_in_text_view).setOnClickListener(this);
 
         return view;
     }
@@ -187,31 +193,19 @@ public class HomeFragment extends Fragment
         switch (v.getId()) {
             case R.id.search_image_button:
             case R.id.search_button:
-                SearchDetailFragment detailFragment = SearchDetailFragment.newInstance();
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    detailFragment.setSharedElementEnterTransition(new ChangeTransform());
-                    detailFragment.setEnterTransition(new ChangeTransform());
-                    detailFragment.setExitTransition(new ChangeTransform());
-                    detailFragment.setSharedElementReturnTransition(new ChangeTransform());
-                }
-
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .addSharedElement(mSearchLayout, getString(R.string.search_view))
-                        .addSharedElement(mSearchButton, getString(R.string.search_edit_text))
-                        .addSharedElement(mSearchImageButton, getString(R.string.search_image_button))
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.main_fragment_container, detailFragment)
-//                        .add(R.id.main_fragment_container, detailFragment)
-//                        .addToBackStack("search_fragment")
-                        .commit();
+                startActivity(SearchActivity.newIntent(getActivity()));
                 break;
             case R.id.home_category_layout:
                 Toast.makeText(getActivity(), "home_category_layout", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_add_category_layout:
                 Toast.makeText(getActivity(), "home_add_category_layout", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.promote_sign_in_clear_image_view:
+                mPromoteSignInLayout.setVisibility(View.GONE);
+                break;
+            case R.id.promote_sign_in_text_view:
+                startActivity(MemberStartActivity.newIntent(getActivity()));
                 break;
         }
     }

@@ -43,9 +43,8 @@ import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.adapter.TagCharacterAdapter;
-import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
 import com.planet.wondering.chemi.util.listener.OnUpdateProductListListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 
@@ -179,7 +178,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mCategoryName = "비밀의 문에 오신 것을 환영합니다.";
         }
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
@@ -269,17 +268,17 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mProductRecyclerView.addItemDecoration(decoration);
-        mProductRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-            @Override
-            public void onShowView() {
-                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-            }
-
-            @Override
-            public void onHideView() {
-                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-            }
-        });
+//        mProductRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
+//            @Override
+//            public void onShowView() {
+//                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+//            }
+//
+//            @Override
+//            public void onHideView() {
+//                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//            }
+//        });
         mProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -299,23 +298,23 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
-        mProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
-                        .findLastCompletelyVisibleItemPosition();
-                int itemSize = mProductRecyclerView.getAdapter().getItemCount();
-                if (lastItem == itemSize - 1) {
-                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
-                }
-                int firstItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
-                        .findFirstCompletelyVisibleItemPosition();
-                if (firstItem == 0) {
-                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
-                }
-            }
-        });
+//        mProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                int lastItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
+//                        .findLastCompletelyVisibleItemPosition();
+//                int itemSize = mProductRecyclerView.getAdapter().getItemCount();
+//                if (lastItem == itemSize - 1) {
+//                    ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+//                }
+//                int firstItem = ((LinearLayoutManager) mProductRecyclerView.getLayoutManager())
+//                        .findFirstCompletelyVisibleItemPosition();
+//                if (firstItem == 0) {
+//                    ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+//                }
+//            }
+//        });
 
         mProductListProgressBar = (ProgressBar) view.findViewById(R.id.product_list_progress_bar);
 

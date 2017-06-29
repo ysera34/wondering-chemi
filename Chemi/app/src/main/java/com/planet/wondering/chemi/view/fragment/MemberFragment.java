@@ -30,6 +30,7 @@ import com.planet.wondering.chemi.model.archive.Content;
 import com.planet.wondering.chemi.model.archive.Product;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.CategoryActivity;
 import com.planet.wondering.chemi.view.activity.ContentActivity;
@@ -131,7 +132,7 @@ public class MemberFragment extends Fragment
         setHasOptionsMenu(true);
 
         mUser = (User) getArguments().getSerializable(ARG_CONFIG_USER);
-        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
 
         if (mUser.getArchiveProducts() == null) {
             mArchiveProducts = new ArrayList<>();

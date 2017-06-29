@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -88,11 +87,5 @@ public class BottomNavigationActivity extends AppBaseActivity
     public void hideBottomNavigationView() {
         mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
                 .setInterpolator(new AccelerateInterpolator(2));
-    }
-
-    public int getScreenWidth() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics.widthPixels;
     }
 }

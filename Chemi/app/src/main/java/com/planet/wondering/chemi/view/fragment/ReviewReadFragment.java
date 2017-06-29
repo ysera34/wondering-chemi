@@ -42,7 +42,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.util.helper.TextValidator;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnMenuSelectedListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
@@ -185,7 +185,7 @@ public class ReviewReadFragment extends Fragment
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
         mReview = (Review) getArguments().getSerializable(ARG_REVIEW);
 
-        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable

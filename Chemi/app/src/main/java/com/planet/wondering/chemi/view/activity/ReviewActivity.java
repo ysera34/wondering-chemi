@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -53,7 +52,7 @@ import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
  * Created by yoon on 2017. 2. 23..
  */
 
-public class ReviewActivity extends BottomNavigationActivity implements OnReviewEditListener,
+public class ReviewActivity extends AppBaseActivity implements OnReviewEditListener,
         OnMenuSelectedListener, OnCommentSelectedListener, OnDialogFinishedListener,
         OnCommentNestedScrollListener, OnCommentEditDialogFinishedListener, OnCommentCountChangedListener {
 
@@ -103,7 +102,8 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBottomNavigationLayout.setVisibility(View.GONE);
+        setContentView(R.layout.activity_fragment);
+//        mBottomNavigationLayout.setVisibility(View.GONE);
 
         mReviewId = getIntent().getIntExtra(EXTRA_REVIEW_ID, -1);
         mProduct = (Product) getIntent().getSerializableExtra(EXTRA_PRODUCT);
@@ -111,24 +111,24 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         mRequestId = getIntent().getIntExtra(EXTRA_REQUEST_ID, -1);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
 
         if (mRequestId == Common.REVIEW_CREATE_REQUEST_CODE) {
             mFragment = ReviewCreateFragment.newInstance(mProduct);
             mFragmentManager.beginTransaction()
-                    .add(R.id.main_fragment_container, mFragment)
+                    .add(R.id.pure_fragment_container, mFragment)
                     .commit();
         } else if (mRequestId == Common.REVIEW_READ_REQUEST_CODE) {
             if (mReviewId == -1) {
 //                mFragment = ReviewReadFragment.newInstance(mProduct, mReview);
 //                mFragmentManager.beginTransaction()
-//                        .add(R.id.main_fragment_container, mFragment)
+//                        .add(R.id.pure_fragment_container, mFragment)
 //                        .commit();
                 requestReview(mReviewId);
             } else {
 //                mFragment = ReviewReadFragment.newInstance(mReviewId);
 //                mFragmentManager.beginTransaction()
-//                        .add(R.id.main_fragment_container, mFragment)
+//                        .add(R.id.pure_fragment_container, mFragment)
 //                        .commit();
                 requestReview(mReviewId);
             }
@@ -149,7 +149,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
             mReviewContent = reviewContent;
             mFragmentManager.beginTransaction()
 //                    .replace(R.id.fragment_container, ReviewEditFragment.newInstance(reviewContent))
-                    .add(R.id.main_fragment_container, ReviewEditFragment.newInstance(reviewContent, requestId))
+                    .add(R.id.pure_fragment_container, ReviewEditFragment.newInstance(reviewContent, requestId))
                     .addToBackStack(null)
                     .commit();
         } else {
@@ -161,7 +161,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //                    .commit();
 
             mFragmentManager.popBackStackImmediate();
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
             if (requestId == 1) {
                 ((ReviewCreateFragment) fragment).updateContentTextView(mReviewContent);
             } else if (requestId == 2){
@@ -179,7 +179,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
         switch (layoutIndex) {
             case 4:
                 mFragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_container, ReviewUpdateFragment.newInstance(mReview))
+                        .replace(R.id.pure_fragment_container, ReviewUpdateFragment.newInstance(mReview))
                         .commit();
                 break;
         }
@@ -187,7 +187,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     @Override
     public void onCommentSelected(Comment comment, int commentClass) {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentSelected(comment);
         }
@@ -199,7 +199,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
             startActivity(MemberStartActivity.newIntent(getApplicationContext()));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else {
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
             if (fragment instanceof ReviewReadFragment) {
                 ((ReviewReadFragment) fragment).hideSoftKeyboard();
             }
@@ -208,7 +208,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     @Override
     public void onCommentNestedScroll() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentNestedScroll();
         }
@@ -216,7 +216,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     @Override
     public void onCommentEditDialogFinished(String description) {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
         if (fragment instanceof ReviewReadFragment) {
             ((ReviewReadFragment) fragment).commentEditDialogFinished(description);
         }
@@ -239,7 +239,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 //                        mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragment = ReviewReadFragment.newInstance(mReview);
                         mFragmentManager.beginTransaction()
-                                .replace(R.id.main_fragment_container, mFragment)
+                                .replace(R.id.pure_fragment_container, mFragment)
                                 .commit();
                     }
                 },
@@ -271,7 +271,7 @@ public class ReviewActivity extends BottomNavigationActivity implements OnReview
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
 //        MemberConfigFragment memberConfigFragment = MemberConfigFragment.newInstance();
         if (fragment instanceof ReviewEditFragment) {
 //            mFragmentManager.beginTransaction()

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/promote_sign_in_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="14dp">
+    android:paddingTop="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -11,6 +14,7 @@
         android:background="@color/colorWhite">
 
         <ImageView
+            android:id="@+id/promote_sign_in_clear_image_view"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:padding="10dp"
@@ -42,11 +46,13 @@
                 android:textSize="14sp"
                 android:textColor="@color/colorArmadillo"/>
             <TextView
+                android:id="@+id/promote_sign_in_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:text="지금 가입하기"
                 android:textSize="14sp"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/color_selector_primary_white"/>
         </LinearLayout>
 
     </RelativeLayout>

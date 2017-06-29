@@ -47,7 +47,7 @@ import com.planet.wondering.chemi.util.adapter.BottomSheetMenuAdapter;
 import com.planet.wondering.chemi.util.helper.ImageHandler;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnReviewEditListener;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import java.util.ArrayList;
@@ -157,7 +157,7 @@ public class ReviewCreateFragment extends Fragment
 
         mReviewHint = getString(R.string.review_create_review_hint);
         mReviewContent = getArguments().getString(ARG_REVIEW_CONTENT, "");
-        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
