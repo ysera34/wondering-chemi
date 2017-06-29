@@ -512,5 +512,6 @@ public class ProductActivity extends AppBaseActivity
             startActivity(HomeActivity.newIntent(getApplicationContext()));
         }
         super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

@@ -97,19 +97,6 @@ public class RotateViewPager extends RelativeLayout {
         mPagerItemSize = promoteContents.size();
     }
 
-    public void addOnPageChangeListener() {
-        if (mRotateViewPagerChangeListener == null) {
-            mRotateViewPagerChangeListener = new RotateViewPagerChangeListener();
-        }
-        mRotateViewPager.addOnPageChangeListener(mRotateViewPagerChangeListener);
-    }
-
-    public void removeOnPageChangeListener() {
-        if (mRotateViewPagerChangeListener != null) {
-            mRotateViewPager.removeOnPageChangeListener(mRotateViewPagerChangeListener);
-        }
-    }
-
     private class RotateViewPagerAdapter extends PagerAdapter {
 
         private ArrayList<PromoteContent> mPromoteContents;
@@ -123,7 +110,7 @@ public class RotateViewPager extends RelativeLayout {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             int restPosition = position % mPromoteContents.size();
-            PromoteContent promoteContent = mPromoteContents.get(restPosition);
+            final PromoteContent promoteContent = mPromoteContents.get(restPosition);
             View view = mLayoutInflater.inflate(R.layout.layout_rotate_image_view, container, false);
             ImageView imageView = (ImageView) view;
 
@@ -131,6 +118,22 @@ public class RotateViewPager extends RelativeLayout {
                     .load(promoteContent.getImagePath())
                     .into(imageView);
             container.addView(imageView);
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OnItemClickListener itemClickListener = getItemClickListener();
+                    if (itemClickListener != null) {
+                        itemClickListener.onItemClick(promoteContent.getId());
+                    }
+                }
+            });
+
+//            imageView.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(getContext(), "promoteContent.getId: " + promoteContent.getId(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
             return imageView;
         }
 
@@ -147,6 +150,33 @@ public class RotateViewPager extends RelativeLayout {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((ImageView) object);
+        }
+    }
+
+    private OnItemClickListener mItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int itemId);
+    }
+
+    public OnItemClickListener getItemClickListener() {
+        return mItemClickListener;
+    }
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public void addOnPageChangeListener() {
+        if (mRotateViewPagerChangeListener == null) {
+            mRotateViewPagerChangeListener = new RotateViewPagerChangeListener();
+        }
+        mRotateViewPager.addOnPageChangeListener(mRotateViewPagerChangeListener);
+    }
+
+    public void removeOnPageChangeListener() {
+        if (mRotateViewPagerChangeListener != null) {
+            mRotateViewPager.removeOnPageChangeListener(mRotateViewPagerChangeListener);
         }
     }
 

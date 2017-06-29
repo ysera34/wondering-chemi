@@ -34,8 +34,11 @@ import com.planet.wondering.chemi.model.home.PromoteContent;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
+import com.planet.wondering.chemi.view.activity.ContentActivity;
+import com.planet.wondering.chemi.view.activity.ImageActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
+import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.RotateViewPager;
 
@@ -108,7 +111,7 @@ public class HomeFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mScreenWidth = ((BottomNavigationActivity) getActivity()).getScreenWidth();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
         mLayoutInflater = LayoutInflater.from(getContext());
         isAddedSearchLayout = false;
         isAddedCategoryLayout = false;
@@ -143,6 +146,7 @@ public class HomeFragment extends Fragment
         mPromoteSignInLayout = (LinearLayout) view.findViewById(R.id.promote_sign_in_layout);
         view.findViewById(R.id.promote_sign_in_clear_image_view).setOnClickListener(this);
         view.findViewById(R.id.promote_sign_in_text_view).setOnClickListener(this);
+        view.findViewById(R.id.expert_group_detail_text_view).setOnClickListener(this);
 
         return view;
     }
@@ -206,6 +210,11 @@ public class HomeFragment extends Fragment
                 break;
             case R.id.promote_sign_in_text_view:
                 startActivity(MemberStartActivity.newIntent(getActivity()));
+                break;
+            case R.id.expert_group_detail_text_view:
+                startActivity(ImageActivity.newIntent(getActivity(),
+                        "케미전문가단", "https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02/images/others/expert_group_image.jpg"));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }
@@ -358,7 +367,8 @@ public class HomeFragment extends Fragment
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), mRecommendProduct.getName(), Toast.LENGTH_SHORT).show();
+            startActivity(ProductActivity.newIntent(getActivity(), mRecommendProduct.getId()));
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
@@ -371,6 +381,13 @@ public class HomeFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         ArrayList<PromoteContent> promoteContents = Parser.parerPromoteContents(response);
                         mHomeContentViewPager.setRotateViewPagerAdapter(promoteContents);
+                        mHomeContentViewPager.setItemClickListener(new RotateViewPager.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int itemId) {
+                                startActivity(ContentActivity.newIntent(getActivity(), itemId));
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

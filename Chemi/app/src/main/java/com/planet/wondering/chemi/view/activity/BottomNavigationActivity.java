@@ -2,15 +2,11 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.helper.BottomNavigationViewHelper;
@@ -59,6 +55,7 @@ public class BottomNavigationActivity extends AppBaseActivity
         mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
         mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
 
+        /*
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(0);
 //        TextView disableTextView = (TextView) menuView.getChildAt(menuIndex).findViewById(R.id.smallLabel);
 //        TextView enableTextView = (TextView) menuView.getChildAt(menuIndex).findViewById(R.id.largeLabel);
@@ -77,6 +74,7 @@ public class BottomNavigationActivity extends AppBaseActivity
                 itemView.getChildAt(1).setVisibility(View.GONE);
             }
         }
+        */
     }
 
     public void showBottomNavigationView() {

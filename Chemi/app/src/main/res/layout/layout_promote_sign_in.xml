@@ -52,7 +52,7 @@
                 android:clickable="true"
                 android:text="지금 가입하기"
                 android:textSize="14sp"
-                android:textColor="@color/color_selector_primary_white"/>
+                android:textColor="@color/colorPrimary"/>
         </LinearLayout>
 
     </RelativeLayout>
