@@ -46,31 +46,6 @@ public class CategoryGroupView extends LinearLayout {
 
     private void initializeView(Context context) {
 
-//        LinearLayout.LayoutParams params = (LayoutParams) getLayoutParams();
-//
-//        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
-//        params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-//        getLayoutParams().width =
-//                (int) getResources().getDimension(R.dimen.category_group_view_width);
-//        getLayoutParams().height =
-//                (int) getResources().getDimension(R.dimen.category_group_view_height);
-//        getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
-//        getLayoutParams().width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-//
-//        setLayoutParams(new LinearLayout.LayoutParams(
-//                (int) (50 * getContext().getResources().getDisplayMetrics().density + 0.5f),
-//                (int) (80 * getContext().getResources().getDisplayMetrics().density + 0.5f)));
-
-//        mCategoryGroupLayout.setLayoutParams(params);
-
-//        indicatorTextView.setLayoutParams(new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-//        ));
-//        indicatorTextView.getLayoutParams().width =
-//                (int) getResources().getDimension(R.dimen.rotate_view_pager_indicator_width);
-//        indicatorTextView.getLayoutParams().height =
-//                (int) getResources().getDimension(R.dimen.rotate_view_pager_indicator_height);
-
         setOrientation(VERTICAL);
         mCategoryGroupLayout = (LinearLayout) inflate(context, R.layout.layout_category_group_view, this);
         mCategoryIconImageView = (ImageView) mCategoryGroupLayout.findViewById(R.id.category_group_icon_image_view);

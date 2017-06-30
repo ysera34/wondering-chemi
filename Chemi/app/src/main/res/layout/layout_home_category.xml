@@ -13,8 +13,10 @@
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_baby_circle_false"
         app:name="@string/category_group_name_1">
 
@@ -23,8 +25,10 @@
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_female_circle_false"
         app:name="@string/category_group_name_2">
 
@@ -33,8 +37,10 @@
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_general_circle_false"
         app:name="@string/category_group_name_3">
 
@@ -44,6 +50,8 @@
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
         android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_living_circle_false"
         app:name="@string/category_group_name_4">
 
