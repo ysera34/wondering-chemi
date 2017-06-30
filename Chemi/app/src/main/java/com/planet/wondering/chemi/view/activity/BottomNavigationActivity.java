@@ -35,9 +35,6 @@ public class BottomNavigationActivity extends AppBaseActivity
             case R.id.action_search:
                 startActivity(HomeActivity.newIntent(getApplicationContext()));
                 break;
-//            case R.id.action_category:
-//                startActivity(CategoryActivity.newIntent(getApplicationContext()));
-//                break;
             case R.id.action_content:
                 startActivity(ContentListActivity.newIntent(getApplicationContext()));
                 break;

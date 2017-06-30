@@ -466,43 +466,6 @@ public class ProductActivity extends AppBaseActivity
 
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                startActivity(HomeActivity.newIntent(getApplicationContext()));
-//                break;
-////            case R.id.action_category:
-////                startActivity(CategoryActivity.newIntent(getApplicationContext()));
-////                break;
-//            case R.id.action_content:
-//                startActivity(ContentListActivity.newIntent(getApplicationContext()));
-//                break;
-//            case R.id.action_dictionary:
-//                startActivity(DictionaryActivity.newIntent(getApplicationContext()));
-//                break;
-//            case R.id.action_member:
-//                startActivity(MemberActivity.newIntent(getApplicationContext()));
-//                break;
-//        }
-//        return true;
-//    }
-
-//    public void setupBottomNavigation(int menuIndex) {
-//        mBottomNavigationView.getMenu().getItem(menuIndex).setChecked(true);
-//        mBottomNavigationView.getMenu().getItem(menuIndex).setEnabled(false);
-//    }
-//
-//    public void showBottomNavigationView() {
-//        mBottomNavigationLayout.animate().translationY(0)
-//                .setInterpolator(new DecelerateInterpolator(2));
-//    }
-//
-//    public void hideBottomNavigationView() {
-//        mBottomNavigationLayout.animate().translationY(mBottomNavigationLayout.getHeight())
-//                .setInterpolator(new AccelerateInterpolator(2));
-//    }
-
     @Override
     public void onBackPressed() {
         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);

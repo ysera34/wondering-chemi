@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:duration="300" android:drawable="@drawable/ic_category_baby_wet_tissue" />
-    <item android:duration="300" android:drawable="@drawable/ic_category_baby_hair_wash" />
-    <item android:duration="300" android:drawable="@drawable/ic_category_baby_lotion" />
-    <item android:duration="300" android:drawable="@drawable/ic_category_baby_tooth_paste" />
-    <item android:duration="300" android:drawable="@drawable/ic_category_baby_body_wash" />
+    <item android:duration="300" android:drawable="@drawable/ic_category_baby_circle_true" />
+    <item android:duration="300" android:drawable="@drawable/ic_category_female_circle_true" />
+    <item android:duration="300" android:drawable="@drawable/ic_category_general_circle_true" />
+    <item android:duration="300" android:drawable="@drawable/ic_category_living_circle_true" />
 </animation-list>

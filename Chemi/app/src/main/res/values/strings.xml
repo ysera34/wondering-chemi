@@ -185,20 +185,6 @@
     <string name="member_profile_archive_content_title">%s님이 관심있는 컨텐츠</string>
     <string name="member_profile_archive_review_product_title">%s님이 리뷰를 작성한 제품</string>
 
-    <string name="category_name_hint_format">\"%s\"내 검색</string>
-    <string name="category_name_baby_wet_tissue">아이용 물티슈</string>
-    <string name="category_name_baby_hair">아이용 샴푸\u00B7린스</string>
-    <string name="category_name_baby_lotion">아이용 크림·로션·오일</string>
-    <string name="category_name_baby_tooth_paste">아이용 치약</string>
-    <string name="category_name_baby_body_wash">아이용 바디워시</string>
-    <string name="category_name_baby_etc">기타</string>
-    <string name="category_name_adult_wet_tissue">물티슈</string>
-    <string name="category_name_adult_hair">샴푸\u00B7린스</string>
-    <string name="category_name_adult_body_wash">바디워시</string>
-    <string name="category_name_adult_tooth_paste">치약</string>
-    <string name="category_name_adult_pregnant_goods">여성·임산부</string>
-    <string name="category_name_adult_etc">기타</string>
-
     <string name="administrator_support_email">help@chemi.io</string>
     <string name="partner_email_title">메일 보내기</string>
     <string name="partner_email_subject">케미와 제휴를 맺고 싶습니다.</string>
@@ -212,22 +198,6 @@
     <string name="request_chemical_title">이메일로 성분 정보 수정 요청하기</string>
     <string name="request_chemical_subject">성분 정보의 수정을 요청합니다.</string>
     <string name="request_chemical_description">%s 성분에 대한 정보가 부정확하여 수정을 요청합니다.\n제가 확인한 정보는 케미의 정보와 다릅니다. 그것은 다음과 같습니다.\n</string>
-
-    <string-array name="category_name_array">
-        <item>@string/category_name_hint_format</item>
-        <item>@string/category_name_baby_wet_tissue</item>
-        <item>@string/category_name_baby_hair</item>
-        <item>@string/category_name_baby_body_wash</item>
-        <item>@string/category_name_baby_lotion</item>
-        <item>@string/category_name_baby_tooth_paste</item>
-        <item>@string/category_name_baby_etc</item>
-        <item>@string/category_name_adult_wet_tissue</item>
-        <item>@string/category_name_adult_hair</item>
-        <item>@string/category_name_adult_body_wash</item>
-        <item>@string/category_name_adult_tooth_paste</item>
-        <item>@string/category_name_adult_pregnant_goods</item>
-        <item>@string/category_name_adult_etc</item>
-    </string-array>
 
     <string name="comments_empty_message1">아직 등록된 댓글이 없어요.</string>
     <string name="comments_empty_message2">제일 먼저 댓글을 남겨보세요.</string>

@@ -32,7 +32,6 @@
         android:paddingBottom="4.5dp"
         android:gravity="center"
         android:textSize="10sp"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/ic_category_chip"/>
+        android:textColor="@color/colorWhite"/>
 
 </RelativeLayout>
