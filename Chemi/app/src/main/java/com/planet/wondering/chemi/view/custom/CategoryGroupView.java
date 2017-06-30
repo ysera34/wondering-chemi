@@ -37,6 +37,13 @@ public class CategoryGroupView extends LinearLayout {
         initializeView(context);
     }
 
+    public CategoryGroupView(Context context, AttributeSet attrs, int categoryResId, String categoryName) {
+        super(context, attrs);
+        mCategoryResId = categoryResId;
+        mCategoryName = categoryName;
+        initializeView(context);
+    }
+
     private int mCategoryResId;
     private String mCategoryName;
 
@@ -56,5 +63,21 @@ public class CategoryGroupView extends LinearLayout {
     private void bindCategory() {
         mCategoryIconImageView.setImageResource(mCategoryResId);
         mCategoryNameTextView.setText(String.valueOf(mCategoryName));
+    }
+
+    public int getCategoryResId() {
+        return mCategoryResId;
+    }
+
+    public void setCategoryResId(int categoryResId) {
+        mCategoryResId = categoryResId;
+    }
+
+    public String getCategoryName() {
+        return mCategoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        mCategoryName = categoryName;
     }
 }

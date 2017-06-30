@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/search_category_group_layout"
+              android:layout_width="match_parent"
+              android:layout_height="84dp"
+              android:orientation="horizontal"
+              android:gravity="center"
+              android:background="@color/colorWhite"
+              android:elevation="1dp">
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/search_category_group_view_1"
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
+        app:iconResId="@drawable/ic_category_baby_circle_false"
+        app:name="@string/category_group_name_1">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/search_category_group_view_2"
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
+        app:iconResId="@drawable/ic_category_female_circle_false"
+        app:name="@string/category_group_name_2">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/search_category_group_view_3"
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
+        app:iconResId="@drawable/ic_category_general_circle_false"
+        app:name="@string/category_group_name_3">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/search_category_group_view_4"
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/selector_ripple_list_item_gray"
+        app:iconResId="@drawable/ic_category_living_circle_false"
+        app:name="@string/category_group_name_4">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+</LinearLayout>

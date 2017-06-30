@@ -1,43 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+              android:background="@color/colorWhite">
 
-    <RelativeLayout
-        android:id="@+id/category_header_layout"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/category_group_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp">
+        android:layout_height="84dp"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabTextColor="@color/colorFontFrenchGray"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextAppearance="@style/CategoryGroupTabLayoutTextStyle">
 
-        <TextView
-            android:id="@+id/category_header_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="18dp"
-            android:text="카테고리"
-            android:textSize="16sp"
-            android:textColor="@color/colorWhite"/>
+    </android.support.design.widget.TabLayout>
 
-        <TextView
-            android:id="@+id/category_custom_text_view"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:clickable="true"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/category_group_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/category_recycler_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-    </android.support.v7.widget.RecyclerView>
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>

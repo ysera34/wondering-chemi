@@ -99,11 +99,13 @@ public class CategoryBottomSheetDialogFragment extends BottomSheetDialogFragment
         window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
         int statusBarHeight = rectangle.top;
 
+        int searchLayoutHeight = (int) getResources().getDimension(R.dimen.search_editText_height);
+
         if (params.getBehavior() instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) params.getBehavior()).setBottomSheetCallback(mBottomSheetCallback);
         }
 
-        params.height = screenHeight - statusBarHeight;
+        params.height = screenHeight - statusBarHeight - searchLayoutHeight;
         parent.setLayoutParams(params);
     }
 
