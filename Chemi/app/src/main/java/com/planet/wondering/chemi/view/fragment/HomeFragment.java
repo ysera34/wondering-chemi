@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -108,7 +107,7 @@ public class HomeFragment extends Fragment
 
     private LayoutInflater mLayoutInflater;
     private RelativeLayout mAddSearchLayout;
-    private LinearLayout mAddCategoryLayout;
+    private LinearLayout mHomeAddCategoryLayout;
     private boolean isAddedSearchLayout;
     private boolean isAddedCategoryLayout;
 
@@ -166,20 +165,30 @@ public class HomeFragment extends Fragment
             MemberCongratulationDialogFragment dialogFragment = MemberCongratulationDialogFragment.newInstance();
             dialogFragment.show(getFragmentManager(), "congratulation_dialog");
         }
-        setupCategoryTabIcons();
+
         mAddSearchLayout = (RelativeLayout) mLayoutInflater.inflate(R.layout.layout_home_add_search_view, mHomeHeaderLayout, false);
         mHomeAddSearchButton = (Button) mAddSearchLayout.findViewById(R.id.home_add_search_text_button);
         mHomeAddSearchButton.setOnClickListener(this);
         mHomeAddSearchImageButton = (ImageButton) mAddSearchLayout.findViewById(R.id.home_add_search_image_button);
         mHomeAddSearchImageButton.setOnClickListener(this);
-        mAddCategoryLayout = (LinearLayout) mLayoutInflater.inflate(R.layout.layout_home_add_category, mHomeHeaderLayout, false);
-        mAddCategoryLayout.setOnClickListener(this);
+        mHomeAddCategoryLayout = (LinearLayout) mLayoutInflater.inflate(R.layout.layout_home_add_category, mHomeHeaderLayout, false);
+        mHomeAddCategoryLayout.setOnClickListener(this);
 
+        setCategoryViewClickListener();
         updateUI();
         requestHome();
 
         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
             mPromoteSignInLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void setCategoryViewClickListener() {
+        for (int i = 0; i < mHomeCategoryLayout.getChildCount(); i++) {
+            mHomeCategoryLayout.getChildAt(i).setOnClickListener(this);
+        }
+        for (int i = 0; i < mHomeAddCategoryLayout.getChildCount(); i++) {
+            mHomeAddCategoryLayout.getChildAt(i).setOnClickListener(this);
         }
     }
 
@@ -224,11 +233,29 @@ public class HomeFragment extends Fragment
                 startActivity(ProductListActivity.newIntent(getActivity(), mHomeSearchButton.getText().toString()));
                 break;
             case R.id.home_category_layout:
-                Toast.makeText(getActivity(), "home_category_layout", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.home_add_category_layout:
-                Toast.makeText(getActivity(), "home_add_category_layout", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.category_group_view_1:
+            case R.id.add_category_group_view_1:
+                startActivity(SearchActivity.newIntent(getActivity(), 0));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.category_group_view_2:
+            case R.id.add_category_group_view_2:
+                startActivity(SearchActivity.newIntent(getActivity(), 1));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.category_group_view_3:
+            case R.id.add_category_group_view_3:
+                startActivity(SearchActivity.newIntent(getActivity(), 2));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.category_group_view_4:
+            case R.id.add_category_group_view_4:
+                startActivity(SearchActivity.newIntent(getActivity(), 3));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+
             case R.id.promote_sign_in_clear_image_view:
                 mPromoteSignInLayout.setVisibility(View.GONE);
                 break;
@@ -290,20 +317,20 @@ public class HomeFragment extends Fragment
                         - mHomeToolbarLayout.getMeasuredHeight();
             } else {
                 headerLayoutMeasuredHeight2 = mHomeHeaderLayout.getMeasuredHeight()
-                        - mHomeToolbarLayout.getMeasuredHeight() - mAddCategoryLayout.getMeasuredHeight();
+                        - mHomeToolbarLayout.getMeasuredHeight() - mHomeAddCategoryLayout.getMeasuredHeight();
             }
         }
 
         if (currentYOffset >= Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
             if (!isAddedCategoryLayout) {
-                mHomeHeaderLayout.addView(mAddCategoryLayout);
+                mHomeHeaderLayout.addView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = true;
             }
         }
 
         if (currentYOffset < Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
             if (isAddedCategoryLayout) {
-                mHomeHeaderLayout.removeView(mAddCategoryLayout);
+                mHomeHeaderLayout.removeView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = false;
             }
         }
@@ -313,10 +340,6 @@ public class HomeFragment extends Fragment
         requestPromoteContents();
         requestRecommendProducts();
         requestBestReviews();
-    }
-
-    private void setupCategoryTabIcons() {
-
     }
 
     private class RecommendProductAdapter extends RecyclerView.Adapter<RecommendProductHolder>{

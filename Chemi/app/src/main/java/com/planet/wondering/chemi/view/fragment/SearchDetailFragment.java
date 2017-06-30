@@ -4,6 +4,7 @@ package com.planet.wondering.chemi.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
     private static final String TAG = SearchDetailFragment.class.getSimpleName();
 
+    private static final String ARG_CATEGORY_GROUP_ID = "category_group_id";
+
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private TagCharacterAdapter mTagCharacterAdapter;
     private RelativeLayout mSearchClearLayout;
@@ -49,9 +52,21 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     private ArrayList<Fragment> mSearchListFragments;
     private ArrayList<String> mSearchListFragmentTitles;
 
+    private int mCategoryGroupId;
+
     public static SearchDetailFragment newInstance() {
 
         Bundle args = new Bundle();
+
+        SearchDetailFragment fragment = new SearchDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SearchDetailFragment newInstance(int categoryGroupId) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_CATEGORY_GROUP_ID, categoryGroupId);
 
         SearchDetailFragment fragment = new SearchDetailFragment();
         fragment.setArguments(args);
@@ -69,6 +84,8 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                 getString(R.string.search_popular_fragment_title));
         addSearchFragment(TagLatestListFragment.newInstance(),
                 getString(R.string.search_latest_fragment_title));
+
+        mCategoryGroupId = getArguments().getInt(ARG_CATEGORY_GROUP_ID, -1);
     }
 
     @Nullable
@@ -181,6 +198,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (mCategoryGroupId != -1) {
+            BottomSheetDialogFragment categoryFragment =
+                    CategoryBottomSheetDialogFragment.newInstance(mCategoryGroupId);
+            categoryFragment.show(getChildFragmentManager(), "category_bottom_sheet_fragment");
+        }
     }
 
     @Override

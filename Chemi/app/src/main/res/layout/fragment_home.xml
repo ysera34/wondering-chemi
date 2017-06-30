@@ -184,6 +184,4 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/layout_bottom_sheet_home_category" />
-
 </android.support.design.widget.CoordinatorLayout>

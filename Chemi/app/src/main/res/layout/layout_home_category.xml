@@ -11,6 +11,7 @@
               android:elevation="1dp">
 
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/category_group_view_1"
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
         android:layout_marginEnd="8dp"
@@ -23,6 +24,7 @@
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/category_group_view_2"
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
         android:layout_marginEnd="8dp"
@@ -35,6 +37,7 @@
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/category_group_view_3"
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
         android:layout_marginEnd="8dp"
@@ -47,6 +50,7 @@
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
     <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:id="@+id/category_group_view_4"
         android:layout_width="@dimen/category_group_view_width"
         android:layout_height="@dimen/category_group_view_height"
         android:gravity="center"
