@@ -20,7 +20,7 @@
             android:layout_height="0.7dp"
             android:background="@color/colorBorder"/>
 
-        <include layout="@layout/layout_search_category_group"/>
+        <!--<include layout="@layout/layout_search_category_group"/>-->
 
         <FrameLayout
             android:id="@+id/category_detail_fragment_container"

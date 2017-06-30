@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.custom.CategoryGroupView;
@@ -44,14 +45,16 @@ public class CategoryFragment extends Fragment {
         return fragment;
     }
 
+    private int mCategoryGroupId;
     private TabLayout mCategoryGroupTabLayout;
     private ViewPager mCategoryGroupViewPager;
     private ArrayList<Fragment> mCategoryDetailFragments;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mCategoryGroupId = getArguments().getInt(ARG_CATEGORY_GROUP_ID, -1);
         mCategoryDetailFragments = new ArrayList<>();
 
         mCategoryDetailFragments.add(CategoryDetailFragment.newInstance());
@@ -81,39 +84,71 @@ public class CategoryFragment extends Fragment {
         });
         mCategoryGroupTabLayout.setupWithViewPager(mCategoryGroupViewPager);
         setCategoryGroupTabLayout();
+        mCategoryGroupTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+//                Toast.makeText(getActivity(), "position: " + tab.getPosition(), Toast.LENGTH_SHORT).show();
+                int position = tab.getPosition();
+                mCategoryGroupViews[position].setCategoryIcon(mTabSelectedIconResIds[position]);
+                mCategoryGroupViews[position].setCategoryNameColor(R.color.colorPrimary);
+                tab.setCustomView(mCategoryGroupViews[position]);
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                mCategoryGroupViews[position].setCategoryIcon(mTabUnSelectedIconResIds[position]);
+                mCategoryGroupViews[position].setCategoryNameColor(R.color.colorArmadillo);
+                tab.setCustomView(mCategoryGroupViews[position]);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        mCategoryGroupViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mCategoryGroupTabLayout) {
+
+        });
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mCategoryGroupViewPager.setCurrentItem(1);
+        if (mCategoryGroupId > -1) {
+            mCategoryGroupViewPager.setCurrentItem(mCategoryGroupId);
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+//    @Override
+//    public void onResume() {
+//        super.onResume();
 //        if (mTabSelectedListener != null) {
 //            mTabLayoutOnPageChangeListener = new CategoryTabLayoutOnPageChangeListener(mCategoryGroupTabLayout);
-//            mTabSelectedListener = new CategoryTabSelectedListener();
 //            mCategoryGroupViewPager.addOnPageChangeListener(mTabLayoutOnPageChangeListener);
+//            mTabSelectedListener = new CategoryTabSelectedListener();
 //            mCategoryGroupTabLayout.addOnTabSelectedListener(mTabSelectedListener);
 //        }
-    }
+//    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+//    @Override
+//    public void onPause() {
+//        super.onPause();
 //        mCategoryGroupViewPager.removeOnPageChangeListener(mTabLayoutOnPageChangeListener);
 //        mCategoryGroupTabLayout.removeOnTabSelectedListener(mTabSelectedListener);
-    }
+//    }
 
     private void setCategoryGroupTabLayout() {
 
-        CategoryGroupView[] categoryGroupViews = new CategoryGroupView[mTabUnSelectedIconResIds.length];
-        for (int i = 0; i < categoryGroupViews.length; i++) {
+        mCategoryGroupViews = new CategoryGroupView[mTabUnSelectedIconResIds.length];
+        for (int i = 0; i < mCategoryGroupViews.length; i++) {
             CategoryGroupView groupView = new CategoryGroupView(getContext(), null,
                     mTabUnSelectedIconResIds[i], getString(mTabTitleResIds[i]));
-            categoryGroupViews[i] = groupView;
+            mCategoryGroupViews[i] = groupView;
         }
 //        CategoryGroupView groupView0 = new CategoryGroupView(getContext(), null,
 //                R.drawable.ic_category_baby_circle_false, getString(R.string.category_group_name_1));
@@ -128,15 +163,6 @@ public class CategoryFragment extends Fragment {
 //        mCategoryGroupTabLayout.getTabAt(2).setCustomView(groupView2);
 //        mCategoryGroupTabLayout.getTabAt(3).setCustomView(groupView3);
 
-
-
-        for (int i = 0; i < mTabUnSelectedIconResIds.length; i++) {
-//            mCategoryGroupTabLayout.getTabAt(i).setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[i]));
-//            mCategoryGroupTabLayout.getTabAt(i).setText(getString(mTabTitleResIds[i]));
-
-            mCategoryGroupTabLayout.getTabAt(i).setCustomView(categoryGroupViews[i]);
-        }
-
 //        mCategoryGroupTabLayout.getTabAt(0).setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[0]));
 //        mCategoryGroupTabLayout.getTabAt(0).setText(getString(mTabTitleResIds[0]));
 //        mCategoryGroupTabLayout.getTabAt(1).setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[1]));
@@ -145,8 +171,18 @@ public class CategoryFragment extends Fragment {
 //        mCategoryGroupTabLayout.getTabAt(2).setText(getString(mTabTitleResIds[2]));
 //        mCategoryGroupTabLayout.getTabAt(3).setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[3]));
 //        mCategoryGroupTabLayout.getTabAt(3).setText(getString(mTabTitleResIds[3]));
+
+
+        for (int i = 0; i < mTabUnSelectedIconResIds.length; i++) {
+//            mCategoryGroupTabLayout.getTabAt(i).setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[i]));
+//            mCategoryGroupTabLayout.getTabAt(i).setText(getString(mTabTitleResIds[i]));
+
+            mCategoryGroupTabLayout.getTabAt(i).setCustomView(mCategoryGroupViews[i]);
+        }
+
     }
 
+    private CategoryGroupView[] mCategoryGroupViews;
     private int[] mTabUnSelectedIconResIds = {
             R.drawable.ic_category_baby_circle_false, R.drawable.ic_category_female_circle_false,
             R.drawable.ic_category_general_circle_false, R.drawable.ic_category_living_circle_false,};
@@ -157,36 +193,44 @@ public class CategoryFragment extends Fragment {
             R.string.category_group_name_1, R.string.category_group_name_2,
             R.string.category_group_name_3, R.string.category_group_name_4,};
 
-//    private CategoryTabLayoutOnPageChangeListener mTabLayoutOnPageChangeListener;
-//    private CategoryTabSelectedListener mTabSelectedListener;
+    private CategoryTabLayoutOnPageChangeListener mTabLayoutOnPageChangeListener;
+    private CategoryTabSelectedListener mTabSelectedListener;
 
-//    private class CategoryTabLayoutOnPageChangeListener extends TabLayout.TabLayoutOnPageChangeListener {
-//
-//        public CategoryTabLayoutOnPageChangeListener(TabLayout tabLayout) {
-//            super(tabLayout);
-//        }
-//    }
+    private class CategoryTabLayoutOnPageChangeListener extends TabLayout.TabLayoutOnPageChangeListener {
 
-//    private class CategoryTabSelectedListener implements TabLayout.OnTabSelectedListener {
-//
-//        @Override
-//        public void onTabSelected(TabLayout.Tab tab) {
+        public CategoryTabLayoutOnPageChangeListener(TabLayout tabLayout) {
+            super(tabLayout);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            Toast.makeText(getActivity(), "onPageSelected position: " + position, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class CategoryTabSelectedListener implements TabLayout.OnTabSelectedListener {
+
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
 //            Log.i(TAG, "mCategoryGroupViewPager.getCurrentItem():" + mCategoryGroupViewPager.getCurrentItem());
 //            tab.setIcon(getResources().getDrawable(mTabSelectedIconResIds[mCategoryGroupViewPager.getCurrentItem()]));
-//        }
-//
-//        @Override
-//        public void onTabUnselected(TabLayout.Tab tab) {
+            int position = tab.getPosition();
+            Toast.makeText(getActivity(), "position: " + position, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
 //            for (int i = 0; i < mTabSelectedIconResIds.length; i++) {
 //                if (i != mCategoryGroupViewPager.getCurrentItem()) {
 //                    tab.setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[i]));
 //                }
 //            }
-//        }
-//
-//        @Override
-//        public void onTabReselected(TabLayout.Tab tab) {
-//
-//        }
-//    }
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    }
 }

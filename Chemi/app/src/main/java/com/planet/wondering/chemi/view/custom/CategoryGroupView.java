@@ -80,4 +80,12 @@ public class CategoryGroupView extends LinearLayout {
     public void setCategoryName(String categoryName) {
         mCategoryName = categoryName;
     }
+
+    public void setCategoryIcon(int drawableResId) {
+        mCategoryIconImageView.setImageResource(drawableResId);
+    }
+
+    public void setCategoryNameColor(int colorResId) {
+        mCategoryNameTextView.setTextColor(getResources().getColor(colorResId));
+    }
 }
