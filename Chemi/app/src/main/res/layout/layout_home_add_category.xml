@@ -5,19 +5,47 @@
               android:layout_width="match_parent"
               android:layout_height="84dp"
               android:orientation="horizontal"
+              android:gravity="center"
               android:background="@color/colorWhite"
               android:elevation="1dp">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/home_category_tab_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        style="@style/CategoryTabLayoutStyle"
-        app:tabMode="fixed"
-        app:tabGravity="center"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextColor="@color/colorArmadillo">
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        app:iconResId="@drawable/ic_category_baby_circle_false"
+        app:name="@string/category_group_name_1">
 
-    </android.support.design.widget.TabLayout>
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        app:iconResId="@drawable/ic_category_female_circle_false"
+        app:name="@string/category_group_name_2">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        app:iconResId="@drawable/ic_category_general_circle_false"
+        app:name="@string/category_group_name_3">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
+
+    <com.planet.wondering.chemi.view.custom.CategoryGroupView
+        android:layout_width="@dimen/category_group_view_width"
+        android:layout_height="@dimen/category_group_view_height"
+        android:gravity="center"
+        app:iconResId="@drawable/ic_category_living_circle_false"
+        app:name="@string/category_group_name_4">
+
+    </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
 </LinearLayout>

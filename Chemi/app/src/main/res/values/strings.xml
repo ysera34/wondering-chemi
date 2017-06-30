@@ -239,4 +239,9 @@
         <item>@string/intro_slide_51</item>
         <item>@string/intro_slide_52</item>
     </string-array>
+
+    <string name="category_group_name_1">베이비</string>
+    <string name="category_group_name_2">맘/여성</string>
+    <string name="category_group_name_3">일반</string>
+    <string name="category_group_name_4">리빙</string>
 </resources>

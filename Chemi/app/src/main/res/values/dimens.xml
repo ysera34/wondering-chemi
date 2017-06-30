@@ -34,4 +34,6 @@
     <dimen name="rotate_view_pager_indicator_height">4dp</dimen>
     <dimen name="home_contents_rotate_view_pager_height">220dp</dimen>
     <dimen name="home_reviews_rotate_view_pager_height">195dp</dimen>
+    <dimen name="category_group_view_width">50dp</dimen>
+    <dimen name="category_group_view_height">80dp</dimen>
 </resources>

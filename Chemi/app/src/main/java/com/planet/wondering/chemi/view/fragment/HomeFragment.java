@@ -4,7 +4,6 @@ package com.planet.wondering.chemi.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -94,7 +93,6 @@ public class HomeFragment extends Fragment
     private NestedScrollView mHomeNestedScrollView;
     private RotateViewPager mHomeContentViewPager;
     private LinearLayout mHomeCategoryLayout;
-    private TabLayout mHomeCategoryTabLayout;
     private LinearLayout mHomeRecommendProductLayout;
     private RecyclerView mHomeRecommendProductRecyclerView;
     private RecommendProductAdapter mRecommendProductAdapter;
@@ -140,7 +138,6 @@ public class HomeFragment extends Fragment
 
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryLayout.setOnClickListener(this);
-        mHomeCategoryTabLayout = (TabLayout) view.findViewById(R.id.home_category_tab_layout);
         mHomeRecommendProductLayout = (LinearLayout) view.findViewById(R.id.home_recommend_product_layout);
         mHomeRecommendProductRecyclerView = (RecyclerView) view.findViewById(R.id.home_recommend_product_recycler_view);
         mHomeRecommendProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
