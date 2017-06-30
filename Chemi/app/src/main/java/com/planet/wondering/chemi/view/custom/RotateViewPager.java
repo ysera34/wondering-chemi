@@ -15,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import java.util.ArrayList;
  */
 
 public class RotateViewPager extends RelativeLayout {
+
+    private static final String TAG = RotateViewPager.class.getSimpleName();
 
     public RotateViewPager(Context context) {
         super(context);
@@ -42,7 +46,7 @@ public class RotateViewPager extends RelativeLayout {
         try {
             mTitleIconResId = a.getResourceId(R.styleable.RotateViewPager_titleIconSrc, 0);
             mTitleText = a.getString(R.styleable.RotateViewPager_titleText);
-            mIndicatorType = a.getInt(R.styleable.RotateViewPager_indicatorType, -1);
+            mIndicatorType = a.getInteger(R.styleable.RotateViewPager_indicatorType, -1);
         } finally {
             a.recycle();
         }
@@ -87,54 +91,80 @@ public class RotateViewPager extends RelativeLayout {
     private RotateViewPagerAdapter mRotateViewPagerAdapter;
     private RotateViewPagerChangeListener mRotateViewPagerChangeListener;
 
-    public void setRotateViewPagerAdapter(ArrayList<PromoteContent> promoteContents) {
+    public void setRotateViewPagerAdapter(ArrayList objects) {
         if (mRotateViewPagerAdapter == null) {
-            mRotateViewPagerAdapter = new RotateViewPagerAdapter(promoteContents);
+            mRotateViewPagerAdapter = new RotateViewPagerAdapter(objects);
         }
         mRotateViewPager.setAdapter(mRotateViewPagerAdapter);
-        mRotateViewPager.setCurrentItem(promoteContents.size() * 1000);
-        setViewPagerIndicator(promoteContents.size());
-        mPagerItemSize = promoteContents.size();
+        mRotateViewPager.setCurrentItem(objects.size() * 1000);
+        setViewPagerIndicator(objects.size());
+        mPagerItemSize = objects.size();
     }
 
     private class RotateViewPagerAdapter extends PagerAdapter {
 
         private ArrayList<PromoteContent> mPromoteContents;
+        private ArrayList<BestReview> mBestReviews;
         private LayoutInflater mLayoutInflater;
 
-        public RotateViewPagerAdapter(ArrayList<PromoteContent> promoteContents) {
-            mPromoteContents = promoteContents;
+        public RotateViewPagerAdapter(ArrayList objects) {
+            if (objects.get(0) instanceof PromoteContent) {
+                mPromoteContents = objects;
+            } else if (objects.get(0) instanceof BestReview) {
+                mBestReviews = objects;
+            }
             mLayoutInflater = LayoutInflater.from(getContext());
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            int restPosition = position % mPromoteContents.size();
-            final PromoteContent promoteContent = mPromoteContents.get(restPosition);
-            View view = mLayoutInflater.inflate(R.layout.layout_rotate_image_view, container, false);
-            ImageView imageView = (ImageView) view;
+            if (mPromoteContents != null) {
+                int restPosition = position % mPromoteContents.size();
+                final PromoteContent promoteContent = mPromoteContents.get(restPosition);
+                View view = mLayoutInflater.inflate(R.layout.layout_rotate_image_view, container, false);
+                ImageView imageView = (ImageView) view;
 
-            Glide.with(getContext())
-                    .load(promoteContent.getImagePath())
-                    .into(imageView);
-            container.addView(imageView);
-            imageView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OnItemClickListener itemClickListener = getItemClickListener();
-                    if (itemClickListener != null) {
-                        itemClickListener.onItemClick(promoteContent.getId());
+                Glide.with(getContext())
+                        .load(promoteContent.getImagePath())
+                        .into(imageView);
+                imageView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OnItemClickListener itemClickListener = getItemClickListener();
+                        if (itemClickListener != null) {
+                            itemClickListener.onItemClick(promoteContent.getId());
+                        }
                     }
-                }
-            });
-
-//            imageView.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(getContext(), "promoteContent.getId: " + promoteContent.getId(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-            return imageView;
+                });
+                container.addView(imageView);
+                return imageView;
+            } else if (mBestReviews != null) {
+                int restPosition = position % mBestReviews.size();
+                final BestReview bestReview = mBestReviews.get(restPosition);
+                View view = mLayoutInflater.inflate(R.layout.layout_rotate_review, container, false);
+                TextView contentTextView = (TextView) view.findViewById(R.id.review_content_text_view);
+                ImageView productImageView = (ImageView) view.findViewById(R.id.review_product_image_view);
+                Glide.with(getContext())
+                        .load("https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02/images/products/311.jpg")
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .override(getPixelFromDp(120), getPixelFromDp(90))
+                        .centerCrop()
+                        .crossFade()
+                        .into(productImageView);
+//                contentTextView.setText(String.valueOf(bestReview.getId()));
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OnItemClickListener itemClickListener = getItemClickListener();
+                        if (itemClickListener != null) {
+                            itemClickListener.onItemClick(bestReview.getId());
+                        }
+                    }
+                });
+                container.addView(view);
+                return view;
+            }
+            return null;
         }
 
         @Override
@@ -149,7 +179,11 @@ public class RotateViewPager extends RelativeLayout {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((ImageView) object);
+            if (mPromoteContents != null) {
+                container.removeView((ImageView) object);
+            } else if (mBestReviews != null) {
+                container.removeView((LinearLayout) object);
+            }
         }
     }
 
@@ -238,7 +272,7 @@ public class RotateViewPager extends RelativeLayout {
                 mIndicatorTextView.setPageSize(size);
                 mIndicatorLayout.addView(mIndicatorTextView);
                 break;
-            default:
+            case 1:
                 for (int i = 0; i < size; i++) {
                     TextView indicatorTextView = new TextView(getContext());
                     specifyIndicatorSize(indicatorTextView);
@@ -297,10 +331,15 @@ public class RotateViewPager extends RelativeLayout {
             case 1:
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
                 params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                params.setMargins(0, 40, 40, 0);
+                params.setMargins(0, 40, 70, 0);
                 mIndicatorLayout.setLayoutParams(params);
                 break;
         }
+    }
+
+    private int getPixelFromDp(int dp) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
 }

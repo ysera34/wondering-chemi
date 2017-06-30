@@ -30,15 +30,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
+import com.planet.wondering.chemi.common.Common;
+import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.ContentActivity;
 import com.planet.wondering.chemi.view.activity.ImageActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
+import com.planet.wondering.chemi.view.activity.ProductListActivity;
+import com.planet.wondering.chemi.view.activity.ReviewActivity;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
 import com.planet.wondering.chemi.view.custom.RotateViewPager;
 
@@ -49,6 +54,7 @@ import java.util.ArrayList;
 import static com.planet.wondering.chemi.network.Config.Content.PROMOTE_CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.RECOMMEND_PATH;
+import static com.planet.wondering.chemi.network.Config.Review.BEST_REVIEW_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 
@@ -93,11 +99,14 @@ public class HomeFragment extends Fragment
     private RecyclerView mHomeRecommendProductRecyclerView;
     private RecommendProductAdapter mRecommendProductAdapter;
     private ArrayList<RecommendProduct> mRecommendProducts;
+    private RotateViewPager mHomeReviewViewPager;
     private int mScreenWidth;
 
     private RelativeLayout mSearchLayout;
-    private Button mSearchButton;
-    private ImageButton mSearchImageButton;
+    private Button mHomeSearchButton;
+    private ImageButton mHomeSearchImageButton;
+    private Button mHomeAddSearchButton;
+    private ImageButton mHomeAddSearchImageButton;
 
     private LayoutInflater mLayoutInflater;
     private RelativeLayout mAddSearchLayout;
@@ -127,7 +136,7 @@ public class HomeFragment extends Fragment
         mHomeToolbarLayout = (LinearLayout) view.findViewById(R.id.home_toolbar_layout);
         mHomeNestedScrollView = (NestedScrollView) view.findViewById(R.id.home_scroll_view);
         mHomeNestedScrollView.setOnScrollChangeListener(this);
-        mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_banner_content_rotate_view_pager);
+        mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_promote_content_rotate_view_pager);
 
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryLayout.setOnClickListener(this);
@@ -136,16 +145,18 @@ public class HomeFragment extends Fragment
         mHomeRecommendProductRecyclerView = (RecyclerView) view.findViewById(R.id.home_recommend_product_recycler_view);
         mHomeRecommendProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mHomeRecommendProductRecyclerView.setNestedScrollingEnabled(false);
+        mHomeReviewViewPager = (RotateViewPager) view.findViewById(R.id.home_best_review_rotate_view_pager);
 
-        mSearchLayout = (RelativeLayout) view.findViewById(R.id.search_layout);
-        mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
-        mSearchImageButton.setOnClickListener(this);
-        mSearchButton = (Button) view.findViewById(R.id.search_button);
-        mSearchButton.setOnClickListener(this);
+        mSearchLayout = (RelativeLayout) view.findViewById(R.id.home_search_layout);
+        mHomeSearchButton = (Button) view.findViewById(R.id.home_search_text_button);
+        mHomeSearchButton.setOnClickListener(this);
+        mHomeSearchImageButton = (ImageButton) view.findViewById(R.id.home_search_image_button);
+        mHomeSearchImageButton.setOnClickListener(this);
 
         mPromoteSignInLayout = (LinearLayout) view.findViewById(R.id.promote_sign_in_layout);
         view.findViewById(R.id.promote_sign_in_clear_image_view).setOnClickListener(this);
         view.findViewById(R.id.promote_sign_in_text_view).setOnClickListener(this);
+        view.findViewById(R.id.expert_group_layout).setOnClickListener(this);
         view.findViewById(R.id.expert_group_detail_text_view).setOnClickListener(this);
 
         return view;
@@ -160,11 +171,19 @@ public class HomeFragment extends Fragment
         }
         setupCategoryTabIcons();
         mAddSearchLayout = (RelativeLayout) mLayoutInflater.inflate(R.layout.layout_home_add_search_view, mHomeHeaderLayout, false);
+        mHomeAddSearchButton = (Button) mAddSearchLayout.findViewById(R.id.home_add_search_text_button);
+        mHomeAddSearchButton.setOnClickListener(this);
+        mHomeAddSearchImageButton = (ImageButton) mAddSearchLayout.findViewById(R.id.home_add_search_image_button);
+        mHomeAddSearchImageButton.setOnClickListener(this);
         mAddCategoryLayout = (LinearLayout) mLayoutInflater.inflate(R.layout.layout_home_add_category, mHomeHeaderLayout, false);
         mAddCategoryLayout.setOnClickListener(this);
 
         updateUI();
         requestHome();
+
+        if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+            mPromoteSignInLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -172,6 +191,8 @@ public class HomeFragment extends Fragment
         super.onResume();
         mHomeContentViewPager.addOnPageChangeListener();
         mHomeContentViewPager.startRotateViewPager();
+        mHomeReviewViewPager.addOnPageChangeListener();
+        mHomeReviewViewPager.startRotateViewPager();
     }
 
     @Override
@@ -179,6 +200,8 @@ public class HomeFragment extends Fragment
         super.onPause();
         mHomeContentViewPager.removeOnPageChangeListener();
         mHomeContentViewPager.stopRotateViewPager();
+        mHomeReviewViewPager.removeOnPageChangeListener();
+        mHomeReviewViewPager.stopRotateViewPager();
     }
 
     private void updateUI() {
@@ -195,9 +218,13 @@ public class HomeFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.search_image_button:
-            case R.id.search_button:
+            case R.id.home_search_text_button:
+            case R.id.home_add_search_text_button:
                 startActivity(SearchActivity.newIntent(getActivity()));
+                break;
+            case R.id.home_search_image_button:
+            case R.id.home_add_search_image_button:
+                startActivity(ProductListActivity.newIntent(getActivity(), mHomeSearchButton.getText().toString()));
                 break;
             case R.id.home_category_layout:
                 Toast.makeText(getActivity(), "home_category_layout", Toast.LENGTH_SHORT).show();
@@ -211,6 +238,7 @@ public class HomeFragment extends Fragment
             case R.id.promote_sign_in_text_view:
                 startActivity(MemberStartActivity.newIntent(getActivity()));
                 break;
+            case R.id.expert_group_layout:
             case R.id.expert_group_detail_text_view:
                 startActivity(ImageActivity.newIntent(getActivity(),
                         "케미전문가단", "https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02/images/others/expert_group_image.jpg"));
@@ -287,6 +315,7 @@ public class HomeFragment extends Fragment
     private void requestHome() {
         requestPromoteContents();
         requestRecommendProducts();
+        requestBestReviews();
     }
 
     private void setupCategoryTabIcons() {
@@ -379,7 +408,7 @@ public class HomeFragment extends Fragment
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        ArrayList<PromoteContent> promoteContents = Parser.parerPromoteContents(response);
+                        ArrayList<PromoteContent> promoteContents = Parser.parsePromoteContents(response);
                         mHomeContentViewPager.setRotateViewPagerAdapter(promoteContents);
                         mHomeContentViewPager.setItemClickListener(new RotateViewPager.OnItemClickListener() {
                             @Override
@@ -413,6 +442,39 @@ public class HomeFragment extends Fragment
                     public void onResponse(JSONObject response) {
                         mRecommendProducts = Parser.parseRecommendProducts(response);
                         updateUI();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestBestReviews() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + BEST_REVIEW_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        ArrayList<BestReview> bestReviews = Parser.parseBestReviews(response);
+                        mHomeReviewViewPager.setRotateViewPagerAdapter(bestReviews);
+                        mHomeReviewViewPager.setItemClickListener(new RotateViewPager.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int itemId) {
+                                startActivity(ReviewActivity.newIntent(
+                                        getActivity(), itemId, Common.REVIEW_READ_REQUEST_CODE));
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

@@ -197,6 +197,7 @@ public class Config {
 
     public static final class Review {
         public static final String PATH = File.separator + "reviews";
+        public static final String BEST_REVIEW_PATH = File.separator + "bestreviews";
         public static final String REVIEW_PATH = File.separator + "reviews" + File.separator;
         public static final String REVIEW_IMAGE_PATH = File.separator + "image";
 

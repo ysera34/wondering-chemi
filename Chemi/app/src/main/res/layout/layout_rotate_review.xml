@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingTop="40dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp"
+              android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:layout_marginEnd="6dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/review_rating_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_star_medium_fill"/>
+
+            <TextView
+                android:id="@+id/review_rating_value_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="3.5"
+                android:textSize="12sp"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/review_rating_message_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="따봉이예요!"
+                android:textSize="12sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/colorAccent"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/review_content_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="1q111111\n//1231244\b/12312313\n1231dsfsdfsdfsdfsfdsfsdfsdfsdfsdfsdfsfsdfsdfsf23141414\n1231241414\n123134141"
+            android:lineSpacingMultiplier="1.0"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:ellipsize="end"
+            android:maxLines="4"/>
+
+        <TextView
+            android:id="@+id/review_parent_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="doquixote / 20대 / 여성 / 건성 / 알레르기"
+            android:textSize="10sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/review_child_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="자녀 악건성 / 자녀알레르기"
+            android:textSize="10sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/review_product_brand_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="보숭이"
+            android:textSize="12sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/colorDoveGray"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <TextView
+            android:id="@+id/review_product_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="카모마일 프리미엄 물티슝"
+            android:textSize="11sp"
+            android:textColor="@color/colorDoveGray"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <ImageView
+            android:id="@+id/review_product_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

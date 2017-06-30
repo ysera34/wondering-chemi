@@ -1265,7 +1265,7 @@ public class Parser {
         return others;
     }
 
-    public static ArrayList<PromoteContent> parerPromoteContents(JSONObject responseObject) {
+    public static ArrayList<PromoteContent> parsePromoteContents(JSONObject responseObject) {
 
         ArrayList<PromoteContent> promoteContents = new ArrayList<>();
         try {
