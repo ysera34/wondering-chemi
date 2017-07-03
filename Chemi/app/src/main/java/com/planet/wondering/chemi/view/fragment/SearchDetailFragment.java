@@ -99,7 +99,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_detail, container, false);
-        mCoordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.search_coordinator_layout);
+//        mCoordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.search_coordinator_layout);
         mSearchLayout = (RelativeLayout) view.findViewById(R.id.search_detail_bar_layout);
         mSearchAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.search_auto_text_view);
         mSearchAutoCompleteTextView.setThreshold(1);
@@ -201,11 +201,11 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        mCategoryBottomSheetView = view.findViewById(R.id.category_bottom_sheet_layout);
-        mCategoryBottomSheetBehavior = BottomSheetBehavior.from(mCategoryBottomSheetView);
-        mCategoryBottomSheetBehavior.setHideable(true);
-        mCategoryBottomSheetBehavior.setPeekHeight(250);
-        mCategoryBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//        mCategoryBottomSheetView = view.findViewById(R.id.category_bottom_sheet_layout);
+//        mCategoryBottomSheetBehavior = BottomSheetBehavior.from(mCategoryBottomSheetView);
+//        mCategoryBottomSheetBehavior.setHideable(true);
+//        mCategoryBottomSheetBehavior.setPeekHeight(250);
+//        mCategoryBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         return view;
     }
 
@@ -213,14 +213,14 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mCategoryBottomSheetView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mCategoryGroupId != -1) {
-                    showCategoryBottomSheet(mCategoryGroupId);
-                }
-            }
-        }, 200);
+//        mCategoryBottomSheetView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (mCategoryGroupId != -1) {
+//                    showCategoryBottomSheet(mCategoryGroupId);
+//                }
+//            }
+//        }, 200);
     }
 
     @Override

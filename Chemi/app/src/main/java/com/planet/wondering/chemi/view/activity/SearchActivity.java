@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.util.listener.OnTagSelectedListener;
+import com.planet.wondering.chemi.view.fragment.CategoryFragment;
 import com.planet.wondering.chemi.view.fragment.SearchDetailFragment;
 
 /**
@@ -46,10 +47,17 @@ public class SearchActivity extends AppBaseActivity implements OnTagSelectedList
         mFragment = mFragmentManager.findFragmentById(R.id.pure_fragment_container);
 
         if (mFragment == null) {
-            mFragment = SearchDetailFragment.newInstance(mCategoryGroupId);
-            mFragmentManager.beginTransaction()
-                    .add(R.id.pure_fragment_container, mFragment)
-                    .commit();
+            if (mCategoryGroupId == -1) {
+                mFragment = SearchDetailFragment.newInstance();
+                mFragmentManager.beginTransaction()
+                        .add(R.id.pure_fragment_container, mFragment)
+                        .commit();
+            } else {
+                mFragment = CategoryFragment.newInstance(mCategoryGroupId);
+                mFragmentManager.beginTransaction()
+                        .add(R.id.pure_fragment_container, mFragment)
+                        .commit();
+            }
         }
     }
 
@@ -64,6 +72,5 @@ public class SearchActivity extends AppBaseActivity implements OnTagSelectedList
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.view.custom.CategoryGroupView;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by yoon on 2017. 7. 1..
  */
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = CategoryFragment.class.getSimpleName();
 
@@ -46,6 +46,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private int mCategoryGroupId;
+    private LinearLayout mCategoryHeaderLayout;
     private TabLayout mCategoryGroupTabLayout;
     private ViewPager mCategoryGroupViewPager;
     private ArrayList<Fragment> mCategoryDetailFragments;
@@ -68,6 +69,8 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
+        mCategoryHeaderLayout = (LinearLayout) view.findViewById(R.id.category_header_layout);
+        mCategoryHeaderLayout.setOnClickListener(this);
         mCategoryGroupTabLayout = (TabLayout) view.findViewById(R.id.category_group_tab_layout);
         mCategoryGroupViewPager = (ViewPager) view.findViewById(R.id.category_group_view_pager);
 
@@ -87,7 +90,6 @@ public class CategoryFragment extends Fragment {
         mCategoryGroupTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//                Toast.makeText(getActivity(), "position: " + tab.getPosition(), Toast.LENGTH_SHORT).show();
                 int position = tab.getPosition();
                 mCategoryGroupViews[position].setCategoryIcon(mTabSelectedIconResIds[position]);
                 mCategoryGroupViews[position].setCategoryNameColor(R.color.colorPrimary);
@@ -108,9 +110,6 @@ public class CategoryFragment extends Fragment {
 
             }
         });
-        mCategoryGroupViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mCategoryGroupTabLayout) {
-
-        });
         return view;
     }
 
@@ -123,23 +122,25 @@ public class CategoryFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (mTabSelectedListener != null) {
-//            mTabLayoutOnPageChangeListener = new CategoryTabLayoutOnPageChangeListener(mCategoryGroupTabLayout);
-//            mCategoryGroupViewPager.addOnPageChangeListener(mTabLayoutOnPageChangeListener);
-//            mTabSelectedListener = new CategoryTabSelectedListener();
-//            mCategoryGroupTabLayout.addOnTabSelectedListener(mTabSelectedListener);
-//        }
-//    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.category_header_layout:
+                getActivity().onBackPressed();
+                break;
+        }
+    }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        mCategoryGroupViewPager.removeOnPageChangeListener(mTabLayoutOnPageChangeListener);
-//        mCategoryGroupTabLayout.removeOnTabSelectedListener(mTabSelectedListener);
-//    }
+    private CategoryGroupView[] mCategoryGroupViews;
+    private int[] mTabUnSelectedIconResIds = {
+            R.drawable.ic_category_baby_circle_false, R.drawable.ic_category_female_circle_false,
+            R.drawable.ic_category_general_circle_false, R.drawable.ic_category_living_circle_false,};
+    private int[] mTabSelectedIconResIds = {
+            R.drawable.ic_category_baby_circle_true, R.drawable.ic_category_female_circle_true,
+            R.drawable.ic_category_general_circle_true, R.drawable.ic_category_living_circle_true,};
+    private int[] mTabTitleResIds = {
+            R.string.category_group_name_1, R.string.category_group_name_2,
+            R.string.category_group_name_3, R.string.category_group_name_4,};
 
     private void setCategoryGroupTabLayout() {
 
@@ -179,57 +180,5 @@ public class CategoryFragment extends Fragment {
             mCategoryGroupTabLayout.getTabAt(i).setCustomView(mCategoryGroupViews[i]);
         }
 
-    }
-
-    private CategoryGroupView[] mCategoryGroupViews;
-    private int[] mTabUnSelectedIconResIds = {
-            R.drawable.ic_category_baby_circle_false, R.drawable.ic_category_female_circle_false,
-            R.drawable.ic_category_general_circle_false, R.drawable.ic_category_living_circle_false,};
-    private int[] mTabSelectedIconResIds = {
-            R.drawable.ic_category_baby_circle_true, R.drawable.ic_category_female_circle_true,
-            R.drawable.ic_category_general_circle_true, R.drawable.ic_category_living_circle_true,};
-    private int[] mTabTitleResIds = {
-            R.string.category_group_name_1, R.string.category_group_name_2,
-            R.string.category_group_name_3, R.string.category_group_name_4,};
-
-    private CategoryTabLayoutOnPageChangeListener mTabLayoutOnPageChangeListener;
-    private CategoryTabSelectedListener mTabSelectedListener;
-
-    private class CategoryTabLayoutOnPageChangeListener extends TabLayout.TabLayoutOnPageChangeListener {
-
-        public CategoryTabLayoutOnPageChangeListener(TabLayout tabLayout) {
-            super(tabLayout);
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            super.onPageSelected(position);
-            Toast.makeText(getActivity(), "onPageSelected position: " + position, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class CategoryTabSelectedListener implements TabLayout.OnTabSelectedListener {
-
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-//            Log.i(TAG, "mCategoryGroupViewPager.getCurrentItem():" + mCategoryGroupViewPager.getCurrentItem());
-//            tab.setIcon(getResources().getDrawable(mTabSelectedIconResIds[mCategoryGroupViewPager.getCurrentItem()]));
-            int position = tab.getPosition();
-            Toast.makeText(getActivity(), "position: " + position, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-//            for (int i = 0; i < mTabSelectedIconResIds.length; i++) {
-//                if (i != mCategoryGroupViewPager.getCurrentItem()) {
-//                    tab.setIcon(getResources().getDrawable(mTabUnSelectedIconResIds[i]));
-//                }
-//            }
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
     }
 }
