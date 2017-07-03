@@ -204,7 +204,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         mCategoryBottomSheetView = view.findViewById(R.id.category_bottom_sheet_layout);
         mCategoryBottomSheetBehavior = BottomSheetBehavior.from(mCategoryBottomSheetView);
         mCategoryBottomSheetBehavior.setHideable(true);
-        mCategoryBottomSheetBehavior.setPeekHeight(0);
+        mCategoryBottomSheetBehavior.setPeekHeight(250);
         mCategoryBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         return view;
     }
@@ -213,9 +213,14 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mCategoryGroupId != -1) {
-            showCategoryBottomSheet(mCategoryGroupId);
-        }
+        mCategoryBottomSheetView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mCategoryGroupId != -1) {
+                    showCategoryBottomSheet(mCategoryGroupId);
+                }
+            }
+        }, 200);
     }
 
     @Override

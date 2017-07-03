@@ -23,20 +23,6 @@
             android:background="@color/colorWhite"
             android:elevation="@dimen/toolbar_elevation">
 
-            <LinearLayout
-                android:id="@+id/home_toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logo_primary_kr"
-                    android:scaleType="centerInside"/>
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <android.support.v4.widget.NestedScrollView
@@ -51,9 +37,24 @@
                 android:id="@+id/home_scroll_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/toolbar_height"
                 android:paddingBottom="@dimen/bottom_navigation_height"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/home_toolbar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    android:gravity="center"
+                    android:background="@color/colorWhite"
+                    android:elevation="@dimen/toolbar_elevation">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/logo_primary_kr"
+                        android:scaleType="centerInside"/>
+
+                </LinearLayout>
 
                 <!-- latest content rotate -->
                 <RelativeLayout
@@ -71,7 +72,9 @@
 
                     </com.planet.wondering.chemi.view.custom.RotateViewPager>
 
-                    <include layout="@layout/layout_home_search_view" />
+                    <include
+                        android:id="@+id/home_search_layout"
+                        layout="@layout/layout_home_search_view" />
     
                 </RelativeLayout>
 

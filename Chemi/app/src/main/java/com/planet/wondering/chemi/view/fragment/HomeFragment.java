@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -99,7 +98,7 @@ public class HomeFragment extends Fragment
     private RotateViewPager mHomeReviewViewPager;
     private int mScreenWidth;
 
-    private RelativeLayout mSearchLayout;
+    private RelativeLayout mHomeSearchLayout;
     private Button mHomeSearchButton;
     private ImageButton mHomeSearchImageButton;
     private Button mHomeAddSearchButton;
@@ -143,7 +142,7 @@ public class HomeFragment extends Fragment
         mHomeRecommendProductRecyclerView.setNestedScrollingEnabled(false);
         mHomeReviewViewPager = (RotateViewPager) view.findViewById(R.id.home_best_review_rotate_view_pager);
 
-        mSearchLayout = (RelativeLayout) view.findViewById(R.id.home_search_layout);
+        mHomeSearchLayout = (RelativeLayout) view.findViewById(R.id.home_search_layout);
         mHomeSearchButton = (Button) view.findViewById(R.id.home_search_text_button);
         mHomeSearchButton.setOnClickListener(this);
         mHomeSearchImageButton = (ImageButton) view.findViewById(R.id.home_search_image_button);
@@ -238,22 +237,22 @@ public class HomeFragment extends Fragment
             case R.id.category_group_view_1:
             case R.id.add_category_group_view_1:
                 startActivity(SearchActivity.newIntent(getActivity(), 0));
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.category_group_view_2:
             case R.id.add_category_group_view_2:
                 startActivity(SearchActivity.newIntent(getActivity(), 1));
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.category_group_view_3:
             case R.id.add_category_group_view_3:
                 startActivity(SearchActivity.newIntent(getActivity(), 2));
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.category_group_view_4:
             case R.id.add_category_group_view_4:
                 startActivity(SearchActivity.newIntent(getActivity(), 3));
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
 
             case R.id.promote_sign_in_clear_image_view:
@@ -275,65 +274,99 @@ public class HomeFragment extends Fragment
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
         int currentYOffset = v.getScrollY();
-        float searchLayoutPositionY = mSearchLayout.getY();
+        Log.i(TAG, "scrollY:" + scrollY);
+        float searchLayoutPositionY = mHomeToolbarLayout.getMeasuredHeight() + mHomeSearchLayout.getY();
 
         int headerLayoutMeasuredHeight1;
+//        if (!isAddedSearchLayout) {
+//            headerLayoutMeasuredHeight1 = mHomeHeaderLayout.getMeasuredHeight();
+//        } else {
+//            headerLayoutMeasuredHeight1 = mHomeHeaderLayout.getMeasuredHeight() - mAddSearchLayout.getMeasuredHeight();
+//        }
+
         if (!isAddedSearchLayout) {
-            headerLayoutMeasuredHeight1 = mHomeHeaderLayout.getMeasuredHeight();
+            headerLayoutMeasuredHeight1 = 0;
         } else {
-            headerLayoutMeasuredHeight1 = mHomeHeaderLayout.getMeasuredHeight() - mAddSearchLayout.getMeasuredHeight();
+            headerLayoutMeasuredHeight1 = mAddSearchLayout.getMeasuredHeight();
         }
 
-        if (currentYOffset >= Math.abs(headerLayoutMeasuredHeight1 - (int) searchLayoutPositionY)) {
+        if (currentYOffset >= searchLayoutPositionY) {
             if (!isAddedSearchLayout) {
                 mHomeHeaderLayout.addView(mAddSearchLayout);
-//                mSearchLayout.removeView();
-                mSearchLayout.setVisibility(View.INVISIBLE);
+                mHomeSearchLayout.setVisibility(View.INVISIBLE);
                 isAddedSearchLayout = true;
-            } else {
-                mHomeHeaderLayout.animate().translationY(-mHomeToolbarLayout.getMeasuredHeight())
-                        .setInterpolator(new AccelerateInterpolator(2));
             }
-        }
-
-        if (currentYOffset < Math.abs(headerLayoutMeasuredHeight1 - (int) searchLayoutPositionY)
-                || currentYOffset == 0) {
+        } else {
             if (isAddedSearchLayout) {
                 mHomeHeaderLayout.removeView(mAddSearchLayout);
-                mSearchLayout.setVisibility(View.VISIBLE);
+                mHomeSearchLayout.setVisibility(View.VISIBLE);
                 isAddedSearchLayout = false;
-            } else {
-                mHomeHeaderLayout.animate().translationY(0)
-                        .setInterpolator(new AccelerateInterpolator(2));
             }
         }
+//
+//        if (currentYOffset >= Math.abs(headerLayoutMeasuredHeight1 - (int) searchLayoutPositionY)) {
+//            if (!isAddedSearchLayout) {
+//                mHomeHeaderLayout.addView(mAddSearchLayout);
+////                mSearchLayout.removeView();
+//                mHomeSearchLayout.setVisibility(View.INVISIBLE);
+//                isAddedSearchLayout = true;
+//            } else {
+//                mHomeHeaderLayout.animate().translationY(-mHomeToolbarLayout.getMeasuredHeight())
+//                        .setInterpolator(new AccelerateInterpolator(2));
+//            }
+//        }
+//
+//        if (currentYOffset < Math.abs(headerLayoutMeasuredHeight1 - (int) searchLayoutPositionY)
+//                || currentYOffset == 0) {
+//            if (isAddedSearchLayout) {
+//                mHomeHeaderLayout.removeView(mAddSearchLayout);
+//                mHomeSearchLayout.setVisibility(View.VISIBLE);
+//                isAddedSearchLayout = false;
+//            } else {
+//                mHomeHeaderLayout.animate().translationY(0)
+//                        .setInterpolator(new AccelerateInterpolator(2));
+//            }
+//        }
 
+//
         float categoryLayoutPositionY = mHomeCategoryLayout.getY();
-        int headerLayoutMeasuredHeight2 = 0;
-
+        Log.i(TAG, "scrollY categoryLayoutPositionY: " + categoryLayoutPositionY);
+        int headerLayoutMeasuredHeight = 0;
+//
         if (isAddedSearchLayout) {
             if (!isAddedCategoryLayout) {
-                headerLayoutMeasuredHeight2 = mHomeHeaderLayout.getMeasuredHeight()
-                        - mHomeToolbarLayout.getMeasuredHeight();
+                headerLayoutMeasuredHeight = mHomeHeaderLayout.getMeasuredHeight();
             } else {
-                headerLayoutMeasuredHeight2 = mHomeHeaderLayout.getMeasuredHeight()
-                        - mHomeToolbarLayout.getMeasuredHeight() - mHomeAddCategoryLayout.getMeasuredHeight();
+                headerLayoutMeasuredHeight = mHomeHeaderLayout.getMeasuredHeight();
+//                        - mHomeToolbarLayout.getMeasuredHeight() - mHomeAddCategoryLayout.getMeasuredHeight();
             }
         }
 
-        if (currentYOffset >= Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
+        if (currentYOffset >= categoryLayoutPositionY - mHomeSearchLayout.getMeasuredHeight()) {
             if (!isAddedCategoryLayout) {
                 mHomeHeaderLayout.addView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = true;
             }
-        }
-
-        if (currentYOffset < Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
+        } else {
             if (isAddedCategoryLayout) {
                 mHomeHeaderLayout.removeView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = false;
             }
         }
+//
+//        if (currentYOffset >= Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
+//            if (!isAddedCategoryLayout) {
+//                mHomeHeaderLayout.addView(mHomeAddCategoryLayout);
+//                isAddedCategoryLayout = true;
+//            }
+//        }
+//
+//        if (currentYOffset < Math.abs(headerLayoutMeasuredHeight2 - (int) categoryLayoutPositionY)) {
+//            if (isAddedCategoryLayout) {
+//                mHomeHeaderLayout.removeView(mHomeAddCategoryLayout);
+//                isAddedCategoryLayout = false;
+//            }
+//        }
     }
 
     private void requestHome() {

@@ -93,7 +93,6 @@ public class CategoryFragment extends Fragment {
                 mCategoryGroupViews[position].setCategoryNameColor(R.color.colorPrimary);
                 tab.setCustomView(mCategoryGroupViews[position]);
 
-
             }
 
             @Override
