@@ -4,8 +4,6 @@ package com.planet.wondering.chemi.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +40,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
     private static final String ARG_CATEGORY_GROUP_ID = "category_group_id";
 
-    private CoordinatorLayout mCoordinatorLayout;
-    private RelativeLayout mSearchLayout;
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private TagCharacterAdapter mTagCharacterAdapter;
     private RelativeLayout mSearchClearLayout;
@@ -56,23 +51,9 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     private ArrayList<Fragment> mSearchListFragments;
     private ArrayList<String> mSearchListFragmentTitles;
 
-    private int mCategoryGroupId;
-    private BottomSheetBehavior mCategoryBottomSheetBehavior;
-    private View mCategoryBottomSheetView;
-
     public static SearchDetailFragment newInstance() {
 
         Bundle args = new Bundle();
-
-        SearchDetailFragment fragment = new SearchDetailFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static SearchDetailFragment newInstance(int categoryGroupId) {
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_CATEGORY_GROUP_ID, categoryGroupId);
 
         SearchDetailFragment fragment = new SearchDetailFragment();
         fragment.setArguments(args);
@@ -90,8 +71,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                 getString(R.string.search_popular_fragment_title));
         addSearchFragment(TagLatestListFragment.newInstance(),
                 getString(R.string.search_latest_fragment_title));
-
-        mCategoryGroupId = getArguments().getInt(ARG_CATEGORY_GROUP_ID, -1);
     }
 
     @Nullable
@@ -99,8 +78,6 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_detail, container, false);
-//        mCoordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.search_coordinator_layout);
-        mSearchLayout = (RelativeLayout) view.findViewById(R.id.search_detail_bar_layout);
         mSearchAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.search_auto_text_view);
         mSearchAutoCompleteTextView.setThreshold(1);
         mSearchAutoCompleteTextView.setOnClickListener(this);
@@ -200,27 +177,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                 startActivity(ProductListActivity.newIntent(getActivity(), tag));
             }
         });
-
-//        mCategoryBottomSheetView = view.findViewById(R.id.category_bottom_sheet_layout);
-//        mCategoryBottomSheetBehavior = BottomSheetBehavior.from(mCategoryBottomSheetView);
-//        mCategoryBottomSheetBehavior.setHideable(true);
-//        mCategoryBottomSheetBehavior.setPeekHeight(250);
-//        mCategoryBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        mCategoryBottomSheetView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (mCategoryGroupId != -1) {
-//                    showCategoryBottomSheet(mCategoryGroupId);
-//                }
-//            }
-//        }, 200);
     }
 
     @Override
@@ -271,42 +233,4 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         mSearchAutoCompleteTextView.setSelection(searchWord.length());
         startActivity(ProductListActivity.newIntent(getActivity(), searchWord));
     }
-
-    private void showCategoryBottomSheet(int categoryGroupId) {
-
-        View parent = (View) mCoordinatorLayout.getParent();
-        parent.setFitsSystemWindows(true);
-
-        parent.measure(0, 0);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        int screenHeight = displayMetrics.heightPixels;
-        mSearchLayout.measure(0, 0);
-
-        mCategoryBottomSheetView.getLayoutParams().height = screenHeight
-                - (getStatusBarHeight() + mSearchLayout.getMeasuredHeight());
-        mCategoryBottomSheetView.requestLayout();
-
-        if (mCategoryBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            mCategoryBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        } else {
-
-        }
-
-        getChildFragmentManager().beginTransaction()
-                .add(R.id.category_detail_fragment_container, CategoryFragment.newInstance(categoryGroupId))
-                .commit();
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-
 }

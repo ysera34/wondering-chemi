@@ -58,10 +58,10 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         mCategoryGroupId = getArguments().getInt(ARG_CATEGORY_GROUP_ID, -1);
         mCategoryDetailFragments = new ArrayList<>();
 
-        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance());
-        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance());
-        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance());
-        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance());
+        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(0));
+        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(1));
+        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(2));
+        mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(3));
     }
 
     @Nullable
@@ -94,7 +94,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 mCategoryGroupViews[position].setCategoryIcon(mTabSelectedIconResIds[position]);
                 mCategoryGroupViews[position].setCategoryNameColor(R.color.colorPrimary);
                 tab.setCustomView(mCategoryGroupViews[position]);
-
             }
 
             @Override
