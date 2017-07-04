@@ -2,6 +2,7 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,23 +24,45 @@ public class DictionaryActivity extends BottomNavigationActivity
 
     private static final String TAG = DictionaryActivity.class.getSimpleName();
 
-    private FragmentManager mFragmentManager;
-    private Fragment mFragment;
+    private static final String EXTRA_CHEMICAL_ID = "com.planet.wondering.chemi.chemical_id";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, DictionaryActivity.class);
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, int chemicalId) {
+        Intent intent = new Intent(packageContext, DictionaryActivity.class);
+        intent.putExtra(EXTRA_CHEMICAL_ID, chemicalId);
+        return intent;
+    }
+
+    private FragmentManager mFragmentManager;
+    private Fragment mFragment;
+
+    private int mChemicalId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            mChemicalId = Integer.valueOf(uri.getQueryParameter("chemical_id"));
+        } else {
+            mChemicalId = getIntent().getIntExtra(EXTRA_CHEMICAL_ID, -1);
+        }
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.main_fragment_container);
 
         if (mFragment == null) {
-            mFragment = DictionaryFragment.newInstance();
+            if (mChemicalId > 0) {
+                mFragment = DictionaryFragment.newInstance(mChemicalId);
+            } else {
+                mFragment = DictionaryFragment.newInstance();
+            }
             mFragmentManager.beginTransaction()
                     .add(R.id.main_fragment_container, mFragment)
                     .commit();
@@ -76,10 +99,15 @@ public class DictionaryActivity extends BottomNavigationActivity
 
     @Override
     public void onBackPressed() {
-        if (mFragment instanceof DictionaryFragment) {
-            ((DictionaryFragment) mFragment).onBackPressed();
-        } else {
+        if (mChemicalId > 0) {
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        } else {
+            if (mFragment instanceof DictionaryFragment) {
+                ((DictionaryFragment) mFragment).onBackPressed();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 }

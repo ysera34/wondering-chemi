@@ -78,9 +78,21 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     private static final String TAG = DictionaryFragment.class.getSimpleName();
 
+    private static final String ARG_CHEMICAL_ID = "chemical_id";
+
     public static DictionaryFragment newInstance() {
 
         Bundle args = new Bundle();
+
+        DictionaryFragment fragment = new DictionaryFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static DictionaryFragment newInstance(int chemicalId) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_CHEMICAL_ID, chemicalId);
 
         DictionaryFragment fragment = new DictionaryFragment();
         fragment.setArguments(args);
@@ -113,12 +125,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private static final int RESULT_MODE = 2;
     private int mCurrentMode;
 
+    private int mChemicalId;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mDicFlagAnimatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.wave);
+
+        mChemicalId = getArguments().getInt(ARG_CHEMICAL_ID, -1);
     }
 
     @Nullable
@@ -222,6 +238,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mChemicalId > 0) {
+            requestChemical(mChemicalId, true);
+        }
     }
 
     @Override
