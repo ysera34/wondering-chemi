@@ -3,6 +3,8 @@ package com.planet.wondering.chemi.view.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +56,10 @@ public class CategoryGroupView extends LinearLayout {
     private void initializeView(Context context) {
 
         setOrientation(VERTICAL);
+        setGravity(Gravity.CENTER);
+        int paddingDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+        setPadding(paddingDp, 0, paddingDp, 0);
         mCategoryGroupLayout = (LinearLayout) inflate(context, R.layout.layout_category_group_view, this);
         mCategoryIconImageView = (ImageView) mCategoryGroupLayout.findViewById(R.id.category_group_icon_image_view);
         mCategoryNameTextView = (TextView) mCategoryGroupLayout.findViewById(R.id.category_group_name_text_view);

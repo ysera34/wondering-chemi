@@ -6,16 +6,17 @@
               android:layout_height="match_parent"
               android:background="@color/colorWhite">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@color/colorWhite"
         android:elevation="4dp">
 
         <LinearLayout
             android:id="@+id/category_header_layout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/toolbar_height"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
@@ -35,19 +36,26 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@color/colorBorder"/>-->
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/category_group_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="84dp"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        app:tabTextColor="@color/colorFontFrenchGray"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextAppearance="@style/CategoryGroupTabLayoutTextStyle">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/category_group_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabTextColor="@color/colorFontFrenchGray"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextAppearance="@style/CategoryGroupTabLayoutTextStyle"
+            android:background="@color/colorWhite"
+            android:elevation="1dp">
 
-    </android.support.design.widget.TabLayout>
+        </android.support.design.widget.TabLayout>
+
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/category_group_view_pager"
