@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;

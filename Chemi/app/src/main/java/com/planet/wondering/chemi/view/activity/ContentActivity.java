@@ -39,7 +39,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Comment;
-import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.PrefixTextWatcher;
@@ -331,7 +331,8 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        mContent = Parser.parseContent(response);
+//                        mContent = Parser.parseContent(response);
+                        mContent = Parser.parseExtendedContent(response);
 //                        bindContent(mContent);
                         switch (mContent.getViewType()) {
                             case VERTICAL_CONTENT_VIEW_TYPE:

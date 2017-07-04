@@ -5,12 +5,14 @@ import android.util.Log;
 import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Comment;
-import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Other;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
+import com.planet.wondering.chemi.model.content.Reference;
+import com.planet.wondering.chemi.model.content.Section;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
@@ -19,6 +21,7 @@ import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
+import com.planet.wondering.chemi.model.content.Text;
 import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
 import com.planet.wondering.chemi.model.home.PromoteProduct;
@@ -79,6 +82,16 @@ import static com.planet.wondering.chemi.network.Config.Content.Key.CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_ID;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_KEEP;
 import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_LIKE;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_BUTTONS;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_BUTTON_NAME;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_BUTTON_URL;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_ID;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_NUMBER;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_TEXTS;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_TEXT_DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Content.Key.CONTENT_SECTION_TEXT_NUMBER;
 import static com.planet.wondering.chemi.network.Config.Content.Key.IMAGE_PATHS;
 import static com.planet.wondering.chemi.network.Config.Content.Key.LIKE_COUNT;
 import static com.planet.wondering.chemi.network.Config.Content.Key.MAIN_IMAGE_PATH;
@@ -774,6 +787,66 @@ public class Parser {
                 JSONArray jsonArray = contentJSONObject.getJSONArray(IMAGE_PATHS);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     content.getContentImagePaths().add(jsonArray.getString(i));
+                }
+                content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
+                content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));
+                content.setViewCount(contentJSONObject.getInt(VIEW_COUNT));
+                content.setLike(contentJSONObject.getInt(CONTENT_LIKE) == 1);
+                content.setArchive(contentJSONObject.getInt(CONTENT_KEEP) == 1);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return content;
+    }
+
+    public static Content parseExtendedContent(JSONObject responseObject) {
+
+        Content content = new Content();
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                JSONObject contentJSONObject = responseObject.getJSONObject(RESPONSE_DATA);
+                content.setId(contentJSONObject.getInt(CONTENT_ID));
+                content.setCategoryId(contentJSONObject.getInt(CATEGORY));
+                content.setViewType(contentJSONObject.getInt(VIEW_TYPE));
+                content.setTitle(contentJSONObject.getString(TITLE));
+                content.setSubTitle(contentJSONObject.getString(SUB_TITLE));
+                content.setImagePath(contentJSONObject.getString(MAIN_IMAGE_PATH));
+
+                JSONArray contentSectionJSONArray = contentJSONObject.getJSONArray(CONTENT_SECTION);
+                for (int i = 0; i < contentSectionJSONArray.length(); i++) {
+                    JSONObject contentSectionJSONObject = contentSectionJSONArray.getJSONObject(i);
+                    Section section = new Section();
+                    section.setId(contentSectionJSONObject.getInt(CONTENT_SECTION_ID));
+                    section.setNumbered(contentSectionJSONObject.getInt(CONTENT_SECTION_NUMBER));
+                    section.setImagePath(contentSectionJSONObject.getString(CONTENT_SECTION_IMAGE_PATH));
+
+                    JSONArray sectionTextJSONArray = contentSectionJSONObject.getJSONArray(CONTENT_SECTION_TEXTS);
+                    if (sectionTextJSONArray.length() > 0) {
+                        ArrayList<Text> sectionTexts = new ArrayList<>();
+                        for (int j = 0; j < sectionTextJSONArray.length(); j++) {
+                            JSONObject textJSONObject = sectionTextJSONArray.getJSONObject(j);
+                            Text text = new Text();
+                            text.setNumber(textJSONObject.getInt(CONTENT_SECTION_TEXT_NUMBER));
+                            text.setDescription(textJSONObject.getString(CONTENT_SECTION_TEXT_DESCRIPTION));
+                            sectionTexts.add(text);
+                        }
+                        section.setTexts(sectionTexts);
+                    }
+                    JSONArray sectionReferenceJSONArray = contentSectionJSONObject.getJSONArray(CONTENT_SECTION_BUTTONS);
+                    if (sectionReferenceJSONArray.length() > 0) {
+                        ArrayList<Reference> sectionReferences = new ArrayList<>();
+                        for (int j = 0; j < sectionReferenceJSONArray.length(); j++) {
+                            JSONObject referenceJSONObject = sectionReferenceJSONArray.getJSONObject(j);
+                            Reference reference = new Reference();
+                            reference.setName(referenceJSONObject.getString(CONTENT_SECTION_BUTTON_NAME));
+                            reference.setUrl(referenceJSONObject.getString(CONTENT_SECTION_BUTTON_URL));
+                            sectionReferences.add(reference);
+                        }
+                        section.setReferences(sectionReferences);
+                    }
+                    content.getSections().add(section);
                 }
                 content.setCommentCount(contentJSONObject.getInt(COMMENT_COUNT));
                 content.setLikeCount(contentJSONObject.getInt(LIKE_COUNT));

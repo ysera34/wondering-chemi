@@ -235,6 +235,16 @@ public class Config {
             public static final String THUMBNAIL_IMAGE_PATH = "imagePath2";
             public static final String BANNER_IMAGE_PATH = "imagePath3";
             public static final String IMAGE_PATHS = "imagePaths";
+            public static final String CONTENT_SECTION = "sections";
+            public static final String CONTENT_SECTION_ID = "id";
+            public static final String CONTENT_SECTION_NUMBER = "numbered";
+            public static final String CONTENT_SECTION_IMAGE_PATH = "imagePath";
+            public static final String CONTENT_SECTION_TEXTS = "texts";
+            public static final String CONTENT_SECTION_TEXT_NUMBER = "numbered";
+            public static final String CONTENT_SECTION_TEXT_DESCRIPTION = "description";
+            public static final String CONTENT_SECTION_BUTTONS = "buttons";
+            public static final String CONTENT_SECTION_BUTTON_NAME = "name";
+            public static final String CONTENT_SECTION_BUTTON_URL = "url";
             public static final String LIKE_COUNT = "liked";
             public static final String VIEW_COUNT = "viewed";
             public static final String CONTENT_LIKE = "isLiker";

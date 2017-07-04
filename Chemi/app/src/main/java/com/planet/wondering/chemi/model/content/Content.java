@@ -1,4 +1,4 @@
-package com.planet.wondering.chemi.model;
+package com.planet.wondering.chemi.model.content;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public class Content implements Serializable {
     private String mImagePath;
     private String mThumbnailImagePath;
     private ArrayList<String> mContentImagePaths;
+    private ArrayList<Section> mSections;
     private int mLikeCount;
     private int mViewCount;
     private int mCommentCount;
@@ -25,6 +26,7 @@ public class Content implements Serializable {
 
     public Content() {
         mContentImagePaths = new ArrayList<>();
+        mSections = new ArrayList<>();
     }
 
     public int getId() {
@@ -89,6 +91,14 @@ public class Content implements Serializable {
 
     public void setContentImagePaths(ArrayList<String> contentImagePaths) {
         mContentImagePaths = contentImagePaths;
+    }
+
+    public ArrayList<Section> getSections() {
+        return mSections;
+    }
+
+    public void setSections(ArrayList<Section> sections) {
+        mSections = sections;
     }
 
     public int getLikeCount() {

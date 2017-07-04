@@ -1,7 +1,9 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,7 +25,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.model.Content;
+import com.planet.wondering.chemi.model.content.Content;
+import com.planet.wondering.chemi.model.content.Section;
 import com.planet.wondering.chemi.view.custom.CustomProgressDialog;
 
 import java.util.ArrayList;
@@ -65,8 +68,10 @@ public class ContentVerticalFragment extends Fragment {
     private NestedScrollView mContentVerticalNestedScrollView;
 
     private ArrayList<String> mContentImagePaths;
+    private ArrayList<Section> mContentSections;
     private RecyclerView mContentImageRecyclerView;
     private ContentImageAdapter mContentImageAdapter;
+    private ContentExtendAdapter mContentExtendAdapter;
     private int mImageBindCompletedCount;
     private CustomProgressDialog mProgressDialog;
 
@@ -85,10 +90,10 @@ public class ContentVerticalFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mContent = (Content) getArguments().getSerializable(ARG_CONTENT);
-        mContentImagePaths = new ArrayList<>();
 
         if (mContent != null ) {
             mContentImagePaths = mContent.getContentImagePaths();
+            mContentSections = mContent.getSections();
         }
     }
 
@@ -129,12 +134,6 @@ public class ContentVerticalFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-//        updateUI();
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mContentLikeCountTextView.setText(String.valueOf(mContent.getLikeCount()));
@@ -142,11 +141,17 @@ public class ContentVerticalFragment extends Fragment {
     }
 
     private void updateUI() {
-        if (mContentImageAdapter == null) {
-            mContentImageAdapter = new ContentImageAdapter(mContentImagePaths);
-            mContentImageRecyclerView.setAdapter(mContentImageAdapter);
+//        if (mContentImageAdapter == null) {
+//            mContentImageAdapter = new ContentImageAdapter(mContentImagePaths);
+//            mContentImageRecyclerView.setAdapter(mContentImageAdapter);
+//        } else {
+//            mContentImageAdapter.notifyDataSetChanged();
+//        }
+        if (mContentExtendAdapter == null) {
+            mContentExtendAdapter = new ContentExtendAdapter(mContentSections);
+            mContentImageRecyclerView.setAdapter(mContentExtendAdapter);
         } else {
-            mContentImageAdapter.notifyDataSetChanged();
+            mContentExtendAdapter.notifyDataSetChanged();
         }
     }
 
@@ -247,6 +252,74 @@ public class ContentVerticalFragment extends Fragment {
         }
     }
 
+    private class ContentExtendAdapter extends RecyclerView.Adapter<ContentExtendedHolder> {
+
+        private ArrayList<Section> mSections;
+
+        public ContentExtendAdapter(ArrayList<Section> sections) {
+            mSections = sections;
+        }
+
+        @Override
+        public ContentExtendedHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view = layoutInflater.inflate(R.layout.list_item_content_extend, parent, false);
+            return new ContentExtendedHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ContentExtendedHolder holder, int position) {
+            holder.bindContentExtend(mSections.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mSections.size();
+        }
+    }
+
+    private class ContentExtendedHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private Section mSection;
+        private ImageView mContentExtendImageView;
+        private LinearLayout mContentExtendTextLayout;
+        private LinearLayout mContentExtendReferenceLayout;
+
+        public ContentExtendedHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+
+            mContentExtendImageView = (ImageView)
+                    itemView.findViewById(R.id.list_item_content_extend_image_view);
+            mContentExtendTextLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_content_extend_text_layout);
+            mContentExtendReferenceLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_content_extend_reference_layout);
+        }
+
+        public void bindContentExtend(Section section) {
+            mSection = section;
+            Glide.with(getActivity())
+                    .load(mSection.getImagePath())
+                    .listener(mRequestListener)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .crossFade()
+                    .into(mContentExtendImageView);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            if (mSection.getReferences() != null) {
+                String reference = mSection.getReferences().get(0).getUrl();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(reference));
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        }
+    }
+
     private RequestListener<String, GlideDrawable> mRequestListener =
             new RequestListener<String, GlideDrawable>() {
         @Override
@@ -260,7 +333,8 @@ public class ContentVerticalFragment extends Fragment {
         public boolean onResourceReady(GlideDrawable resource, String model,
                    Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
             mImageBindCompletedCount++;
-            if (mContentImageAdapter.getItemCount() == mImageBindCompletedCount) {
+//            if (mContentImageAdapter.getItemCount() == mImageBindCompletedCount) {
+            if (mContentExtendAdapter.getItemCount() == mImageBindCompletedCount) {
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                     mProgressDialog = null;

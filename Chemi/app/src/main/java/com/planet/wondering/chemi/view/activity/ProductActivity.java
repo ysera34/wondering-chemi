@@ -127,7 +127,14 @@ public class ProductActivity extends AppBaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
+        Intent intent = getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            mProductId = Integer.valueOf(uri.getQueryParameter("product_id"));
+        } else {
+            mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
+        }
+
         mSearchType = getIntent().getByteExtra(EXTRA_SEARCH_TYPE, (byte) -1);
 
         mFragmentManager = getSupportFragmentManager();
