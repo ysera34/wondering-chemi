@@ -102,8 +102,8 @@ public class CategoryGroup {
 
     private int[] group0PartIconSelectorResIdArray = {
             R.drawable.selector_category_baby_nappy, R.drawable.selector_category_wipes,
-            R.drawable.selector_category_skincare, R.drawable.selector_category_skincare,
-            R.drawable.selector_category_suncare, R.drawable.selector_category_haricare,
+            R.drawable.selector_category_skincare, R.drawable.selector_category_suncare,
+            R.drawable.selector_category_haricare, R.drawable.selector_category_dentalcare,
             R.drawable.selector_category_etc,};
 
     private int[] group1PartIconSelectorResIdArray = {

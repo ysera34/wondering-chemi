@@ -240,6 +240,7 @@
         <item>@string/intro_slide_52</item>
     </string-array>
 
+    <string name="category_name_hint_format">\"%s\"내 검색</string>
     <string name="category_group_0_name">베이비</string>
     <string name="category_group_1_name">맘/여성</string>
     <string name="category_group_2_name">일반</string>

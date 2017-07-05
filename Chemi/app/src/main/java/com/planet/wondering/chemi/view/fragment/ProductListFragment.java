@@ -73,6 +73,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PRODUCT_ID = "product_id";
     private static final String ARG_PRODUCT_IDS = "product_ids";
     private static final String ARG_CATEGORY_ID = "category_id";
+    private static final String ARG_CATEGORY_NAME = "category_name";
     private static final String ARG_TAG_NAME = "tag_name";
 
     public static ProductListFragment newInstance() {
@@ -98,6 +99,17 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         Bundle args = new Bundle();
         args.putInt(ARG_CATEGORY_ID, categoryId);
+
+        ProductListFragment fragment = new ProductListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ProductListFragment newInstance(int categoryId, String categoryName) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_CATEGORY_ID, categoryId);
+        args.putString(ARG_CATEGORY_NAME, categoryName);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -139,7 +151,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private ImageButton mSearchImageButton;
     private String mTagName;
     private int mCategoryId;
-    String[] mCategoryNameArray;
+//    String[] mCategoryNameArray;
     private String mCategoryName;
     private TextView mProductTotalTextView;
     private TextView mProductSortButtonTextView;
@@ -156,6 +168,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         mTagName = getArguments().getString(ARG_TAG_NAME, null);
         mCategoryId = getArguments().getInt(ARG_CATEGORY_ID, -1);
+        mCategoryName = getArguments().getString(ARG_CATEGORY_NAME, null);
 
         mProducts = new ArrayList<>();
         mProductIds = new ArrayList<>();
@@ -182,13 +195,13 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mSearchAutoCompleteTextView.setText(mTagName);
         }
 //        if (mCategoryId > 0 && mCategoryId < 90) {
-//            mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
-//            mSearchAutoCompleteTextView.setCursorVisible(true);
-//            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
-//            mSearchAutoCompleteTextView.setThreshold(1);
-//            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
-//                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
-//            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
+            mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+            mSearchAutoCompleteTextView.setCursorVisible(true);
+            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
+            mSearchAutoCompleteTextView.setThreshold(1);
+            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
+                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
+            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
 //        } else if (mCategoryId >= 90) {
 //            mSearchAutoCompleteTextView.setHint(mCategoryName);
 //            mSearchAutoCompleteTextView.setCursorVisible(true);

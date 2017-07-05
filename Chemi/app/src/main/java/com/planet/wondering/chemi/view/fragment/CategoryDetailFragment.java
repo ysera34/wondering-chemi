@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.category.CategoryPart;
+import com.planet.wondering.chemi.model.category.CategoryPiece;
 import com.planet.wondering.chemi.model.category.CategoryStorage;
+import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
 import java.util.ArrayList;
 
@@ -49,8 +51,10 @@ public class CategoryDetailFragment extends Fragment {
     }
 
     private int mCategoryGroupId;
-    private ArrayList<CategoryPart> mCategoryParts;
     private int mCategoryPartSelectedId;
+    private String mCategoryPieceHeaderName;
+    private ArrayList<CategoryPart> mCategoryParts;
+    private ArrayList<CategoryPiece> mCategoryPieces;
 
     private RecyclerView mCategoryPartRecyclerView;
     private RecyclerView mCategoryPieceRecyclerView;
@@ -65,6 +69,7 @@ public class CategoryDetailFragment extends Fragment {
 
         CategoryStorage categoryStorage = CategoryStorage.getCategoryStorage(getActivity());
         mCategoryParts = categoryStorage.getCategoryGroup(mCategoryGroupId).getCategoryParts();
+        mCategoryPieces = mCategoryParts.get(mCategoryPartSelectedId).getCategoryPieces();
     }
 
     @Nullable
@@ -78,16 +83,24 @@ public class CategoryDetailFragment extends Fragment {
 //                new SeparatorDecoration(getActivity(), android.R.color.black, 0.7f);
 //        mCategoryPartRecyclerView.addItemDecoration(decoration);
 
+        mCategoryPieceRecyclerView = (RecyclerView) view.findViewById(R.id.category_piece_recycler_view);
+        mCategoryPieceRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         updateUI();
         return view;
     }
 
     private void updateUI() {
-        if (mCategoryPartAdapter == null) {
-            mCategoryPartAdapter = new CategoryPartAdapter(mCategoryParts);
-            mCategoryPartRecyclerView.setAdapter(mCategoryPartAdapter);
-        } else {
-            mCategoryPartAdapter.notifyDataSetChanged();
+        if (isAdded()) {
+            if (mCategoryPartAdapter == null) {
+                mCategoryPartAdapter = new CategoryPartAdapter(mCategoryParts);
+                mCategoryPartRecyclerView.setAdapter(mCategoryPartAdapter);
+
+                mCategoryPieceAdapter = new CategoryPieceAdapter(mCategoryPieces);
+                mCategoryPieceRecyclerView.setAdapter(mCategoryPieceAdapter);
+            } else {
+                mCategoryPartAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -115,6 +128,9 @@ public class CategoryDetailFragment extends Fragment {
         public void onBindViewHolder(CategoryPartHolder holder, int position) {
             holder.getCategoryPartIconImageView().setSelected(mCategoryPartSelectedId == position);
             holder.bindCategoryPart(mCategoryParts.get(position));
+            if (mCategoryPartSelectedId == position) {
+                mCategoryPieceHeaderName = mCategoryParts.get(position).getName();
+            }
         }
 
         @Override
@@ -123,21 +139,55 @@ public class CategoryDetailFragment extends Fragment {
         }
     }
 
-    private class CategoryPieceAdapter extends RecyclerView.Adapter<CategoryPieceHolder> {
+    private class CategoryPieceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private ArrayList<CategoryPiece> mCategoryPieces;
+
+        public CategoryPieceAdapter(ArrayList<CategoryPiece> categoryPieces) {
+            mCategoryPieces = categoryPieces;
+        }
+
+        public void setCategoryPieces(ArrayList<CategoryPiece> categoryPieces) {
+            mCategoryPieces = categoryPieces;
+        }
 
         @Override
-        public CategoryPieceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view;
+            switch (viewType) {
+                case VIEW_TYPE_PIECE_HEADER:
+                    view = layoutInflater.inflate(R.layout.list_item_category_piece_header, parent, false);
+                    return new CategoryPieceHeader(view);
+                case VIEW_TYPE_PIECE_ITEM:
+                    view = layoutInflater.inflate(R.layout.list_item_category_piece, parent, false);
+                    return new CategoryPieceHolder(view);
+            }
             return null;
         }
 
         @Override
-        public void onBindViewHolder(CategoryPieceHolder holder, int position) {
-
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof CategoryPieceHeader) {
+                ((CategoryPieceHeader) holder).bindCategoryPieceHeader(mCategoryPieceHeaderName);
+            }
+            if (holder instanceof CategoryPieceHolder) {
+                ((CategoryPieceHolder) holder).bindCategoryPiece(mCategoryPieces.get(position - 1));
+            }
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mCategoryPieces.size() + 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == 0) {
+                return VIEW_TYPE_PIECE_HEADER;
+            } else {
+                return VIEW_TYPE_PIECE_ITEM;
+            }
         }
     }
 
@@ -157,6 +207,7 @@ public class CategoryDetailFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_category_part_indicator_view);
             mCategoryPartLayout = (LinearLayout)
                     itemView.findViewById(R.id.list_item_category_part_layout);
+            mCategoryPartLayout.setOnClickListener(this);
             mCategoryPartIconImageView = (ImageView)
                     itemView.findViewById(R.id.list_item_category_part_icon_image_view);
             mCategoryPartNameTextView = (TextView)
@@ -191,26 +242,82 @@ public class CategoryDetailFragment extends Fragment {
             Log.i(TAG, "start 1~2 : " + String.valueOf((start2 - start1) / 1000));
             Log.i(TAG, "start 2~3 : " + String.valueOf((start3 - start2) / 1000));
             Log.i(TAG, "start 3~4 : " + String.valueOf((start4 - start3) / 1000));
+
+            mCategoryPieceHeaderName = mCategoryPart.getName();
+            mCategoryPieceAdapter.notifyItemChanged(0);
+            mCategoryPieces = mCategoryParts.get(mCategoryPartSelectedId).getCategoryPieces();
+            mCategoryPieceAdapter.setCategoryPieces(mCategoryPieces);
+            mCategoryPieceAdapter.notifyDataSetChanged();
         }
 
         private void setSelectedLayout(boolean isSelected) {
             if (isSelected) {
                 mCategoryPartIndicatorView.setBackgroundResource(R.color.colorPrimary);
-                mCategoryPartLayout.setBackgroundResource(android.R.color.transparent);
+//                mCategoryPartLayout.setBackgroundResource(android.R.color.transparent);
+                mCategoryPartLayout.setBackgroundResource(R.color.colorWhite);
                 mCategoryPartNameTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
             } else {
                 mCategoryPartIndicatorView.setBackgroundResource(android.R.color.transparent);
                 mCategoryPartLayout.setBackgroundResource(R.color.colorWhiteBackground);
                 mCategoryPartNameTextView.setTextColor(getResources().getColor(R.color.colorFontFrenchGray));
-
             }
         }
     }
 
-    private class CategoryPieceHolder extends RecyclerView.ViewHolder {
+    private static final int VIEW_TYPE_PIECE_HEADER = -1;
+    private static final int VIEW_TYPE_PIECE_ITEM = 0;
+
+    private class CategoryPieceHeader extends RecyclerView.ViewHolder {
+
+        private String mPieceHeaderName;
+        private TextView mPieceHeaderNameTextView;
+
+        public CategoryPieceHeader(View itemView) {
+            super(itemView);
+            mPieceHeaderNameTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_category_piece_header_name_text_view);
+        }
+
+        public void bindCategoryPieceHeader(String pieceHeaderName) {
+            mPieceHeaderName = pieceHeaderName;
+            mPieceHeaderNameTextView.setText(String.valueOf(mPieceHeaderName));
+        }
+    }
+
+    private class CategoryPieceHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private CategoryPiece mCategoryPiece;
+
+        private TextView mCategoryPieceNameTextView;
 
         public CategoryPieceHolder(View itemView) {
             super(itemView);
+            mCategoryPieceNameTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_category_piece_name_text_view);
+            mCategoryPieceNameTextView.setOnClickListener(this);
         }
+
+        public void bindCategoryPiece(CategoryPiece categoryPiece) {
+            mCategoryPiece = categoryPiece;
+            mCategoryPieceNameTextView.setText(String.valueOf(mCategoryPiece.getName()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.list_item_category_piece_name_text_view:
+                    startActivity(ProductListActivity.newIntent(getActivity(),
+                            mCategoryPiece.getNumber(), mCategoryPiece.getName()));
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mCategoryParts = null;
+        mCategoryPieces = null;
     }
 }

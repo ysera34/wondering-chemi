@@ -66,7 +66,7 @@ public class CategoryPart {
                         break;
                     case 3:
                         mCategoryPieces.add(new CategoryPiece("선크림/선로션", 37));
-                        mCategoryPieces.add(new CategoryPiece("선케어기타", 38));
+                        mCategoryPieces.add(new CategoryPiece("선케어 기타", 38));
                         break;
                     case 4:
                         mCategoryPieces.add(new CategoryPiece("샴푸/린스", 39));
@@ -75,7 +75,7 @@ public class CategoryPart {
                         mCategoryPieces.add(new CategoryPiece("아이용치약", 40));
                         break;
                     case 6:
-                        mCategoryPieces.add(new CategoryPiece("기타(베이비)", 41));
+                        mCategoryPieces.add(new CategoryPiece("기타 (베이비)", 41));
                         break;
                 }
                 break;
@@ -94,7 +94,7 @@ public class CategoryPart {
                         mCategoryPieces.add(new CategoryPiece("임산부화장품", 49));
                         break;
                     case 2:
-                        mCategoryPieces.add(new CategoryPiece("기타(맘/여성)", 50));
+                        mCategoryPieces.add(new CategoryPiece("기타 (맘/여성)", 50));
                         break;
                 }
                 break;
@@ -115,7 +115,7 @@ public class CategoryPart {
                         mCategoryPieces.add(new CategoryPiece("구강케어", 59));
                         break;
                     case 3:
-                        mCategoryPieces.add(new CategoryPiece("기타(일반)", 60));
+                        mCategoryPieces.add(new CategoryPiece("기타 (일반)", 60));
                         break;
                 }
                 break;
@@ -128,7 +128,7 @@ public class CategoryPart {
                         mCategoryPieces.add(new CategoryPiece("탈취제/세탁세제", 62));
                         break;
                     case 2:
-                        mCategoryPieces.add(new CategoryPiece("기타(리빙)", 63));
+                        mCategoryPieces.add(new CategoryPiece("기타 (리빙)", 63));
                         break;
                 }
                 break;

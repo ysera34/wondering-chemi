@@ -27,6 +27,7 @@ public class ProductListActivity extends AppBaseActivity
     private static final String EXTRA_PRODUCT_ID = "com.planet.wondering.chemi.product_id";
     private static final String EXTRA_PRODUCT_IDS = "com.planet.wondering.chemi.product_ids";
     private static final String EXTRA_CATEGORY_ID = "com.planet.wondering.chemi.category_id";
+    private static final String EXTRA_CATEGORY_NAME = "com.planet.wondering.chemi.category_name";
     private static final String EXTRA_TAG_NAME = "com.planet.wondering.chemi.tag_name";
 
     public static Intent newIntent(Context packageContext) {
@@ -52,6 +53,13 @@ public class ProductListActivity extends AppBaseActivity
         return intent;
     }
 
+    public static Intent newIntent(Context packageContext, int categoryId, String categoryName) {
+        Intent intent = new Intent(packageContext, ProductListActivity.class);
+        intent.putExtra(EXTRA_CATEGORY_ID, categoryId);
+        intent.putExtra(EXTRA_CATEGORY_NAME, categoryName);
+        return intent;
+    }
+
     public static Intent newIntent(Context packageContext, String tagName) {
         Intent intent = new Intent(packageContext, ProductListActivity.class);
         intent.putExtra(EXTRA_TAG_NAME, tagName);
@@ -68,6 +76,7 @@ public class ProductListActivity extends AppBaseActivity
     private int mProductId;
     private ArrayList<Integer> mProductIds;
     private int mCategoryId;
+    private String mCategoryName;
     private String mTagName;
 
     @Override
@@ -78,6 +87,7 @@ public class ProductListActivity extends AppBaseActivity
 //        mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         mProductIds = getIntent().getIntegerArrayListExtra(EXTRA_PRODUCT_IDS);
         mCategoryId = getIntent().getIntExtra(EXTRA_CATEGORY_ID, -1);
+        mCategoryName = getIntent().getStringExtra(EXTRA_CATEGORY_NAME);
         mTagName = getIntent().getStringExtra(EXTRA_TAG_NAME);
 
 
@@ -87,7 +97,7 @@ public class ProductListActivity extends AppBaseActivity
         if (mFragment == null && mCategoryId == -1) {
             mFragment = ProductListFragment.newInstance(mTagName);
         } else if (mCategoryId != -1) {
-            mFragment = ProductListFragment.newInstance(mCategoryId);
+            mFragment = ProductListFragment.newInstance(mCategoryId, mCategoryName);
         }
         mFragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
