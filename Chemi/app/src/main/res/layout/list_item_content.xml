@@ -3,16 +3,19 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:padding="8dp"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
               android:background="@drawable/selector_ripple_list_item_gray">
 
     <ImageView
         android:id="@+id/list_item_content_image_view"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:scaleType="center"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/list_item_content_sub_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,6 +25,7 @@
         android:textColor="@color/colorFontAluminum"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/list_item_content_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +37,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
         android:gravity="center">
         
         <ImageView

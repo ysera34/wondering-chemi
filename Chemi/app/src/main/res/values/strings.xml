@@ -240,8 +240,54 @@
         <item>@string/intro_slide_52</item>
     </string-array>
 
-    <string name="category_group_name_1">베이비</string>
-    <string name="category_group_name_2">맘/여성</string>
-    <string name="category_group_name_3">일반</string>
-    <string name="category_group_name_4">리빙</string>
+    <string name="category_group_0_name">베이비</string>
+    <string name="category_group_1_name">맘/여성</string>
+    <string name="category_group_2_name">일반</string>
+    <string name="category_group_3_name">리빙</string>
+
+    <string name="category_part_name_nappy">기저귀</string>
+    <string name="category_part_name_baby_wipes">베이비 물티슈</string>
+    <string name="category_part_name_wipes">물티슈</string>
+    <string name="category_part_name_skin_care">스킨케어</string>
+    <string name="category_part_name_sun_care">선케어</string>
+    <string name="category_part_name_hair_care">헤어케어</string>
+    <string name="category_part_name_dental_care">구강케어</string>
+    <string name="category_part_name_female_product">여성용품</string>
+    <string name="category_part_name_mom_care">맘케어</string>
+    <string name="category_part_name_living_general">리빙일반</string>
+    <string name="category_part_name_etc">기타</string>
+
+    <string-array name="category_group_0_part_name_array">
+        <item>@string/category_part_name_nappy</item>
+        <item>@string/category_part_name_baby_wipes</item>
+        <item>@string/category_part_name_skin_care</item>
+        <item>@string/category_part_name_sun_care</item>
+        <item>@string/category_part_name_hair_care</item>
+        <item>@string/category_part_name_dental_care</item>
+        <item>@string/category_part_name_etc</item>
+    </string-array>
+    <string-array name="category_group_1_part_name_array">
+        <item>@string/category_part_name_female_product</item>
+        <item>@string/category_part_name_mom_care</item>
+        <item>@string/category_part_name_etc</item>
+    </string-array>
+    <string-array name="category_group_2_part_name_array">
+        <item>@string/category_part_name_skin_care</item>
+        <item>@string/category_part_name_hair_care</item>
+        <item>@string/category_part_name_dental_care</item>
+        <item>@string/category_part_name_etc</item>
+    </string-array>
+    <string-array name="category_group_3_part_name_array">
+        <item>@string/category_part_name_wipes</item>
+        <item>@string/category_part_name_living_general</item>
+        <item>@string/category_part_name_etc</item>
+    </string-array>
+
+
+    <string name="category_piece_name_1_1_1">어른둥이 남여공용</string>
+    <string name="category_piece_name_1_1_2">신생아 남여공용</string>
+    <string name="category_piece_name_1_1_3">소형 남아용</string>
+    <string name="category_piece_name_1_1_4">소형 여아용</string>
+    <string name="category_piece_name_1_1_5">소형 남여공용</string>
+
 </resources>

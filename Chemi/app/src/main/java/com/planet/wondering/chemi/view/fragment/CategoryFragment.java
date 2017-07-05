@@ -56,8 +56,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryGroupId = getArguments().getInt(ARG_CATEGORY_GROUP_ID, -1);
-        mCategoryDetailFragments = new ArrayList<>();
 
+        mCategoryDetailFragments = new ArrayList<>();
         mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(0));
         mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(1));
         mCategoryDetailFragments.add(CategoryDetailFragment.newInstance(2));
@@ -74,6 +74,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         mCategoryGroupTabLayout = (TabLayout) view.findViewById(R.id.category_group_tab_layout);
         mCategoryGroupViewPager = (ViewPager) view.findViewById(R.id.category_group_view_pager);
 
+        mCategoryGroupViewPager.setOffscreenPageLimit(mCategoryDetailFragments.size() - 1);
         mCategoryGroupViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -138,8 +139,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             R.drawable.ic_category_baby_circle_true, R.drawable.ic_category_female_circle_true,
             R.drawable.ic_category_general_circle_true, R.drawable.ic_category_living_circle_true,};
     private int[] mTabTitleResIds = {
-            R.string.category_group_name_1, R.string.category_group_name_2,
-            R.string.category_group_name_3, R.string.category_group_name_4,};
+            R.string.category_group_0_name, R.string.category_group_1_name,
+            R.string.category_group_2_name, R.string.category_group_3_name,};
 
     private void setCategoryGroupTabLayout() {
 

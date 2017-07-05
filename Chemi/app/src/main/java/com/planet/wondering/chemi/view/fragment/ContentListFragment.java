@@ -20,12 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.planet.wondering.chemi.R;
-import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.model.Pager;
+import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.listener.OnRecyclerViewScrollListener;
+import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ContentActivity;
 
@@ -78,6 +80,8 @@ public class ContentListFragment extends Fragment {
     private StringBuilder mUrlBuilder;
     private Pager mPager;
 
+    private int mScreenWidth;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +92,7 @@ public class ContentListFragment extends Fragment {
 //        Log.i(TAG, "mCategoryId : " + mCategoryId);
 
         mUrlBuilder = new StringBuilder();
+        mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
     }
 
     @Nullable
@@ -259,8 +264,14 @@ public class ContentListFragment extends Fragment {
         public void bindContent(Content content) {
             mContent = content;
 
+            int thumbnailWidth = mScreenWidth;
+            int thumbnailHeight = (int) (thumbnailWidth * 0.61f);
+
             Glide.with(getActivity())
                     .load(mContent.getImagePath())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .override(thumbnailWidth, thumbnailHeight)
+                    .centerCrop()
                     .crossFade()
 //                    .override()
                     .into(mContentImageView);

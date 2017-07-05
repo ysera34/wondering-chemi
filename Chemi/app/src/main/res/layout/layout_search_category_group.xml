@@ -18,7 +18,7 @@
         android:clickable="true"
         android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_baby_circle_false"
-        app:name="@string/category_group_name_1">
+        app:name="@string/category_group_0_name">
 
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
@@ -31,7 +31,7 @@
         android:clickable="true"
         android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_female_circle_false"
-        app:name="@string/category_group_name_2">
+        app:name="@string/category_group_1_name">
 
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
@@ -44,7 +44,7 @@
         android:clickable="true"
         android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_general_circle_false"
-        app:name="@string/category_group_name_3">
+        app:name="@string/category_group_2_name">
 
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
@@ -56,7 +56,7 @@
         android:clickable="true"
         android:background="@drawable/selector_ripple_list_item_gray"
         app:iconResId="@drawable/ic_category_living_circle_false"
-        app:name="@string/category_group_name_4">
+        app:name="@string/category_group_3_name">
 
     </com.planet.wondering.chemi.view.custom.CategoryGroupView>
 
