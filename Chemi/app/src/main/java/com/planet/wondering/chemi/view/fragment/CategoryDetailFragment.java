@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,9 @@ public class CategoryDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category_detail, container, false);
         mCategoryPartRecyclerView = (RecyclerView) view.findViewById(R.id.category_part_recycler_view);
         mCategoryPartRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        SeparatorDecoration decoration =
+//                new SeparatorDecoration(getActivity(), android.R.color.black, 0.7f);
+//        mCategoryPartRecyclerView.addItemDecoration(decoration);
 
         updateUI();
         return view;
@@ -172,10 +176,21 @@ public class CategoryDetailFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+
+            long start0 = System.nanoTime();
             mCategoryPartAdapter.notifyItemChanged(mCategoryPartSelectedId);
+            long start1 = System.nanoTime();
             mCategoryPartSelectedId = getAdapterPosition();
+            long start2 = System.nanoTime();
             mCategoryPartAdapter.notifyItemChanged(mCategoryPartSelectedId);
+            long start3 = System.nanoTime();
             setSelectedLayout(mCategoryPartIconImageView.isSelected());
+            long start4 = System.nanoTime();
+
+            Log.i(TAG, "start 0~1 : " + String.valueOf((start1 - start0) / 1000));
+            Log.i(TAG, "start 1~2 : " + String.valueOf((start2 - start1) / 1000));
+            Log.i(TAG, "start 2~3 : " + String.valueOf((start3 - start2) / 1000));
+            Log.i(TAG, "start 3~4 : " + String.valueOf((start4 - start3) / 1000));
         }
 
         private void setSelectedLayout(boolean isSelected) {

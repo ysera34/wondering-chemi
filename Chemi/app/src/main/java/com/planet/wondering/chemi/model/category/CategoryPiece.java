@@ -10,8 +10,14 @@ public class CategoryPiece {
 
     private int mNumber;
     private int mNameResId;
+    private String mName;
     private boolean mHasExpanded;
     private ArrayList<CategoryPiece> mPieces;
+
+    public CategoryPiece(String name, int number) {
+        mName = name;
+        mNumber = number;
+    }
 
     public CategoryPiece(int number, int nameResId, boolean hasExpanded) {
         mNumber = number;
@@ -36,6 +42,14 @@ public class CategoryPiece {
 
     public void setNameResId(int nameResId) {
         mNameResId = nameResId;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
     }
 
     public boolean isHasExpanded() {

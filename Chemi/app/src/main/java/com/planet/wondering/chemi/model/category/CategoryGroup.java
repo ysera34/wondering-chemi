@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class CategoryGroup {
 
-    private int mId;
+    private int mCategoryGroupId;
     private int mNameResId;
     private int mImageResId;
     private Context mContext;
@@ -23,10 +23,10 @@ public class CategoryGroup {
     private String[] group3PartNameArray;
 
 
-    public CategoryGroup(Context context, int id) {
+    public CategoryGroup(Context context, int categoryGroupId) {
         mContext = context;
         mCategoryParts = new ArrayList<>();
-        setCategoryGroup(id);
+        setCategoryGroup(categoryGroupId);
     }
 
     public CategoryGroup(int nameResId, int imageResId) {
@@ -34,42 +34,46 @@ public class CategoryGroup {
         mImageResId = imageResId;
     }
 
-    private void setCategoryGroup(int id) {
+    private void setCategoryGroup(int categoryGroupId) {
         group0PartNameArray = mContext.getResources().getStringArray(R.array.category_group_0_part_name_array);
         group1PartNameArray = mContext.getResources().getStringArray(R.array.category_group_1_part_name_array);
         group2PartNameArray = mContext.getResources().getStringArray(R.array.category_group_2_part_name_array);
         group3PartNameArray = mContext.getResources().getStringArray(R.array.category_group_3_part_name_array);
 
-        switch (id) {
+        switch (categoryGroupId) {
             case 0:
                 for (int i = 0; i < group0PartNameArray.length; i++) {
-                    mCategoryParts.add(new CategoryPart(group0PartNameArray[i], group0PartIconSelectorResIdArray[i]));
+                    mCategoryParts.add(
+                            new CategoryPart(categoryGroupId, i, group0PartNameArray[i], group0PartIconSelectorResIdArray[i]));
                 }
                 break;
             case 1:
                 for (int i = 0; i < group1PartNameArray.length; i++) {
-                    mCategoryParts.add(new CategoryPart(group1PartNameArray[i], group1PartIconSelectorResIdArray[i]));
+                    mCategoryParts.add(
+                            new CategoryPart(categoryGroupId, i, group1PartNameArray[i], group1PartIconSelectorResIdArray[i]));
                 }
                 break;
             case 2:
                 for (int i = 0; i < group2PartNameArray.length; i++) {
-                    mCategoryParts.add(new CategoryPart(group2PartNameArray[i], group2PartIconSelectorResIdArray[i]));
+                    mCategoryParts.add(
+                            new CategoryPart(categoryGroupId, i, group2PartNameArray[i], group2PartIconSelectorResIdArray[i]));
                 }
                 break;
             case 3:
                 for (int i = 0; i < group3PartNameArray.length; i++) {
-                    mCategoryParts.add(new CategoryPart(group3PartNameArray[i], group3PartIconSelectorResIdArray[i]));
+                    mCategoryParts.add(
+                            new CategoryPart(categoryGroupId, i, group3PartNameArray[i], group3PartIconSelectorResIdArray[i]));
                 }
                 break;
         }
     }
 
-    public int getId() {
-        return mId;
+    public int getCategoryGroupId() {
+        return mCategoryGroupId;
     }
 
-    public void setId(int id) {
-        mId = id;
+    public void setCategoryGroupId(int categoryGroupId) {
+        mCategoryGroupId = categoryGroupId;
     }
 
     public int getNameResId() {
@@ -95,11 +99,6 @@ public class CategoryGroup {
     public void setCategoryParts(ArrayList<CategoryPart> categoryParts) {
         mCategoryParts = categoryParts;
     }
-
-//    private String[] group0PartNameArray = mContext.getResources().getStringArray(R.array.category_group_0_part_name_array);
-//    private String[] group1PartNameArray = mContext.getResources().getStringArray(R.array.category_group_1_part_name_array);
-//    private String[] group2PartNameArray = mContext.getResources().getStringArray(R.array.category_group_2_part_name_array);
-//    private String[] group3PartNameArray = mContext.getResources().getStringArray(R.array.category_group_3_part_name_array);
 
     private int[] group0PartIconSelectorResIdArray = {
             R.drawable.selector_category_baby_nappy, R.drawable.selector_category_wipes,
