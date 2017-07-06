@@ -11,21 +11,24 @@ public class CategoryPiece {
     private int mNumber;
     private int mNameResId;
     private String mName;
+    private boolean mHasClickListener;
     private boolean mHasExpanded;
-    private ArrayList<CategoryPiece> mPieces;
+    private ArrayList<CategoryPiece> mCategoryPieces;
 
     public CategoryPiece(String name, int number) {
         mName = name;
         mNumber = number;
+        mHasClickListener = true;
     }
 
-    public CategoryPiece(int number, int nameResId, boolean hasExpanded) {
-        mNumber = number;
-        mNameResId = nameResId;
-        mHasExpanded = hasExpanded;
-        if (mHasExpanded) {
-            mPieces = new ArrayList<>();
-        }
+    public CategoryPiece(String name) {
+        mName = name;
+        mHasClickListener = false;
+    }
+
+    public CategoryPiece(ArrayList<CategoryPiece> categoryPieces) {
+        mHasExpanded = true;
+        mCategoryPieces = categoryPieces;
     }
 
     public int getNumber() {
@@ -52,6 +55,14 @@ public class CategoryPiece {
         mName = name;
     }
 
+    public boolean isHasClickListener() {
+        return mHasClickListener;
+    }
+
+    public void setHasClickListener(boolean hasClickListener) {
+        mHasClickListener = hasClickListener;
+    }
+
     public boolean isHasExpanded() {
         return mHasExpanded;
     }
@@ -60,11 +71,11 @@ public class CategoryPiece {
         mHasExpanded = hasExpanded;
     }
 
-    public ArrayList<CategoryPiece> getPieces() {
-        return mPieces;
+    public ArrayList<CategoryPiece> getCategoryPieces() {
+        return mCategoryPieces;
     }
 
-    public void setPieces(ArrayList<CategoryPiece> pieces) {
-        mPieces = pieces;
+    public void setCategoryPieces(ArrayList<CategoryPiece> categoryPieces) {
+        mCategoryPieces = categoryPieces;
     }
 }

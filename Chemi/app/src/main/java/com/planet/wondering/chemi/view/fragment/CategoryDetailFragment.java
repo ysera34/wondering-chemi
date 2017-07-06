@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.category.CategoryPart;
 import com.planet.wondering.chemi.model.category.CategoryPiece;
 import com.planet.wondering.chemi.model.category.CategoryStorage;
+import com.planet.wondering.chemi.util.decorator.SeparatorDecoration;
 import com.planet.wondering.chemi.view.activity.ProductListActivity;
 
 import java.util.ArrayList;
@@ -79,9 +79,9 @@ public class CategoryDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category_detail, container, false);
         mCategoryPartRecyclerView = (RecyclerView) view.findViewById(R.id.category_part_recycler_view);
         mCategoryPartRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        SeparatorDecoration decoration =
-//                new SeparatorDecoration(getActivity(), android.R.color.black, 0.7f);
-//        mCategoryPartRecyclerView.addItemDecoration(decoration);
+        SeparatorDecoration decoration =
+                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
+        mCategoryPartRecyclerView.addItemDecoration(decoration);
 
         mCategoryPieceRecyclerView = (RecyclerView) view.findViewById(R.id.category_piece_recycler_view);
         mCategoryPieceRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -172,6 +172,7 @@ public class CategoryDetailFragment extends Fragment {
                 ((CategoryPieceHeader) holder).bindCategoryPieceHeader(mCategoryPieceHeaderName);
             }
             if (holder instanceof CategoryPieceHolder) {
+                holder.setIsRecyclable(false);
                 ((CategoryPieceHolder) holder).bindCategoryPiece(mCategoryPieces.get(position - 1));
             }
         }
@@ -228,37 +229,32 @@ public class CategoryDetailFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
-            long start0 = System.nanoTime();
-            mCategoryPartAdapter.notifyItemChanged(mCategoryPartSelectedId);
-            long start1 = System.nanoTime();
             mCategoryPartSelectedId = getAdapterPosition();
-            long start2 = System.nanoTime();
-            mCategoryPartAdapter.notifyItemChanged(mCategoryPartSelectedId);
-            long start3 = System.nanoTime();
             setSelectedLayout(mCategoryPartIconImageView.isSelected());
-            long start4 = System.nanoTime();
-
-            Log.i(TAG, "start 0~1 : " + String.valueOf((start1 - start0) / 1000));
-            Log.i(TAG, "start 1~2 : " + String.valueOf((start2 - start1) / 1000));
-            Log.i(TAG, "start 2~3 : " + String.valueOf((start3 - start2) / 1000));
-            Log.i(TAG, "start 3~4 : " + String.valueOf((start4 - start3) / 1000));
+            mCategoryPartAdapter.notifyDataSetChanged();
 
             mCategoryPieceHeaderName = mCategoryPart.getName();
-            mCategoryPieceAdapter.notifyItemChanged(0);
-            mCategoryPieces = mCategoryParts.get(mCategoryPartSelectedId).getCategoryPieces();
-            mCategoryPieceAdapter.setCategoryPieces(mCategoryPieces);
-            mCategoryPieceAdapter.notifyDataSetChanged();
+            if (mCategoryPartSelectedId > RecyclerView.NO_POSITION) {
+                mCategoryPieces = mCategoryParts.get(mCategoryPartSelectedId).getCategoryPieces();
+                mCategoryPieceAdapter.setCategoryPieces(mCategoryPieces);
+                mCategoryPieceAdapter.notifyDataSetChanged();
+            }
         }
 
         private void setSelectedLayout(boolean isSelected) {
             if (isSelected) {
                 mCategoryPartIndicatorView.setBackgroundResource(R.color.colorPrimary);
-//                mCategoryPartLayout.setBackgroundResource(android.R.color.transparent);
                 mCategoryPartLayout.setBackgroundResource(R.color.colorWhite);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    mCategoryPartLayout.setElevation(1.0f);
+//                }
                 mCategoryPartNameTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
             } else {
                 mCategoryPartIndicatorView.setBackgroundResource(android.R.color.transparent);
                 mCategoryPartLayout.setBackgroundResource(R.color.colorWhiteBackground);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    mCategoryPartLayout.setElevation(0.0f);
+//                }
                 mCategoryPartNameTextView.setTextColor(getResources().getColor(R.color.colorFontFrenchGray));
             }
         }
@@ -289,18 +285,47 @@ public class CategoryDetailFragment extends Fragment {
 
         private CategoryPiece mCategoryPiece;
 
+        private LinearLayout mCategoryPieceLayout;
         private TextView mCategoryPieceNameTextView;
 
         public CategoryPieceHolder(View itemView) {
             super(itemView);
+            mCategoryPieceLayout = (LinearLayout)
+                    itemView.findViewById(R.id.list_item_category_piece_layout);
             mCategoryPieceNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_category_piece_name_text_view);
-            mCategoryPieceNameTextView.setOnClickListener(this);
         }
 
         public void bindCategoryPiece(CategoryPiece categoryPiece) {
             mCategoryPiece = categoryPiece;
-            mCategoryPieceNameTextView.setText(String.valueOf(mCategoryPiece.getName()));
+            if (mCategoryPiece.isHasClickListener()) {
+                mCategoryPieceNameTextView.setOnClickListener(this);
+            } else {
+                mCategoryPieceNameTextView.setClickable(false);
+                mCategoryPieceNameTextView.setTextColor(getResources().getColor(R.color.colorArmadillo));
+            }
+            if (mCategoryPiece.getName() != null) {
+                mCategoryPieceNameTextView.setText(String.valueOf(mCategoryPiece.getName()));
+            } else {
+                mCategoryPieceNameTextView.setVisibility(View.GONE);
+                final String categoryPieceName = mCategoryPieces.get(getAdapterPosition() - 2).getName();
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                for (int i = 0; i < mCategoryPiece.getCategoryPieces().size(); i++) {
+                    View view = layoutInflater.inflate(R.layout.list_item_category_piece_extend, mCategoryPieceLayout, false);
+                    final CategoryPiece categoryPieceExtend = mCategoryPiece.getCategoryPieces().get(i);
+                    TextView pieceExtendTextView = (TextView) view.findViewById(R.id.list_item_category_piece_extend_name_text_view);
+                    pieceExtendTextView.setText(String.valueOf(categoryPieceExtend.getName()));
+                    pieceExtendTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(ProductListActivity.newIntent(getActivity(),
+                                    categoryPieceExtend.getNumber(), categoryPieceName + " " + categoryPieceExtend.getName()));
+                        }
+                    });
+                    mCategoryPieceLayout.addView(view);
+                }
+            }
+
         }
 
         @Override

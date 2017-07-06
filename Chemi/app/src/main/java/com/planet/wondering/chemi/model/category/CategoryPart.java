@@ -36,21 +36,41 @@ public class CategoryPart {
                     case 0:
                         mCategoryPieces.add(new CategoryPiece("이른둥이 남여공용", 13));
                         mCategoryPieces.add(new CategoryPiece("신생아 남여공용", 14));
-                        mCategoryPieces.add(new CategoryPiece("소형 남아용", 15));
-                        mCategoryPieces.add(new CategoryPiece("소형 여아용", 16));
-                        mCategoryPieces.add(new CategoryPiece("소형 남여공용", 17));
-                        mCategoryPieces.add(new CategoryPiece("중형 남아용", 18));
-                        mCategoryPieces.add(new CategoryPiece("중형 여아용", 19));
-                        mCategoryPieces.add(new CategoryPiece("중형 남여공용", 20));
-                        mCategoryPieces.add(new CategoryPiece("대형 남아용", 21));
-                        mCategoryPieces.add(new CategoryPiece("대형 여아용", 22));
-                        mCategoryPieces.add(new CategoryPiece("대형 남여공용", 23));
-                        mCategoryPieces.add(new CategoryPiece("특대형 남아용", 24));
-                        mCategoryPieces.add(new CategoryPiece("특대형 여아용", 25));
-                        mCategoryPieces.add(new CategoryPiece("특대형 남여공용", 26));
-                        mCategoryPieces.add(new CategoryPiece("점보형 남아용", 27));
-                        mCategoryPieces.add(new CategoryPiece("점보형 여아용", 28));
-                        mCategoryPieces.add(new CategoryPiece("점보형 남여공용", 29));
+
+                        mCategoryPieces.add(new CategoryPiece("소형"));
+                        ArrayList<CategoryPiece> babyNappySmallCategoryPieces = new ArrayList<>();
+                        babyNappySmallCategoryPieces.add(new CategoryPiece("남아용", 15));
+                        babyNappySmallCategoryPieces.add(new CategoryPiece("여아용", 16));
+                        babyNappySmallCategoryPieces.add(new CategoryPiece("남여공용", 17));
+                        mCategoryPieces.add(new CategoryPiece(babyNappySmallCategoryPieces));
+
+                        mCategoryPieces.add(new CategoryPiece("중형"));
+                        ArrayList<CategoryPiece> babyNappyMediumCategoryPieces = new ArrayList<>();
+                        babyNappyMediumCategoryPieces.add(new CategoryPiece("남아용", 18));
+                        babyNappyMediumCategoryPieces.add(new CategoryPiece("여아용", 19));
+                        babyNappyMediumCategoryPieces.add(new CategoryPiece("남여공용", 20));
+                        mCategoryPieces.add(new CategoryPiece(babyNappyMediumCategoryPieces));
+
+                        mCategoryPieces.add(new CategoryPiece("대형"));
+                        ArrayList<CategoryPiece> babyNappyBigCategoryPieces = new ArrayList<>();
+                        babyNappyBigCategoryPieces.add(new CategoryPiece("남아용", 21));
+                        babyNappyBigCategoryPieces.add(new CategoryPiece("여아용", 22));
+                        babyNappyBigCategoryPieces.add(new CategoryPiece("남여공용", 23));
+                        mCategoryPieces.add(new CategoryPiece(babyNappyBigCategoryPieces));
+
+                        mCategoryPieces.add(new CategoryPiece("특대형"));
+                        ArrayList<CategoryPiece> babyNappyBiggerCategoryPieces = new ArrayList<>();
+                        babyNappyBiggerCategoryPieces.add(new CategoryPiece("남아용", 24));
+                        babyNappyBiggerCategoryPieces.add(new CategoryPiece("여아용", 25));
+                        babyNappyBiggerCategoryPieces.add(new CategoryPiece("남여공용", 26));
+                        mCategoryPieces.add(new CategoryPiece(babyNappyBiggerCategoryPieces));
+
+                        mCategoryPieces.add(new CategoryPiece("점보형"));
+                        ArrayList<CategoryPiece> babyNappyBiggestCategoryPieces = new ArrayList<>();
+                        babyNappyBiggestCategoryPieces.add(new CategoryPiece("남아용", 27));
+                        babyNappyBiggestCategoryPieces.add(new CategoryPiece("여아용", 28));
+                        babyNappyBiggestCategoryPieces.add(new CategoryPiece("남여공용", 29));
+                        mCategoryPieces.add(new CategoryPiece(babyNappyBiggestCategoryPieces));
                         break;
                     case 1:
                         mCategoryPieces.add(new CategoryPiece("베이비물티슈", 30));
