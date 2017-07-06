@@ -35,6 +35,7 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.AppBaseActivity;
+import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
 import com.planet.wondering.chemi.view.activity.ContentActivity;
 import com.planet.wondering.chemi.view.activity.ImageActivity;
 import com.planet.wondering.chemi.view.activity.MemberStartActivity;
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment
     private LinearLayout mHomeHeaderLayout;
     private LinearLayout mHomeToolbarLayout;
     private NestedScrollView mHomeNestedScrollView;
+    private LinearLayout mHomeScrollLayout;
     private RotateViewPager mHomeContentViewPager;
     private LinearLayout mHomeCategoryLayout;
     private LinearLayout mHomeRecommendProductLayout;
@@ -109,6 +111,7 @@ public class HomeFragment extends Fragment
     private LinearLayout mHomeAddCategoryLayout;
     private boolean isAddedSearchLayout;
     private boolean isAddedCategoryLayout;
+    private boolean isBottomNavigationVisible = true;
 
     private LinearLayout mPromoteSignInLayout;
 
@@ -132,8 +135,9 @@ public class HomeFragment extends Fragment
         mHomeToolbarLayout = (LinearLayout) view.findViewById(R.id.home_toolbar_layout);
         mHomeNestedScrollView = (NestedScrollView) view.findViewById(R.id.home_scroll_view);
         mHomeNestedScrollView.setOnScrollChangeListener(this);
-        mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_promote_content_rotate_view_pager);
+        mHomeScrollLayout = (LinearLayout) view.findViewById(R.id.home_scroll_layout);
 
+        mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_promote_content_rotate_view_pager);
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryLayout.setOnClickListener(this);
         mHomeRecommendProductLayout = (LinearLayout) view.findViewById(R.id.home_recommend_product_layout);
@@ -269,10 +273,8 @@ public class HomeFragment extends Fragment
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-        int currentYOffset = v.getScrollY();
         float searchLayoutPositionY = mHomeToolbarLayout.getMeasuredHeight() + mHomeSearchLayout.getY();
-
-        if (currentYOffset >= searchLayoutPositionY) {
+        if (scrollY >= searchLayoutPositionY) {
             if (!isAddedSearchLayout) {
                 mHomeHeaderLayout.addView(mAddSearchLayout);
                 mHomeSearchLayout.setVisibility(View.INVISIBLE);
@@ -285,9 +287,9 @@ public class HomeFragment extends Fragment
                 isAddedSearchLayout = false;
             }
         }
-        float categoryLayoutPositionY = mHomeCategoryLayout.getY();
 
-        if (currentYOffset >= categoryLayoutPositionY - mHomeSearchLayout.getMeasuredHeight()) {
+        float categoryLayoutPositionY = mHomeCategoryLayout.getY();
+        if (scrollY >= categoryLayoutPositionY - mHomeSearchLayout.getMeasuredHeight()) {
             if (!isAddedCategoryLayout) {
                 mHomeHeaderLayout.addView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = true;
@@ -296,6 +298,39 @@ public class HomeFragment extends Fragment
             if (isAddedCategoryLayout) {
                 mHomeHeaderLayout.removeView(mHomeAddCategoryLayout);
                 isAddedCategoryLayout = false;
+            }
+        }
+
+        /* Bottom Navigation Show Hide */
+//        Log.i(TAG, "scrollY - oldScrollY: " + (scrollY - oldScrollY));
+        int currentOffsetY = scrollY - oldScrollY;
+
+        // up : + ; down : -
+        if (currentOffsetY > 70) {
+            if (isBottomNavigationVisible) {
+                ((BottomNavigationActivity) getActivity()).hideBottomNavigationView();
+                isBottomNavigationVisible = false;
+            }
+        }
+        if (currentOffsetY < -70) {
+            if (!isBottomNavigationVisible) {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                isBottomNavigationVisible = true;
+            }
+        }
+
+        if (v.getScrollY() == 0) {
+//            Log.i(TAG, "NestedScrollView: Top has been reached" );
+            if (!isBottomNavigationVisible) {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                isBottomNavigationVisible = true;
+            }
+        }
+        if (mHomeScrollLayout.getMeasuredHeight() == v.getScrollY() + v.getHeight()) {
+//            Log.i(TAG, "NestedScrollView: Bottom has been reached" );
+            if (!isBottomNavigationVisible) {
+                ((BottomNavigationActivity) getActivity()).showBottomNavigationView();
+                isBottomNavigationVisible = true;
             }
         }
     }

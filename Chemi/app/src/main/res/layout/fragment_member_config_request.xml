@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:text="(자동완성은 저희 제품군을 기준이예요)"
+                    android:text="(자동완성은 저희 제품군을 기준으로 해요)"
                     android:textSize="12sp"
                     android:textColor="@color/colorFontFrenchGray"/>
 

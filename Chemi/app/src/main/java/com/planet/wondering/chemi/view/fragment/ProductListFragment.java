@@ -154,10 +154,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     private int mCategoryId;
 //    String[] mCategoryNameArray;
     private String mCategoryName;
-    private TextView mProductTotalTextView;
-    private TextView mProductSortButtonTextView;
+//    private TextView mProductTotalTextView;
+//    private TextView mProductSortButtonTextView;
 
-    private LinearLayout mProductListLayout;
+//    private LinearLayout mProductListLayout;
     private RecyclerView mProductRecyclerView;
     private ProductAdapter mProductAdapter;
     private ProgressBar mProductListProgressBar;
@@ -246,8 +246,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        mProductListLayout = (LinearLayout) view.findViewById(R.id.product_list_layout);
-        mProductListLayout.setOnClickListener(this);
+//        mProductListLayout = (LinearLayout) view.findViewById(R.id.product_list_layout);
+//        mProductListLayout.setOnClickListener(this);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        SeparatorDecoration decoration =
