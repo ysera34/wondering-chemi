@@ -126,11 +126,12 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProductListFragment newInstance(String tagName, int categoryId) {
+    public static ProductListFragment newInstance(String tagName, int categoryId, String categoryName) {
 
         Bundle args = new Bundle();
         args.putString(ARG_TAG_NAME, tagName);
         args.putInt(ARG_CATEGORY_ID, categoryId);
+        args.putString(ARG_CATEGORY_NAME, categoryName);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -174,12 +175,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         mProductIds = new ArrayList<>();
         mUrlBuilder = new StringBuilder();
 
-//        if (mCategoryId > 0 && mCategoryId < 90) {
-//            mCategoryNameArray = getResources().getStringArray(R.array.category_name_array);
-//            mCategoryName = mCategoryNameArray[mCategoryId];
-//        } else if (mCategoryId >= 90) {
-//            mCategoryName = "비밀의 문에 오신 것을 환영합니다.";
-//        }
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
     }
@@ -194,23 +189,13 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         if (mTagName != null) {
             mSearchAutoCompleteTextView.setText(mTagName);
         }
-//        if (mCategoryId > 0 && mCategoryId < 90) {
-            mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
-            mSearchAutoCompleteTextView.setCursorVisible(true);
-            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
-            mSearchAutoCompleteTextView.setThreshold(1);
-            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
-                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
-            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
-//        } else if (mCategoryId >= 90) {
-//            mSearchAutoCompleteTextView.setHint(mCategoryName);
-//            mSearchAutoCompleteTextView.setCursorVisible(true);
-//            mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
-//            mSearchAutoCompleteTextView.setThreshold(1);
-//            mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
-//                    android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
-//            mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
-//        }
+        mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+        mSearchAutoCompleteTextView.setCursorVisible(true);
+        mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
+        mSearchAutoCompleteTextView.setThreshold(1);
+        mTagCharacterAdapter = new TagCharacterAdapter(getActivity(), mSearchAutoCompleteTextView,
+                android.R.layout.simple_dropdown_item_1line, 2, mCategoryId);
+        mSearchAutoCompleteTextView.setAdapter(mTagCharacterAdapter);
         mSearchAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -239,7 +224,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     if (textView.getText().length() == 0) {
                         Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     } else {
-//                        Toast.makeText(getActivity(), textView.getText().toString(), Toast.LENGTH_SHORT).show();
                         updateTagCategoryProductList();
                     }
                 }
@@ -262,8 +246,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             }
         });
 
-//        mProductTotalTextView = (TextView) view.findViewById(R.id.product_total_text_view);
-//        mProductSortButtonTextView = (TextView) view.findViewById(R.id.product_sort_button_text_view);
         mProductListLayout = (LinearLayout) view.findViewById(R.id.product_list_layout);
         mProductListLayout.setOnClickListener(this);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
@@ -380,7 +362,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
     private void updateTagCategoryProductList() {
 
-        mUpdateProductListListener.OnTagCategoryUpdated(mSearchAutoCompleteTextView.getText().toString(), mCategoryId);
+        mUpdateProductListListener.OnTagCategoryUpdated(mSearchAutoCompleteTextView.getText().toString(), mCategoryId, mCategoryName);
         mSearchAutoCompleteTextView.dismissDropDown();
         mInputMethodManager.hideSoftInputFromWindow(mSearchAutoCompleteTextView.getWindowToken(), 0);
         /* ignore dropdown */
@@ -755,7 +737,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     mMessageTextView.setVisibility(View.GONE);
                     mRequestButtonTextView.setVisibility(View.GONE);
                 } else {
-                    mEmptyImageView.setVisibility(View.VISIBLE);
+//                    mEmptyImageView.setVisibility(View.VISIBLE);
+                    mEmptyImageView.setVisibility(View.GONE);
                     mScrollPromoteArrowImageView.setVisibility(View.GONE);
                     mMessageTextView.setVisibility(View.VISIBLE);
                     mMessageTextView.setText(

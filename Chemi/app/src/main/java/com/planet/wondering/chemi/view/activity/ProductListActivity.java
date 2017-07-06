@@ -106,9 +106,10 @@ public class ProductListActivity extends AppBaseActivity
     }
 
     @Override
-    public void OnTagCategoryUpdated(String tagName, int category) {
+    public void OnTagCategoryUpdated(String tagName, int categoryId, String categoryName) {
         mFragmentManager.beginTransaction()
-                .add(R.id.pure_fragment_container, ProductListFragment.newInstance(tagName, category))
+                .add(R.id.pure_fragment_container,
+                        ProductListFragment.newInstance(tagName, categoryId, categoryName))
                 .addToBackStack(tagName)
                 .commit();
     }

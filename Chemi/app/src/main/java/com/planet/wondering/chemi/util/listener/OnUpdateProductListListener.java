@@ -6,5 +6,5 @@ package com.planet.wondering.chemi.util.listener;
 
 public interface OnUpdateProductListListener {
 
-    void OnTagCategoryUpdated(String tagName, int category);
+    void OnTagCategoryUpdated(String tagName, int categoryId, String categoryName);
 }
