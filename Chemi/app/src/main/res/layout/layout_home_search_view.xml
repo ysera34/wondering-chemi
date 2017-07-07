@@ -18,10 +18,11 @@
         android:layout_toStartOf="@+id/home_search_image_button"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="보솜이 안심물티슈"
         android:textSize="14sp"
         android:textAlignment="textStart"
         android:textColorHint="@color/colorFontHint"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:background="@android:color/transparent"/>
     <!--android:hint="@string/search_guide_sentence"-->
 

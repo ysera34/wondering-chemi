@@ -89,9 +89,11 @@ public class TagSharedPreferences {
 
     public static int findTagsIndex(Context context, Tag tag) {
         ArrayList<Tag> tags = getStoredTags(context);
-        for (int i = 0; i < tags.size(); i++) {
-            if (tags.get(i).getName().equals(tag.getName())) {
-                return i;
+        if (tags != null) {
+            for (int i = 0; i < tags.size(); i++) {
+                if (tags.get(i).getName().equals(tag.getName())) {
+                    return i;
+                }
             }
         }
         return -1;

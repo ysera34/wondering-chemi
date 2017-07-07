@@ -128,6 +128,7 @@ public class Config {
 
     public static final class Product {
         public static final String PATH = File.separator + "products" + File.separator;
+        public static final String PROMOTE_PRODUCT_PATH = File.separator + "promotedproducts";
         public static final String RECOMMEND_PATH = File.separator + "recommendedproducts";
         public static final String QUERY_PATH = File.separator + "products?";
         public static final String KEEP_PATH = File.separator + "keepers";

@@ -30,9 +30,11 @@ import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
+import com.planet.wondering.chemi.model.home.PromoteProduct;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.PromoteProductSharedPreferences;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.AppBaseActivity;
 import com.planet.wondering.chemi.view.activity.BottomNavigationActivity;
@@ -96,10 +98,12 @@ public class HomeFragment extends Fragment
     private LinearLayout mHomeRecommendProductLayout;
     private RecyclerView mHomeRecommendProductRecyclerView;
     private RecommendProductAdapter mRecommendProductAdapter;
+    private ArrayList<PromoteProduct> mPromoteProducts;
     private ArrayList<RecommendProduct> mRecommendProducts;
     private RotateViewPager mHomeReviewViewPager;
     private int mScreenWidth;
 
+    private String mHomeSearchText;
     private RelativeLayout mHomeSearchLayout;
     private Button mHomeSearchButton;
     private ImageButton mHomeSearchImageButton;
@@ -120,6 +124,11 @@ public class HomeFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
+        PromoteProduct product = PromoteProductSharedPreferences.getStoredPromoteProduct(getActivity());
+        if (product != null) {
+            mHomeSearchText = product.getBrand() + " " + product.getName();
+        }
+
         mLayoutInflater = LayoutInflater.from(getContext());
         isAddedSearchLayout = false;
         isAddedCategoryLayout = false;
@@ -169,6 +178,7 @@ public class HomeFragment extends Fragment
             dialogFragment.show(getFragmentManager(), "congratulation_dialog");
         }
 
+
         mAddSearchLayout = (RelativeLayout) mLayoutInflater.inflate(R.layout.layout_home_add_search_view, mHomeHeaderLayout, false);
         mHomeAddSearchButton = (Button) mAddSearchLayout.findViewById(R.id.home_add_search_text_button);
         mHomeAddSearchButton.setOnClickListener(this);
@@ -180,6 +190,11 @@ public class HomeFragment extends Fragment
         setCategoryViewClickListener();
         updateUI();
         requestHome();
+
+        if (mHomeSearchText != null) {
+            mHomeSearchButton.setText(String.valueOf(mHomeSearchText));
+            mHomeAddSearchButton.setHint(String.valueOf(mHomeSearchText));
+        }
 
         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
             mPromoteSignInLayout.setVisibility(View.GONE);

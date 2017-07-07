@@ -33,4 +33,13 @@ public class PromoteProduct {
     public void setName(String name) {
         mName = name;
     }
+
+    @Override
+    public String toString() {
+        return "PromoteProduct{" +
+                "mId=" + mId +
+                ", mBrand='" + mBrand + '\'' +
+                ", mName='" + mName + '\'' +
+                '}';
+    }
 }

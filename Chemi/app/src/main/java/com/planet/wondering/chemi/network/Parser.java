@@ -1428,7 +1428,7 @@ public class Parser {
                     for (int i = 0; i < count; i++) {
                         JSONObject bestReviewJSONObject = bestReviewsJSONArray.getJSONObject(i);
                         BestReview bestReview = new BestReview();
-                        bestReview.setId(bestReviewJSONObject.getInt("reviewid"));
+                        bestReview.setId(bestReviewJSONObject.getInt(REVIEW_ID));
                         bestReviews.add(bestReview);
                     }
                 }
