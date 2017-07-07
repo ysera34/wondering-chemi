@@ -14,6 +14,6 @@
         android:padding="10dp"
         android:clickable="true"
         android:textSize="15sp"
-        android:textColor="@color/color_selector_armadillo_primary"/>
+        android:textColor="@color/color_selector_armadillo_french_gray"/>
 
 </LinearLayout>

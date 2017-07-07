@@ -48,8 +48,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // network state
-
         startActivityForResult(UpdateActivity.newIntent(getApplicationContext(),
                 CHECK_VERSION_REQUEST_CODE, false), CHECK_VERSION_REQUEST_CODE);
 
@@ -126,7 +124,6 @@ public class SplashActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         ArrayList<PromoteProduct> promoteProducts = Parser.parsePromoteProducts(response);
                         PromoteProductSharedPreferences.setStoredPromoteProducts(getApplicationContext(), promoteProducts);
-
                         startMainActivity();
                     }
                 },

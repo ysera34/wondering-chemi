@@ -16,7 +16,7 @@
         android:paddingEnd="10dp"
         android:clickable="true"
         android:textSize="15sp"
-        android:textColor="@color/color_selector_dove_gray_primary"
+        android:textColor="@color/color_selector_dove_gray_french_gray"
         android:background="@drawable/widget_border_top"/>
 
 <!--</LinearLayout>-->

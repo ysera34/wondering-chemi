@@ -24,7 +24,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:background="@android:color/transparent"/>
-    <!--android:hint="@string/search_guide_sentence"-->
 
     <ImageButton
         android:id="@+id/home_search_image_button"
