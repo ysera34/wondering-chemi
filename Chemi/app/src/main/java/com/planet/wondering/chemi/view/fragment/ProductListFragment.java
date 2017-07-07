@@ -199,7 +199,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                     mSearchClearImageView.setVisibility(View.VISIBLE);
                 }
                 if (charSequence.length() == 0) {
-                    mSearchClearImageView.setVisibility(View.INVISIBLE);
+                    mSearchClearImageView.setVisibility(View.GONE);
                 }
             }
 

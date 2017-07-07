@@ -16,15 +16,14 @@
             android:id="@+id/member_config_change_name_back_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_back_primary"/>
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_back_primary"
+                android:scaleType="centerInside"/>
 
             <TextView
                 android:layout_width="wrap_content"

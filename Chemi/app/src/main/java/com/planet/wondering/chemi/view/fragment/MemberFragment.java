@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,6 +37,7 @@ import com.planet.wondering.chemi.view.activity.ContentListActivity;
 import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
+import com.planet.wondering.chemi.view.activity.SearchActivity;
 
 import java.util.ArrayList;
 
@@ -478,8 +478,7 @@ public class MemberFragment extends Fragment
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.archive_product_empty_promote_button_text_view:
-                    Toast.makeText(getActivity(), "archive_product_empty_promote_button_text_view",
-                            Toast.LENGTH_SHORT).show();
+                    startActivity(SearchActivity.newIntent(getActivity(), 0));
                     break;
             }
         }
@@ -693,8 +692,7 @@ public class MemberFragment extends Fragment
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.archive_review_empty_promote_button_text_view:
-                    Toast.makeText(getActivity(), "archive_review_empty_promote_button_text_view",
-                            Toast.LENGTH_SHORT).show();
+                    startActivity(SearchActivity.newIntent(getActivity(), 0));
                     break;
             }
         }

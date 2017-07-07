@@ -16,8 +16,7 @@
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_back_primary"
-            android:scaleType="centerInside"
-            android:background="@android:color/transparent"/>
+            android:scaleType="centerInside"/>
 
         <AutoCompleteTextView
             android:id="@+id/product_list_search_auto_text_view"
@@ -37,12 +36,13 @@
             android:background="@android:color/transparent"/>
 
         <ImageView
-            android:visibility="invisible"
+            android:visibility="gone"
             android:id="@+id/search_clear_image_view"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_clear_gray"
-            android:scaleType="centerInside"/>
+            android:scaleType="centerInside"
+            android:background="@android:color/transparent"/>
 
         <ImageView
             android:id="@+id/search_image_view"

@@ -90,7 +90,7 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
                     mSearchClearImageView.setVisibility(View.VISIBLE);
                 }
                 if (charSequence.length() == 0) {
-                    mSearchClearImageView.setVisibility(View.INVISIBLE);
+                    mSearchClearImageView.setVisibility(View.GONE);
                 }
             }
 
