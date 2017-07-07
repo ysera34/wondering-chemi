@@ -17,7 +17,7 @@
     <string name="menu_toolbar_content_action_share">컨텐츠공유</string>
     <string name="menu_toolbar_member_action_config">사용자 설정</string>
 
-    <string name="search_guide_sentence">상품명, 브랜드명의 초성으로 검색해보세요!</string>
+    <string name="search_guide_sentence">상품, 브랜드의 초성으로 검색해보세요!</string>
     <string name="search_edit_text">search_edit_text</string>
     <string name="search_image_button">search_image_button</string>
     <string name="search_view">search_edit_text_view</string>

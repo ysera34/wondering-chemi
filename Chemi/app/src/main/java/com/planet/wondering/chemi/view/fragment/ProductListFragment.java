@@ -1,6 +1,5 @@
 package com.planet.wondering.chemi.view.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,12 +20,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -140,24 +137,19 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
     private StringBuilder mUrlBuilder;
     private ArrayList<Product> mProducts;
-    private ArrayList<Integer> mProductIds;
 //    private Product mProduct;
     private Pager mPager;
 
     private InputMethodManager mInputMethodManager;
+    private ImageView mProductListBackArrowImageView;
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private TagCharacterAdapter mTagCharacterAdapter;
-    private RelativeLayout mSearchClearLayout;
-    private ImageButton mSearchClearImageButton;
-    private ImageButton mSearchImageButton;
+    private ImageView mSearchClearImageView;
+    private ImageView mSearchImageView;
     private String mTagName;
     private int mCategoryId;
-//    String[] mCategoryNameArray;
     private String mCategoryName;
-//    private TextView mProductTotalTextView;
-//    private TextView mProductSortButtonTextView;
 
-//    private LinearLayout mProductListLayout;
     private RecyclerView mProductRecyclerView;
     private ProductAdapter mProductAdapter;
     private ProgressBar mProductListProgressBar;
@@ -172,7 +164,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         mCategoryName = getArguments().getString(ARG_CATEGORY_NAME, null);
 
         mProducts = new ArrayList<>();
-        mProductIds = new ArrayList<>();
         mUrlBuilder = new StringBuilder();
 
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -205,10 +196,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
-                    mSearchClearImageButton.setVisibility(View.VISIBLE);
+                    mSearchClearImageView.setVisibility(View.VISIBLE);
                 }
                 if (charSequence.length() == 0) {
-                    mSearchClearImageButton.setVisibility(View.INVISIBLE);
+                    mSearchClearImageView.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -232,12 +223,13 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         });
 
         mSearchAutoCompleteTextView.setOnClickListener(this);
-        mSearchClearLayout = (RelativeLayout) view.findViewById(R.id.search_clear_image_layout);
-        mSearchClearLayout.setOnClickListener(this);
-        mSearchClearImageButton = (ImageButton) view.findViewById(R.id.search_clear_image_button);
-        mSearchClearImageButton.setOnClickListener(this);
-        mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
-        mSearchImageButton.setOnClickListener(this);
+
+        mProductListBackArrowImageView = (ImageView) view.findViewById(R.id.product_list_back_arrow_image_view);
+        mProductListBackArrowImageView.setOnClickListener(this);
+        mSearchClearImageView = (ImageView) view.findViewById(R.id.search_clear_image_view);
+        mSearchClearImageView.setOnClickListener(this);
+        mSearchImageView = (ImageView) view.findViewById(R.id.search_image_view);
+        mSearchImageView.setOnClickListener(this);
 
         mSearchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -246,8 +238,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             }
         });
 
-//        mProductListLayout = (LinearLayout) view.findViewById(R.id.product_list_layout);
-//        mProductListLayout.setOnClickListener(this);
         mProductRecyclerView = (RecyclerView) view.findViewById(R.id.product_recycler_view);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        SeparatorDecoration decoration =
@@ -321,13 +311,11 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.product_list_back_arrow_image_view:
+                getActivity().onBackPressed();
+                break;
             case R.id.product_list_search_auto_text_view:
                 if (mTagName != null) {
                     getActivity().onBackPressed();
@@ -335,11 +323,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
                 }
                 break;
-            case R.id.search_clear_image_layout:
-            case R.id.search_clear_image_button:
+            case R.id.search_clear_image_view:
                 mSearchAutoCompleteTextView.getText().clear();
                 break;
-            case R.id.search_image_button:
+            case R.id.search_image_view:
                 if (mSearchAutoCompleteTextView.getText().length() == 0) {
                     Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -375,21 +362,16 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
     private void requestTagProductList(String query) {
 
-        final ProgressDialog progressDialog;
         mProductListProgressBar.setVisibility(View.VISIBLE);
 
         if (mPager == null) {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
                     .append(QUERY_TAG).append(encodeUTF8(query));
-//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
-//                    getString(R.string.progress_dialog_message_wait), false, false);
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_TAG).append(encodeUTF8(query));
-//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
-//                    getString(R.string.progress_dialog_message_wait), false, false);
         }
 
         Log.i(TAG, mUrlBuilder.toString());
@@ -399,9 +381,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-//                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
-//                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -410,7 +390,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
                         Log.e(TAG, error.toString());
                         Toast.makeText(getActivity(),
@@ -433,14 +412,10 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH)
                     .append(QUERY_CATEGORY).append(categoryId);
-//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list),
-//                    getString(R.string.progress_dialog_message_wait), false, false);
         } else {
             mUrlBuilder.delete(0, mUrlBuilder.length());
             mUrlBuilder.append(URL_HOST).append(QUERY_PATH).append(mPager.getNextQuery())
                     .append(QUERY_CATEGORY).append(categoryId);
-//            progressDialog = ProgressDialog.show(getActivity(), getString(R.string.progress_dialog_title_product_list_next),
-//                    getString(R.string.progress_dialog_message_wait), false, false);
         }
 
         Log.i(TAG, mUrlBuilder.toString());
@@ -450,9 +425,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-//                        progressDialog.dismiss();
                         mProductListProgressBar.setVisibility(View.GONE);
-//                        mProductTotalTextView.setText(highlightTotalText(Parser.parseTotalCount(response)));
                         mProducts.addAll(Parser.parseProductList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -661,10 +634,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
             Glide.with(getActivity())
                     .load(mProduct.getImagePath())
-//                    .placeholder(R.drawable.unloaded_image_holder)
-//                    .error(R.drawable.unloaded_image_holder)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                    .override(280, 215)
                     .override(thumbnailWidth, thumbnailHeight)
                     .centerCrop()
                     .crossFade()
@@ -685,13 +655,11 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         @Override
         public void onClick(View view) {
-//            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
             if (mTagName != null) {
-                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId(), (byte) 0));
+                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
             } else if (mCategoryId > 0) {
-                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId(), (byte) 1));
+                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
             }
-//            startActivity(ProductPagerActivity.newIntent(getActivity(), mProductIds, mProduct.getId()));
         }
     }
 

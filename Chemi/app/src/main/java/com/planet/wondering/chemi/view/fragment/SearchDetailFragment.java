@@ -19,8 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,13 +37,11 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
     private static final String TAG = SearchDetailFragment.class.getSimpleName();
 
-    private static final String ARG_CATEGORY_GROUP_ID = "category_group_id";
-
     private AutoCompleteTextView mSearchAutoCompleteTextView;
     private TagCharacterAdapter mTagCharacterAdapter;
-    private RelativeLayout mSearchClearLayout;
-    private ImageButton mSearchClearImageButton;
-    private ImageButton mSearchImageButton;
+    private ImageView mSearchBackArrowImageView;
+    private ImageView mSearchClearImageView;
+    private ImageView mSearchImageView;
 
     private TabLayout mSearchTabLayout;
     private ViewPager mSearchViewPager;
@@ -90,10 +87,10 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
-                    mSearchClearImageButton.setVisibility(View.VISIBLE);
+                    mSearchClearImageView.setVisibility(View.VISIBLE);
                 }
                 if (charSequence.length() == 0) {
-                    mSearchClearImageButton.setVisibility(View.INVISIBLE);
+                    mSearchClearImageView.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -117,12 +114,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        mSearchClearLayout = (RelativeLayout) view.findViewById(R.id.search_clear_image_layout);
-        mSearchClearLayout.setOnClickListener(this);
-        mSearchClearImageButton = (ImageButton) view.findViewById(R.id.search_clear_image_button);
-        mSearchClearImageButton.setOnClickListener(this);
-        mSearchImageButton = (ImageButton) view.findViewById(R.id.search_image_button);
-        mSearchImageButton.setOnClickListener(this);
+        mSearchBackArrowImageView = (ImageView) view.findViewById(R.id.search_detail_back_arrow_image_view);
+        mSearchBackArrowImageView.setOnClickListener(this);
+        mSearchClearImageView = (ImageView) view.findViewById(R.id.search_clear_image_view);
+        mSearchClearImageView.setOnClickListener(this);
+        mSearchImageView = (ImageView) view.findViewById(R.id.search_image_view);
+        mSearchImageView.setOnClickListener(this);
 
         mSearchTabLayout = (TabLayout) view.findViewById(R.id.search_tabLayout);
         mSearchViewPager = (ViewPager) view.findViewById(R.id.search_viewPager);
@@ -208,11 +205,12 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
             case R.id.search_auto_text_view:
                 mSearchViewPager.setCurrentItem(1);
                 break;
-            case R.id.search_clear_image_layout:
-            case R.id.search_clear_image_button:
+            case R.id.search_detail_back_arrow_image_view:
+                getActivity().onBackPressed();
+            case R.id.search_clear_image_view:
                 mSearchAutoCompleteTextView.getText().clear();
                 break;
-            case R.id.search_image_button:
+            case R.id.search_image_view:
                 if (mSearchAutoCompleteTextView.getText().length() == 0) {
                     Toast.makeText(getActivity(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {

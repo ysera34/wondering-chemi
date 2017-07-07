@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +76,6 @@ public class ProductActivity extends AppBaseActivity
     private static final String TAG = ProductActivity.class.getSimpleName();
 
     private static final String EXTRA_PRODUCT_ID = "com.planet.wondering.chemi.product_id";
-    private static final String EXTRA_SEARCH_TYPE = "com.planet.wondering.chemi.search_type";
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ProductActivity.class);
@@ -91,17 +88,9 @@ public class ProductActivity extends AppBaseActivity
         return intent;
     }
 
-    public static Intent newIntent(Context packageContext, int productId, byte searchType) {
-        Intent intent = new Intent(packageContext, ProductActivity.class);
-        intent.putExtra(EXTRA_PRODUCT_ID, productId);
-        intent.putExtra(EXTRA_SEARCH_TYPE, searchType);
-        return intent;
-    }
-
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
-    private byte mSearchType;
     private int mProductId;
     private Product mProduct;
 
@@ -117,9 +106,6 @@ public class ProductActivity extends AppBaseActivity
     private TextView mProductDetailReviewRatingValueTextView;
     private TextView mProductDetailReviewRatingCountTextView;
 
-    protected BottomNavigationView mBottomNavigationView;
-    public RelativeLayout mBottomNavigationLayout;
-
     private int mScreenWidth;
 
     @Override
@@ -134,8 +120,6 @@ public class ProductActivity extends AppBaseActivity
         } else {
             mProductId = getIntent().getIntExtra(EXTRA_PRODUCT_ID, 0);
         }
-
-        mSearchType = getIntent().getByteExtra(EXTRA_SEARCH_TYPE, (byte) -1);
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.product_fragment_container);
@@ -175,20 +159,9 @@ public class ProductActivity extends AppBaseActivity
         mProductDetailReviewRatingCountTextView =
                 (TextView) findViewById(R.id.product_detail_review_rating_count_text_view);
 
-//        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
-//        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
-//        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-//        mBottomNavigationLayout = (RelativeLayout) findViewById(R.id.bottom_navigation_layout);
-
         mScreenWidth = getScreenWidth();
         requestProduct();
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        setupBottomNavigation(mSearchType);
-//    }
 
     private void bindProduct(Product product) {
 
@@ -213,10 +186,7 @@ public class ProductActivity extends AppBaseActivity
 
         Glide.with(getApplicationContext())
                 .load(mProduct.getImagePath())
-//                    .placeholder(R.drawable.unloaded_image_holder)
-//                    .error(R.drawable.unloaded_image_holder)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                .override(700, 460)
                 .override(thumbnailWidth, thumbnailHeight)
                 .crossFade()
                 .fitCenter()
@@ -316,15 +286,6 @@ public class ProductActivity extends AppBaseActivity
     }
 
     private void requestProduct() {
-
-//        Product product = new Product();
-//        product.setName("product" + mProductId);
-//        product.setBrand("brand" + mProductId);
-//
-//        bindProduct(product);
-//        final ProgressDialog progressDialog =
-//                ProgressDialog.show(getApplicationContext(), "상품의 정보를 가져오고 있습니다.",
-//                        "잠시만 기다려 주세요.", false, false);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, URL_HOST + PATH + mProductId,

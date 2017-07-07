@@ -322,7 +322,7 @@ public class ReviewReadFragment extends Fragment
                 dialog.show();
                 break;
             case R.id.review_read_product_layout:
-                startActivity(ProductActivity.newIntent(getActivity(), mReview.getProductId(), (byte) 0));
+                startActivity(ProductActivity.newIntent(getActivity(), mReview.getProductId()));
                 break;
             case R.id.review_read_comment_edit_text:
                 if (UserSharedPreferences.getStoredToken(getActivity()) != null) {

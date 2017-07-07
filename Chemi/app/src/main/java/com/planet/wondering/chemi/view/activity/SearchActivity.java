@@ -68,9 +68,4 @@ public class SearchActivity extends AppBaseActivity implements OnTagSelectedList
             ((SearchDetailFragment) mFragment).updateSearchEditText(tag);
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }

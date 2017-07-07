@@ -120,6 +120,8 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
         return fragment;
     }
 
+    private LinearLayout mBackLayout;
+
     private CircleImageView mUserCircleImageView;
     private CircleImageView mCameraCircleImageView;
     private ImageHandler mImageHandler;
@@ -170,6 +172,8 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_config_profile, container, false);
 
+        mBackLayout = (LinearLayout) view.findViewById(R.id.member_config_profile_back_layout);
+        mBackLayout.setOnClickListener(this);
         mUserCircleImageView = (CircleImageView) view.findViewById(R.id.member_config_profile_user_image_view);
         mCameraCircleImageView = (CircleImageView) view.findViewById(R.id.member_config_profile_camera_image_view);
         mUserCircleImageView.setOnClickListener(this);
@@ -291,6 +295,9 @@ public class MemberConfigProfileFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.member_config_profile_back_layout:
+                getActivity().onBackPressed();
+                break;
             case R.id.member_config_profile_user_image_view:
             case R.id.member_config_profile_camera_image_view:
 //                createUserImageMenuBottomSheetDialog();

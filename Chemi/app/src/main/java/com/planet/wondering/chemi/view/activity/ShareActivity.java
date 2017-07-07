@@ -83,7 +83,7 @@ public class ShareActivity extends AppCompatActivity {
 //                    contentId = uriData.getQueryParameter("content_id");
 
                 if (productId != null) {
-                    startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId), (byte) 0));
+                    startActivity(ProductActivity.newIntent(getApplicationContext(), Integer.valueOf(productId)));
 //                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     finish();
                 } else if (contentId != null) {

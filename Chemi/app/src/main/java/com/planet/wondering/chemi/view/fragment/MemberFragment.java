@@ -525,7 +525,7 @@ public class MemberFragment extends Fragment
 
         @Override
         public void onClick(View v) {
-            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getProductId(), (byte) 0));
+            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getProductId()));
         }
     }
 
