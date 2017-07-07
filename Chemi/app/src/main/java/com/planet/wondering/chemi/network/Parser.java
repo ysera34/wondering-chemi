@@ -1429,6 +1429,67 @@ public class Parser {
                         JSONObject bestReviewJSONObject = bestReviewsJSONArray.getJSONObject(i);
                         BestReview bestReview = new BestReview();
                         bestReview.setId(bestReviewJSONObject.getInt(REVIEW_ID));
+
+                        Object ratingObject = bestReviewJSONObject.get(Config.Review.Key.RATING);
+                        float ratingFloat = 0.0f;
+                        if (ratingObject instanceof Integer && (Integer) ratingObject == -1) {
+                            ratingFloat = 0.0f;
+                        } else if (ratingObject instanceof Integer) {
+                            ratingFloat = ((Integer) ratingObject).floatValue();
+                        } else {
+                            ratingFloat = ((Double) ratingObject).floatValue();
+                        }
+                        bestReview.setRatingValue(ratingFloat);
+                        bestReview.setReviewContent(bestReviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
+
+                        bestReview.setProductBrand(bestReviewJSONObject.getString(PRODUCT_BRAND));
+                        bestReview.setProductName(bestReviewJSONObject.getString(PRODUCT_NAME));
+                        bestReview.setProductImagePath(bestReviewJSONObject.getString(PRODUCT_IMAGE_PATH));
+
+                        JSONObject userJSONObject = bestReviewJSONObject.getJSONObject(USER);
+                        bestReview.addParentTextBuilder(userJSONObject.getString(Config.User.Key.NAME), false);
+                        bestReview.addParentTextBuilder(userJSONObject.getString(AGE), true);
+
+                        int gender = userJSONObject.getInt(GENDER);
+                        if (gender == 0) {
+                            bestReview.addParentTextBuilder("여성", true);
+                        } else if (gender == 1) {
+                            bestReview.addParentTextBuilder("남성", true);
+                        }
+
+                        int hasDrySkin = userJSONObject.getInt(HAS_DRY_SKIN);
+                        int hasOilySkin = userJSONObject.getInt(HAS_OILY_SKIN);
+                        int hasAllergy = userJSONObject.getInt(HAS_ALLERGY);
+
+                        if (hasDrySkin == 0 && hasOilySkin == 0 && hasAllergy == 0) {
+
+                        } else {
+                            if (hasDrySkin == 1) {
+                                bestReview.addParentTextBuilder("지성", true);
+                            }
+                            if (hasAllergy == 1) {
+                                bestReview.addParentTextBuilder("건성", true);
+                            }
+                        }
+
+                        int hasChild = userJSONObject.getInt(HAS_CHILD);
+                        int childHasDrySkin = userJSONObject.getInt(CHILD_HAS_DRY_SKIN);
+                        int childHasAllergy = userJSONObject.getInt(CHILD_HAS_ALLERGY);
+
+                        if (hasChild == 1) {
+                            if (childHasDrySkin == 0 && childHasAllergy == 0) {
+                                bestReview.addChildTextBuilder("자녀 있음", false);
+                            } else {
+                                if (childHasDrySkin == 1) {
+                                    bestReview.addChildTextBuilder("자녀 악건성", false);
+                                    if (childHasAllergy == 1) {
+                                        bestReview.addChildTextBuilder("자녀 알레르기", true);
+                                    }
+                                } else if (childHasAllergy == 1) {
+                                    bestReview.addChildTextBuilder("자녀 알레르기", false);
+                                }
+                            }
+                        }
                         bestReviews.add(bestReview);
                     }
                 }

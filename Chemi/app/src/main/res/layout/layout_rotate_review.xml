@@ -34,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="3.5"
                 android:textSize="12sp"
                 android:textColor="@color/colorAccent"/>
 
@@ -42,7 +41,6 @@
                 android:id="@+id/review_rating_message_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="따봉이예요!"
                 android:textSize="12sp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/colorAccent"/>
@@ -54,7 +52,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="1q111111\n//1231244\b/12312313\n1231dsfsdfsdfsdfsfdsfsdfsdfsdfsdfsdfsfsdfsdfsf23141414\n1231241414\n123134141"
             android:lineSpacingMultiplier="1.0"
             android:textSize="12sp"
             android:textStyle="italic"
@@ -93,7 +90,6 @@
             android:id="@+id/review_product_brand_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="보숭이"
             android:textSize="12sp"
             android:textStyle="bold|italic"
             android:textColor="@color/colorDoveGray"
@@ -105,7 +101,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="카모마일 프리미엄 물티슝"
             android:textSize="11sp"
             android:textColor="@color/colorDoveGray"
             android:ellipsize="end"

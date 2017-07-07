@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -50,7 +51,6 @@ public class SplashActivity extends AppCompatActivity {
 
         startActivityForResult(UpdateActivity.newIntent(getApplicationContext(),
                 CHECK_VERSION_REQUEST_CODE, false), CHECK_VERSION_REQUEST_CODE);
-
     }
 
     @Override
@@ -131,6 +131,8 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
+                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
         );

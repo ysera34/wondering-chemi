@@ -72,6 +72,8 @@ public class RotateViewPager extends RelativeLayout {
     protected Handler mRotateHandler;
     protected Runnable mRotateRunnable;
 
+    String[] mReviewMessageArray = getResources().getStringArray(R.array.review_rating_message_array);
+
     private void initializeView(Context context) {
         mRootView = inflate(context, R.layout.layout_rotate_view_pager, this);
         mRotateViewPager = (ViewPager) mRootView.findViewById(R.id.rotate_view_pager);
@@ -142,16 +144,32 @@ public class RotateViewPager extends RelativeLayout {
                 int restPosition = position % mBestReviews.size();
                 final BestReview bestReview = mBestReviews.get(restPosition);
                 View view = mLayoutInflater.inflate(R.layout.layout_rotate_review, container, false);
+                TextView ratingValueTextView = (TextView) view.findViewById(R.id.review_rating_value_text_view);
+                TextView ratingMessageTextView = (TextView) view.findViewById(R.id.review_rating_message_text_view);
                 TextView contentTextView = (TextView) view.findViewById(R.id.review_content_text_view);
+                TextView parentTextView = (TextView) view.findViewById(R.id.review_parent_text_view);
+                TextView childTextView = (TextView) view.findViewById(R.id.review_child_text_view);
+
+                ratingValueTextView.setText(String.valueOf(bestReview.getRatingValue()));
+                ratingMessageTextView.setText(String.valueOf(getReviewMessage(bestReview.getRatingValue())));
+                contentTextView.setText(String.valueOf(bestReview.getReviewContent()));
+
+                parentTextView.setText(bestReview.getParentTextBuilder());
+                childTextView.setText(bestReview.getChildTextBuilder());
+
+                TextView productBrandTextView = (TextView) view.findViewById(R.id.review_product_brand_text_view);
+                TextView productNameTextView = (TextView) view.findViewById(R.id.review_product_name_text_view);
                 ImageView productImageView = (ImageView) view.findViewById(R.id.review_product_image_view);
+
+                productBrandTextView.setText(String.valueOf(bestReview.getProductBrand()));
+                productNameTextView.setText(String.valueOf(bestReview.getProductName()));
                 Glide.with(getContext())
-                        .load("https://s3.ap-northeast-2.amazonaws.com/chemistaticfiles02/images/products/311.jpg")
+                        .load(bestReview.getProductImagePath())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .override(getPixelFromDp(120), getPixelFromDp(90))
                         .centerCrop()
                         .crossFade()
                         .into(productImageView);
-//                contentTextView.setText(String.valueOf(bestReview.getId()));
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -342,4 +360,12 @@ public class RotateViewPager extends RelativeLayout {
         return (int) (dp * scale + 0.5f);
     }
 
+    private String getReviewMessage(float reviewRatingValue) {
+        for (int i = 0; i < mReviewMessageArray.length; i++) {
+            if (reviewRatingValue == 0.5f * i) {
+                return mReviewMessageArray[i];
+            }
+        }
+        return "";
+    }
 }
