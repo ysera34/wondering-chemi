@@ -192,7 +192,7 @@ public class HomeFragment extends Fragment
         requestHome();
 
         if (mHomeSearchText != null) {
-            mHomeSearchButton.setText(String.valueOf(mHomeSearchText));
+            mHomeSearchButton.setHint(String.valueOf(mHomeSearchText));
             mHomeAddSearchButton.setHint(String.valueOf(mHomeSearchText));
         }
 
@@ -248,7 +248,7 @@ public class HomeFragment extends Fragment
                 break;
             case R.id.home_search_image_button:
             case R.id.home_add_search_image_button:
-                startActivity(ProductListActivity.newIntent(getActivity(), mHomeSearchButton.getText().toString()));
+                startActivity(ProductListActivity.newIntent(getActivity(), mHomeSearchButton.getHint().toString()));
                 break;
             case R.id.home_category_layout:
             case R.id.home_add_category_layout:
