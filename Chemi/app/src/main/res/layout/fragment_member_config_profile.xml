@@ -183,7 +183,7 @@
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:layout_marginEnd="6dp"
-                    android:text="자녀 악건성"
+                    android:text="자녀 건성"
                     android:textSize="11sp"
                     android:textColor="@color/colorPrimary"
                     android:background="@drawable/widget_solid_oval_rectangle_twilight_blue"/>

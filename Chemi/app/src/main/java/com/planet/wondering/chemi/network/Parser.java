@@ -5,14 +5,11 @@ import android.util.Log;
 import com.planet.wondering.chemi.model.CTag;
 import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Comment;
-import com.planet.wondering.chemi.model.content.Content;
 import com.planet.wondering.chemi.model.Hazard;
 import com.planet.wondering.chemi.model.Other;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
-import com.planet.wondering.chemi.model.content.Reference;
-import com.planet.wondering.chemi.model.content.Section;
 import com.planet.wondering.chemi.model.Tag;
 import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.model.archive.ReviewProduct;
@@ -21,6 +18,9 @@ import com.planet.wondering.chemi.model.config.FAQBody;
 import com.planet.wondering.chemi.model.config.Notice;
 import com.planet.wondering.chemi.model.config.NoticeBody;
 import com.planet.wondering.chemi.model.config.UserConfig;
+import com.planet.wondering.chemi.model.content.Content;
+import com.planet.wondering.chemi.model.content.Reference;
+import com.planet.wondering.chemi.model.content.Section;
 import com.planet.wondering.chemi.model.content.Text;
 import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
@@ -37,6 +37,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.planet.wondering.chemi.common.Common.CONTENT_COMMENT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Archive.Key.USER_ARCHIVE_ID;
@@ -1377,7 +1379,12 @@ public class Parser {
                         JSONObject promoteProductJSONObject = promoteProductsJSONArray.getJSONObject(i);
                         PromoteProduct promoteProduct = new PromoteProduct();
                         promoteProduct.setId(promoteProductJSONObject.getInt(PRODUCT_ID));
-                        promoteProduct.setBrand(promoteProductJSONObject.getString(BRAND));
+                        String brandName = promoteProductJSONObject.getString(BRAND);
+                        int index = brandName.indexOf("\u0028");
+                        if (index > -1) {
+                            brandName = brandName.substring(0, index);
+                        }
+                        promoteProduct.setBrand(brandName);
                         promoteProduct.setName(promoteProductJSONObject.getString(NAME));
                         promoteProducts.add(promoteProduct);
                     }
@@ -1442,7 +1449,12 @@ public class Parser {
                         bestReview.setRatingValue(ratingFloat);
                         bestReview.setReviewContent(bestReviewJSONObject.getString(Config.Review.Key.DESCRIPTION));
 
-                        bestReview.setProductBrand(bestReviewJSONObject.getString(PRODUCT_BRAND));
+                        String brandName = bestReviewJSONObject.getString(PRODUCT_BRAND);
+                        int index = brandName.indexOf("\u0028");
+                        if (index > -1) {
+                            brandName = brandName.substring(0, index);
+                        }
+                        bestReview.setProductBrand(brandName);
                         bestReview.setProductName(bestReviewJSONObject.getString(PRODUCT_NAME));
                         bestReview.setProductImagePath(bestReviewJSONObject.getString(PRODUCT_IMAGE_PATH));
 
@@ -1481,7 +1493,7 @@ public class Parser {
                                 bestReview.addChildTextBuilder("자녀 있음", false);
                             } else {
                                 if (childHasDrySkin == 1) {
-                                    bestReview.addChildTextBuilder("자녀 악건성", false);
+                                    bestReview.addChildTextBuilder("자녀 건성", false);
                                     if (childHasAllergy == 1) {
                                         bestReview.addChildTextBuilder("자녀 알레르기", true);
                                     }
@@ -1498,5 +1510,10 @@ public class Parser {
             Log.e(TAG, e.getMessage());
         }
         return bestReviews;
+    }
+
+    private static int indexOfPattern(Pattern pattern, String string) {
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find() ? matcher.start() : -1;
     }
 }

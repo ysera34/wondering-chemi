@@ -107,7 +107,8 @@ public class CategoryGroup {
             R.drawable.selector_category_etc,};
 
     private int[] group1PartIconSelectorResIdArray = {
-            R.drawable.selector_category_female_product, R.drawable.selector_category_momcare,
+//            R.drawable.selector_category_female_product,
+            R.drawable.selector_category_momcare,
             R.drawable.selector_category_etc,};
 
     private int[] group2PartIconSelectorResIdArray = {

@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,7 +123,7 @@ public class ReviewCreateFragment extends Fragment
         return fragment;
     }
 
-    private RelativeLayout mReviewCreateConfirmLayout;
+    private ImageView mReviewCreateConfirmImageView;
     private ImageView mReviewCreateProductImageView;
     private TextView mReviewCreateProductBrandTextView;
     private TextView mReviewCreateProductNameTextView;
@@ -166,8 +165,8 @@ public class ReviewCreateFragment extends Fragment
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_create, container, false);
 
-        mReviewCreateConfirmLayout = (RelativeLayout) view.findViewById(R.id.review_create_confirm_layout);
-        mReviewCreateConfirmLayout.setOnClickListener(this);
+        mReviewCreateConfirmImageView = (ImageView) view.findViewById(R.id.review_create_confirm_image_view);
+        mReviewCreateConfirmImageView.setOnClickListener(this);
         mReviewCreateProductImageView = (ImageView) view.findViewById(R.id.review_create_product_image_view);
         mReviewCreateProductBrandTextView = (TextView) view.findViewById(R.id.review_create_product_brand_text_view);
         mReviewCreateProductNameTextView = (TextView) view.findViewById(R.id.review_create_product_name_text_view);
@@ -248,14 +247,14 @@ public class ReviewCreateFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.review_create_confirm_layout:
+            case R.id.review_create_confirm_image_view:
                 if (!isRatingBarChanged) {
                     Toast.makeText(getActivity(), "제품의 별점을 매겨보세요", Toast.LENGTH_SHORT).show();
                 } else if (!isWriteContent) {
                     Toast.makeText(getActivity(), "제품의 리뷰를 작성해보세요", Toast.LENGTH_SHORT).show();
                 } else {
                     requestCreateReview();
-                    mReviewCreateConfirmLayout.setEnabled(false);
+                    mReviewCreateConfirmImageView.setEnabled(false);
                 }
                 break;
             case R.id.review_create_review_text_view:
@@ -571,7 +570,7 @@ public class ReviewCreateFragment extends Fragment
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(),
                                 R.string.progress_dialog_message_error, Toast.LENGTH_SHORT).show();
-                        mReviewCreateConfirmLayout.setEnabled(true);
+                        mReviewCreateConfirmImageView.setEnabled(true);
                     }
                 }
         )

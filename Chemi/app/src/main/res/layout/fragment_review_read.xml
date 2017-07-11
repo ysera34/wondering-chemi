@@ -35,22 +35,16 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:visibility="invisible"
-            android:id="@+id/review_read_more_menu_layout"
-            android:layout_width="34dp"
+        <!--android:visibility="invisible"-->
+
+        <ImageView
+            android:id="@+id/review_read_more_menu_image_view"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="14dp"
-            android:gravity="center">
+            android:src="@drawable/ic_more_vert"
+            android:scaleType="centerInside"/>
 
-            <ImageView
-                android:id="@+id/review_read_more_menu_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_more_vert"/>
-
-        </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -274,7 +268,7 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp"
                             android:layout_marginEnd="6dp"
-                            android:text="자녀 악건성"
+                            android:text="자녀 건성"
                             android:textSize="11sp"
                             android:textColor="@color/colorArmadillo"
                             android:background="@drawable/widget_solid_oval_rectangle_black_haze"/>

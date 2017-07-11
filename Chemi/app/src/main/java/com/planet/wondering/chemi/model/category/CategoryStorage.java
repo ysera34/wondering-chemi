@@ -32,13 +32,6 @@ public class CategoryStorage {
     }
 
     public CategoryGroup getCategoryGroup(int categoryGroupId) {
-//        for (CategoryGroup categoryGroup : mCategoryGroups) {
-//            if (categoryGroup.getId() == categoryGroupId) {
-//                return categoryGroup;
-//            }
-//        }
-//        return null;
-
         return new CategoryGroup(mContext, categoryGroupId);
     }
 }

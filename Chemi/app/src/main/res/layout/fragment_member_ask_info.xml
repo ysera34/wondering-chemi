@@ -184,76 +184,76 @@
             android:layout_height="wrap_content"
             android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
-
-            <CheckBox
-                android:id="@+id/member_ask_info_parent_none_check_box"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:text="없음"
-                android:textSize="15sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp">
 
-            <CheckBox
-                android:id="@+id/member_ask_info_parent_dry_skin_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:text="건성"
-                android:textSize="15sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                <CheckBox
+                    android:id="@+id/member_ask_info_parent_none_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:text="없음"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
 
-            <CheckBox
-                android:id="@+id/member_ask_info_parent_oily_skin_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:text="지성"
-                android:textSize="15sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                <CheckBox
+                    android:id="@+id/member_ask_info_parent_dry_skin_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:text="건성"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
 
-            <CheckBox
-                android:id="@+id/member_ask_info_parent_allergy_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:text="알레르기 (아토피 등)"
-                android:textSize="15sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                <CheckBox
+                    android:id="@+id/member_ask_info_parent_oily_skin_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:text="지성"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
 
-        </LinearLayout>
+                <CheckBox
+                    android:id="@+id/member_ask_info_parent_allergy_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:text="알레르기 (아토피 등)"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
+
+            </LinearLayout>
         </HorizontalScrollView>
 
         <TextView
@@ -329,59 +329,59 @@
             android:layout_height="wrap_content"
             android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <CheckBox
-                android:id="@+id/member_ask_info_child_none_check_box"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:text="없음"
-                android:textSize="16sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                android:layout_marginTop="10dp">
 
-            <CheckBox
-                android:id="@+id/member_ask_info_child_dry_skin_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:text="악건성"
-                android:textSize="16sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                <CheckBox
+                    android:id="@+id/member_ask_info_child_none_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:text="없음"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
 
-            <CheckBox
-                android:id="@+id/member_ask_info_child_allergy_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:text="알레르기 (아토피 등)"
-                android:textSize="16sp"
-                android:textColor="@color/color_selector_check_dove_gray_primary"
-                android:button="@null"
-                android:background="@drawable/selector_check_box_ask_info"/>
+                <CheckBox
+                    android:id="@+id/member_ask_info_child_dry_skin_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:text="건성"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
 
-        </LinearLayout>
+                <CheckBox
+                    android:id="@+id/member_ask_info_child_allergy_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:text="알레르기 (아토피 등)"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_selector_check_dove_gray_primary"
+                    android:button="@null"
+                    android:background="@drawable/selector_check_box_ask_info"/>
+
+            </LinearLayout>
 
         </HorizontalScrollView>
 

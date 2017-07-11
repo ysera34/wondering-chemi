@@ -51,7 +51,7 @@ public class ImageActivity extends AppBaseActivity implements View.OnClickListen
         mImageTitleTextView.setText(String.valueOf(mTitle));
 
         findViewById(R.id.image_title_text_layout).setOnClickListener(this);
-        findViewById(R.id.clear_layout).setOnClickListener(this);
+        findViewById(R.id.clear_image_view).setOnClickListener(this);
         mFullScreenImageView = (ImageView) findViewById(R.id.full_screen_image_view);
 
         Glide.with(getApplicationContext())
@@ -63,7 +63,7 @@ public class ImageActivity extends AppBaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_title_text_layout:
-            case R.id.clear_layout:
+            case R.id.clear_image_view:
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;

@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,7 +126,6 @@ public class ReviewReadFragment extends Fragment
 
     private InputMethodManager mInputMethodManager;
     private LinearLayout mReviewReadBackLayout;
-    private RelativeLayout mReviewReadMoreMenuLayout;
     private ImageView mReviewReadMoreMenuImageView;
     private PopupWindow mPopupWindow;
 
@@ -195,9 +193,8 @@ public class ReviewReadFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_review_read, container, false);
         mReviewReadBackLayout = (LinearLayout) view.findViewById(R.id.review_read_back_layout);
         mReviewReadBackLayout.setOnClickListener(this);
-        mReviewReadMoreMenuLayout = (RelativeLayout) view.findViewById(R.id.review_read_more_menu_layout);
-        mReviewReadMoreMenuLayout.setOnClickListener(this);
         mReviewReadMoreMenuImageView = (ImageView) view.findViewById(R.id.review_read_more_menu_image_view);
+        mReviewReadMoreMenuImageView.setOnClickListener(this);
 
         mReviewReadNestedScrollView = (NestedScrollView) view.findViewById(R.id.review_read_nested_scroll_view);
 
@@ -258,7 +255,7 @@ public class ReviewReadFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (mReview.isAuthor()) {
-            mReviewReadMoreMenuLayout.setVisibility(View.VISIBLE);
+            mReviewReadMoreMenuImageView.setVisibility(View.VISIBLE);
         }
         if (mReview != null) {
             bindProduct();
@@ -293,9 +290,9 @@ public class ReviewReadFragment extends Fragment
             case R.id.review_read_back_layout:
                 getActivity().onBackPressed();
                 break;
-            case R.id.review_read_more_menu_layout:
+            case R.id.review_read_more_menu_image_view:
                 mInputMethodManager.hideSoftInputFromWindow(mCommentCreateEditText.getWindowToken(), 0);
-                displayPopupWindow(mReviewReadMoreMenuLayout);
+                displayPopupWindow(mReviewReadMoreMenuImageView);
                 rotateMoreMenuAnimation(true);
                 break;
             case R.id.popup_menu_action_update:

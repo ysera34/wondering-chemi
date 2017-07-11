@@ -268,7 +268,7 @@
         <item>@string/category_part_name_etc</item>
     </string-array>
     <string-array name="category_group_1_part_name_array">
-        <item>@string/category_part_name_female_product</item>
+        <!--<item>@string/category_part_name_female_product</item>-->
         <item>@string/category_part_name_mom_care</item>
         <item>@string/category_part_name_etc</item>
     </string-array>

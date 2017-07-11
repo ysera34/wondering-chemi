@@ -180,7 +180,9 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         if (mTagName != null) {
             mSearchAutoCompleteTextView.setText(mTagName);
         }
-        mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+        if (mCategoryName != null) {
+            mSearchAutoCompleteTextView.setHint(getString(R.string.category_name_hint_format, mCategoryName));
+        }
         mSearchAutoCompleteTextView.setCursorVisible(true);
         mSearchAutoCompleteTextView.setSelection(mSearchAutoCompleteTextView.getText().length());
         mSearchAutoCompleteTextView.setThreshold(1);
@@ -221,7 +223,6 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
                 return false;
             }
         });
-
         mSearchAutoCompleteTextView.setOnClickListener(this);
 
         mProductListBackArrowImageView = (ImageView) view.findViewById(R.id.product_list_back_arrow_image_view);

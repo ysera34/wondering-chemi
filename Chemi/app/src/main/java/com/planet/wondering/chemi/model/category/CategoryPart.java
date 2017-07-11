@@ -73,26 +73,26 @@ public class CategoryPart {
                         mCategoryPieces.add(new CategoryPiece(babyNappyBiggestCategoryPieces));
                         break;
                     case 1:
-                        mCategoryPieces.add(new CategoryPiece("베이비물티슈", 30));
+                        mCategoryPieces.add(new CategoryPiece("베이비 물티슈", 30));
                         break;
                     case 2:
-                        mCategoryPieces.add(new CategoryPiece("클렌저/워시", 31));
-                        mCategoryPieces.add(new CategoryPiece("로션/에센스", 32));
-                        mCategoryPieces.add(new CategoryPiece("크림/젤(겔)/팩", 33));
-                        mCategoryPieces.add(new CategoryPiece("오일", 34));
-                        mCategoryPieces.add(new CategoryPiece("파우더/미스트", 35));
-                        mCategoryPieces.add(new CategoryPiece("립케어/립밤", 36));
-                        mCategoryPieces.add(new CategoryPiece("버터/밤/오인트먼트(연고)", 64));
+                        mCategoryPieces.add(new CategoryPiece("베이비 클렌저/워시", 31));
+                        mCategoryPieces.add(new CategoryPiece("베이비 로션/에센스", 32));
+                        mCategoryPieces.add(new CategoryPiece("베이비 크림/젤(겔)/팩", 33));
+                        mCategoryPieces.add(new CategoryPiece("베이비 오일", 34));
+                        mCategoryPieces.add(new CategoryPiece("베이비 파우더/미스트", 35));
+                        mCategoryPieces.add(new CategoryPiece("베이비 립케어/립밤", 36));
+                        mCategoryPieces.add(new CategoryPiece("베이비 버터/밤/연고", 64));
                         break;
                     case 3:
-                        mCategoryPieces.add(new CategoryPiece("선크림/선로션", 37));
-                        mCategoryPieces.add(new CategoryPiece("선케어 기타", 38));
+                        mCategoryPieces.add(new CategoryPiece("베이비 선크림/선로션", 37));
+                        mCategoryPieces.add(new CategoryPiece("베이비 선케어 기타", 38));
                         break;
                     case 4:
-                        mCategoryPieces.add(new CategoryPiece("샴푸/린스", 39));
+                        mCategoryPieces.add(new CategoryPiece("베이비 샴푸/린스", 39));
                         break;
                     case 5:
-                        mCategoryPieces.add(new CategoryPiece("아이용치약", 40));
+                        mCategoryPieces.add(new CategoryPiece("아이용 치약", 40));
                         break;
                     case 6:
                         mCategoryPieces.add(new CategoryPiece("기타 (베이비)", 41));
@@ -101,19 +101,25 @@ public class CategoryPart {
                 break;
             case 1:
                 switch (categoryPartId) {
+//                    case 0:
+//                        mCategoryPieces.add(new CategoryPiece("소형", 42));
+//                        mCategoryPieces.add(new CategoryPiece("중형", 43));
+//                        mCategoryPieces.add(new CategoryPiece("대형", 44));
+//                        mCategoryPieces.add(new CategoryPiece("오버나이트", 45));
+//                        mCategoryPieces.add(new CategoryPiece("팬티라이너", 46));
+//                        mCategoryPieces.add(new CategoryPiece("체내형", 47));
+//                        mCategoryPieces.add(new CategoryPiece("여성청결제", 48));
+//                        break;
+//                    case 1:
+//                        mCategoryPieces.add(new CategoryPiece("임산부화장품", 49));
+//                        break;
+//                    case 2:
+//                        mCategoryPieces.add(new CategoryPiece("기타 (맘/여성)", 50));
+//                        break;
                     case 0:
-                        mCategoryPieces.add(new CategoryPiece("소형", 42));
-                        mCategoryPieces.add(new CategoryPiece("중형", 43));
-                        mCategoryPieces.add(new CategoryPiece("대형", 44));
-                        mCategoryPieces.add(new CategoryPiece("오버나이트", 45));
-                        mCategoryPieces.add(new CategoryPiece("팬티라이너", 46));
-                        mCategoryPieces.add(new CategoryPiece("체내형", 47));
-                        mCategoryPieces.add(new CategoryPiece("여성청결제", 48));
+                        mCategoryPieces.add(new CategoryPiece("임산부 화장품", 49));
                         break;
                     case 1:
-                        mCategoryPieces.add(new CategoryPiece("임산부화장품", 49));
-                        break;
-                    case 2:
                         mCategoryPieces.add(new CategoryPiece("기타 (맘/여성)", 50));
                         break;
                 }
@@ -123,7 +129,7 @@ public class CategoryPart {
                     case 0:
                         mCategoryPieces.add(new CategoryPiece("바디워시", 52));
                         mCategoryPieces.add(new CategoryPiece("핸드워시", 53));
-                        mCategoryPieces.add(new CategoryPiece("클렌징폼", 54));
+//                        mCategoryPieces.add(new CategoryPiece("클렌징폼", 54));
                         break;
                     case 1:
                         mCategoryPieces.add(new CategoryPiece("샴푸", 55));
@@ -132,7 +138,7 @@ public class CategoryPart {
                         break;
                     case 2:
                         mCategoryPieces.add(new CategoryPiece("치약", 58));
-                        mCategoryPieces.add(new CategoryPiece("구강케어", 59));
+//                        mCategoryPieces.add(new CategoryPiece("구강케어", 59));
                         break;
                     case 3:
                         mCategoryPieces.add(new CategoryPiece("기타 (일반)", 60));
@@ -142,7 +148,7 @@ public class CategoryPart {
             case 3:
                 switch (categoryPartId) {
                     case 0:
-                        mCategoryPieces.add(new CategoryPiece("일반물티슈", 61));
+                        mCategoryPieces.add(new CategoryPiece("일반 물티슈", 61));
                         break;
                     case 1:
                         mCategoryPieces.add(new CategoryPiece("탈취제/세탁세제", 62));

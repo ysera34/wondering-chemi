@@ -75,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="악건성"
+                android:text="건성"
                 android:textSize="19sp"
                 android:textColor="@color/colorWhite"/>
 

@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,7 +108,7 @@ public class ReviewUpdateFragment extends Fragment
         return fragment;
     }
 
-    private RelativeLayout mReviewUpdateConfirmLayout;
+    private ImageView mUpdateConfirmImageView;
     private ImageView mUpdateProductImageView;
     private TextView mUpdateProductBrandTextView;
     private TextView mUpdateProductNameTextView;
@@ -153,8 +152,8 @@ public class ReviewUpdateFragment extends Fragment
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_update, container, false);
 
-        mReviewUpdateConfirmLayout = (RelativeLayout) view.findViewById(R.id.review_update_confirm_layout);
-        mReviewUpdateConfirmLayout.setOnClickListener(this);
+        mUpdateConfirmImageView = (ImageView) view.findViewById(R.id.review_update_confirm_image_view);
+        mUpdateConfirmImageView.setOnClickListener(this);
         mUpdateProductImageView = (ImageView) view.findViewById(R.id.review_update_product_image_view);
         mUpdateProductBrandTextView = (TextView) view.findViewById(R.id.review_update_product_brand_text_view);
         mUpdateProductNameTextView = (TextView) view.findViewById(R.id.review_update_product_name_text_view);
@@ -296,7 +295,7 @@ public class ReviewUpdateFragment extends Fragment
     public void onClick(View v) {
         mProgressDialog = new CustomProgressDialog(getActivity());
         switch (v.getId()) {
-            case R.id.review_update_confirm_layout:
+            case R.id.review_update_confirm_image_view:
                 mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 mProgressDialog.show();
                 if (!isHasUploadImage1 && !isHasUploadImage2 && !isHasUploadImage3) {

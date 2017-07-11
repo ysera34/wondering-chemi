@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:paddingTop="40dp"
+              android:paddingBottom="20dp"
               android:paddingStart="16dp"
               android:paddingEnd="16dp"
               android:background="@color/colorWhite">
@@ -26,6 +27,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="4dp"
                 android:src="@drawable/ic_star_medium_fill"/>
 
@@ -62,7 +64,6 @@
             android:id="@+id/review_parent_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="doquixote / 20대 / 여성 / 건성 / 알레르기"
             android:textSize="10sp"
             android:textStyle="bold|italic"
             android:textColor="@color/colorPrimary"/>
@@ -72,7 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="자녀 악건성 / 자녀알레르기"
             android:textSize="10sp"
             android:textStyle="bold|italic"
             android:textColor="@color/colorPrimary"/>
@@ -112,7 +112,5 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

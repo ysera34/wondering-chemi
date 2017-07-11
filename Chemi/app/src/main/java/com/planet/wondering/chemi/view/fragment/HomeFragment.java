@@ -124,10 +124,6 @@ public class HomeFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         mScreenWidth = ((AppBaseActivity) getActivity()).getScreenWidth();
-        PromoteProduct product = PromoteProductSharedPreferences.getStoredPromoteProduct(getActivity());
-        if (product != null) {
-            mHomeSearchText = product.getBrand() + " " + product.getName();
-        }
 
         mLayoutInflater = LayoutInflater.from(getContext());
         isAddedSearchLayout = false;
@@ -178,7 +174,6 @@ public class HomeFragment extends Fragment
             dialogFragment.show(getFragmentManager(), "congratulation_dialog");
         }
 
-
         mAddSearchLayout = (RelativeLayout) mLayoutInflater.inflate(R.layout.layout_home_add_search_view, mHomeHeaderLayout, false);
         mHomeAddSearchButton = (Button) mAddSearchLayout.findViewById(R.id.home_add_search_text_button);
         mHomeAddSearchButton.setOnClickListener(this);
@@ -190,11 +185,6 @@ public class HomeFragment extends Fragment
         setCategoryViewClickListener();
         updateUI();
         requestHome();
-
-        if (mHomeSearchText != null) {
-            mHomeSearchButton.setHint(String.valueOf(mHomeSearchText));
-            mHomeAddSearchButton.setHint(String.valueOf(mHomeSearchText));
-        }
 
         if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
             mPromoteSignInLayout.setVisibility(View.GONE);
@@ -211,8 +201,8 @@ public class HomeFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         mHomeContentViewPager.addOnPageChangeListener();
         mHomeContentViewPager.startRotateViewPager();
         mHomeReviewViewPager.addOnPageChangeListener();
@@ -220,8 +210,19 @@ public class HomeFragment extends Fragment
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onResume() {
+        super.onResume();
+        PromoteProduct product = PromoteProductSharedPreferences.getStoredPromoteProduct(getActivity());
+        if (product != null) {
+            mHomeSearchText = product.getBrand() + " " + product.getName();
+            mHomeSearchButton.setHint(String.valueOf(mHomeSearchText));
+            mHomeAddSearchButton.setHint(String.valueOf(mHomeSearchText));
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         mHomeContentViewPager.removeOnPageChangeListener();
         mHomeContentViewPager.stopRotateViewPager();
         mHomeReviewViewPager.removeOnPageChangeListener();

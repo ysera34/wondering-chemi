@@ -23,20 +23,14 @@
             android:textSize="16sp"
             android:textColor="@color/colorFontNormal"/>
 
-        <RelativeLayout
-            android:id="@+id/review_update_confirm_layout"
-            android:layout_width="34dp"
+        <ImageView
+            android:id="@+id/review_update_confirm_image_view"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="18dp"
-            android:gravity="center">
+            android:src="@drawable/ic_confirm"
+            android:scaleType="centerInside"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_confirm"/>
-
-        </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView
