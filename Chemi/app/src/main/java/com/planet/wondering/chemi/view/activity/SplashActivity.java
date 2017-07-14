@@ -42,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
-    private static final int SPLASH_TIME_OUT = 1000;
+    private static final int SPLASH_TIME_OUT = 800;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

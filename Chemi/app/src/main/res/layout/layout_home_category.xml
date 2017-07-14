@@ -8,6 +8,7 @@
               android:orientation="horizontal"
               android:gravity="center"
               android:background="@color/colorWhite"
+              android:transitionName="category_layout_transition"
               android:elevation="1dp">
 
     <com.planet.wondering.chemi.view.custom.CategoryGroupView

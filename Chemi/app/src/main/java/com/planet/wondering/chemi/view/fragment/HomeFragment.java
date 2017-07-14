@@ -1,6 +1,9 @@
 package com.planet.wondering.chemi.view.fragment;
 
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -255,18 +258,54 @@ public class HomeFragment extends Fragment
             case R.id.home_add_category_layout:
                 break;
             case R.id.category_group_view_1:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = SearchActivity.newIntent(getActivity(), 0);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            mHomeCategoryLayout, "category_layout_transition");
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(SearchActivity.newIntent(getActivity(), 0));
+                }
+                break;
             case R.id.add_category_group_view_1:
                 startActivity(SearchActivity.newIntent(getActivity(), 0));
                 break;
             case R.id.category_group_view_2:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = SearchActivity.newIntent(getActivity(), 1);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            mHomeCategoryLayout, "category_layout_transition");
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(SearchActivity.newIntent(getActivity(), 1));
+                }
+                break;
             case R.id.add_category_group_view_2:
                 startActivity(SearchActivity.newIntent(getActivity(), 1));
                 break;
             case R.id.category_group_view_3:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = SearchActivity.newIntent(getActivity(), 2);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            mHomeCategoryLayout, "category_layout_transition");
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(SearchActivity.newIntent(getActivity(), 2));
+                }
+                break;
             case R.id.add_category_group_view_3:
                 startActivity(SearchActivity.newIntent(getActivity(), 2));
                 break;
             case R.id.category_group_view_4:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = SearchActivity.newIntent(getActivity(), 3);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            mHomeCategoryLayout, "category_layout_transition");
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(SearchActivity.newIntent(getActivity(), 3));
+                }
+                break;
             case R.id.add_category_group_view_4:
                 startActivity(SearchActivity.newIntent(getActivity(), 3));
                 break;
