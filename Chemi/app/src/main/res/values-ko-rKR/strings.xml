@@ -32,6 +32,12 @@
     <string name="product_sort_rating_value">평점 순</string>
     <string name="product_sort_rating_count">리뷰 순</string>
     <string name="product_total_count">검색 결과 %s 개</string>
+    <string name="chemical_chart_title_format">총 %s개의 성분 중</string>
+    <string name="chemical_chart_description">*그래프는 전체 성분 갯수에 대한 비율을 나타냈어요.</string>
+    <string name="chemical_ewg_value_name_1">등급\n미정</string>
+    <string name="chemical_ewg_value_name_2">낮은\n위험도</string>
+    <string name="chemical_ewg_value_name_3">중간\n위험도</string>
+    <string name="chemical_ewg_value_name_4">높은\n위험도</string>
     <string name="product_list_result_paginating_message">검색된 제품이 더 있어요!\n스크롤을 조금 더 올려주세요.</string>
     <string name="product_list_result_empty_request_promote_message">검색어에 대한 검색을 마쳤어요!\n찾고 계신 제품이 없다면</string>
     <string name="product_review_count">(%s명)</string>
@@ -103,7 +109,6 @@
         <item>@string/confirm_validation_message_incorrect</item>
         <item>@string/confirm_validation_message_correct</item>
     </string-array>
-
 
     <string name="survey_year_format">%s년</string>
     <string name="survey_info_progress_stage_format">%1$s단계 중 %2$s단계</string>

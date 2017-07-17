@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -105,6 +106,9 @@ public class ReviewListFragment extends Fragment {
     private Review mReview;
     private ArrayList<Review> mReviews;
 
+    private Fragment mChartFragment;
+    private FragmentManager mChildFragmentManager;
+
     private RecyclerView mReviewRecyclerView;
     private ReviewAdapter mReviewAdapter;
 
@@ -114,6 +118,8 @@ public class ReviewListFragment extends Fragment {
 
         mProductId = getArguments().getInt(ARG_PRODUCT_ID, -1);
         mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
+
+        mChildFragmentManager = getChildFragmentManager();
 
         mReviews = new ArrayList<>();
         mUrlBuilder = new StringBuilder();
@@ -125,22 +131,19 @@ public class ReviewListFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review_list, container, false);
 
+        int[] numberOfEachEWGRatings = mProduct.getNumberOfEachEWGRating();
+        int chemicalCount = mProduct.getChemicals().size();
+        mChartFragment = mChildFragmentManager.findFragmentById(R.id.chart_fragment_container);
+        if (mChartFragment == null) {
+            mChildFragmentManager.beginTransaction()
+                    .add(R.id.chart_fragment_container,
+                            ChemicalChartFragment.newInstance(chemicalCount, numberOfEachEWGRatings))
+                    .commit();
+        }
+
         mReviewRecyclerView = (RecyclerView) view.findViewById(R.id.review_recycler_view);
         mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        SeparatorDecoration decoration =
-//                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
-//        mReviewRecyclerView.addItemDecoration(decoration);
-//        mReviewRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener() {
-//            @Override
-//            public void onShowView() {
-//                ((ProductActivity) getActivity()).showBottomNavigationView();
-//            }
-//
-//            @Override
-//            public void onHideView() {
-//                ((ProductActivity) getActivity()).hideBottomNavigationView();
-//            }
-//        });
+        mReviewRecyclerView.setNestedScrollingEnabled(false);
         mReviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

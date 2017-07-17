@@ -125,6 +125,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 
         mChemicalRecyclerView = (RecyclerView) view.findViewById(R.id.chemical_recycler_view);
         mChemicalRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mChemicalRecyclerView.setNestedScrollingEnabled(false);
 //        SeparatorDecoration decoration =
 //                new SeparatorDecoration(getActivity(), android.R.color.transparent, 0.7f);
 //        mChemicalRecyclerView.addItemDecoration(decoration);

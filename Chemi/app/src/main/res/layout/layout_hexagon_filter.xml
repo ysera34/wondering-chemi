@@ -7,8 +7,8 @@
 
     <RelativeLayout
         android:id="@+id/hexagon_filter_image_layout"
-        android:layout_width="56dp"
-        android:layout_height="63dp"
+        android:layout_width="55dp"
+        android:layout_height="65dp"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="14dp">
 
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:paddingTop="12dp">
+            android:paddingTop="11dp">
 
             <TextView
                 android:id="@+id/count_text_view"

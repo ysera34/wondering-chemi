@@ -101,25 +101,19 @@ public class CategoryPart {
                 break;
             case 1:
                 switch (categoryPartId) {
-//                    case 0:
+                    case 0:
 //                        mCategoryPieces.add(new CategoryPiece("소형", 42));
 //                        mCategoryPieces.add(new CategoryPiece("중형", 43));
 //                        mCategoryPieces.add(new CategoryPiece("대형", 44));
 //                        mCategoryPieces.add(new CategoryPiece("오버나이트", 45));
 //                        mCategoryPieces.add(new CategoryPiece("팬티라이너", 46));
 //                        mCategoryPieces.add(new CategoryPiece("체내형", 47));
-//                        mCategoryPieces.add(new CategoryPiece("여성청결제", 48));
-//                        break;
-//                    case 1:
-//                        mCategoryPieces.add(new CategoryPiece("임산부화장품", 49));
-//                        break;
-//                    case 2:
-//                        mCategoryPieces.add(new CategoryPiece("기타 (맘/여성)", 50));
-//                        break;
-                    case 0:
-                        mCategoryPieces.add(new CategoryPiece("임산부 화장품", 49));
+                        mCategoryPieces.add(new CategoryPiece("여성청결제", 48));
                         break;
                     case 1:
+                        mCategoryPieces.add(new CategoryPiece("임산부화장품", 49));
+                        break;
+                    case 2:
                         mCategoryPieces.add(new CategoryPiece("기타 (맘/여성)", 50));
                         break;
                 }

@@ -78,10 +78,10 @@ public class ProductFragment extends Fragment {
         mProductDetailListFragments = new ArrayList<>();
         mProductDetailListFragmentTitles = new ArrayList<>();
 
+        addProductDetailFragment(ReviewListFragment.newInstance(mProduct),
+                getString(R.string.product_detail_tab_title2));
         addProductDetailFragment(ChemicalListFragment.newInstance(mProduct),
                 getString(R.string.product_detail_tab_title1));
-        addProductDetailFragment(ReviewListFragment.newInstance(mProduct),
-                getString(R.string.product_detail_tab_title2) + getString(R.string.product_detail_tab_title2_description, String.valueOf(mProduct.getRatingCount())));
     }
 
     @Nullable
@@ -92,6 +92,13 @@ public class ProductFragment extends Fragment {
 
         mProductDetailTabLayout = (TabLayout) view.findViewById(R.id.product_detail_tab_layout);
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
+
+//        mChildFragment = mChildFragmentManager.findFragmentById(R.id.product_fragment_container);
+//        if (mChildFragment == null) {
+//            mChildFragmentManager.beginTransaction()
+//                    .add(R.id.product_fragment_container, ChemicalChartFragment.newInstance())
+//                    .commit();
+//        }
 
         mFragmentPagerAdapter = new ProductFragmentPagerAdapter(getChildFragmentManager());
         mProductDetailViewPager.setAdapter(mFragmentPagerAdapter);

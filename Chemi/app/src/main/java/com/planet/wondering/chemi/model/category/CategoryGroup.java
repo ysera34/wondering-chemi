@@ -22,7 +22,6 @@ public class CategoryGroup {
     private String[] group2PartNameArray;
     private String[] group3PartNameArray;
 
-
     public CategoryGroup(Context context, int categoryGroupId) {
         mContext = context;
         mCategoryParts = new ArrayList<>();
@@ -107,7 +106,7 @@ public class CategoryGroup {
             R.drawable.selector_category_etc,};
 
     private int[] group1PartIconSelectorResIdArray = {
-//            R.drawable.selector_category_female_product,
+            R.drawable.selector_category_female_product,
             R.drawable.selector_category_momcare,
             R.drawable.selector_category_etc,};
 
