@@ -36,9 +36,10 @@
     <string name="product_list_result_empty_request_promote_message">검색어에 대한 검색을 마쳤어요!\n찾고 계신 제품이 없다면</string>
     <string name="product_review_count">(%s명)</string>
     <string name="review_count_format">%s건</string>
-    <string name="product_detail_tab_title1">성분</string>
-    <string name="product_detail_tab_title2">리뷰</string>
+    <string name="product_detail_tab_title1">전체 성분</string>
+    <string name="product_detail_tab_title2">제품 정보 및 리뷰</string>
     <string name="product_detail_tab_title2_description">\u0020(%s건)</string>
+    <string name="total_count_format">%s개</string>
     <string name="chemical_whole_true_message">전성분</string>
     <string name="chemical_whole_false_message">주성분</string>
     <string name="chemical_list_sort_hazard">위험도 순</string>
@@ -268,7 +269,7 @@
         <item>@string/category_part_name_etc</item>
     </string-array>
     <string-array name="category_group_1_part_name_array">
-        <!--<item>@string/category_part_name_female_product</item>-->
+        <item>@string/category_part_name_female_product</item>
         <item>@string/category_part_name_mom_care</item>
         <item>@string/category_part_name_etc</item>
     </string-array>

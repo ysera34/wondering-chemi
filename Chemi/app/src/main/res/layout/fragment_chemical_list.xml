@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:custom="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
@@ -95,44 +99,55 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="@color/colorWhite"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:paddingBottom="8dp"
         android:elevation="1dp">
-        <!--android:layout_marginBottom="2dp"-->
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status0"
-            custom:hexagonLabel="전체 성분"/>
+            android:layout_weight="1"
+            custom:hexagonImageSrc="@drawable/ic_chemical_ewg_value_maker_0"
+            custom:hexagonLabel="전체성분"/>
+        <!--custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status0"-->
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status1"
+            android:layout_weight="1"
+            custom:hexagonImageSrc="@drawable/ic_chemical_ewg_value_maker_1"
             custom:hexagonLabel="낮은위험도"/>
+        <!--custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status1"-->
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status2"
+            android:layout_weight="1"
+            custom:hexagonImageSrc="@drawable/ic_chemical_ewg_value_maker_2"
             custom:hexagonLabel="중간위험도"/>
+        <!--custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status2"-->
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon4"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status3"
+            android:layout_weight="1"
+            custom:hexagonImageSrc="@drawable/ic_chemical_ewg_value_maker_3"
             custom:hexagonLabel="높은위험도"/>
+        <!--custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status3"-->
 
         <com.planet.wondering.chemi.view.custom.HexagonFilterLayout
             android:id="@+id/hexagon5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status4"
-            custom:hexagonLabel="등급 미정"/>
+            android:layout_weight="1"
+            custom:hexagonImageSrc="@drawable/ic_chemical_ewg_value_maker_4"
+            custom:hexagonLabel="등급미정"/>
+        <!--custom:hexagonImageSrc="@drawable/chemical_composition_dangerous_status4"-->
 
     </LinearLayout>
 
@@ -144,3 +159,4 @@
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

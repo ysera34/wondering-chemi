@@ -3,6 +3,6 @@
              android:id="@+id/member_fragment_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@drawable/home_baby02">
+             android:background="@drawable/home_baby">
 
 </FrameLayout>

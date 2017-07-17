@@ -3,7 +3,10 @@ package com.planet.wondering.chemi.view.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -61,14 +64,19 @@ public class HexagonFilterLayout extends LinearLayout {
         setWillNotDraw(false);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mRootView = inflate(context, R.layout.layout_hexagon_filter, this);
+        setGravity(Gravity.CENTER_HORIZONTAL);
+        setOrientation(VERTICAL);
         mHexagonFilterImageLayout = (RelativeLayout) mRootView.findViewById(R.id.hexagon_filter_image_layout);
         mHexagonFilterImageView = (ImageView) mRootView.findViewById(R.id.hexagon_filter_image_view);
         mHexagonFilterImageView.setImageResource(mHexagonImageSrc);
         mCountTextView = (TextView) mRootView.findViewById(R.id.count_text_view);
         mCountTextView.setText(String.valueOf(mHexagonCount));
+        mCountTextView.setTypeface(Typeface.DEFAULT);
         mUnitTextView = (TextView) mRootView.findViewById(R.id.unit_text_view);
+        mUnitTextView.setTypeface(Typeface.DEFAULT);
         mLabelTextView = (TextView) mRootView.findViewById(R.id.label_text_view);
         mLabelTextView.setText(mHexagonLabel);
+        mLabelTextView.setTypeface(Typeface.DEFAULT);
 //        invalidate();
     }
 
@@ -81,6 +89,8 @@ public class HexagonFilterLayout extends LinearLayout {
         scale.setFillAfter(true);
         scale.setDuration(250);
         mHexagonFilterImageLayout.startAnimation(scale);
+        mLabelTextView.setTextColor(Color.parseColor("#757575"));
+        mLabelTextView.setTypeface(Typeface.DEFAULT_BOLD);
         mScaleState = true;
     }
 
@@ -93,6 +103,8 @@ public class HexagonFilterLayout extends LinearLayout {
         scale.setFillAfter(true);
         scale.setDuration(250);
         mHexagonFilterImageLayout.startAnimation(scale);
+        mLabelTextView.setTextColor(Color.parseColor("#9b9b9b"));
+        mLabelTextView.setTypeface(Typeface.DEFAULT);
         mScaleState = false;
     }
 
