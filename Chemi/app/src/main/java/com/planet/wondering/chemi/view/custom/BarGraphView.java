@@ -29,6 +29,7 @@ public class BarGraphView extends LinearLayout {
     public BarGraphView(Context context, int barNameResId,
                         int barGraphValue, int barGraphTargetWidth, int barColorResId) {
         super(context);
+        mContext = context;
         mBarNameResId = barNameResId;
         mBarGraphValue = barGraphValue;
         mBarGraphTargetWidth = barGraphTargetWidth;
@@ -41,6 +42,7 @@ public class BarGraphView extends LinearLayout {
         initializeView();
     }
 
+    private Context mContext;
     private LinearLayout.LayoutParams mLayoutParams;
     private TextView mBarNameTextView;
     private View mBarGraphView;
@@ -52,28 +54,30 @@ public class BarGraphView extends LinearLayout {
     private int mBarColorResId;
 
     private void initializeView() {
-        setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixelFromDp(23)));
+        setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixelFromDp(30)));
         setOrientation(HORIZONTAL);
         setBaselineAligned(false);
-        mBarNameTextView = new TextView(getContext());
-        mBarGraphView = new View(getContext());
-        mCountTextView = new TextView(getContext());
+
+        mBarNameTextView = new TextView(mContext);
+        mBarGraphView = new View(mContext);
+        mCountTextView = new TextView(mContext);
         mWidthResizeAnimation = new WidthResizeAnimation(mBarGraphView, 0, mBarGraphTargetWidth);
         mWidthResizeAnimation.setDuration(1000);
 
-        mBarNameTextView.setText(getResources().getString(mBarNameResId));
-        mBarNameTextView.setMaxLines(2);
-        mBarNameTextView.setGravity(Gravity.CENTER | Gravity.START);
-        mBarNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-        mBarNameTextView.setTextColor(getResources().getColor(mBarColorResId));
         mBarNameTextView.setLayoutParams(new LayoutParams(getPixelFromDp(35), ViewGroup.LayoutParams.MATCH_PARENT));
+        mBarNameTextView.setMaxLines(2);
+        mBarNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        mBarNameTextView.setText(getResources().getString(mBarNameResId));
+        mBarNameTextView.setGravity(Gravity.CENTER | Gravity.START);
+        mBarNameTextView.setTextColor(getResources().getColor(mBarColorResId));
+        mBarNameTextView.setTypeface(Typeface.DEFAULT);
         addView(mBarNameTextView);
         mLayoutParams = (LinearLayout.LayoutParams) mBarNameTextView.getLayoutParams();
         mLayoutParams.setMargins(0, 0, getPixelFromDp(4), 0);
 
-        mBarGraphView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mLayoutParams = (LinearLayout.LayoutParams) mBarGraphView.getLayoutParams();
-        mLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+        mBarGraphView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
+//        mLayoutParams = (LinearLayout.LayoutParams) mBarGraphView.getLayoutParams();
+//        mLayoutParams.gravity = Gravity.CENTER_VERTICAL;
         mBarGraphView.setBackgroundColor(getResources().getColor(mBarColorResId));
         addView(mBarGraphView);
 
@@ -83,7 +87,6 @@ public class BarGraphView extends LinearLayout {
         mCountTextView.setGravity(Gravity.CENTER);
         addView(mCountTextView);
         mLayoutParams = (LinearLayout.LayoutParams) mCountTextView.getLayoutParams();
-//        mLayoutParams.gravity = Gravity.CENTER_VERTICAL;
         mLayoutParams.setMargins(getPixelFromDp(4), 0, 0, 0);
 
         mBarGraphView.startAnimation(mWidthResizeAnimation);
@@ -108,6 +111,7 @@ public class BarGraphView extends LinearLayout {
                 @Override
                 public void run() {
                     textView.setText(highlightText(finalCount, mBarColorResId));
+                    textView.setTypeface(Typeface.DEFAULT);
                 }
             }, time);
         }

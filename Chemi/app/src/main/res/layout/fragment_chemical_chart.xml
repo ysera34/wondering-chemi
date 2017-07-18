@@ -17,9 +17,9 @@
         android:id="@+id/chemical_chart_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="20dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         android:text="@string/chemical_chart_title_format"
         android:textSize="15sp"
         android:textColor="@color/colorArmadillo"/>
@@ -28,8 +28,8 @@
         android:id="@+id/chemical_chart_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:layout_marginBottom="15dp"
         android:orientation="vertical">
 
@@ -38,25 +38,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:layout_marginBottom="15dp"
         android:text="@string/chemical_chart_description"
         android:textSize="12sp"
         android:textColor="@color/colorFontAluminum"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:text="+ 전체 성분 모두 보러가기"
-        android:textColor="@color/color_selector_button_white_primary"
-        android:background="@drawable/selector_opaque_primary"/>
-
 
 </LinearLayout>

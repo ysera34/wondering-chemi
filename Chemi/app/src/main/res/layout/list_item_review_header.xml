@@ -6,24 +6,6 @@
     android:gravity="center"
     android:background="@color/colorWhite">
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginEnd="16dp"-->
-        <!--android:text="리뷰"-->
-        <!--android:textSize="16sp"-->
-        <!--android:textColor="@color/colorFontNormal"/>-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/list_item_review_header_count_text_view"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:textSize="12sp"-->
-        <!--android:textColor="@color/colorFontAluminum"/>-->
-
     <LinearLayout
         android:id="@+id/list_item_review_header_review_create_layout"
         android:layout_width="wrap_content"

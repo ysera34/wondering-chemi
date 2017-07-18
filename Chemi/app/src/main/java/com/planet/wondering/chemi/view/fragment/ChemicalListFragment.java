@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static com.planet.wondering.chemi.R.id.chemical_whole_text_view;
 import static com.planet.wondering.chemi.network.Config.Chemical.PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
@@ -85,8 +86,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
     private ArrayList<Chemical> mChemicals;
 
     private TextView mChemicalWholeTextView;
-    private TextView mChemicalSortInfoTextView;
-    private TextView mChemicalIncludeAllergyTotalTextView;
+//    private TextView mChemicalSortInfoTextView;
+//    private TextView mChemicalIncludeAllergyTotalTextView;
     private HexagonFilterLayout[] mHexagonFilterLayouts;
     private RecyclerView mChemicalRecyclerView;
     private ChemicalAdapter mChemicalAdapter;
@@ -106,11 +107,11 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical_list, container, false);
 
-        mChemicalWholeTextView = (TextView) view.findViewById(R.id.chemical_whole_text_view);
-        mChemicalSortInfoTextView = (TextView) view.findViewById(R.id.chemical_sort_info_text_view);
-        mChemicalIncludeAllergyTotalTextView =
-                (TextView) view.findViewById(R.id.chemical_include_allergy_total_text_view);
-        mChemicalIncludeAllergyTotalTextView.setText(String.valueOf(mProduct.getAllergyCount()));
+        mChemicalWholeTextView = (TextView) view.findViewById(chemical_whole_text_view);
+//        mChemicalSortInfoTextView = (TextView) view.findViewById(R.id.chemical_sort_info_text_view);
+//        mChemicalIncludeAllergyTotalTextView =
+//                (TextView) view.findViewById(R.id.chemical_include_allergy_total_text_view);
+//        mChemicalIncludeAllergyTotalTextView.setText(String.valueOf(mProduct.getAllergyCount()));
         mHexagonFilterLayouts = new HexagonFilterLayout[5];
 
         int[] filterLayoutIds = new int[]{
@@ -142,7 +143,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 //                ((BottomNavigationActivity) getActivity()).hideEditTextLayout();
 //            }
 //        });
-
+//        chemical_whole_text_view
         updateUI();
 
         return view;
@@ -157,7 +158,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         } else {
             mChemicalWholeTextView.setText(getString(R.string.chemical_whole_false_message));
         }
-        mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
+//        mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
     }
 
     @Override
@@ -219,11 +220,11 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
         }
         ArrayList<Chemical> chemicals = mProduct.getChemicalListOfEachEWGRating(hexagonFilterIndex);
         if (hexagonFilterIndex == 0) {
-            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
+//            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_notation);
         } else {
             Collections.sort(chemicals, mHazardGradeDescChemicalComparator);
             Collections.reverse(chemicals);
-            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_hazard);
+//            mChemicalSortInfoTextView.setText(R.string.chemical_list_sort_hazard);
         }
         mChemicalAdapter.setChemicals(chemicals);
         mChemicalAdapter.notifyDataSetChanged();

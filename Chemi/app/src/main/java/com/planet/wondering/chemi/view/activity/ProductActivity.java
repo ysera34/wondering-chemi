@@ -40,7 +40,6 @@ import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
-import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 import com.planet.wondering.chemi.view.fragment.MemberCongratulationDialogFragment;
 import com.planet.wondering.chemi.view.fragment.ProductFragment;
 import com.planet.wondering.chemi.view.fragment.ProductImageDialogFragment;
@@ -64,7 +63,6 @@ import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
-import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 3. 15..
@@ -136,9 +134,9 @@ public class ProductActivity extends AppBaseActivity
 //            @Override
 //            public void onStateChanged(AppBarLayout appBarLayout, State state) {
 //                if (state.name().equals("COLLAPSED")) {
-//                    hideBottomNavigationView();
+//                    showReviewCreateLayout();
 //                } else if (state.name().equals("EXPANDED")) {
-//                    showBottomNavigationView();
+//                    hideReviewCreateLayout();
 //                }
 //            }
 //        });
@@ -211,37 +209,42 @@ public class ProductActivity extends AppBaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mProduct != null) {
-            if (!mProduct.isArchive()) {
-                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_false, menu);
-            } else {
-                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_true, menu);
-            }
-        }
+//        if (mProduct != null) {
+//            if (!mProduct.isArchive()) {
+//                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_false, menu);
+//            } else {
+//                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_true, menu);
+//            }
+//        }
+//        return true;
+        getMenuInflater().inflate(R.menu.menu_toolbar_product, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_product_faq:
-//                Toast.makeText(getApplicationContext(), "action_faq", Toast.LENGTH_SHORT).show();
-                startActivity(MemberActivity.newIntent(getApplicationContext(), 4));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                break;
-            case R.id.action_product_archive:
-                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-//                    Toast.makeText(getApplicationContext(), "action_archive", Toast.LENGTH_SHORT).show();
-                    requestArchiveProduct(mProduct.isArchive());
-                } else {
-                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
-                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
-                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
-                }
-                break;
-            case R.id.action_product_share:
-                requestShareProductToKakao();
+//            case R.id.action_product_faq:
+//                startActivity(MemberActivity.newIntent(getApplicationContext(), 4));
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                break;
+//            case R.id.action_product_archive:
+//                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
+//                    requestArchiveProduct(mProduct.isArchive());
+//                } else {
+//                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+//                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+//                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
+//                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
+//                }
+//                break;
+//            case R.id.action_product_share:
+//                requestShareProductToKakao();
+//                break;
+            case R.id.action_home:
+                startActivity(HomeActivity.newIntent(getApplicationContext()));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -301,9 +304,10 @@ public class ProductActivity extends AppBaseActivity
                             mFragmentManager.beginTransaction()
                                     .add(R.id.product_fragment_container, mFragment)
                                     .commit();
-                        } else {
-                            ((ProductFragment) mFragment).updateFragmentTitles(mProduct);
                         }
+//                        else {
+//                            ((ProductFragment) mFragment).updateFragmentTitles(mProduct);
+//                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -431,7 +435,6 @@ public class ProductActivity extends AppBaseActivity
             public void onSuccess(KakaoLinkResponse result) {
             }
         });
-
     }
 
     @Override

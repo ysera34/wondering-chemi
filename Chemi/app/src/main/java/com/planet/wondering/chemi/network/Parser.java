@@ -438,6 +438,7 @@ public class Parser {
                 }
                 product.setArchive(productJSONObject.getBoolean(ARCHIVE));
                 product.setAllergyCount(productJSONObject.getInt(ALLERGY));
+
                 int chemicalSize = productJSONObject.getInt(CHEMICALS_SIZE);
                 if (chemicalSize > 0) {
                     JSONArray chemicalJSONArray = productJSONObject.getJSONArray(CHEMICALS);

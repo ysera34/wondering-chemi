@@ -7,159 +7,151 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/product_detail_app_bar_layout"
+    android:id="@+id/product_detail_app_bar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/product_detail_app_bar_layout_height"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/product_detail_collapsing_toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/product_detail_app_bar_layout_height"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        app:titleEnabled="false"
+        app:contentScrim="@color/colorWhite"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+        app:expandedTitleMarginStart="20dp"
+        app:expandedTitleMarginEnd="30dp"
         android:fitsSystemWindows="true">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/product_detail_collapsing_toolbar_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
-            app:titleEnabled="false"
-            app:contentScrim="@color/colorWhite"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:expandedTitleMarginStart="20dp"
-            app:expandedTitleMarginEnd="30dp"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:layout_collapseMode="parallax"
             android:fitsSystemWindows="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="71dp">
+                <!--status bar + toolbar height-->
+
+                <ImageView
+                    android:id="@+id/product_detail_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="center"
+                    android:layout_above="@+id/product_detail_review_info_layout"/>
+
+                <LinearLayout
+                    android:id="@+id/product_detail_review_info_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp">
+
+                    <RatingBar
+                        android:id="@+id/product_detail_review_rating_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        style="@style/MediumStarStarRatingBar"
+                        android:isIndicator="true"
+                        android:stepSize="0.01"
+                        android:numStars="5"/>
+                    <!--style="?android:attr/ratingBarStyleSmall"-->
+                    <!--style="@style/ProductListRatingBarStyle"-->
+
+                    <TextView
+                        android:id="@+id/product_detail_review_rating_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="3dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorAccent"/>
+                    <!--android:layout_marginStart="6dp"-->
+
+                    <TextView
+                        android:id="@+id/product_detail_review_rating_count_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="3dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorFontNormal"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/product_detail_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
+            app:titleTextColor="@color/colorFontToolbarTitle"
+            app:subtitleTextAppearance="@style/ProductToolbarTextAppearance.Subtitle"
+            app:subtitleTextColor="@color/colorFontToolbarTitle"
+            style="@style/ProductToolbarStyle"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_collapseMode="pin">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                app:layout_collapseMode="parallax"
-                android:fitsSystemWindows="true">
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="71dp">
-                    <!--status bar + toolbar height-->
+                <TextView
+                    android:id="@+id/product_detail_toolbar_title_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorFontNormal"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"/>
 
-                    <ImageView
-                        android:id="@+id/product_detail_image_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="center"
-                        android:layout_above="@+id/product_detail_review_info_layout"/>
-
-                    <LinearLayout
-                        android:id="@+id/product_detail_review_info_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:gravity="center"
-                        android:layout_marginBottom="8dp">
-
-                        <RatingBar
-                            android:id="@+id/product_detail_review_rating_bar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
-                            style="@style/MediumStarStarRatingBar"
-                            android:isIndicator="true"
-                            android:stepSize="0.01"
-                            android:numStars="5"/>
-                        <!--style="?android:attr/ratingBarStyleSmall"-->
-                        <!--style="@style/ProductListRatingBarStyle"-->
-
-                        <TextView
-                            android:id="@+id/product_detail_review_rating_value_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:paddingTop="3dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/colorAccent"/>
-                        <!--android:layout_marginStart="6dp"-->
-
-                        <TextView
-                            android:id="@+id/product_detail_review_rating_count_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:layout_gravity="bottom"
-                            android:paddingTop="3dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/colorFontNormal"/>
-
-                    </LinearLayout>
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/product_detail_toolbar_sub_title_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/colorFontNormal"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"/>
 
             </LinearLayout>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/product_detail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                app:titleTextAppearance="@style/ProductToolbarTextAppearance.Title"
-                app:titleTextColor="@color/colorFontToolbarTitle"
-                app:subtitleTextAppearance="@style/ProductToolbarTextAppearance.Subtitle"
-                app:subtitleTextColor="@color/colorFontToolbarTitle"
-                style="@style/ProductToolbarStyle"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:layout_collapseMode="pin">
+        </android.support.v7.widget.Toolbar>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+    </android.support.design.widget.CollapsingToolbarLayout>
 
-                    <TextView
-                        android:id="@+id/product_detail_toolbar_title_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:textSize="12sp"
-                        android:textColor="@color/colorFontNormal"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:ellipsize="marquee"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"/>
+</android.support.design.widget.AppBarLayout>
 
-                    <TextView
-                        android:id="@+id/product_detail_toolbar_sub_title_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:textSize="13sp"
-                        android:textStyle="bold|italic"
-                        android:textColor="@color/colorFontNormal"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:ellipsize="marquee"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"/>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
+    <FrameLayout
+        android:id="@+id/product_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="true"
-        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:id="@+id/product_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

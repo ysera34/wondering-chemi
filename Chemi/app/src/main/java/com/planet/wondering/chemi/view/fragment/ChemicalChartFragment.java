@@ -86,11 +86,10 @@ public class ChemicalChartFragment extends Fragment {
 
         for (int i = 0; i < hazardColorResIdArr.length; i++) {
             BarGraphView barGraphView = new BarGraphView(getContext(), hazardNameResIdArr[i], mNumberOfEachEWGRatings[i + 1],
-                    getPixelFromDp(getChartViewWidth(240, mNumberOfEachEWGRatings[i + 1], mNumberOfEachEWGRatings[0])),
+                    getPixelFromDp(getChartViewWidth(230, mNumberOfEachEWGRatings[i + 1], mNumberOfEachEWGRatings[0])),
                     hazardColorResIdArr[i]);
             mChartLayout.addView(barGraphView);
         }
-
     }
 
     private int getChartViewWidth(int maxLength, int hazardCount, int allCount) {

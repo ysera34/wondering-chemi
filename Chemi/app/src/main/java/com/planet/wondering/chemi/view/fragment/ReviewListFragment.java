@@ -274,7 +274,8 @@ public class ReviewListFragment extends Fragment {
                     view = layoutInflater.inflate(R.layout.list_item_review_empty, parent, false);
                     return new EmptyViewHolder(view);
                 case VIEW_TYPE_HEADER:
-                    view = layoutInflater.inflate(R.layout.list_item_review_header, parent, false);
+//                    view = layoutInflater.inflate(R.layout.list_item_review_header, parent, false);
+                    view = layoutInflater.inflate(R.layout.list_item_review_count_header, parent, false);
                     return new ReviewHeaderHolder(view);
                 case VIEW_TYPE_ITEM:
                     view = layoutInflater.inflate(R.layout.list_item_review, parent, false);
@@ -291,6 +292,8 @@ public class ReviewListFragment extends Fragment {
             if (holder instanceof ReviewHolder) {
                 Review review = mReviews.get(position - 1);
                 ((ReviewHolder) holder).bindReview(review);
+            } else if (holder instanceof ReviewHeaderHolder) {
+                ((ReviewHeaderHolder) holder).bindReviewHeader(mProduct.getRatingCount());
             }
         }
 
@@ -324,21 +327,22 @@ public class ReviewListFragment extends Fragment {
     private class ReviewHeaderHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-//        private TextView mReviewCountTextView;
-        private LinearLayout mReviewCreateLayout;
+        private TextView mReviewCountTextView;
+//        private LinearLayout mReviewCreateLayout;
 
         public ReviewHeaderHolder(View itemView) {
             super(itemView);
 
-//            mReviewCountTextView = (TextView)
-//                    itemView.findViewById(R.id.list_item_review_header_count_text_view);
-            mReviewCreateLayout = (LinearLayout)
-                    itemView.findViewById(R.id.list_item_review_header_review_create_layout);
-            mReviewCreateLayout.setOnClickListener(this);
+            mReviewCountTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_review_header_count_text_view);
+//            mReviewCreateLayout = (LinearLayout)
+//                    itemView.findViewById(R.id.list_item_review_header_review_create_layout);
+//            mReviewCreateLayout.setOnClickListener(this);
         }
 
         public void bindReviewHeader(int reviewCount) {
 //            mReviewCountTextView.setText(getString(R.string.review_count_format, String.valueOf(reviewCount)));
+            mReviewCountTextView.setText(String.valueOf(reviewCount));
         }
 
         @Override

@@ -11,6 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
@@ -68,6 +71,8 @@ public class ProductFragment extends Fragment {
 
     private ProductFragmentPagerAdapter mFragmentPagerAdapter;
 
+    private LinearLayout mReviewCreateLayout;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +97,7 @@ public class ProductFragment extends Fragment {
 
         mProductDetailTabLayout = (TabLayout) view.findViewById(R.id.product_detail_tab_layout);
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
+        mReviewCreateLayout = (LinearLayout) view.findViewById(R.id.review_create_layout);
 
 //        mChildFragment = mChildFragmentManager.findFragmentById(R.id.product_fragment_container);
 //        if (mChildFragment == null) {
@@ -102,6 +108,26 @@ public class ProductFragment extends Fragment {
 
         mFragmentPagerAdapter = new ProductFragmentPagerAdapter(getChildFragmentManager());
         mProductDetailViewPager.setAdapter(mFragmentPagerAdapter);
+        mProductDetailViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    showReviewCreateLayout();
+                } else if (position == 1) {
+                    hideReviewCreateLayout();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         mProductDetailTabLayout.setupWithViewPager(mProductDetailViewPager);
         return view;
@@ -160,4 +186,32 @@ public class ProductFragment extends Fragment {
         }
     }
 
+    public void showReviewCreateLayout() {
+        mProductDetailViewPager.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0));
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mProductDetailViewPager.getLayoutParams();
+        params.height = 0;
+        params.weight = 1;
+        mProductDetailViewPager.setLayoutParams(params);
+        mReviewCreateLayout.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
+    }
+
+    public void hideReviewCreateLayout() {
+
+        mProductDetailViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mReviewCreateLayout.animate().translationY(mReviewCreateLayout.getHeight())
+                        .setInterpolator(new AccelerateInterpolator(2));
+            }
+        }, 200);
+        mProductDetailViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mProductDetailViewPager.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            }
+        }, 500);
+    }
 }
