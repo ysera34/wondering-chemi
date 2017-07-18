@@ -120,6 +120,7 @@ public class ProductListActivity extends AppBaseActivity
             mFragmentManager.popBackStack();
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 }

@@ -575,6 +575,20 @@ public class Parser {
         return chemicals;
     }
 
+    public static int parseReviewCount(JSONObject responseObject) {
+
+        int reviewCount = 0;
+        try {
+            String responseMessage = responseObject.getString(RESPONSE_MESSAGE);
+            if (responseMessage.equals(RESPONSE_SUCCESS)) {
+                reviewCount = responseObject.getInt(COUNT);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return reviewCount;
+    }
+
     public static ArrayList<Review> parseReviewList(JSONObject responseObject) {
 
         ArrayList<Review> reviews = new ArrayList<>();

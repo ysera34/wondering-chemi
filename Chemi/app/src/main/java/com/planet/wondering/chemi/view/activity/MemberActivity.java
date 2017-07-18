@@ -559,16 +559,6 @@ public class MemberActivity extends BottomNavigationActivity implements OnMenuSe
 
     private void requestMemberConfigUser() {
 
-//        final ProgressDialog progressDialog =
-//                ProgressDialog.show(MemberActivity.this,
-//                        "회원님의 정보를 가져오고 있습니다.",
-//                        getString(R.string.progress_dialog_message_wait), false, false);
-//        final ProgressDialog progressDialog = new ProgressDialog(MemberActivity.this);
-//        progressDialog.setIndeterminate(true);
-//        progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_bar_animation));
-//        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        progressDialog.show();
-
         final CustomProgressDialog progressDialog = new CustomProgressDialog(MemberActivity.this);
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.show();

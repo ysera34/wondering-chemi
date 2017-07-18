@@ -17,7 +17,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,32 +28,23 @@ import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.Pager;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.model.Review;
-import com.planet.wondering.chemi.model.User;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
-import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
-import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
-import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
-import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.EXTRA_DIALOG;
-import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 1. 19..
@@ -197,9 +187,7 @@ public class ReviewListFragment extends Fragment {
                 }
                 break;
             case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
-                getActivity().startActivityForResult(ReviewActivity.newIntent(
-                        getActivity(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
-                        REVIEW_CREATE_REQUEST_CODE);
+                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
                 break;
         }
     }
@@ -232,6 +220,7 @@ public class ReviewListFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 //                        Log.i(TAG, response.toString());
 //                        mReviews = Parser.parseReviewList(response);
+                        mProduct.setRatingCount(Parser.parseReviewCount(response));
                         mReviews.addAll(Parser.parseReviewList(response));
                         mPager = Parser.parseListPaginationQuery(response);
                         updateUI();
@@ -324,8 +313,7 @@ public class ReviewListFragment extends Fragment {
     private static final int VIEW_TYPE_EMPTY = 0;
     private static final int VIEW_TYPE_ITEM = 1;
 
-    private class ReviewHeaderHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    private class ReviewHeaderHolder extends RecyclerView.ViewHolder {
 
         private TextView mReviewCountTextView;
 //        private LinearLayout mReviewCreateLayout;
@@ -344,46 +332,12 @@ public class ReviewListFragment extends Fragment {
 //            mReviewCountTextView.setText(getString(R.string.review_count_format, String.valueOf(reviewCount)));
             mReviewCountTextView.setText(String.valueOf(reviewCount));
         }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.list_item_review_header_review_create_layout:
-                    if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
-//                        getActivity().startActivityForResult(ReviewActivity.newIntent(
-//                                getActivity(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
-//                                REVIEW_CREATE_REQUEST_CODE);
-                        requestMemberConfig();
-                    } else {
-                        CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                                .newInstance(R.drawable.ic_login, R.string.login_info_message,
-                                        R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
-                        dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
-                    }
-                    break;
-            }
-        }
     }
 
-    private class EmptyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-//        private ImageButton mReviewCreateImageButton;
+    private class EmptyViewHolder extends RecyclerView.ViewHolder {
 
         EmptyViewHolder(View itemView) {
             super(itemView);
-
-//            mReviewCreateImageButton = (ImageButton)
-//                    itemView.findViewById(R.id.list_item_review_empty_review_create_image_button);
-//            mReviewCreateImageButton.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-//                case R.id.list_item_review_empty_review_create_image_button:
-//
-//                    break;
-            }
         }
     }
 
@@ -593,50 +547,7 @@ public class ReviewListFragment extends Fragment {
         public void onClick(View v) {
 //            startActivity(ReviewActivity.newIntent(getActivity(), mProduct, mReview, Common.REVIEW_READ_REQUEST_CODE));
             startActivity(ReviewActivity.newIntent(getActivity(), mReview.getId(), Common.REVIEW_READ_REQUEST_CODE));
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
-    }
-
-    private void requestMemberConfig() {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, URL_HOST + Config.User.PATH,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        User user = Parser.parseMemberConfigUser(response);
-                        if (user.isHasExtraInfo()) {
-                            getActivity().startActivityForResult(ReviewActivity.newIntent(
-                                    getActivity(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
-                                    REVIEW_CREATE_REQUEST_CODE);
-                        } else {
-                            CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-                                    .newInstance(R.drawable.ic_login, R.string.promote_extra_info_message,
-                                            R.string.promote_extra_info_title, PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
-                            dialogFragment1.show(getChildFragmentManager(), EXTRA_DIALOG);
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                    }
-                }
-        )
-        {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
-                return params;
-            }
-        };
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
-                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 }

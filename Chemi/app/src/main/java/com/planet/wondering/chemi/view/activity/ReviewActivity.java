@@ -284,6 +284,7 @@ public class ReviewActivity extends AppBaseActivity implements OnReviewEditListe
         } else {
             setResult(Activity.RESULT_OK, new Intent());
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 }

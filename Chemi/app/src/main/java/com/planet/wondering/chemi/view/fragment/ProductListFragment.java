@@ -656,11 +656,8 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         @Override
         public void onClick(View view) {
-            if (mTagName != null) {
-                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
-            } else if (mCategoryId > 0) {
-                startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
-            }
+            startActivity(ProductActivity.newIntent(getActivity(), mProduct.getId()));
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 

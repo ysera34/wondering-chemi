@@ -8,24 +8,53 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
+import com.planet.wondering.chemi.model.User;
+import com.planet.wondering.chemi.network.AppSingleton;
+import com.planet.wondering.chemi.network.Config;
+import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.activity.ReviewActivity;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVIEW_CREATE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_READ_REQUEST_CODE;
+import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.EXTRA_DIALOG;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 1. 18..
  */
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ProductFragment.class.getSimpleName();
 
@@ -72,6 +101,7 @@ public class ProductFragment extends Fragment {
     private ProductFragmentPagerAdapter mFragmentPagerAdapter;
 
     private LinearLayout mReviewCreateLayout;
+    private TextView mReviewCreateButtonTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +128,8 @@ public class ProductFragment extends Fragment {
         mProductDetailTabLayout = (TabLayout) view.findViewById(R.id.product_detail_tab_layout);
         mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
         mReviewCreateLayout = (LinearLayout) view.findViewById(R.id.review_create_layout);
+        mReviewCreateButtonTextView = (TextView) view.findViewById(R.id.review_create_button_text_view);
+        mReviewCreateButtonTextView.setOnClickListener(this);
 
 //        mChildFragment = mChildFragmentManager.findFragmentById(R.id.product_fragment_container);
 //        if (mChildFragment == null) {
@@ -147,10 +179,35 @@ public class ProductFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
+                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+                requestMemberConfig(true);
+                break;
             case REVIEW_READ_REQUEST_CODE:
-            for (Fragment fragment : getChildFragmentManager().getFragments()) {
-                fragment.onActivityResult(requestCode, resultCode, data);
-            }
+                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
+                for (Fragment fragment : getChildFragmentManager().getFragments()) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            case REVIEW_CREATE_REQUEST_CODE:
+                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.review_create_button_text_view:
+                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                    requestMemberConfig(false);
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
+                    dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+                }
+                break;
         }
     }
 
@@ -187,31 +244,84 @@ public class ProductFragment extends Fragment {
     }
 
     public void showReviewCreateLayout() {
+        mReviewCreateLayout.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2));
         mProductDetailViewPager.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0));
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mProductDetailViewPager.getLayoutParams();
         params.height = 0;
         params.weight = 1;
         mProductDetailViewPager.setLayoutParams(params);
-        mReviewCreateLayout.animate().translationY(0)
-                .setInterpolator(new DecelerateInterpolator(2));
     }
 
     public void hideReviewCreateLayout() {
 
-        mProductDetailViewPager.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mReviewCreateLayout.animate().translationY(mReviewCreateLayout.getHeight())
-                        .setInterpolator(new AccelerateInterpolator(2));
-            }
-        }, 200);
+        mReviewCreateLayout.animate().translationY(mReviewCreateLayout.getHeight())
+                .setInterpolator(new AccelerateInterpolator(2));
+
         mProductDetailViewPager.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mProductDetailViewPager.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             }
-        }, 500);
+        }, 350);
+    }
+
+    private void requestMemberConfig(final boolean isRetry) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL_HOST + Config.User.PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        User user = Parser.parseMemberConfigUser(response);
+                        if (!isRetry) {
+                            if (user.isHasExtraInfo()) {
+                                getActivity().startActivityForResult(ReviewActivity.newIntent(
+                                        getActivity(), mProduct, REVIEW_CREATE_REQUEST_CODE),
+                                        REVIEW_CREATE_REQUEST_CODE);
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            } else {
+                                CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                                        .newInstance(R.drawable.ic_login, R.string.promote_extra_info_message,
+                                                R.string.promote_extra_info_title, PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+                                dialogFragment1.show(getChildFragmentManager(), EXTRA_DIALOG);
+                            }
+                        } else {
+                            if (user.isHasExtraInfo()) {
+                                getActivity().startActivityForResult(ReviewActivity.newIntent(
+                                        getActivity(), mProduct, REVIEW_CREATE_REQUEST_CODE),
+                                        REVIEW_CREATE_REQUEST_CODE);
+                                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            } else {
+                                Toast.makeText(getActivity(), getString(R.string.promote_extra_info_message),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_GET_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
     }
 }

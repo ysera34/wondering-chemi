@@ -56,6 +56,8 @@ import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE
 import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVIEW_CREATE_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.REVIEW_READ_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
@@ -278,12 +280,26 @@ public class ProductActivity extends AppBaseActivity
                     }
                 }
                 break;
-            default:
+            case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
+                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+//                startActivityForResult(ReviewActivity.newIntent(
+//                        getApplicationContext(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
+//                        REVIEW_CREATE_REQUEST_CODE);
+//                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                    if (data != null) {
-                        fragment.onActivityResult(requestCode, resultCode, data);
-                    }
+                    fragment.onActivityResult(requestCode, resultCode, data);
                 }
+                break;
+            case REVIEW_READ_REQUEST_CODE:
+                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
+                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            case REVIEW_CREATE_REQUEST_CODE:
+                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
+                break;
+            default:
                 break;
         }
     }

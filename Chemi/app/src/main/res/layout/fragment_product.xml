@@ -32,15 +32,18 @@
         android:id="@+id/review_create_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/colorPrimary"
         android:layout_gravity="bottom">
 
         <TextView
+            android:id="@+id/review_create_button_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:clickable="true"
             android:text="리뷰쓰기"
-            android:textColor="@color/color_selector_button_white_primary"/>
+            android:textColor="@color/color_selector_button_white_primary"
+            android:background="@drawable/selector_rectangle_opaque_primary"
+            android:elevation="4dp"/>
 
     </LinearLayout>
 

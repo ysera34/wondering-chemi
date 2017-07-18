@@ -106,7 +106,6 @@ public class ChemicalChartFragment extends Fragment {
                 getString(R.string.chemical_chart_title_format, String.valueOf(mChemicalCount)));
         int startIndex = 2;
         int endIndex = startIndex + String.valueOf(mChemicalCount).length();
-        Log.i(TAG, "endIndex: " + endIndex);
         spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
                 startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
