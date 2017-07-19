@@ -218,9 +218,9 @@ public class MemberConfigChangeNameFragment extends Fragment
         if (nameText != null) {
             if (nameText.length() < 2) {
                 return getString(R.string.name_validation_message_short);
-            } else if (nameText.length() >= 2 && nameText.length() < 11) {
+            } else if (nameText.length() >= 2 && nameText.length() < 7) {
                 return null; // nameText request url ~~>
-            } else if (nameText.length() >= 11) {
+            } else if (nameText.length() >= 7) {
                 return getString(R.string.name_validation_message_long);
             }
         }

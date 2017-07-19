@@ -256,8 +256,13 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
 
     public void hideReviewCreateLayout() {
 
-        mReviewCreateLayout.animate().translationY(mReviewCreateLayout.getHeight())
-                .setInterpolator(new AccelerateInterpolator(2));
+        mReviewCreateLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mReviewCreateLayout.animate().translationY(mReviewCreateLayout.getHeight())
+                        .setInterpolator(new AccelerateInterpolator(2));
+            }
+        }, 200);
 
         mProductDetailViewPager.postDelayed(new Runnable() {
             @Override
@@ -265,7 +270,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
                 mProductDetailViewPager.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             }
-        }, 350);
+        }, 500);
     }
 
     private void requestMemberConfig(final boolean isRetry) {

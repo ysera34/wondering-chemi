@@ -18,6 +18,70 @@
 
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@color/colorWhite"
+            android:elevation="1dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorBorder">
+
+            </View>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorWhite"
+            android:elevation="1dp">
+
+            <ImageView
+                android:id="@+id/faq_button_image_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_toolbar_question_true"
+                android:scaleType="centerInside"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorBorder"/>
+
+            <ImageView
+                android:id="@+id/archive_button_image_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_toolbar_archive_false"
+                android:scaleType="centerInside"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorBorder"/>
+
+            <ImageView
+                android:id="@+id/share_button_image_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_toolbar_share_true"
+                android:scaleType="centerInside"/>
+
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="10dp"

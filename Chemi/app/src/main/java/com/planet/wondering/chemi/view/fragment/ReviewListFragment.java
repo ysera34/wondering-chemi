@@ -1,10 +1,13 @@
 package com.planet.wondering.chemi.view.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,12 +20,18 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.kakao.kakaolink.internal.KakaoTalkLinkProtocol;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.common.Common;
 import com.planet.wondering.chemi.model.Pager;
@@ -31,26 +40,38 @@ import com.planet.wondering.chemi.model.Review;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Config;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
+import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
+import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
+import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
+import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
+import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;
 
 /**
  * Created by yoon on 2017. 1. 19..
  */
 
-public class ReviewListFragment extends Fragment {
+public class ReviewListFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ReviewListFragment.class.getSimpleName();
 
@@ -98,6 +119,10 @@ public class ReviewListFragment extends Fragment {
 
     private Fragment mChartFragment;
     private FragmentManager mChildFragmentManager;
+
+    private ImageView mFaqButtonImageView;
+    private ImageView mArchiveButtonImageView;
+    private ImageView mShareButtonImageView;
 
     private RecyclerView mReviewRecyclerView;
     private ReviewAdapter mReviewAdapter;
@@ -149,7 +174,13 @@ public class ReviewListFragment extends Fragment {
 
         updateUI();
 
-//        requestReviewList();
+        mFaqButtonImageView = (ImageView) view.findViewById(R.id.faq_button_image_view);
+        mArchiveButtonImageView = (ImageView) view.findViewById(R.id.archive_button_image_view);
+        mShareButtonImageView = (ImageView) view.findViewById(R.id.share_button_image_view);
+        mFaqButtonImageView.setOnClickListener(this);
+        mArchiveButtonImageView.setOnClickListener(this);
+        mShareButtonImageView.setOnClickListener(this);
+        updateArchiveImageView();
 
         return view;
     }
@@ -177,6 +208,14 @@ public class ReviewListFragment extends Fragment {
         }
     }
 
+    private void updateArchiveImageView() {
+        if (mProduct.isArchive()) {
+            mArchiveButtonImageView.setImageResource(R.drawable.ic_toolbar_archive_true);
+        } else {
+            mArchiveButtonImageView.setImageResource(R.drawable.ic_toolbar_archive_false);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -188,6 +227,29 @@ public class ReviewListFragment extends Fragment {
                 break;
             case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
                 Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.faq_button_image_view:
+                startActivity(MemberActivity.newIntent(getActivity(), 4));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.archive_button_image_view:
+                if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
+                    requestArchiveProduct(mProduct.isArchive());
+                } else {
+                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
+                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
+                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
+                    dialogFragment1.show(getChildFragmentManager(), LOGIN_DIALOG);
+                }
+                break;
+            case R.id.share_button_image_view:
+                requestShareProductToKakao();
                 break;
         }
     }
@@ -549,5 +611,106 @@ public class ReviewListFragment extends Fragment {
             startActivity(ReviewActivity.newIntent(getActivity(), mReview.getId(), Common.REVIEW_READ_REQUEST_CODE));
             getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
+    }
+
+    private void requestArchiveProduct(final boolean isArchive) {
+
+        int requestMethodId;
+        if (!isArchive) {
+            requestMethodId = Request.Method.POST;
+        } else {
+            requestMethodId = Request.Method.DELETE;
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                requestMethodId, URL_HOST + PATH + mProduct.getId() + KEEP_PATH,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (Parser.parseSimpleResult(response)) {
+
+                            if (!isArchive) {
+                                Toast.makeText(getActivity(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
+                                mProduct.setArchive(true);
+                            } else {
+                                Toast.makeText(getActivity(), "보관함에세 삭제되었어요.", Toast.LENGTH_SHORT).show();
+                                mProduct.setArchive(false);
+                            }
+                            updateArchiveImageView();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+//                        Toast.makeText(getApplicationContext(),
+//                                "상품을 보관하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.progress_dialog_message_error,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(TOKEN, UserSharedPreferences.getStoredToken(getActivity()));
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
+                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void requestShareProductToKakao() {
+
+        String prefixTitle = "";
+        if (UserSharedPreferences.getStoredUserName(getActivity()) != null) {
+            prefixTitle = getString(R.string.share_user_name_format,
+                    UserSharedPreferences.getStoredUserName(getActivity())) + " ";
+        }
+
+        Map<String, String> templateArgs = new HashMap<>();
+        templateArgs.put("${imagePath}", mProduct.getImagePath());
+        templateArgs.put("${title}", prefixTitle + getString(R.string.share_product_title_format,
+                mProduct.getBrand(), mProduct.getName()));
+        templateArgs.put("${description}", getString(R.string.share_product_description_format,
+                mProduct.getBrand(), mProduct.getName()));
+        templateArgs.put("${product_id}", String.valueOf(mProduct.getId()));
+
+        KakaoLinkService.getInstance().sendCustom(getActivity(), PRODUCT_SHARE_TEMPLATE_CODE,
+                templateArgs, new ResponseCallback<KakaoLinkResponse>() {
+                    @Override
+                    public void onFailure(ErrorResult errorResult) {
+//                Logger.e(errorResult.toString());
+//                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
+
+                        if (errorResult.getException().toString().split(":")[0].equals(KAKAOTALK_NOT_INSTALLED.toString())) {
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage(getString(com.kakao.kakaolink.R.string.com_kakao_alert_install_kakaotalk));
+                            builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(KakaoTalkLinkProtocol.TALK_MARKET_URL_PREFIX)));
+                                }
+                            });
+                            builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            AlertDialog dialog1 = builder1.create();
+                            dialog1.show();
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(KakaoLinkResponse result) {
+                    }
+                });
     }
 }

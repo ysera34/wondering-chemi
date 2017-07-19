@@ -35,9 +35,9 @@
 
         </LinearLayout>
 
-        <!--android:visibility="invisible"-->
 
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/review_read_more_menu_image_view"
             android:layout_width="48dp"
             android:layout_height="match_parent"
