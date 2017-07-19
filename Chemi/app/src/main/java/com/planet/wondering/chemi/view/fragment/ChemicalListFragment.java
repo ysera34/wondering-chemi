@@ -89,6 +89,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 //    private TextView mChemicalSortInfoTextView;
 //    private TextView mChemicalIncludeAllergyTotalTextView;
     private HexagonFilterLayout[] mHexagonFilterLayouts;
+    private TextView mChemicalEWGInfoButtonTextView;
     private RecyclerView mChemicalRecyclerView;
     private ChemicalAdapter mChemicalAdapter;
 
@@ -124,6 +125,9 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             mHexagonFilterLayouts[i].setOnClickListener(this);
         }
 
+        mChemicalEWGInfoButtonTextView = (TextView) view.findViewById(R.id.chemical_ewg_info_button_text_view);
+        mChemicalEWGInfoButtonTextView.setOnClickListener(this);
+
         mChemicalRecyclerView = (RecyclerView) view.findViewById(R.id.chemical_recycler_view);
         mChemicalRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mChemicalRecyclerView.setNestedScrollingEnabled(false);
@@ -143,7 +147,7 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
 //                ((BottomNavigationActivity) getActivity()).hideEditTextLayout();
 //            }
 //        });
-//        chemical_whole_text_view
+
         updateUI();
 
         return view;
@@ -199,6 +203,9 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
             case R.id.hexagon5:
                 arrangeHexagonFilterLayouts(4);
                 arrangeChemicalList(4);
+                break;
+            case R.id.chemical_ewg_info_button_text_view:
+                Toast.makeText(getActivity(), "자주묻는 질문으로 연결!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

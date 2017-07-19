@@ -2,7 +2,6 @@ package com.planet.wondering.chemi.view.activity;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,11 +27,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.kakao.kakaolink.internal.KakaoTalkLinkProtocol;
-import com.kakao.kakaolink.v2.KakaoLinkResponse;
-import com.kakao.kakaolink.v2.KakaoLinkService;
-import com.kakao.network.ErrorResult;
-import com.kakao.network.callback.ResponseCallback;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
@@ -50,19 +43,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.kakao.util.exception.KakaoException.ErrorType.KAKAOTALK_NOT_INSTALLED;
 import static com.planet.wondering.chemi.common.Common.IS_NOW_USED_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.LOGIN_DIALOG_REQUEST_CODE;
-import static com.planet.wondering.chemi.common.Common.PRODUCT_SHARE_TEMPLATE_CODE;
 import static com.planet.wondering.chemi.common.Common.PRODUCT_THUMBNAIL_WIDTH_HEIGHT_RATIO;
 import static com.planet.wondering.chemi.common.Common.PROMOTE_EXTRA_DIALOG_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_CREATE_REQUEST_CODE;
 import static com.planet.wondering.chemi.common.Common.REVIEW_READ_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
-import static com.planet.wondering.chemi.network.Config.Product.KEEP_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
@@ -123,13 +112,6 @@ public class ProductActivity extends AppBaseActivity
 
         mFragmentManager = getSupportFragmentManager();
         mFragment = mFragmentManager.findFragmentById(R.id.product_fragment_container);
-
-//        if (mFragment == null) {
-//            mFragment = ProductFragment.newInstance();
-//            mFragmentManager.beginTransaction()
-//                    .add(R.id.fragment_container, mFragment)
-//                    .commit();
-//        }
 
         mProductAppBarLayout = (AppBarLayout) findViewById(R.id.product_detail_app_bar_layout);
 //        mProductAppBarLayout.addOnOffsetChangedListener(new OnAppBarStateChangeListener() {
@@ -211,14 +193,6 @@ public class ProductActivity extends AppBaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        if (mProduct != null) {
-//            if (!mProduct.isArchive()) {
-//                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_false, menu);
-//            } else {
-//                getMenuInflater().inflate(R.menu.menu_toolbar_product_archive_true, menu);
-//            }
-//        }
-//        return true;
         getMenuInflater().inflate(R.menu.menu_toolbar_product, menu);
         return true;
     }
@@ -226,23 +200,6 @@ public class ProductActivity extends AppBaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.action_product_faq:
-//                startActivity(MemberActivity.newIntent(getApplicationContext(), 4));
-//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//                break;
-//            case R.id.action_product_archive:
-//                if (UserSharedPreferences.getStoredToken(getApplicationContext()) != null) {
-//                    requestArchiveProduct(mProduct.isArchive());
-//                } else {
-//                    CustomAlertDialogFragment dialogFragment1 = CustomAlertDialogFragment
-//                            .newInstance(R.drawable.ic_login, R.string.login_info_message,
-//                                    R.string.login_button_title, LOGIN_DIALOG_REQUEST_CODE);
-//                    dialogFragment1.show(getSupportFragmentManager(), LOGIN_DIALOG);
-//                }
-//                break;
-//            case R.id.action_product_share:
-//                requestShareProductToKakao();
-//                break;
             case R.id.action_home:
                 startActivity(HomeActivity.newIntent(getApplicationContext()));
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -281,23 +238,19 @@ public class ProductActivity extends AppBaseActivity
                 }
                 break;
             case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
-                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
-//                startActivityForResult(ReviewActivity.newIntent(
-//                        getApplicationContext(), mProduct, Common.REVIEW_CREATE_REQUEST_CODE),
-//                        REVIEW_CREATE_REQUEST_CODE);
-//                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
                 for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
                 break;
             case REVIEW_READ_REQUEST_CODE:
-                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
+//                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
                 for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
                 break;
             case REVIEW_CREATE_REQUEST_CODE:
-                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
+//                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
                 break;
             default:
                 break;
@@ -349,108 +302,6 @@ public class ProductActivity extends AppBaseActivity
                 NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
-    }
-
-    private void requestArchiveProduct(final boolean isArchive) {
-
-        int requestMethodId;
-        if (!isArchive) {
-            requestMethodId = Request.Method.POST;
-        } else {
-            requestMethodId = Request.Method.DELETE;
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                requestMethodId, URL_HOST + PATH + mProductId + KEEP_PATH,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (Parser.parseSimpleResult(response)) {
-
-                            if (!isArchive) {
-                                Toast.makeText(getApplicationContext(), "보관함에 보관되었어요.", Toast.LENGTH_SHORT).show();
-                                mProduct.setArchive(true);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "보관함에세 삭제되었어요.", Toast.LENGTH_SHORT).show();
-                                mProduct.setArchive(false);
-                            }
-                            invalidateOptionsMenu();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-//                        Toast.makeText(getApplicationContext(),
-//                                "상품을 보관하는 중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-        )
-        {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put(TOKEN, UserSharedPreferences.getStoredToken(getApplicationContext()));
-                return params;
-            }
-        };
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SOCKET_TIMEOUT_POST_REQ,
-                NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest, TAG);
-    }
-
-    private void requestShareProductToKakao() {
-
-        String prefixTitle = "";
-        if (UserSharedPreferences.getStoredUserName(getApplicationContext()) != null) {
-            prefixTitle = getString(R.string.share_user_name_format,
-                    UserSharedPreferences.getStoredUserName(getApplicationContext())) + " ";
-        }
-
-        Map<String, String> templateArgs = new HashMap<>();
-        templateArgs.put("${imagePath}", mProduct.getImagePath());
-        templateArgs.put("${title}", prefixTitle + getString(R.string.share_product_title_format,
-                mProduct.getBrand(), mProduct.getName()));
-        templateArgs.put("${description}", getString(R.string.share_product_description_format,
-                mProduct.getBrand(), mProduct.getName()));
-        templateArgs.put("${product_id}", String.valueOf(mProduct.getId()));
-
-        KakaoLinkService.getInstance().sendCustom(this, PRODUCT_SHARE_TEMPLATE_CODE,
-                templateArgs, new ResponseCallback<KakaoLinkResponse>() {
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-//                Logger.e(errorResult.toString());
-//                Toast.makeText(getApplicationContext(), errorResult.toString(), Toast.LENGTH_LONG).show();
-
-                if (errorResult.getException().toString().split(":")[0].equals(KAKAOTALK_NOT_INSTALLED.toString())) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ProductActivity.this);
-                    builder1.setMessage(getString(com.kakao.kakaolink.R.string.com_kakao_alert_install_kakaotalk));
-                    builder1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(KakaoTalkLinkProtocol.TALK_MARKET_URL_PREFIX)));
-                        }
-                    });
-                    builder1.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog dialog1 = builder1.create();
-                    dialog1.show();
-                }
-            }
-
-            @Override
-            public void onSuccess(KakaoLinkResponse result) {
-            }
-        });
     }
 
     @Override

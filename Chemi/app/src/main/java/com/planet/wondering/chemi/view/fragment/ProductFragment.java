@@ -33,6 +33,7 @@ import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.helper.UserSharedPreferences;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
+import com.planet.wondering.chemi.view.custom.SwipeableViewPager;
 
 import org.json.JSONObject;
 
@@ -94,7 +95,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
     private Product mProduct;
 
     private TabLayout mProductDetailTabLayout;
-    private ViewPager mProductDetailViewPager;
+//    private ViewPager mProductDetailViewPager;
+    private SwipeableViewPager mProductDetailViewPager;
     private ArrayList<Fragment> mProductDetailListFragments;
     private ArrayList<String> mProductDetailListFragmentTitles;
 
@@ -116,7 +118,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         addProductDetailFragment(ReviewListFragment.newInstance(mProduct),
                 getString(R.string.product_detail_tab_title2));
         addProductDetailFragment(ChemicalListFragment.newInstance(mProduct),
-                getString(R.string.product_detail_tab_title1));
+                "");
     }
 
     @Nullable
@@ -126,17 +128,11 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         mProductDetailTabLayout = (TabLayout) view.findViewById(R.id.product_detail_tab_layout);
-        mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
+//        mProductDetailViewPager = (ViewPager) view.findViewById(R.id.product_detail_view_pager);
+        mProductDetailViewPager = (SwipeableViewPager) view.findViewById(R.id.product_detail_view_pager);
         mReviewCreateLayout = (LinearLayout) view.findViewById(R.id.review_create_layout);
         mReviewCreateButtonTextView = (TextView) view.findViewById(R.id.review_create_button_text_view);
         mReviewCreateButtonTextView.setOnClickListener(this);
-
-//        mChildFragment = mChildFragmentManager.findFragmentById(R.id.product_fragment_container);
-//        if (mChildFragment == null) {
-//            mChildFragmentManager.beginTransaction()
-//                    .add(R.id.product_fragment_container, ChemicalChartFragment.newInstance())
-//                    .commit();
-//        }
 
         mFragmentPagerAdapter = new ProductFragmentPagerAdapter(getChildFragmentManager());
         mProductDetailViewPager.setAdapter(mFragmentPagerAdapter);
@@ -168,6 +164,22 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mProduct.getProductType() == 1) {
+            mProductDetailViewPager.setSwipeable(true);
+            if (mProduct.isWholeChemicals()) {
+                mFragmentPagerAdapter.setFragmentTitles(1, "전성분 목록");
+            } else {
+                mFragmentPagerAdapter.setFragmentTitles(1, "주성분 목록");
+            }
+            mFragmentPagerAdapter.notifyDataSetChanged();
+        } else if (mProduct.getProductType() == 2) {
+            LinearLayout chemicalTabLayout = ((LinearLayout) mProductDetailTabLayout.getChildAt(0));
+            chemicalTabLayout.getChildAt(1).setEnabled(false);
+            mProductDetailTabLayout.setSelectedTabIndicatorHeight(0);
+//            mProductDetailTabLayout.setSelectedTabIndicatorHeight((int) (2 * getResources().getDisplayMetrics().density));
+//            mFragmentPagerAdapter.setFragmentTitles(1, "");
+//            mFragmentPagerAdapter.notifyDataSetChanged();
+        }
     }
 
     private void addProductDetailFragment(Fragment fragment, String title) {
@@ -180,17 +192,17 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case PROMOTE_EXTRA_DIALOG_REQUEST_CODE:
-                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
+//                Log.i(TAG, "PROMOTE_EXTRA_DIALOG_REQUEST_CODE : " + PROMOTE_EXTRA_DIALOG_REQUEST_CODE);
                 requestMemberConfig(true);
                 break;
             case REVIEW_READ_REQUEST_CODE:
-                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
+//                Log.i(TAG, "REVIEW_READ_REQUEST_CODE : " + REVIEW_READ_REQUEST_CODE);
                 for (Fragment fragment : getChildFragmentManager().getFragments()) {
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
                 break;
             case REVIEW_CREATE_REQUEST_CODE:
-                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
+//                Log.i(TAG, "REVIEW_CREATE_REQUEST_CODE : " + REVIEW_CREATE_REQUEST_CODE);
                 break;
         }
     }

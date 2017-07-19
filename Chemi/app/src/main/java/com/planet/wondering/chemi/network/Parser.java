@@ -26,6 +26,7 @@ import com.planet.wondering.chemi.model.home.BestReview;
 import com.planet.wondering.chemi.model.home.PromoteContent;
 import com.planet.wondering.chemi.model.home.PromoteProduct;
 import com.planet.wondering.chemi.model.home.RecommendProduct;
+import com.planet.wondering.chemi.model.product.Material;
 import com.planet.wondering.chemi.network.Config.Chemical.Key;
 
 import org.json.JSONArray;
@@ -129,12 +130,20 @@ import static com.planet.wondering.chemi.network.Config.Product.Key.ALLERGY;
 import static com.planet.wondering.chemi.network.Config.Product.Key.ARCHIVE;
 import static com.planet.wondering.chemi.network.Config.Product.Key.BRAND;
 import static com.planet.wondering.chemi.network.Config.Product.Key.CHEMICALS_SIZE;
+import static com.planet.wondering.chemi.network.Config.Product.Key.FEATURE;
 import static com.planet.wondering.chemi.network.Config.Product.Key.IMAGE_PATH;
+import static com.planet.wondering.chemi.network.Config.Product.Key.MATERIAL;
+import static com.planet.wondering.chemi.network.Config.Product.Key.MATERIALS;
+import static com.planet.wondering.chemi.network.Config.Product.Key.MATERIAL_ID;
+import static com.planet.wondering.chemi.network.Config.Product.Key.MATERIAL_NAME;
 import static com.planet.wondering.chemi.network.Config.Product.Key.NAME;
 import static com.planet.wondering.chemi.network.Config.Product.Key.PRODUCT_ID;
+import static com.planet.wondering.chemi.network.Config.Product.Key.PRODUCT_TYPE;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RATING_COUNT;
 import static com.planet.wondering.chemi.network.Config.Product.Key.RECOMMEND_DESCRIPTION;
+import static com.planet.wondering.chemi.network.Config.Product.Key.SIZE;
+import static com.planet.wondering.chemi.network.Config.Product.Key.TARGET;
 import static com.planet.wondering.chemi.network.Config.Product.Key.WHOLE_CHEMICALS;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
@@ -421,6 +430,8 @@ public class Parser {
                 product.setBrand(productJSONObject.getString(BRAND));
                 product.setName(productJSONObject.getString(NAME));
                 product.setImagePath(productJSONObject.getString(IMAGE_PATH));
+                product.setProductType(productJSONObject.getInt(PRODUCT_TYPE));
+
 //                product.setRatingValue((float) productJSONObject.getDouble(RATING));
                 Object ratingObject = productJSONObject.get(RATING);
                 float ratingFloat = 0.0f;
@@ -469,6 +480,25 @@ public class Parser {
                             chemical.setAllergy(true);
                         }
                         product.getChemicals().add(chemical);
+                    }
+                }
+                if (product.getProductType() == 2) {
+                    product.getInfoStrings();
+                    product.getInfoStrings().add(productJSONObject.getString(SIZE));
+                    product.getInfoStrings().add(productJSONObject.getString(Config.Product.Key.TYPE));
+                    product.getInfoStrings().add(productJSONObject.getString(TARGET));
+                    product.getInfoStrings().add(productJSONObject.getString(FEATURE));
+                    int materialSize = productJSONObject.getInt(MATERIALS);
+                    if (materialSize > 0) {
+                        product.getMaterials();
+                        JSONArray materialJSONArray = productJSONObject.getJSONArray(MATERIAL);
+                        for (int i = 0; i < materialSize; i++) {
+                            JSONObject materialJSONObject = materialJSONArray.getJSONObject(i);
+                            Material material = new Material();
+                            material.setId(materialJSONObject.getInt(MATERIAL_ID));
+                            material.setName(materialJSONObject.getString(MATERIAL_NAME));
+                            product.getMaterials().add(material);
+                        }
                     }
                 }
             }

@@ -20,6 +20,14 @@ public class WidthResizeAnimation extends Animation {
         mTargetWidth = targetWidth;
     }
 
+    public int getTargetWidth() {
+        return mTargetWidth;
+    }
+
+    public void setTargetWidth(int targetWidth) {
+        mTargetWidth = targetWidth;
+    }
+
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
 //        super.applyTransformation(interpolatedTime, t);

@@ -19,14 +19,23 @@
 
     </android.support.design.widget.TabLayout>
 
-    <android.support.v4.view.ViewPager
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/product_detail_view_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/colorWhite">-->
+
+    <!--</android.support.v4.view.ViewPager>-->
+
+    <com.planet.wondering.chemi.view.custom.SwipeableViewPager
         android:id="@+id/product_detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/colorWhite">
 
-    </android.support.v4.view.ViewPager>
+    </com.planet.wondering.chemi.view.custom.SwipeableViewPager>
 
     <LinearLayout
         android:id="@+id/review_create_layout"

@@ -1,5 +1,7 @@
 package com.planet.wondering.chemi.model;
 
+import com.planet.wondering.chemi.model.product.Material;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,7 +18,13 @@ public class Product implements Serializable {
     private String mBrand;
     private String mType;
     private String mPurpose;
+    private String mSize;
+    private String mTarget;
+    private String mFeature;
+    private ArrayList<String> mInfoStrings;
+    private ArrayList<Material> mMaterials;
     private String mImagePath;
+    private int mProductType;
     private float mRatingValue;
     private int mRatingCount;
     private int mAllergyCount;
@@ -84,12 +92,66 @@ public class Product implements Serializable {
         mPurpose = purpose;
     }
 
+    public String getSize() {
+        return mSize;
+    }
+
+    public void setSize(String size) {
+        mSize = size;
+    }
+
+    public String getTarget() {
+        return mTarget;
+    }
+
+    public void setTarget(String target) {
+        mTarget = target;
+    }
+
+    public String getFeature() {
+        return mFeature;
+    }
+
+    public void setFeature(String feature) {
+        mFeature = feature;
+    }
+
+    public ArrayList<String> getInfoStrings() {
+        if (mInfoStrings == null) {
+            mInfoStrings = new ArrayList<>();
+        }
+        return mInfoStrings;
+    }
+
+    public void setInfoStrings(ArrayList<String> infoStrings) {
+        mInfoStrings = infoStrings;
+    }
+
+    public ArrayList<Material> getMaterials() {
+        if (mMaterials == null) {
+            mMaterials = new ArrayList<>();
+        }
+        return mMaterials;
+    }
+
+    public void setMaterials(ArrayList<Material> materials) {
+        mMaterials = materials;
+    }
+
     public String getImagePath() {
         return mImagePath;
     }
 
     public void setImagePath(String imagePath) {
         mImagePath = imagePath;
+    }
+
+    public int getProductType() {
+        return mProductType;
+    }
+
+    public void setProductType(int productType) {
+        mProductType = productType;
     }
 
     public float getRatingValue() {

@@ -540,15 +540,17 @@ public class HomeFragment extends Fragment
                     @Override
                     public void onResponse(JSONObject response) {
                         ArrayList<BestReview> bestReviews = Parser.parseBestReviews(response);
-                        mHomeReviewViewPager.setRotateViewPagerAdapter(bestReviews);
-                        mHomeReviewViewPager.setItemClickListener(new RotateViewPager.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int itemId) {
-                                startActivity(ReviewActivity.newIntent(
-                                        getActivity(), itemId, Common.REVIEW_READ_REQUEST_CODE));
-                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            }
-                        });
+                        if (bestReviews.size() > 0) {
+                            mHomeReviewViewPager.setRotateViewPagerAdapter(bestReviews);
+                            mHomeReviewViewPager.setItemClickListener(new RotateViewPager.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int itemId) {
+                                    startActivity(ReviewActivity.newIntent(
+                                            getActivity(), itemId, Common.REVIEW_READ_REQUEST_CODE));
+                                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                }
+                            });
+                        }
                     }
                 },
                 new Response.ErrorListener() {

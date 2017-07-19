@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ public class ChemicalChartFragment extends Fragment {
 
     private static final String TAG = ChemicalChartFragment.class.getSimpleName();
 
+    private static final String ARG_WHOLE_CHEMICALS = "whole_chemicals";
     private static final String ARG_CHEMICAL_COUNT = "chemical_count";
     private static final String ARG_NUMBER_OF_EACH_EWG_RATINGS = "number_of_each_ewg_ratings";
 
@@ -36,9 +36,11 @@ public class ChemicalChartFragment extends Fragment {
         return fragment;
     }
 
-    public static ChemicalChartFragment newInstance(int chemicalCount, int[] numberOfEachEWGRatings) {
+    public static ChemicalChartFragment newInstance(
+            boolean wholeChemicals, int chemicalCount, int[] numberOfEachEWGRatings) {
 
         Bundle args = new Bundle();
+        args.putBoolean(ARG_WHOLE_CHEMICALS, wholeChemicals);
         args.putInt(ARG_CHEMICAL_COUNT, chemicalCount);
         args.putSerializable(ARG_NUMBER_OF_EACH_EWG_RATINGS, numberOfEachEWGRatings);
 
@@ -47,14 +49,17 @@ public class ChemicalChartFragment extends Fragment {
         return fragment;
     }
 
+    private TextView mChemicalWholeTextView;
     private LinearLayout mChartLayout;
     private TextView mChemicalChartTitleTextView;
+    private boolean mWholeChemicals;
     private int mChemicalCount;
     private int[] mNumberOfEachEWGRatings;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mWholeChemicals = getArguments().getBoolean(ARG_WHOLE_CHEMICALS);
         mChemicalCount = getArguments().getInt(ARG_CHEMICAL_COUNT);
         mNumberOfEachEWGRatings = getArguments().getIntArray(ARG_NUMBER_OF_EACH_EWG_RATINGS);
     }
@@ -64,6 +69,7 @@ public class ChemicalChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chemical_chart, container, false);
+        mChemicalWholeTextView = (TextView) view.findViewById(R.id.chemical_whole_text_view);
         mChemicalChartTitleTextView = (TextView) view.findViewById(R.id.chemical_chart_title_text_view);
         mChartLayout = (LinearLayout) view.findViewById(R.id.chemical_chart_layout);
         return view;
@@ -72,6 +78,11 @@ public class ChemicalChartFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mWholeChemicals) {
+            mChemicalWholeTextView.setText("전성분 정보");
+        } else {
+            mChemicalWholeTextView.setText("주성분 정보");
+        }
         mChemicalChartTitleTextView.setText(highlightChartTitleName());
         addChartView();
     }

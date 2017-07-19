@@ -57,8 +57,14 @@ public class PromoteProductSharedPreferences {
 
         if (products != null) {
             int size = products.size();
-            product = products.get((INDEX_OF_PROMOTE_PRODUCTS++ % size));
-            return product;
+            if (size > 0) {
+                product = products.get((INDEX_OF_PROMOTE_PRODUCTS++ % size));
+                return product;
+            } else {
+                product = new PromoteProduct();
+                product.setBrand("");
+                product.setName("");
+            }
         }
         return null;
     }

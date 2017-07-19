@@ -148,12 +148,20 @@ public class ReviewListFragment extends Fragment implements View.OnClickListener
 
         int[] numberOfEachEWGRatings = mProduct.getNumberOfEachEWGRating();
         int chemicalCount = mProduct.getChemicals().size();
-        mChartFragment = mChildFragmentManager.findFragmentById(R.id.chart_fragment_container);
+        mChartFragment = mChildFragmentManager.findFragmentById(R.id.product_extend_fragment_container);
         if (mChartFragment == null) {
-            mChildFragmentManager.beginTransaction()
-                    .add(R.id.chart_fragment_container,
-                            ChemicalChartFragment.newInstance(chemicalCount, numberOfEachEWGRatings))
-                    .commit();
+            if (mProduct.getProductType() == 1) {
+                mChildFragmentManager.beginTransaction()
+                        .add(R.id.product_extend_fragment_container,
+                                ChemicalChartFragment.newInstance(
+                                        mProduct.isWholeChemicals(), chemicalCount, numberOfEachEWGRatings))
+                        .commit();
+            } else if (mProduct.getProductType() == 2) {
+                mChildFragmentManager.beginTransaction()
+                        .add(R.id.product_extend_fragment_container,
+                                ProductInfoFragment.newInstance(mProduct))
+                        .commit();
+            }
         }
 
         mReviewRecyclerView = (RecyclerView) view.findViewById(R.id.review_recycler_view);

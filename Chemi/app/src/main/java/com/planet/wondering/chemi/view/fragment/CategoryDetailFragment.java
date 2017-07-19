@@ -325,7 +325,6 @@ public class CategoryDetailFragment extends Fragment {
                     mCategoryPieceLayout.addView(view);
                 }
             }
-
         }
 
         @Override
@@ -334,6 +333,7 @@ public class CategoryDetailFragment extends Fragment {
                 case R.id.list_item_category_piece_name_text_view:
                     startActivity(ProductListActivity.newIntent(getActivity(),
                             mCategoryPiece.getNumber(), mCategoryPiece.getName()));
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     break;
             }
         }

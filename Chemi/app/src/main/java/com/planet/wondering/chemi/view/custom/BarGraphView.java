@@ -89,12 +89,13 @@ public class BarGraphView extends LinearLayout {
         mLayoutParams = (LinearLayout.LayoutParams) mCountTextView.getLayoutParams();
         mLayoutParams.setMargins(getPixelFromDp(4), 0, 0, 0);
 
-        mBarGraphView.startAnimation(mWidthResizeAnimation);
         if (mBarGraphValue > 0) {
             animateTextView(0, mBarGraphValue, mCountTextView);
         } else if (mBarGraphValue == 0) {
+            mWidthResizeAnimation.setTargetWidth((int) (1 * getResources().getDisplayMetrics().density));
             mCountTextView.setText(highlightText(mBarGraphValue, mBarColorResId));
         }
+        mBarGraphView.startAnimation(mWidthResizeAnimation);
     }
 
     private void animateTextView(int initialValue, final int finalValue, final TextView textView) {
