@@ -40,6 +40,7 @@
     <string name="chemical_ewg_value_name_2">낮은\n위험도</string>
     <string name="chemical_ewg_value_name_3">중간\n위험도</string>
     <string name="chemical_ewg_value_name_4">높은\n위험도</string>
+    <string name="product_material_info_prefix_format">- %s</string>
     <string name="product_list_result_paginating_message">검색된 제품이 더 있어요!\n스크롤을 조금 더 올려주세요.</string>
     <string name="product_list_result_empty_request_promote_message">검색어에 대한 검색을 마쳤어요!\n찾고 계신 제품이 없다면</string>
     <string name="product_review_count">(%s명)</string>

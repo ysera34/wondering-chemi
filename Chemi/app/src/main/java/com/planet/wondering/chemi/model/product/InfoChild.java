@@ -6,17 +6,8 @@ package com.planet.wondering.chemi.model.product;
 
 public class InfoChild {
 
-    private int mViewType;
     private String mTitle;
     private String mDescription;
-
-    public int getViewType() {
-        return mViewType;
-    }
-
-    public void setViewType(int viewType) {
-        mViewType = viewType;
-    }
 
     public String getTitle() {
         return mTitle;

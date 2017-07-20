@@ -2,8 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:paddingStart="24dp"
+              android:paddingEnd="24dp"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp">
 
+    <TextView
+        android:id="@+id/list_item_product_info_child_grid_start_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="15sp"
+        android:textColor="@color/colorFontAluminum"/>
 
+    <TextView
+        android:id="@+id/list_item_product_info_child_grid_end_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="15sp"
+        android:textColor="@color/colorFontAluminum"/>
 
 </LinearLayout>

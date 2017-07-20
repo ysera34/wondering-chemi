@@ -80,6 +80,27 @@ public class ProductInfoFragment extends Fragment {
                     break;
                 case 1:
                     infoParent.setTitle("재질 정보");
+                    if (product != null) {
+                        int materialSize = product.getMaterials().size();
+                        int index;
+                        if (materialSize % 2 == 0) {
+                            index = materialSize / 2;
+                        } else {
+                            index = materialSize / 2 + 1;
+                        }
+                        for (int j = 0; j < index; j++) {
+                            InfoChild infoChild = new InfoChild();
+                            infoChild.setTitle(product.getMaterials().get(j * 2).getName());
+                            if (j != index - 1) {
+                                infoChild.setDescription(product.getMaterials().get(j * 2 + 1).getName());
+                            } else {
+                                if (materialSize % 2 == 0) {
+                                    infoChild.setDescription(product.getMaterials().get(j * 2 + 1).getName());
+                                }
+                            }
+                            infoParent.getChildList().add(infoChild);
+                        }
+                    }
                     break;
                 case 2:
                     infoParent.setTitle("성분 정보");
@@ -293,12 +314,25 @@ public class ProductInfoFragment extends Fragment {
 
         private InfoChild mInfoChild;
 
+        private TextView mStartTextView;
+        private TextView mEndTextView;
+
         public InfoChildGridHolder(@NonNull View itemView) {
             super(itemView);
+            mStartTextView = (TextView) itemView
+                    .findViewById(R.id.list_item_product_info_child_grid_start_text_view);
+            mEndTextView = (TextView) itemView
+                    .findViewById(R.id.list_item_product_info_child_grid_end_text_view);
         }
 
         public void bindInfoChild(InfoChild infoChild) {
             mInfoChild = infoChild;
+            mStartTextView.setText(getString(
+                    R.string.product_material_info_prefix_format, mInfoChild.getTitle()));
+            if (mInfoChild.getDescription() != null) {
+                mEndTextView.setText(getString(
+                        R.string.product_material_info_prefix_format, mInfoChild.getDescription()));
+            }
         }
     }
 

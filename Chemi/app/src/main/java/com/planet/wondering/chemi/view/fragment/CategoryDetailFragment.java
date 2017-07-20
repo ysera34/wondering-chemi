@@ -320,6 +320,7 @@ public class CategoryDetailFragment extends Fragment {
                         public void onClick(View v) {
                             startActivity(ProductListActivity.newIntent(getActivity(),
                                     categoryPieceExtend.getNumber(), categoryPieceName + " " + categoryPieceExtend.getName()));
+                            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         }
                     });
                     mCategoryPieceLayout.addView(view);
