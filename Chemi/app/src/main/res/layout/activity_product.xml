@@ -21,7 +21,7 @@
         android:background="@color/colorWhite"
         app:titleEnabled="false"
         app:contentScrim="@color/colorWhite"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:expandedTitleMarginStart="20dp"
         app:expandedTitleMarginEnd="30dp"
         android:fitsSystemWindows="true">

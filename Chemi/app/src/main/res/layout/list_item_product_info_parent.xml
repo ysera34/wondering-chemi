@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
-              android:background="@drawable/selector_ripple_list_item_gray">
+              android:background="@drawable/selector_ripple_bg_white_border_top">
 
     <TextView
         android:id="@+id/list_item_product_info_parent_title_text_view"

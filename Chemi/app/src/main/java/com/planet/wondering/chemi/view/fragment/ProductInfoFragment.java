@@ -74,6 +74,7 @@ public class ProductInfoFragment extends Fragment {
                             InfoChild infoChild = new InfoChild();
                             infoChild.setTitle(infoChildGeneralTitleArr[j]);
                             infoChild.setDescription(product.getInfoStrings().get(j));
+                            infoParent.setInitiallyExpanded(true);
                             infoParent.getChildList().add(infoChild);
                         }
                     }
@@ -104,6 +105,10 @@ public class ProductInfoFragment extends Fragment {
                     break;
                 case 2:
                     infoParent.setTitle("성분 정보");
+                    InfoChild infoChild = new InfoChild();
+                    infoChild.setDescription("\"전체 성분이 공개되지 않은 제품이예요.\"");
+                    infoParent.setInitiallyExpanded(true);
+                    infoParent.getChildList().add(infoChild);
                     break;
             }
             mInfoParents.add(infoParent);
@@ -340,12 +345,17 @@ public class ProductInfoFragment extends Fragment {
 
         private InfoChild mInfoChild;
 
+        private TextView mQuotationTextView;
+
         public InfoChildQuotationHolder(@NonNull View itemView) {
             super(itemView);
+            mQuotationTextView = (TextView) itemView
+                    .findViewById(R.id.list_item_product_info_child_quotation_text_view);
         }
 
         public void bindInfoChild(InfoChild infoChild) {
             mInfoChild = infoChild;
+            mQuotationTextView.setText(mInfoChild.getDescription());
         }
     }
 

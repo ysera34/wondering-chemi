@@ -16,7 +16,7 @@
         android:layout_marginEnd="12dp"
         android:gravity="center"
         android:clickable="true"
-        android:background="@drawable/selector_ripple_list_item_gray"
+        android:background="@drawable/selector_ripple_bg_white"
         app:iconResId="@drawable/ic_category_baby_circle_false"
         app:name="@string/category_group_0_name">
 
@@ -29,7 +29,7 @@
         android:layout_marginEnd="12dp"
         android:gravity="center"
         android:clickable="true"
-        android:background="@drawable/selector_ripple_list_item_gray"
+        android:background="@drawable/selector_ripple_bg_white"
         app:iconResId="@drawable/ic_category_female_circle_false"
         app:name="@string/category_group_1_name">
 
@@ -42,7 +42,7 @@
         android:layout_marginEnd="12dp"
         android:gravity="center"
         android:clickable="true"
-        android:background="@drawable/selector_ripple_list_item_gray"
+        android:background="@drawable/selector_ripple_bg_white"
         app:iconResId="@drawable/ic_category_general_circle_false"
         app:name="@string/category_group_2_name">
 
@@ -54,7 +54,7 @@
         android:layout_height="@dimen/category_group_view_height"
         android:gravity="center"
         android:clickable="true"
-        android:background="@drawable/selector_ripple_list_item_gray"
+        android:background="@drawable/selector_ripple_bg_white"
         app:iconResId="@drawable/ic_category_living_circle_false"
         app:name="@string/category_group_3_name">
 

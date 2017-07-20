@@ -214,7 +214,7 @@
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
         android:layout_marginTop="1dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"
@@ -241,7 +241,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"
@@ -268,7 +268,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"
@@ -295,7 +295,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"
@@ -314,7 +314,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"
@@ -341,7 +341,7 @@
         android:layout_height="@dimen/member_config_body_menu_height"
         android:paddingStart="18dp"
         android:paddingEnd="18dp"
-        android:background="@drawable/selector_ripple_list_item_border_gray">
+        android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
         <TextView
             android:layout_width="wrap_content"

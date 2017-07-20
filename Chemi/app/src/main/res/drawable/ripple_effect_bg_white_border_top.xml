@@ -3,5 +3,5 @@
     android:color="@color/colorBorder">
 
     <!--background-->
-    <item android:drawable="@drawable/widget_background_white_list_item"/>
+    <item android:drawable="@drawable/widget_bg_white_border_top"/>
 </layer-list>

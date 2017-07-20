@@ -47,7 +47,7 @@
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:id="@+id/member_config_profile_text_view"
@@ -74,7 +74,7 @@
                 android:layout_height="@dimen/member_config_body_menu_height"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
                 android:layout_height="@dimen/member_config_body_menu_height"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -154,7 +154,7 @@
                 android:layout_height="@dimen/member_config_body_menu_height"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -181,7 +181,7 @@
                 android:layout_height="@dimen/member_config_body_menu_height"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
                 android:layout_height="@dimen/member_config_body_menu_height"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -258,7 +258,7 @@
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/selector_ripple_list_item_border_gray">
+                android:background="@drawable/selector_ripple_bg_white_border_bottom">
 
                 <TextView
                     android:layout_width="wrap_content"

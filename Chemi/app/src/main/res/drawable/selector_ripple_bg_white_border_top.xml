@@ -4,5 +4,5 @@
         android:drawable="@color/colorBorder"/>
     <!--<item android:state_pressed="true"-->
           <!--android:drawable="@color/colorAlabaster"/>-->
-    <item android:drawable="@drawable/ripple_effect_white_border_gray"/>
+    <item android:drawable="@drawable/ripple_effect_bg_white_border_top"/>
 </selector>

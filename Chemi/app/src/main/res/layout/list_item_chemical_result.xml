@@ -5,7 +5,7 @@
     android:layout_height="@dimen/list_item_chemical_height"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:background="@drawable/selector_ripple_list_item_border_gray">
+    android:background="@drawable/selector_ripple_bg_white_border_bottom">
     <!--android:background="@color/colorWhite"-->
 
     <LinearLayout

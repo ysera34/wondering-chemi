@@ -3,7 +3,7 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/selector_ripple_list_item_border_gray">
+              android:background="@drawable/selector_ripple_bg_white_border_bottom">
     
     <LinearLayout
         android:layout_width="0dp"

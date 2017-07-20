@@ -4,7 +4,7 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="8dp"
-                android:background="@drawable/selector_ripple_list_item_gray">
+                android:background="@drawable/selector_ripple_bg_white">
 
         <ImageView
             android:id="@+id/list_item_archive_content_image_view"

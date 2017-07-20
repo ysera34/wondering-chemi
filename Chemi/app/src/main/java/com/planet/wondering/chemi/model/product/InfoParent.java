@@ -14,6 +14,7 @@ public class InfoParent implements Parent<InfoChild> {
     private int mId;
     private String mTitle;
     private ArrayList<InfoChild> mInfoChildren;
+    private boolean mInitiallyExpanded;
 
     public InfoParent() {
         mInfoChildren = new ArrayList<>();
@@ -48,8 +49,12 @@ public class InfoParent implements Parent<InfoChild> {
         return mInfoChildren;
     }
 
+    public void setInitiallyExpanded(boolean initiallyExpanded) {
+        mInitiallyExpanded = initiallyExpanded;
+    }
+
     @Override
     public boolean isInitiallyExpanded() {
-        return false;
+        return mInitiallyExpanded;
     }
 }

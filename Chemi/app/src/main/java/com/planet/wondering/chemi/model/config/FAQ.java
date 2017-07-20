@@ -15,6 +15,7 @@ public class FAQ implements Parent<FAQBody> {
     private String mQuestion;
     private String mCreateDate;
     private String mModifyDate;
+    private boolean mInitiallyExpanded;
 
     private ArrayList<FAQBody> mFAQBodies;
 
@@ -67,8 +68,12 @@ public class FAQ implements Parent<FAQBody> {
         return mFAQBodies;
     }
 
+    public void setInitiallyExpanded(boolean initiallyExpanded) {
+        mInitiallyExpanded = initiallyExpanded;
+    }
+
     @Override
     public boolean isInitiallyExpanded() {
-        return false;
+        return mInitiallyExpanded;
     }
 }
