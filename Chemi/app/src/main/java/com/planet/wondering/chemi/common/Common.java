@@ -7,6 +7,7 @@ package com.planet.wondering.chemi.common;
 public class Common {
 
     public static final String APP_VERSION_NAME_KEY = "version";
+    public static final String APP_RELEASE_VERSION = "release_version";
     public static final String EXTRA_REQUEST_CHECK_VERSION = "com.planet.wondering.chemi.request_check_version";
     public static final String EXTRA_RESULT_CHECK_VERSION = "com.planet.wondering.chemi.result_check_version";
     public static final String APP_MARKET_URL = "market://details?id=com.planet.wondering.chemi";
@@ -52,6 +53,7 @@ public class Common {
     public static final int REVOKE_DIALOG_REQUEST_CODE = 3114;
     public static final int WITHDRAW_DIALOG_REQUEST_CODE = 3115;
     public static final int PROMOTE_EXTRA_DIALOG_REQUEST_CODE = 3116;
+    public static final int NETWORK_SETTING_REQUEST_CODE = 3117;
 
     public static final String EXTRA_REQUEST_USER_CODE = "com.planet.wondering.chemi.request_user_code";
     public static final String EXTRA_RESPONSE_USER_CODE = "com.planet.wondering.chemi.response_user_code";

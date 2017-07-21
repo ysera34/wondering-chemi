@@ -145,6 +145,8 @@ public class HomeFragment extends Fragment
         mHomeNestedScrollView.setOnScrollChangeListener(this);
         mHomeScrollLayout = (LinearLayout) view.findViewById(R.id.home_scroll_layout);
 
+
+
         mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_promote_content_rotate_view_pager);
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryLayout.setOnClickListener(this);
@@ -247,12 +249,22 @@ public class HomeFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_search_text_button:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = SearchActivity.newIntent(getActivity());
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            mHomeSearchLayout, "search_layout_transition");
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(SearchActivity.newIntent(getActivity()));
+                }
+                break;
             case R.id.home_add_search_text_button:
                 startActivity(SearchActivity.newIntent(getActivity()));
                 break;
             case R.id.home_search_image_button:
             case R.id.home_add_search_image_button:
                 startActivity(ProductListActivity.newIntent(getActivity(), mHomeSearchButton.getHint().toString()));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.home_category_layout:
             case R.id.home_add_category_layout:

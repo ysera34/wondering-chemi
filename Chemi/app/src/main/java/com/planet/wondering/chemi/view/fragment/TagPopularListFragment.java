@@ -217,6 +217,12 @@ public class TagPopularListFragment extends Fragment {
             mTag = tag;
             mTagRatingNumberTextView.setText(String.valueOf(mTag.getRank()));
             mTagNameTextView.setText(mTag.getName());
+            mTagNameTextView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mTagNameTextView.setSelected(true);
+                }
+            }, 1500);
             mTagVariationStateImageView.setImageResource(mTag.getStateImageResId());
             mTagVariationValueTextView.setText(String.valueOf(mTag.getAbsoluteVariation()));
         }

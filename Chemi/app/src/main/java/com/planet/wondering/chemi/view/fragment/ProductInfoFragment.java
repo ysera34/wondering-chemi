@@ -335,7 +335,12 @@ public class ProductInfoFragment extends Fragment {
             if (mInfoChild.isLastChild()) {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                layoutParams.setMargins(0, 0, 0, getPixelFromDp(12));
+                mLayout.setLayoutParams(layoutParams);
+            } else {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, 0);
                 mLayout.setLayoutParams(layoutParams);
             }
         }
@@ -366,11 +371,18 @@ public class ProductInfoFragment extends Fragment {
             if (mInfoChild.getDescription() != null) {
                 mEndTextView.setText(getString(
                         R.string.product_material_info_prefix_format, mInfoChild.getDescription()));
+            } else {
+                mEndTextView.setText(" ");
             }
             if (mInfoChild.isLastChild()) {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                layoutParams.setMargins(0, 0, 0, getPixelFromDp(12));
+                mLayout.setLayoutParams(layoutParams);
+            } else {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, 0);
                 mLayout.setLayoutParams(layoutParams);
             }
         }
@@ -398,6 +410,11 @@ public class ProductInfoFragment extends Fragment {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                mLayout.setLayoutParams(layoutParams);
+            } else {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, 0);
                 mLayout.setLayoutParams(layoutParams);
             }
         }

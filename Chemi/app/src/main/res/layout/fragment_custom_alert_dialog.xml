@@ -50,7 +50,7 @@
             android:layout_centerHorizontal="true"
             android:textColor="#4a4a4a"
             android:textSize="18sp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             tools:text="alert dialog title"/>
 
         <TextView

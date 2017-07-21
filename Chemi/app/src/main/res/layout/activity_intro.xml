@@ -107,7 +107,10 @@
         android:layout_alignParentBottom="true"
         android:text="시작하기"
         android:textSize="16sp"
-        android:textColor="@color/colorWhite"
-        android:background="@color/colorPrimary"/>
+        android:textColor="@color/color_selector_button_white_primary"
+        android:background="@drawable/selector_rectangle_opaque_primary"
+        android:elevation="4dp"/>
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:background="@color/colorPrimary"-->
 
 </RelativeLayout>

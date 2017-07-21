@@ -288,6 +288,7 @@ public class ContentListFragment extends Fragment {
 //            startActivity(ContentActivity.newIntent(getActivity(), mContent.getId()));
             getActivity().startActivityForResult(
                     ContentActivity.newIntent(getActivity(), mContent.getId()), CONTENT_REQUEST_CODE);
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 

@@ -237,7 +237,6 @@ public class MemberStartActivity extends AppBaseActivity
         }
     }
 
-
     public void replaceFragment(String email) {
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.member_fragment_container);
@@ -259,7 +258,6 @@ public class MemberStartActivity extends AppBaseActivity
                         .replace(R.id.member_fragment_container, MemberSurveyInfoFragment.newInstance())
                         .commit();
             }
-
 
         } else if (fragment instanceof MemberForgetPasswordFragment) {
             mFragmentManager.beginTransaction()

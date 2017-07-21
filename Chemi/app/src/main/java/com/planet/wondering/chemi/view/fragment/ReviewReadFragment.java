@@ -320,6 +320,7 @@ public class ReviewReadFragment extends Fragment
                 break;
             case R.id.review_read_product_layout:
                 startActivity(ProductActivity.newIntent(getActivity(), mReview.getProductId()));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.review_read_comment_edit_text:
                 if (UserSharedPreferences.getStoredToken(getActivity()) != null) {
@@ -394,8 +395,6 @@ public class ReviewReadFragment extends Fragment
             }
         });
     }
-
-
 
     private void displayPopupWindow(View anchorView) {
         mPopupWindow = new PopupWindow(getActivity());

@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +20,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.planet.wondering.chemi.BuildConfig;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Other;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
+import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
 
 import org.json.JSONObject;
 
@@ -36,16 +40,18 @@ import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_ERRO
 import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_USUALLY_MODE_CODE;
 import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSION;
+import static com.planet.wondering.chemi.common.Common.NETWORK_SETTING_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Other.OTHER_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.NETWORK_DIALOG;
 
 /**
  * Created by yoon on 2017. 6. 10..
  */
 
-public class UpdateActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity implements OnDialogFinishedListener {
 
     private static final String TAG = UpdateActivity.class.getSimpleName();
 
@@ -75,6 +81,14 @@ public class UpdateActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mRequestCode == CHECK_VERSION_REQUEST_CODE) {
+            requestAppVersionName();
+        }
+    }
+
     private void requestAppVersionName() {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -82,7 +96,12 @@ public class UpdateActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Other versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
+                        Other versionOtherObject;
+                        if (BuildConfig.DEBUG) {
+                            versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
+                        } else {
+                            versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
+                        }
                         checkVersionName(getAppVersionName(), versionOtherObject.getDescription());
                     }
                 },
@@ -92,6 +111,7 @@ public class UpdateActivity extends AppCompatActivity {
                         Log.e(TAG, error.toString());
                         Toast.makeText(getApplicationContext(), R.string.progress_dialog_message_error,
                                 Toast.LENGTH_SHORT).show();
+                        showSettingDialog();
                     }
                 }
         );
@@ -220,5 +240,27 @@ public class UpdateActivity extends AppCompatActivity {
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showSettingDialog() {
+        CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment
+                .newInstance(R.string.dialog_title_wait_message,
+                        R.string.dialog_description_promote_network_setting,
+                        R.string.network_dialog_positive_string,
+                        R.string.network_dialog_negative_string,
+                        NETWORK_SETTING_REQUEST_CODE);
+        dialogFragment.show(getSupportFragmentManager(), NETWORK_DIALOG);
+    }
+
+    @Override
+    public void onDialogFinished(boolean isChose, int requestCode) {
+        if (requestCode == NETWORK_SETTING_REQUEST_CODE) {
+            if (isChose) {
+                requestAppVersionName();
+            } else {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        }
     }
 }

@@ -293,11 +293,15 @@
         <item>@string/category_part_name_etc</item>
     </string-array>
 
-
     <string name="category_piece_name_1_1_1">어른둥이 남여공용</string>
     <string name="category_piece_name_1_1_2">신생아 남여공용</string>
     <string name="category_piece_name_1_1_3">소형 남아용</string>
     <string name="category_piece_name_1_1_4">소형 여아용</string>
     <string name="category_piece_name_1_1_5">소형 남여공용</string>
+
+    <string name="dialog_title_wait_message">잠시만요!</string>
+    <string name="dialog_description_promote_network_setting">인터넷에 연결할 수 없습니다.\n다시 시도하거나 네트워크 설정을 확인해주세요.</string>
+    <string name="network_dialog_positive_string">재시도</string>
+    <string name="network_dialog_negative_string">설정</string>
 
 </resources>

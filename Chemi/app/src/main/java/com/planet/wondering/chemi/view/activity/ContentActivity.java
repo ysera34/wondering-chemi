@@ -938,7 +938,7 @@ public class ContentActivity extends AppBaseActivity implements View.OnClickList
             intent.putExtra(EXTRA_RESPONSE_CONTENT_COMMENT_COUNT, mCurrentCommentCount);
             setResult(RESULT_OK, intent);
             super.onBackPressed();
-
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
 
 //        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
