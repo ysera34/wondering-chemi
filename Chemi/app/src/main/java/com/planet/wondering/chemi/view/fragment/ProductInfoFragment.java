@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
@@ -74,6 +75,9 @@ public class ProductInfoFragment extends Fragment {
                             InfoChild infoChild = new InfoChild();
                             infoChild.setTitle(infoChildGeneralTitleArr[j]);
                             infoChild.setDescription(product.getInfoStrings().get(j));
+                            if (j == 3) {
+                                infoChild.setLastChild(true);
+                            }
                             infoParent.setInitiallyExpanded(true);
                             infoParent.getChildList().add(infoChild);
                         }
@@ -81,6 +85,7 @@ public class ProductInfoFragment extends Fragment {
                     break;
                 case 1:
                     infoParent.setTitle("재질 정보");
+                    infoParent.setArrowVisible(true);
                     if (product != null) {
                         int materialSize = product.getMaterials().size();
                         int index;
@@ -99,6 +104,9 @@ public class ProductInfoFragment extends Fragment {
                                     infoChild.setDescription(product.getMaterials().get(j * 2 + 1).getName());
                                 }
                             }
+                            if (j == index - 1) {
+                                infoChild.setLastChild(true);
+                            }
                             infoParent.getChildList().add(infoChild);
                         }
                     }
@@ -107,6 +115,7 @@ public class ProductInfoFragment extends Fragment {
                     infoParent.setTitle("성분 정보");
                     InfoChild infoChild = new InfoChild();
                     infoChild.setDescription("\"전체 성분이 공개되지 않은 제품이예요.\"");
+                    infoChild.setLastChild(true);
                     infoParent.setInitiallyExpanded(true);
                     infoParent.getChildList().add(infoChild);
                     break;
@@ -183,6 +192,7 @@ public class ProductInfoFragment extends Fragment {
         @Override
         public void onBindChildViewHolder(@NonNull ChildViewHolder childViewHolder, int parentPosition, int childPosition, @NonNull InfoChild child) {
             if (childViewHolder instanceof InfoChildGeneralHolder) {
+
                 ((InfoChildGeneralHolder) childViewHolder).bindInfoChild(child);
             }
             if (childViewHolder instanceof InfoChildGridHolder) {
@@ -203,7 +213,7 @@ public class ProductInfoFragment extends Fragment {
                 case 2:
                     return QUOTATION_VIEW_TYPE;
             }
-            return 0;
+            return -1;
         }
     }
 
@@ -233,6 +243,12 @@ public class ProductInfoFragment extends Fragment {
         public void bindInfoParent(InfoParent infoParent) {
             mInfoParent = infoParent;
             mTitleTextView.setText(String.valueOf(mInfoParent.getTitle()));
+            if (mInfoParent.isArrowVisible()) {
+                mArrowImageView.setVisibility(View.VISIBLE);
+            } else {
+                mArrowImageView.setVisibility(View.GONE);
+            }
+
         }
 
         @Override
@@ -297,11 +313,14 @@ public class ProductInfoFragment extends Fragment {
 
         private InfoChild mInfoChild;
 
+        private LinearLayout mLayout;
         private TextView mTitleTextView;
         private TextView mDescriptionTextView;
 
         public InfoChildGeneralHolder(@NonNull View itemView) {
             super(itemView);
+            mLayout = (LinearLayout) itemView
+                    .findViewById(R.id.list_item_product_info_child_general_layout);
             mTitleTextView = (TextView) itemView
                     .findViewById(R.id.list_item_product_info_child_general_title_text_view);
             mDescriptionTextView = (TextView) itemView
@@ -312,6 +331,13 @@ public class ProductInfoFragment extends Fragment {
             mInfoChild = infoChild;
             mTitleTextView.setText(String.valueOf(mInfoChild.getTitle()));
             mDescriptionTextView.setText(String.valueOf(mInfoChild.getDescription()));
+
+            if (mInfoChild.isLastChild()) {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                mLayout.setLayoutParams(layoutParams);
+            }
         }
     }
 
@@ -319,11 +345,14 @@ public class ProductInfoFragment extends Fragment {
 
         private InfoChild mInfoChild;
 
+        private LinearLayout mLayout;
         private TextView mStartTextView;
         private TextView mEndTextView;
 
         public InfoChildGridHolder(@NonNull View itemView) {
             super(itemView);
+            mLayout = (LinearLayout) itemView
+                    .findViewById(R.id.list_item_product_info_child_grid_layout);
             mStartTextView = (TextView) itemView
                     .findViewById(R.id.list_item_product_info_child_grid_start_text_view);
             mEndTextView = (TextView) itemView
@@ -338,6 +367,12 @@ public class ProductInfoFragment extends Fragment {
                 mEndTextView.setText(getString(
                         R.string.product_material_info_prefix_format, mInfoChild.getDescription()));
             }
+            if (mInfoChild.isLastChild()) {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                mLayout.setLayoutParams(layoutParams);
+            }
         }
     }
 
@@ -345,10 +380,13 @@ public class ProductInfoFragment extends Fragment {
 
         private InfoChild mInfoChild;
 
+        private LinearLayout mLayout;
         private TextView mQuotationTextView;
 
         public InfoChildQuotationHolder(@NonNull View itemView) {
             super(itemView);
+            mLayout = (LinearLayout) itemView
+                    .findViewById(R.id.list_item_product_info_child_quotation_layout);
             mQuotationTextView = (TextView) itemView
                     .findViewById(R.id.list_item_product_info_child_quotation_text_view);
         }
@@ -356,8 +394,17 @@ public class ProductInfoFragment extends Fragment {
         public void bindInfoChild(InfoChild infoChild) {
             mInfoChild = infoChild;
             mQuotationTextView.setText(mInfoChild.getDescription());
+            if (mInfoChild.isLastChild()) {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, getPixelFromDp(16));
+                mLayout.setLayoutParams(layoutParams);
+            }
         }
     }
 
-
+    private int getPixelFromDp(int dp) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 }

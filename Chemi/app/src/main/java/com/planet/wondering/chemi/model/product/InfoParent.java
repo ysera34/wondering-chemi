@@ -15,6 +15,7 @@ public class InfoParent implements Parent<InfoChild> {
     private String mTitle;
     private ArrayList<InfoChild> mInfoChildren;
     private boolean mInitiallyExpanded;
+    private boolean mArrowVisible;
 
     public InfoParent() {
         mInfoChildren = new ArrayList<>();
@@ -56,5 +57,13 @@ public class InfoParent implements Parent<InfoChild> {
     @Override
     public boolean isInitiallyExpanded() {
         return mInitiallyExpanded;
+    }
+
+    public boolean isArrowVisible() {
+        return mArrowVisible;
+    }
+
+    public void setArrowVisible(boolean arrowVisible) {
+        mArrowVisible = arrowVisible;
     }
 }

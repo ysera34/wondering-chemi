@@ -1,35 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/widget_background_custom_alert_dialog">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="24dp"-->
+        <!--android:paddingBottom="24dp"-->
+        <!--android:background="@drawable/widget_border_bottom_custom_alert_dialog">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/custom_alert_dialog_icon_image_view"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="24dp"-->
+            <!--android:scaleType="centerCrop"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/custom_alert_dialog_message_text_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="dfasfasdf"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textColor="@color/colorArmadillo"/>-->
+
+    <!--</LinearLayout>-->
+
+    <RelativeLayout
+        android:id="@+id/alert_dialog_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
+        android:minHeight="115dp"
+        android:gravity="center"
         android:background="@drawable/widget_border_bottom_custom_alert_dialog">
 
-        <ImageView
-            android:id="@+id/custom_alert_dialog_icon_image_view"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="24dp"
-            android:scaleType="centerCrop"/>
+        <TextView
+            android:id="@+id/custom_alert_dialog_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="#4a4a4a"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            tools:text="alert dialog title"/>
 
         <TextView
-            android:id="@+id/custom_alert_dialog_message_text_view"
-            android:layout_width="match_parent"
+            android:layout_below="@+id/custom_alert_dialog_title_text_view"
+            android:id="@+id/custom_alert_dialog_description_text_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@color/colorArmadillo"/>
+            android:lineSpacingExtra="5sp"
+            android:textColor="#4a4a4a"
+            android:textSize="14sp"
+            tools:text="description"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

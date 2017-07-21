@@ -24,6 +24,7 @@ import com.planet.wondering.chemi.model.Chemical;
 import com.planet.wondering.chemi.model.Product;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
+import com.planet.wondering.chemi.view.activity.MemberActivity;
 import com.planet.wondering.chemi.view.custom.HexagonFilterLayout;
 
 import org.json.JSONObject;
@@ -205,7 +206,8 @@ public class ChemicalListFragment extends Fragment implements View.OnClickListen
                 arrangeChemicalList(4);
                 break;
             case R.id.chemical_ewg_info_button_text_view:
-                Toast.makeText(getActivity(), "자주묻는 질문으로 연결!", Toast.LENGTH_SHORT).show();
+                startActivity(MemberActivity.newIntent(getActivity(), 4));
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }

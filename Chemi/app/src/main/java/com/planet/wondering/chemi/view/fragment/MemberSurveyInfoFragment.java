@@ -423,7 +423,7 @@ public class MemberSurveyInfoFragment extends Fragment
         mMemberSurveyInfoConfirmButtonTextView
                 .setTextColor(getResources().getColorStateList(R.color.color_selector_primary_white));
         mMemberSurveyInfoConfirmButtonTextView
-                .setBackgroundResource(R.drawable.selector_opaque_white_transparent_white);
+                .setBackgroundResource(R.drawable.selector_opaque_white_transparent_primary);
 
 
     }

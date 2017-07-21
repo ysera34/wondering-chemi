@@ -8,6 +8,7 @@ public class InfoChild {
 
     private String mTitle;
     private String mDescription;
+    private boolean mLastChild;
 
     public String getTitle() {
         return mTitle;
@@ -23,5 +24,13 @@ public class InfoChild {
 
     public void setDescription(String description) {
         mDescription = description;
+    }
+
+    public boolean isLastChild() {
+        return mLastChild;
+    }
+
+    public void setLastChild(boolean lastChild) {
+        mLastChild = lastChild;
     }
 }
