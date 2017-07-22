@@ -48,12 +48,14 @@ import com.planet.wondering.chemi.view.activity.ProductActivity;
 import com.planet.wondering.chemi.view.activity.ProductListActivity;
 import com.planet.wondering.chemi.view.activity.ReviewActivity;
 import com.planet.wondering.chemi.view.activity.SearchActivity;
+import com.planet.wondering.chemi.view.activity.UpdateActivity;
 import com.planet.wondering.chemi.view.custom.RotateViewPager;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.planet.wondering.chemi.common.Common.PROMOTE_RELEASE_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.Content.PROMOTE_CONTENT_PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.RECOMMEND_PATH;
@@ -145,8 +147,6 @@ public class HomeFragment extends Fragment
         mHomeNestedScrollView.setOnScrollChangeListener(this);
         mHomeScrollLayout = (LinearLayout) view.findViewById(R.id.home_scroll_layout);
 
-
-
         mHomeContentViewPager = (RotateViewPager) view.findViewById(R.id.home_promote_content_rotate_view_pager);
         mHomeCategoryLayout = (LinearLayout) view.findViewById(R.id.home_category_layout);
         mHomeCategoryLayout.setOnClickListener(this);
@@ -223,6 +223,7 @@ public class HomeFragment extends Fragment
             mHomeSearchButton.setHint(String.valueOf(mHomeSearchText));
             mHomeAddSearchButton.setHint(String.valueOf(mHomeSearchText));
         }
+        startActivity(UpdateActivity.newIntent(getActivity(), PROMOTE_RELEASE_REQUEST_CODE, false));
     }
 
     @Override

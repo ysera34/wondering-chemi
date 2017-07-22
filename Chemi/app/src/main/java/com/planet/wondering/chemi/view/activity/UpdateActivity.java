@@ -20,13 +20,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.planet.wondering.chemi.BuildConfig;
 import com.planet.wondering.chemi.R;
 import com.planet.wondering.chemi.model.Other;
 import com.planet.wondering.chemi.network.AppSingleton;
 import com.planet.wondering.chemi.network.Parser;
 import com.planet.wondering.chemi.util.listener.OnDialogFinishedListener;
 import com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment;
+import com.planet.wondering.chemi.view.fragment.MemberCongratulationDialogFragment;
 
 import org.json.JSONObject;
 
@@ -41,6 +41,7 @@ import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_USUA
 import static com.planet.wondering.chemi.common.Common.CHECK_VERSION_RESULT_VOLUNTARY_MODE_CODE;
 import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSION;
 import static com.planet.wondering.chemi.common.Common.NETWORK_SETTING_REQUEST_CODE;
+import static com.planet.wondering.chemi.common.Common.PROMOTE_RELEASE_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Other.OTHER_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
@@ -78,6 +79,8 @@ public class UpdateActivity extends AppCompatActivity implements OnDialogFinishe
 
         if (mRequestCode == CHECK_VERSION_REQUEST_CODE) {
             requestAppVersionName();
+        } else if (mRequestCode == PROMOTE_RELEASE_REQUEST_CODE) {
+            showPromoteRelease();
         }
     }
 
@@ -97,11 +100,7 @@ public class UpdateActivity extends AppCompatActivity implements OnDialogFinishe
                     @Override
                     public void onResponse(JSONObject response) {
                         Other versionOtherObject;
-                        if (BuildConfig.DEBUG) {
-                            versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
-                        } else {
-                            versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
-                        }
+                        versionOtherObject = Parser.parseOther(response, APP_VERSION_NAME_KEY);
                         checkVersionName(getAppVersionName(), versionOtherObject.getDescription());
                     }
                 },
@@ -262,5 +261,11 @@ public class UpdateActivity extends AppCompatActivity implements OnDialogFinishe
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         }
+    }
+
+    private void showPromoteRelease() {
+        MemberCongratulationDialogFragment dialogFragment =
+                MemberCongratulationDialogFragment.newInstance(true);
+        dialogFragment.show(getSupportFragmentManager(), "release_dialog");
     }
 }

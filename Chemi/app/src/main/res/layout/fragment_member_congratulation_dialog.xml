@@ -13,6 +13,7 @@
         android:src="@drawable/ic_congratulations"/>
 
     <TextView
+        android:id="@+id/congratulation_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
@@ -22,6 +23,7 @@
         android:textColor="@color/colorPrimary"/>
 
     <TextView
+        android:id="@+id/congratulation_description_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
@@ -42,8 +44,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingStart="36dp"
         android:paddingEnd="36dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:clickable="true"
         android:text="확 인"
         android:textSize="16sp"

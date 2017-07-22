@@ -11,6 +11,9 @@ public class Common {
     public static final String EXTRA_REQUEST_CHECK_VERSION = "com.planet.wondering.chemi.request_check_version";
     public static final String EXTRA_RESULT_CHECK_VERSION = "com.planet.wondering.chemi.result_check_version";
     public static final String APP_MARKET_URL = "market://details?id=com.planet.wondering.chemi";
+    public static final String APP_RELEASE_MARKET_URL = "market://details?id=com.futurist.chemi";
+
+    public static final int PROMOTE_RELEASE_REQUEST_CODE = 11000;
     public static final int CHECK_VERSION_REQUEST_CODE = 11001;
     public static final int CHECK_VERSION_RESULT_CODE = 11002;
     public static final int CHECK_VERSION_RESULT_COMPULSORY_MODE_CODE = 11003;

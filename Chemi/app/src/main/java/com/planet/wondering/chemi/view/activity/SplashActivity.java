@@ -93,28 +93,6 @@ public class SplashActivity extends AppCompatActivity {
         }, SPLASH_TIME_OUT);
     }
 
-//    private void popupUpdateDialog() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this, R.style.SplashDialogTheme);
-//        builder.setMessage("케미가 업그레이드 되었어요!\n업데이트를 통해 더욱 향상된 서비스를 경험하세요 :)");
-//        builder.setPositiveButton("업데이트", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(APP_MARKET_URL)));
-//                finish();
-//            }
-//        });
-//        builder.setNegativeButton("종료", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                ActivityCompat.finishAffinity(SplashActivity.this);
-//            }
-//        });
-//        builder.setCancelable(false);
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//    }
-
     private void requestPromoteProducts() {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
