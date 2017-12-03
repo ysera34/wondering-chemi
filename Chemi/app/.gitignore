@@ -7,6 +7,8 @@
 /google-services.json
 /src/main/java/com/planet/wondering/chemi/network/NetworkConfig.java
 
+/src/main/res/drawable
+/src/main/res/drawable-v21
 /src/main/res/drawable-xhdpi
 /src/main/res/drawable-xxhdpi
 /src/main/res/drawable-xxxhdpi
