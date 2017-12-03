@@ -91,7 +91,7 @@ import static com.planet.wondering.chemi.common.Common.WITHDRAW_NAVER_USER_REQUE
 import static com.planet.wondering.chemi.common.Common.WITHDRAW_NAVER_USER_RESULT_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.EMAIL;

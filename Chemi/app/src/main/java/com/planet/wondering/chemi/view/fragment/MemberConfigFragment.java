@@ -48,7 +48,7 @@ import static com.planet.wondering.chemi.common.Common.EXTRA_RESULT_CHECK_VERSIO
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.GET_EMAIL;
 import static com.planet.wondering.chemi.network.Config.User.Key.GET_PUSH;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;

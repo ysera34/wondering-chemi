@@ -3,3 +3,6 @@
 /src/main/res/values/key.xml
 /src/main/res/values-ko-rKR/terms.xml
 /src/main/res/values/terms.xml
+
+/google-services.json
+/src/main/java/com/planet/wondering/chemi/network/NetworkConfig.java

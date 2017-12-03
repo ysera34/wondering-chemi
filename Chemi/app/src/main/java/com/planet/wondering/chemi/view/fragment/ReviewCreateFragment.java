@@ -61,7 +61,7 @@ import static com.planet.wondering.chemi.network.Config.Product.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.Key.DESCRIPTION;
 import static com.planet.wondering.chemi.network.Config.Review.Key.RATING;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.encodeUTF8;
 

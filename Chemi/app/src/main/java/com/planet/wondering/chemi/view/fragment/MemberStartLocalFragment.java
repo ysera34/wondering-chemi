@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
 import static com.planet.wondering.chemi.common.Common.LOCAL_USER_PLATFORM_ID;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_PATH;
 import static com.planet.wondering.chemi.network.Config.User.EMAIL_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.ACCESS_TOKEN;

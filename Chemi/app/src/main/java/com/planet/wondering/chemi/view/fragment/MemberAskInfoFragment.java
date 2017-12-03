@@ -35,7 +35,7 @@ import java.util.Map;
 
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.BIRTH_YEAR;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_ALLERGY;
 import static com.planet.wondering.chemi.network.Config.User.Key.CHILD_HAS_DRY_SKIN;

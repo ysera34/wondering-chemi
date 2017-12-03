@@ -69,7 +69,7 @@ import static com.planet.wondering.chemi.network.Config.Review.PATH;
 import static com.planet.wondering.chemi.network.Config.Review.REVIEW_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 
 /**

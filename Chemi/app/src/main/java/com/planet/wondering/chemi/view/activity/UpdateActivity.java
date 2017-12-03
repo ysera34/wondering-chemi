@@ -45,7 +45,7 @@ import static com.planet.wondering.chemi.common.Common.PROMOTE_RELEASE_REQUEST_C
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Other.OTHER_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.NETWORK_DIALOG;
 
 /**

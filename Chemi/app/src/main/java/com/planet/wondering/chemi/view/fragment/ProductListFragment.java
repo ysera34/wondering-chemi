@@ -56,7 +56,7 @@ import static com.planet.wondering.chemi.network.Config.Product.QUERY_CATEGORY;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_PATH;
 import static com.planet.wondering.chemi.network.Config.Product.QUERY_TAG;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.encodeUTF8;
 
 /**

@@ -61,7 +61,7 @@ import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.Product.RECOMMEND_PATH;
 import static com.planet.wondering.chemi.network.Config.Review.BEST_REVIEW_PATH;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 
 /**
  * Created by yoon on 2017. 6. 21..

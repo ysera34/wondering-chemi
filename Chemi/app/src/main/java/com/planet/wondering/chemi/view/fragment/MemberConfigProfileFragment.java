@@ -76,7 +76,7 @@ import static com.planet.wondering.chemi.network.Config.RESPONSE_DATA;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_MESSAGE;
 import static com.planet.wondering.chemi.network.Config.RESPONSE_SUCCESS;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.IMAGE_PATH;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.network.Config.User.Key.USER_IMAGE_PATH;

@@ -47,7 +47,7 @@ import static com.planet.wondering.chemi.common.Common.REVIEW_CREATE_REQUEST_COD
 import static com.planet.wondering.chemi.common.Common.REVIEW_READ_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.TOKEN;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.EXTRA_DIALOG;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.LOGIN_DIALOG;

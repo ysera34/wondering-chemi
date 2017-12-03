@@ -34,7 +34,7 @@ import java.util.Map;
 import static com.planet.wondering.chemi.common.Common.SIGN_UP_FOR_PLATFORM_USER_REQUEST_CODE;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_POST_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.User.Key.NAME_STRING;
 import static com.planet.wondering.chemi.network.Config.User.NAME_STRING_PATH;
 import static com.planet.wondering.chemi.network.Config.User.PATH;

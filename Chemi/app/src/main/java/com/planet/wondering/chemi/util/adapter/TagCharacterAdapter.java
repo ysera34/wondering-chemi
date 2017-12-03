@@ -36,7 +36,7 @@ import static com.planet.wondering.chemi.network.Config.Tag.BRAND_PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.Key.CHARACTER_QUERY;
 import static com.planet.wondering.chemi.network.Config.Tag.PATH;
 import static com.planet.wondering.chemi.network.Config.Tag.PRODUCT_PATH;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 
 /**
  * Created by yoon on 2017. 4. 17..

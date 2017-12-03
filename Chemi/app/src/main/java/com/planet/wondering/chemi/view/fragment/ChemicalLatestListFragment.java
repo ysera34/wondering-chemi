@@ -42,7 +42,7 @@ import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_CHEMICAL_
 import static com.planet.wondering.chemi.network.Config.Chemical.QUERY_PATH;
 import static com.planet.wondering.chemi.network.Config.NUMBER_OF_RETRIES;
 import static com.planet.wondering.chemi.network.Config.SOCKET_TIMEOUT_GET_REQ;
-import static com.planet.wondering.chemi.network.Config.URL_HOST;
+import static com.planet.wondering.chemi.network.NetworkConfig.URL_HOST;
 import static com.planet.wondering.chemi.network.Config.encodeUTF8;
 import static com.planet.wondering.chemi.view.custom.CustomAlertDialogFragment.CLEAR_DIALOG;
 
